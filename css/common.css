@@ -33,7 +33,7 @@ html, body, .body__container {
 }
 
 .home__link {
-  margin-left: 5rem;
+  margin-left: 2rem;
 }
 
 .footer {
@@ -43,8 +43,15 @@ html, body, .body__container {
   font-size: medium;
 }
 
+ul.footer__ul {
+  padding-left:1rem !important;
+}
+
 .footer__ul li {
   display: inline-block;
+}
+
+.footer__ul li:not(:first-child) {
   padding-left: 1rem;
 }
 
