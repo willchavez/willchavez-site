@@ -1,0 +1,53 @@
+.about {
+  text-align: left;
+}
+
+.about__subtitle {
+  text-align: left;
+  padding-bottom: 1rem;
+  max-width: 30em;
+}
+
+h2.about {
+  font-weight: normal !important;
+}
+
+h2.f3 {
+  font-weight: normal !important;
+}
+
+.about__subtitle a {
+  color: #4D4D4F;
+}
+
+.about__subtitle a:hover {
+  text-decoration: none;
+  color: #111111;
+}
+
+.outline h2 {
+  font-weight: normal !important;
+}
+
+.company {
+  padding-bottom: 1rem;
+}
+
+.education {
+  padding-bottom: 1rem;
+}
+
+.page__content__container {
+  padding: 0 3rem 0 3rem;
+}
+
+.company a, .education a {
+  color: #4D4D4F;
+  font-weight: 500;
+}
+
+.company a:hover, .education a:hover {
+  text-decoration: none;
+  color: #111111;
+
+}

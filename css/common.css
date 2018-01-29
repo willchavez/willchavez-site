@@ -1,0 +1,58 @@
+html, body, .body__container {
+  min-height: 100vh;
+  height: 100vh;
+}
+
+.navigation {
+  text-align: right;
+  padding-right: 2rem;
+  padding-top: 1rem;
+}
+.navigation__ul {
+  display: inline-block;
+}
+
+.navigation__ul li {
+  display: inline-block;
+}
+
+.navigation__ul li a {
+  color: #4D4D4F;
+  padding-left: 1rem;
+}
+
+.navigation__ul li a:hover {
+  text-decoration: none;
+  color: #111111;
+}
+
+.navigation a {
+  display: inline-block;
+  color: #4D4D4F;
+  text-align: right;
+}
+
+.home__link {
+  margin-left: 5rem;
+}
+
+.footer {
+  text-align: right;
+  padding-right: 2rem;
+  font-weight: normal;
+  font-size: medium;
+}
+
+.footer__ul li {
+  display: inline-block;
+  padding-left: 1rem;
+}
+
+.footer__ul a {
+  color: #4D4D4F;
+}
+
+.footer__ul a:hover {
+  text-decoration: none;
+  color: #111111;
+}

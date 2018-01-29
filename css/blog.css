@@ -1,0 +1,32 @@
+.page__content__container {
+  padding: 0 3rem 0 3rem;
+}
+
+.blog {
+  text-align: left;
+}
+
+h2.blog {
+  font-weight: normal !important;
+}
+
+.blog_body {
+  font-weight: normal !important;
+}
+
+.blog_body ul {
+  padding: 0;
+}
+
+.blog_body li {
+  list-style-type: none;
+}
+
+.blog_body a {
+  color: #4D4D4F;
+}
+
+.blog_body a:hover {
+  text-decoration: none;
+  color: #111111;
+}
