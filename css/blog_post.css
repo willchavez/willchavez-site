@@ -28,3 +28,16 @@
   text-decoration: none;
   color: #111111;
 }
+
+.siema {
+  margin: 1rem 0;
+}
+
+img {
+  image-orientation: from-image;
+}
+
+.single-item {
+  max-width: 70%;
+  text-align: center;
+}
