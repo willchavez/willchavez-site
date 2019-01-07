@@ -9,3 +9,12 @@
 h2.projects {
   font-weight: normal !important;
 }
+
+.blog_body li {
+  padding-bottom: 2rem;
+  list-style-type: none;
+}
+
+.blog_body ul {
+  padding-left: 0rem;
+}
