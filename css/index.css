@@ -1,12 +1,42 @@
 .summary {
-  text-align: right;
+  text-align: left;
+  font-family: covik-sans, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  padding-right: 1rem;
+  padding-left: 2rem;
+}
+
+.title {
+  font-family: eckmannpsych-large, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  text-align: left;
+  padding-right: 1rem;
+  padding-left: 2rem;
+}
+
+.summary_long {
+  text-align: left;
+  font-family: covik-sans, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  padding-right: 1rem;
+  padding-left: 2rem;
+  max-width: 900px;
 }
 
 .summary__company {
   color: #4D4D4F;
+  font-family: covik-sans, sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .summary__company:hover {
   color: #111111;
   text-decoration: none;
+  font-family: covik-sans, sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
