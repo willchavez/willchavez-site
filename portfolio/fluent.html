@@ -24,6 +24,18 @@
       async
       src="https://www.googletagmanager.com/gtag/js?id=UA-52565345-3"
     ></script>
+    <script src="
+    https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js
+    "></script>
+    <link href="
+    https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css
+    " rel="stylesheet">
+    
+    <script>
+      document.addEventListener( 'DOMContentLoaded', function () {
+        new Splide( '#image-carousel' ).mount();
+      } );
+    </script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
@@ -51,18 +63,51 @@
           <ol>
             <li>
               Fluent System Icons (<a href="https://github.com/microsoft/fluentui-system-icons">github</a>, <a href="https://www.npmjs.com/package/@fluentui/react-icons">react-icons</a>, <a href="https://www.npmjs.com/package/@fluentui/svg-icons">svg-icons</a>)
+              <br><br>
+              Updates and fixes for multiple platforms were provided for this library (Android/iOS/react/react-native). <a href="https://github.com/microsoft/fluentui-system-icons/blob/main/scripts/diff.sh#L109">Image analysis</a> on updated icons was added as part of our scripting process. 
             </li>
             <li>
               Fluent Emoji (<a href="https://github.com/microsoft/fluentui-emoji">github</a>)
+
+              <br><br>
+              This work was part of an effort to open source our Emoji library via Figma and Github! Our CVP of Design & Research featured our work in the medium article, <a href="https://medium.com/microsoft-design/designing-in-the-open-source-5c62be73a599">Designing in the Open(Source)</a>. 
             </li>
             <li>
               Fluent Emoji Animated (<a href="https://github.com/microsoft/fluentui-emoji-animated">github</a>)
+              <br><br>
+              Created an open source repo for our animated emoji! Emoji are formatted as APNG files. Our custom tooling used <a href="https://apngasm.sourceforge.net/">apng assembler</a>, <a href="https://imagemagick.org/index.php">imagemagick</a>, & node js.
             </li>
           </ol>
+        </div>
+
+
+        <div>
+          <section id="image-carousel" class="splide" aria-label="Beautiful Images">
+            <div class="splide__track">
+              <ul class="splide__list">
+                <li class="splide__slide">
+                  <img src="../img/portfolio/fluent/react-icons.png" alt="">
+                </li>
+                <li class="splide__slide">
+                  <img src="../img/portfolio/fluent/svg-icons.png" alt="">
+                </li>
+                <li class="splide__slide">
+                  <img src="../img/portfolio/fluent/fluentui-system-icons.png" alt="">
+                </li>
+                <li class="splide__slide">
+                  <img src="../img/portfolio/fluent/fluentui-emoji.png" alt="">
+                </li>
+                <li class="splide__slide">
+                  <img src="../img/portfolio/fluent/fluentui-emoji-animated.png" alt="">
+                </li>
+              </ul>
+            </div>
+          </section>
         </div>
       </div>
       <div class="return-link">
         <a href="../portfolio.html" class="link dim blue">Return to Portfolio</a>
+        <br>
       </div>
     </div>
   </body>

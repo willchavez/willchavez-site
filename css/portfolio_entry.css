@@ -1,4 +1,7 @@
-
+.splide__slide img {
+  width: 100%;
+  height: auto;
+}
 
 .page__content__container {
   padding: 0 3rem 0 1rem;
