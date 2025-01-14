@@ -1,3 +1,11 @@
+li {
+  color: #4D4D4F; /* Apply color to all text inside <li> */
+}
+
+li a {
+  color: #000000; /* Set link text color to black */
+}
+
 .summary {
   text-align: left;
   font-family: covik-sans, sans-serif;
@@ -32,14 +40,8 @@
   max-width: 900px;
 }
 
-.summary__company {
-  color: #4D4D4F;
-  font-family: covik-sans, sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
 
-.summary__company:hover {
+a:hover {
   color: #111111;
   text-decoration: none;
   font-family: covik-sans, sans-serif;

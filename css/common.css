@@ -2,6 +2,9 @@ html, body, .body__container {
   min-height: 100vh;
   height: 100vh;
 }
+a {
+  color: #4D4D4F;
+}
 
 .navigation {
   text-align: right;
@@ -21,10 +24,6 @@ html, body, .body__container {
   padding-left: 1rem;
 }
 
-.navigation__ul li a:hover {
-  text-decoration: none;
-  color: #111111;
-}
 
 .navigation a {
   display: inline-block;
@@ -59,7 +58,3 @@ ul.footer__ul {
   color: #4D4D4F;
 }
 
-.footer__ul a:hover {
-  text-decoration: none;
-  color: #111111;
-}

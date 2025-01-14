@@ -1,5 +1,3 @@
-
-
 .page__content__container {
   padding: 0 3rem 0 1rem;
 }
@@ -19,16 +17,6 @@ h2.projects {
 .blog_body ul {
   padding-left: 0rem;
 }
-
-.summary {
-  text-align: left;
-  font-family: covik-sans, sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  padding-right: 1rem;
-  padding-left: 2rem;
-}
-
 
 @media (min-width: 640px) {
   body {
@@ -56,5 +44,6 @@ ul {
   margin-left: 1rem;
 }
  
-a:hover {
-text-decoration: none; }
+* {
+  
+}
