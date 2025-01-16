@@ -16,7 +16,10 @@
     <link rel="stylesheet" type="text/css" href="../css/tachyons.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/common.css" />
     <link rel="stylesheet" type="text/css" href="../css/portfolio_entry.css" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <!-- inside <head> -->
+    <link href="../dist/zoom.css" rel="stylesheet">
+
     <title>William Chavez | Portfolio</title>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -79,13 +82,13 @@
             <div class="splide__track">
               <ul class="splide__list">
                 <li class="splide__slide">
-                  <img src="../img/portfolio/hire-harlem/hire-harlem_now.gif" alt="">
+                  <img src="../img/portfolio/hire-harlem/hire-harlem_now.gif" alt=""  data-action="zoom">
                 </li>
                 <li class="splide__slide">
-                  <img src="../img/portfolio/hire-harlem/hire-harlem_figma.png" alt="">
+                  <img src="../img/portfolio/hire-harlem/hire-harlem_figma.png" alt="" data-action="zoom">
                 </li>
                 <li class="splide__slide">
-                  <img src="../img/portfolio/hire-harlem/hire-harlem_old.png" alt="">
+                  <img src="../img/portfolio/hire-harlem/hire-harlem_old.png" alt="" data-action="zoom">
                 </li>
               </ul>
             </div>
@@ -99,5 +102,7 @@
       </div>
       <br><br>
     </div>
+        <!-- before </body> -->
+   <script src="../dist/zoom-vanilla.min.js"></script>
   </body>
 </html>

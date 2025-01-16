@@ -16,7 +16,11 @@
     <link rel="stylesheet" type="text/css" href="../css/tachyons.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/common.css" />
     <link rel="stylesheet" type="text/css" href="../css/portfolio_entry.css" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <!-- inside <head> -->
+    <link href="../dist/zoom.css" rel="stylesheet">
+
+   
     <title>William Chavez | Portfolio</title>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -46,8 +50,9 @@
       gtag('config', 'UA-52565345-3');
     </script>
     <link rel="stylesheet" href="https://use.typekit.net/ezn2wcq.css">
-
+  
   </head>
+
   <body>
     <div class="near-black avenir body__container">
       <h1 class="summary f3 f2-m f1-l">
@@ -76,16 +81,16 @@
             <div class="splide__track">
               <ul class="splide__list">
                 <li class="splide__slide">
-                  <img src="../img/portfolio/flubert/flubert_ex1.png" alt="">
+                  <img src="../img/portfolio/flubert/flubert_ex1.png" alt="" data-action="zoom">
                 </li>
                 <li class="splide__slide">
-                  <img src="../img/portfolio/flubert/flubert_ex2.png" alt="">
+                  <img src="../img/portfolio/flubert/flubert_ex2.png" alt="" data-action="zoom">
                 </li>
                 <li class="splide__slide">
-                  <img src="../img/portfolio/flubert/flubert_ex3.png" alt="">
+                  <img src="../img/portfolio/flubert/flubert_ex3.png" alt="" data-action="zoom">
                 </li>
                 <li class="splide__slide">
-                  <img src="../img/portfolio/flubert/flubert_ex4.png" alt="">
+                  <img src="../img/portfolio/flubert/flubert_ex4.png" alt="" data-action="zoom">
                 </li>
 
               </ul>
@@ -93,12 +98,14 @@
           </section>
         </div>
       </div>
-      <br><br> 
+      <br /><br /> 
       <div class="return-link">
         <a href="../portfolio.html" class="link dim blue">Return to Portfolio</a>
        
       </div>
-      <br><br>
+      <br /><br />
     </div>
+     <!-- before </body> -->
+   <script src="../dist/zoom-vanilla.min.js"></script>
   </body>
 </html>

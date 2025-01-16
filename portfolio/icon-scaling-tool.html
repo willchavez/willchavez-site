@@ -16,8 +16,11 @@
     <link rel="stylesheet" type="text/css" href="../css/tachyons.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/common.css" />
     <link rel="stylesheet" type="text/css" href="../css/portfolio_entry.css" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <title>William Chavez | Portfolio</title>
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <!-- inside <head> -->
+    <link href="../dist/zoom.css" rel="stylesheet">
+
+       <title>William Chavez | Portfolio</title>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script
@@ -79,16 +82,16 @@
             <div class="splide__track">
               <ul class="splide__list">
                 <li class="splide__slide">
-                  <img src="../img/portfolio/icon-scaling-tool/ist-export.png" alt="">
+                  <img src="../img/portfolio/icon-scaling-tool/ist-export.png" alt="" data-action="zoom">
                 </li>
                 <li class="splide__slide">
-                  <img src="../img/portfolio/icon-scaling-tool/ist-headless.png" alt="">
+                  <img src="../img/portfolio/icon-scaling-tool/ist-headless.png" alt="" data-action="zoom">
                 </li>
                 <li class="splide__slide">
-                  <img src="../img/portfolio/icon-scaling-tool/ist-rename.gif" alt="">
+                  <img src="../img/portfolio/icon-scaling-tool/ist-rename.gif" alt="" data-action="zoom">
                 </li>
                 <li class="splide__slide">
-                  <img src="../img/portfolio/icon-scaling-tool/ist-squash.png" alt="">
+                  <img src="../img/portfolio/icon-scaling-tool/ist-squash.png" alt="" data-action="zoom">
                 </li>
 
               </ul>
@@ -103,5 +106,7 @@
       <br><br>
 
     </div>
+        <!-- before </body> -->
+   <script src="../dist/zoom-vanilla.min.js"></script>
   </body>
 </html>

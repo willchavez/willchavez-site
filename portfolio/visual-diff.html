@@ -20,6 +20,7 @@
     <!-- inside <head> -->
     <link href="../dist/zoom.css" rel="stylesheet">
 
+   
     <title>William Chavez | Portfolio</title>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -54,10 +55,10 @@
   <body>
     <div class="near-black avenir body__container">
       <h1 class="summary f3 f2-m f1-l">
-        Fluent Repos
+        Visual Diff Tool
       </h1> 
       <h4 class="summary f5 f4-m f3-l">
-        At Microsoft, I've maintained and created repositories and npm packages for icons, emoji, and animated-assets.
+        This tool came out of a user need from designers at Microsoft that wanted a visual representation of the differences in updated icons in the <a href="https://github.com/microsoft/fluentui-system-icons">microsoft/fluentui-system-icons</a> repo. 
       </h4> 
 
       <!-- project page content -->
@@ -65,20 +66,13 @@
         <div class="blog_body mw9 ph3-ns">
           <ol>
             <li>
-              Fluent System Icons (<a href="https://github.com/microsoft/fluentui-system-icons">github</a>, <a href="https://www.npmjs.com/package/@fluentui/react-icons">react-icons</a>, <a href="https://www.npmjs.com/package/@fluentui/svg-icons">svg-icons</a>)
-              <br><br>
-              Updates and fixes for multiple platforms were provided for this library (Android/iOS/react/react-native). <a href="https://github.com/microsoft/fluentui-system-icons/blob/main/scripts/diff.sh#L109">Image analysis</a> on updated icons was added as part of our scripting process. 
+                It generates an overlayed image of the old and new icon, with coloring and transparency see to indicate the updated pixel areas.
             </li>
             <li>
-              Fluent Emoji (<a href="https://github.com/microsoft/fluentui-emoji">github</a>)
-
-              <br><br>
-              This work was part of an effort to open source our Emoji library via Figma and Github! Our CVP of Design & Research featured our work in the medium article, <a href="https://medium.com/microsoft-design/designing-in-the-open-source-5c62be73a599">Designing in the Open(Source)</a>. 
+                It uses <a href="https://imagemagick.org/">imagemagick</a> to numerically represent the visual differences based on pixel differences.
             </li>
             <li>
-              Fluent Emoji Animated (<a href="https://github.com/microsoft/fluentui-emoji-animated">github</a>)
-              <br><br>
-              Created an open source repo for our animated emoji! Emoji are formatted as APNG files. Our custom tooling used <a href="https://apngasm.sourceforge.net/">apng assembler</a>, <a href="https://imagemagick.org/index.php">imagemagick</a>, & node js.
+                The tool started off as it's own <a href="https://willchavez.github.io/fluent-icon-updates/">separate website</a>, where we passed in the new icons to make the comparisons. It has since been updated to a <a href="https://github.com/microsoft/fluentui-system-icons/blob/main/scripts/generate_html_report.py">python script</a> that runs on our pipeline so that we're not maintaining a separate website. 
             </li>
           </ol>
         </div>
@@ -89,25 +83,17 @@
             <div class="splide__track">
               <ul class="splide__list">
                 <li class="splide__slide">
-                  <img src="../img/portfolio/fluent/react-icons.png" alt="" data-action="zoom">
+                  <img src="../img/portfolio/visual-diff/icon-diff-1.gif" alt="" data-action="zoom">
                 </li>
                 <li class="splide__slide">
-                  <img src="../img/portfolio/fluent/svg-icons.png" alt="" data-action="zoom">
-                </li>
-                <li class="splide__slide">
-                  <img src="../img/portfolio/fluent/fluentui-system-icons.png" alt="" data-action="zoom">
-                </li>
-                <li class="splide__slide">
-                  <img src="../img/portfolio/fluent/fluentui-emoji.png" alt="" data-action="zoom">
-                </li>
-                <li class="splide__slide">
-                  <img src="../img/portfolio/fluent/fluentui-emoji-animated.png" alt="" data-action="zoom">
+                  <img src="../img/portfolio/visual-diff/icon-diff-2.gif" alt="" data-action="zoom">
                 </li>
               </ul>
             </div>
           </section>
         </div>
       </div>
+      <br>
       <div class="return-link">
         <a href="../portfolio.html" class="link dim blue">Return to Portfolio</a>
         <br>
@@ -115,7 +101,7 @@
       <br><br>
 
     </div>
-         <!-- before </body> -->
+    <!-- before </body> -->
    <script src="../dist/zoom-vanilla.min.js"></script>
   </body>
 </html>
