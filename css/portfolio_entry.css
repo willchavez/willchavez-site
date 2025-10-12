@@ -37,7 +37,6 @@ h2.projects {
 
 .summary {
   text-align: left;
-  font-family: covik-sans, sans-serif;
   font-weight: 400;
   font-style: normal;
   padding-right: 1rem;
@@ -73,3 +72,7 @@ ul {
  
 a:hover {
 text-decoration: none; }
+
+* {
+  font-family: inter, sans-serif;
+}

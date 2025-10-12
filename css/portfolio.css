@@ -1,4 +1,6 @@
-
+* {
+  font-family: inter, sans-serif;
+}
 
 .page__content__container {
   padding: 0 3rem 0 1rem;
@@ -22,7 +24,6 @@ h2.projects {
 
 .summary {
   text-align: left;
-  font-family: covik-sans, sans-serif;
   font-weight: 400;
   font-style: normal;
   padding-right: 1rem;

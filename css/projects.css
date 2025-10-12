@@ -43,7 +43,10 @@ h2 {
 ul {
   margin-left: 1rem;
 }
- 
 * {
-  
+  font-family: inter, sans-serif;
+}
+
+h1 {
+  margin-bottom: 2rem;
 }
