@@ -1,116 +1,199 @@
 <!DOCTYPE html>
-<html class="bg-near-white">
+<html>
   <head>
     <meta charset="UTF-8" />
-    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
-    <meta
-      content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
-      name="viewport"
-    />
-    <meta
-      name="description"
-      content="This is a blog website for William Chavez."
-    />
-    <meta name="keywords" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Fluent Repos — Will Chavez" />
     <meta name="author" content="William Chavez" />
-    <link rel="stylesheet" type="text/css" href="../css/tachyons.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/common.css" />
-    <link rel="stylesheet" type="text/css" href="../css/portfolio_entry.css" />
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-    <!-- inside <head> -->
-    <link href="../dist/zoom.css" rel="stylesheet">
-
-    <title>William Chavez | Portfolio</title>
-
-    <script src="
-    https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js
-    "></script>
-    <link href="
-    https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css
-    " rel="stylesheet">
-    
-    <script>
-      document.addEventListener( 'DOMContentLoaded', function () {
-        new Splide( '#image-carousel' ).mount();
-      } );
-    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet" />
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RPXX4TMRSH"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-RPXX4TMRSH');
     </script>
-    <link rel="stylesheet" href="https://use.typekit.net/ezn2wcq.css">
+    <title>Will Chavez — Fluent Repos</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
 
+      html, body {
+        background: #f7f5f2;
+        font-family: "Source Serif 4", Georgia, serif;
+        color: #1a1a1a;
+        font-size: 17px;
+      }
+
+      body { padding: 4rem 4rem 6rem; }
+
+      .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 4rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #b05a3a;
+      }
+
+      h1 { font-size: 1.9rem; font-weight: 400; color: #1a1a1a; line-height: 1.3; }
+
+      .subtitle { font-size: 0.85rem; color: #888; margin-top: 0.3rem; }
+
+      .section {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 0 3rem;
+        margin-bottom: 2.5rem;
+        align-items: start;
+      }
+
+      .section-label {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #111;
+        padding-top: 0.1rem;
+        line-height: 1.8;
+        letter-spacing: -0.02em;
+      }
+
+      .section-label::before { content: "// "; color: #b05a3a; opacity: 0.7; }
+
+      .section p { font-size: 0.88rem; line-height: 1.8; letter-spacing: -0.02em; color: #000; }
+
+      ol { list-style: none; border-left: 1px solid #b05a3a; padding-left: 1rem; }
+
+      li {
+        position: relative;
+        margin-bottom: 0.9rem;
+        font-size: 0.88rem;
+        line-height: 1.8;
+        letter-spacing: -0.02em;
+        color: #000;
+      }
+
+      li::before { content: "> "; color: #aaa; }
+
+      a { color: #1a1a1a; text-decoration-color: #b05a3a; text-underline-offset: 3px; }
+      a:hover { text-decoration: none; }
+
+      .back { font-size: 0.72rem; color: #888; margin-bottom: 2.5rem; display: block; text-decoration: none; }
+      .back:hover { color: #1a1a1a; }
+
+      /*
+        5 landscape images, all nearly identical ratio (~1.20–1.24):
+          react-icons, svg-icons, system-icons, emoji, animated-emoji
+        Layout: 2-column grid; animated-emoji spans full width as a visual close.
+      */
+      .img-grid {
+        border-left: 1px solid #b05a3a;
+        padding-left: 1rem;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+      }
+
+      .img-grid img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 4px;
+        border: 1px solid #e0dcd7;
+      }
+
+      .img-grid img.full { grid-column: 1 / -1; }
+
+      .img-grid img { cursor: zoom-in; }
+
+      #lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(26, 26, 26, 0.9);
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        cursor: zoom-out;
+      }
+
+      #lightbox.open { display: flex; }
+
+      #lightbox img {
+        max-width: 90vw;
+        max-height: 90vh;
+        width: auto;
+        height: auto;
+        border-radius: 4px;
+        border: 1px solid #e0dcd7;
+        box-shadow: 0 8px 48px rgba(0, 0, 0, 0.5);
+        cursor: default;
+      }
+
+      @media (max-width: 640px) {
+        body { padding: 2.5rem 1.5rem 4rem; }
+        .section { grid-template-columns: 1fr; gap: 0.4rem 0; }
+        .img-grid { grid-template-columns: 1fr; }
+        .img-grid img.full { grid-column: 1; }
+      }
+    </style>
   </head>
   <body>
-    <div class="near-black avenir body__container">
-      <h1 class="summary f3 f2-m f1-l">
-        Fluent Repos
-      </h1> 
-      <h4 class="summary f5 f4-m f3-l">
-        At Microsoft, I've maintained and created repositories and npm packages for icons, emoji, and animated-assets.
-      </h4> 
+    <a class="back" href="../work.html">← work</a>
 
-      <!-- project page content -->
-      <div class="page__content__container">
-        <div class="blog_body mw9 ph3-ns">
-          <ol>
-            <li>
-              Fluent System Icons (<a href="https://github.com/microsoft/fluentui-system-icons">github</a>, <a href="https://www.npmjs.com/package/@fluentui/react-icons">react-icons</a>, <a href="https://www.npmjs.com/package/@fluentui/svg-icons">svg-icons</a>)
-              <br><br>
-              Updates and fixes for multiple platforms were provided for this library (Android/iOS/react/react-native). <a href="https://github.com/microsoft/fluentui-system-icons/blob/main/scripts/diff.sh#L109">Image analysis</a> on updated icons was added as part of our scripting process. 
-            </li>
-            <li>
-              Fluent Emoji (<a href="https://github.com/microsoft/fluentui-emoji">github</a>)
-
-              <br><br>
-              This work was part of an effort to open source our Emoji library via Figma and Github! Our CVP of Design & Research featured our work in the medium article, <a href="https://medium.com/microsoft-design/designing-in-the-open-source-5c62be73a599">Designing in the Open(Source)</a>. 
-            </li>
-            <li>
-              Fluent Emoji Animated (<a href="https://github.com/microsoft/fluentui-emoji-animated">github</a>)
-              <br><br>
-              Created an open source repo for our animated emoji! Emoji are formatted as APNG files. Our custom tooling used <a href="https://apngasm.sourceforge.net/">apng assembler</a>, <a href="https://imagemagick.org/index.php">imagemagick</a>, & node js.
-            </li>
-          </ol>
-        </div>
-
-
-        <div>
-          <section id="image-carousel" class="splide" aria-label="Beautiful Images">
-            <div class="splide__track">
-              <ul class="splide__list">
-                <li class="splide__slide">
-                  <img src="../img/portfolio/fluent/react-icons.png" alt="React icons example" data-action="zoom">
-                </li>
-                <li class="splide__slide">
-                  <img src="../img/portfolio/fluent/svg-icons.png" alt="SVG icons example" data-action="zoom">
-                </li>
-                <li class="splide__slide">
-                  <img src="../img/portfolio/fluent/fluentui-system-icons.png" alt="Fluent UI system icons example" data-action="zoom">
-                </li>
-                <li class="splide__slide">
-                  <img src="../img/portfolio/fluent/fluentui-emoji.png" alt="Fluent UI emoji example" data-action="zoom">
-                </li>
-                <li class="splide__slide">
-                  <img src="../img/portfolio/fluent/fluentui-emoji-animated.png" alt="Fluent UI animated emoji example" data-action="zoom">
-                </li>
-              </ul>
-            </div>
-          </section>
-        </div>
+    <div class="title">
+      <div>
+        <h1>Fluent Repos</h1>
+        <div class="subtitle">@ <a href="https://fluent2.microsoft.design/">Fluent Design Studio</a>, Microsoft</div>
       </div>
-      <div class="return-link">
-        <a href="../portfolio.html" class="link dim blue">Return to Portfolio</a>
-        <br>
-      </div>
-      <br><br>
-
     </div>
-         <!-- before </body> -->
-   <script src="../dist/zoom-vanilla.min.js"></script>
+
+    <div class="section">
+      <span class="section-label">about</span>
+      <p>Maintained and created open-source repositories and npm packages for the Fluent Design System — covering icons, emoji, and animated assets used across Microsoft's products.</p>
+    </div>
+
+    <div class="section">
+      <span class="section-label">repos</span>
+      <ol>
+        <li>
+          <a href="https://github.com/microsoft/fluentui-system-icons">Fluent System Icons</a> (<a href="https://www.npmjs.com/package/@fluentui/react-icons">react-icons</a>, <a href="https://www.npmjs.com/package/@fluentui/svg-icons">svg-icons</a>) — updates and fixes across Android, iOS, React, and React Native; added <a href="https://github.com/microsoft/fluentui-system-icons/blob/main/scripts/diff.sh#L109">image analysis</a> to the scripting pipeline
+        </li>
+        <li>
+          <a href="https://github.com/microsoft/fluentui-emoji">Fluent Emoji</a> — open-sourced our emoji library via Figma and GitHub; featured in <a href="https://medium.com/microsoft-design/designing-in-the-open-source-5c62be73a599">Designing in the Open(Source)</a> by our CVP of Design & Research
+        </li>
+        <li>
+          <a href="https://github.com/microsoft/fluentui-emoji-animated">Fluent Emoji Animated</a> — created an open-source repo for animated emoji (APNG format) using custom tooling built on <a href="https://apngasm.sourceforge.net/">apng assembler</a>, <a href="https://imagemagick.org/index.php">ImageMagick</a>, and Node.js
+        </li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <span class="section-label">screenshots</span>
+      <div class="img-grid">
+        <img src="../img/portfolio/fluent/react-icons.png" alt="React icons npm package" />
+        <img src="../img/portfolio/fluent/svg-icons.png" alt="SVG icons npm package" />
+        <img src="../img/portfolio/fluent/fluentui-system-icons.png" alt="Fluent UI system icons repo" />
+        <img src="../img/portfolio/fluent/fluentui-emoji.png" alt="Fluent UI emoji repo" />
+        <img class="full" src="../img/portfolio/fluent/fluentui-emoji-animated.png" alt="Fluent UI animated emoji repo" />
+      </div>
+    </div>
+    <div id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
+    <script>
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      document.querySelectorAll('.img-grid img').forEach(img => {
+        img.addEventListener('click', () => {
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt;
+          lightbox.classList.add('open');
+        });
+      });
+      lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') lightbox.classList.remove('open'); });
+    </script>
   </body>
 </html>

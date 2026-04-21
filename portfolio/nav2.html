@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Icon Scaling Tool — Will Chavez" />
+    <meta name="description" content="Nav 2.0 — Will Chavez" />
     <meta name="author" content="William Chavez" />
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,7 +17,7 @@
       gtag('js', new Date());
       gtag('config', 'G-RPXX4TMRSH');
     </script>
-    <title>Will Chavez — Icon Scaling Tool</title>
+    <title>Will Chavez — Nav 2.0</title>
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -83,15 +83,22 @@
       .back { font-size: 0.72rem; color: #888; margin-bottom: 2.5rem; display: block; text-decoration: none; }
       .back:hover { color: #1a1a1a; }
 
+      .img-grid img { cursor: zoom-in; }
+
       /*
-        4 portrait images: export (596×1122), headless (800×1045), rename gif (292×540), squash (592×1116)
-        All portrait-ish — 4-column row. headless is slightly wider so it'll be a touch taller, which is fine.
+        functionality.gif  295×985  (ratio 0.30 — tall portrait panel)
+        nav2.gif          1251×1000 (ratio 1.25 — landscape)
+        pill bounce.gif    306×263  (ratio 1.16 — small, square-ish)
+        screenshot                  (unknown — small file)
+
+        Layout: 1fr + 3fr columns so the tall narrow panel sits left
+        next to the wider landscape gif, then pill bounce + screenshot below.
       */
       .img-grid {
         border-left: 1px solid #b05a3a;
         padding-left: 1rem;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: 1fr 3fr;
         gap: 0.5rem;
         align-items: start;
       }
@@ -103,8 +110,6 @@
         border-radius: 4px;
         border: 1px solid #e0dcd7;
       }
-
-      .img-grid img { cursor: zoom-in; }
 
       #lightbox {
         display: none;
@@ -134,7 +139,7 @@
       @media (max-width: 640px) {
         body { padding: 2.5rem 1.5rem 4rem; }
         .section { grid-template-columns: 1fr; gap: 0.4rem 0; }
-        .img-grid { grid-template-columns: repeat(2, 1fr); }
+        .img-grid { grid-template-columns: 1fr; }
       }
     </style>
   </head>
@@ -143,35 +148,37 @@
 
     <div class="title">
       <div>
-        <h1>Icon Scaling Tool</h1>
-        <div class="subtitle">@ <a href="https://fluent2.microsoft.design/">Fluent Design Studio</a>, Microsoft</div>
+        <h1>Nav 2.0</h1>
+        <div class="subtitle">@ <a href="https://www.microsoft.com/en-us/">Microsoft</a>, with <a href="http://ankitpotdar.com/">Ankit Potdar</a></div>
       </div>
     </div>
 
     <div class="section">
       <span class="section-label">about</span>
-      <p>A <a href="https://www.figma.com/community/plugin/875501505522624941/icon-scaling-tool">Figma plugin</a> used internally at Microsoft and available world-wide. Scales icons in Figma and exports them in PDF & SVG formats. Built in close collaboration with designers and woven into the bi-weekly icon push that ships updates across Microsoft's product surfaces.</p>
+      <p>Early-stage prototype exploring next-generation navigation patterns for Copilot. Built in close partnership with Ankit Potdar, the work gave stakeholders a tangible system to evaluate — covering cross-surface navigation, information hierarchy, and system responsiveness — rather than just reacting to static designs.</p>
     </div>
 
     <div class="section">
       <span class="section-label">contributions</span>
       <ol>
-        <li>worked directly with designers to understand their workflow needs and iterated on the plugin accordingly</li>
-        <li>made the plugin completely headless so it could run as part of the automated bi-weekly icon release pipeline</li>
-        <li>combined vector paths to reduce SVG node count (squashing), cutting file size and improving render performance</li>
-        <li>added metadata export for each icon component — covering metaphors, descriptions, sizes, and themes</li>
+        <li>led technical prototyping — translated conceptual UX directions into working navigation flows and interactive states</li>
+        <li>defined how navigation behaves across contexts: expansion, transitions, selection, and system feedback</li>
+        <li>partnered with Ankit to iterate quickly, keeping design intent and engineering feasibility in lockstep</li>
+        <li>shaped early patterns for modular navigation components, laying groundwork for more scalable systems thinking</li>
+        <li>packaged the prototype for stakeholder review in a way that drove clear, specific product conversations</li>
       </ol>
     </div>
 
     <div class="section">
       <span class="section-label">screenshots</span>
       <div class="img-grid">
-        <img src="../img/portfolio/icon-scaling-tool/ist-export.png" alt="Export panel" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-headless.png" alt="Headless mode" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-rename.gif" alt="Rename demo" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-squash.png" alt="Squash/combine paths" />
+        <img src="../img/portfolio/nav2/functionality.gif" alt="Navigation functionality panel" />
+        <img src="../img/portfolio/nav2/nav2.gif" alt="Nav 2.0 prototype" />
+        <img src="../img/portfolio/nav2/pill%20bounce.gif" alt="Pill bounce micro-interaction" />
+        <img src="../img/portfolio/nav2/1.png" alt="Nav 2.0 screenshot" />
       </div>
     </div>
+
     <div id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
     <script>
       const lightbox = document.getElementById('lightbox');

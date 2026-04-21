@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Icon Scaling Tool — Will Chavez" />
+    <meta name="description" content="PeerSurvey Redesign — Will Chavez" />
     <meta name="author" content="William Chavez" />
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,7 +17,7 @@
       gtag('js', new Date());
       gtag('config', 'G-RPXX4TMRSH');
     </script>
-    <title>Will Chavez — Icon Scaling Tool</title>
+    <title>Will Chavez — PeerSurvey Redesign</title>
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -83,15 +83,13 @@
       .back { font-size: 0.72rem; color: #888; margin-bottom: 2.5rem; display: block; text-decoration: none; }
       .back:hover { color: #1a1a1a; }
 
-      /*
-        4 portrait images: export (596×1122), headless (800×1045), rename gif (292×540), squash (592×1116)
-        All portrait-ish — 4-column row. headless is slightly wider so it'll be a touch taller, which is fine.
-      */
+      .img-grid img { cursor: zoom-in; }
+
       .img-grid {
         border-left: 1px solid #b05a3a;
         padding-left: 1rem;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 0.5rem;
         align-items: start;
       }
@@ -104,7 +102,7 @@
         border: 1px solid #e0dcd7;
       }
 
-      .img-grid img { cursor: zoom-in; }
+      .img-grid img.full { grid-column: 1 / -1; }
 
       #lightbox {
         display: none;
@@ -134,7 +132,8 @@
       @media (max-width: 640px) {
         body { padding: 2.5rem 1.5rem 4rem; }
         .section { grid-template-columns: 1fr; gap: 0.4rem 0; }
-        .img-grid { grid-template-columns: repeat(2, 1fr); }
+        .img-grid { grid-template-columns: 1fr; }
+        .img-grid img.full { grid-column: 1; }
       }
     </style>
   </head>
@@ -143,35 +142,44 @@
 
     <div class="title">
       <div>
-        <h1>Icon Scaling Tool</h1>
-        <div class="subtitle">@ <a href="https://fluent2.microsoft.design/">Fluent Design Studio</a>, Microsoft</div>
+        <h1>PeerSurvey Redesign</h1>
+        <div class="subtitle">@ <a href="https://omscs.gatech.edu/">Georgia Tech</a>, with Aaquib Khwaja, Anna Levenberg, Jackson Lyons</div>
       </div>
     </div>
 
     <div class="section">
       <span class="section-label">about</span>
-      <p>A <a href="https://www.figma.com/community/plugin/875501505522624941/icon-scaling-tool">Figma plugin</a> used internally at Microsoft and available world-wide. Scales icons in Figma and exports them in PDF & SVG formats. Built in close collaboration with designers and woven into the bi-weekly icon push that ships updates across Microsoft's product surfaces.</p>
+      <p>HCI design project rethinking how peer review works in Canvas — the LMS used across Georgia Tech. The existing flow buries feedback in forms and disconnects reviewing from the actual document being evaluated. This project diagnosed those gaps through surveys, heuristic evaluation, and forum analysis, then prototyped a new experience. My contribution, PeerView, introduces a comment-centric, split-screen review interface built to make giving and receiving feedback feel natural and useful rather than obligatory.</p>
     </div>
 
     <div class="section">
       <span class="section-label">contributions</span>
       <ol>
-        <li>worked directly with designers to understand their workflow needs and iterated on the plugin accordingly</li>
-        <li>made the plugin completely headless so it could run as part of the automated bi-weekly icon release pipeline</li>
-        <li>combined vector paths to reduce SVG node count (squashing), cutting file size and improving render performance</li>
-        <li>added metadata export for each icon component — covering metaphors, descriptions, sizes, and themes</li>
+        <li>led design and prototyping for Prototype 1 (PeerView) — the highest-rated concept among 17 evaluation participants</li>
+        <li>designed a split-screen editor with the submission on the left and a structured feedback panel on the right</li>
+        <li>introduced inline highlight-to-comment interactions with typed categories: Thought, Question, Nit, and Action</li>
+        <li>built a dashboard view surfacing assigned and received reviews at a glance, reducing the cognitive overhead of the native Canvas flow</li>
+        <li>added a confirmation modal before posting feedback to reduce accidental submissions and give reviewers a moment to reflect</li>
+        <li>designed a read-only received feedback view that preserves inline context alongside written comments</li>
+        <li>contributed to the full research pipeline: survey design, heuristic evaluation, and comparative usability study</li>
       </ol>
+    </div>
+
+    <div class="section">
+      <span class="section-label">prototype</span>
+      <p><a href="https://header-hand-71542763.figma.site/" target="_blank" rel="noopener">view live prototype →</a></p>
     </div>
 
     <div class="section">
       <span class="section-label">screenshots</span>
       <div class="img-grid">
-        <img src="../img/portfolio/icon-scaling-tool/ist-export.png" alt="Export panel" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-headless.png" alt="Headless mode" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-rename.gif" alt="Rename demo" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-squash.png" alt="Squash/combine paths" />
+        <img src="../img/portfolio/peer-survey/1.png" alt="PeerView dashboard — assigned reviews" />
+        <img src="../img/portfolio/peer-survey/3.png" alt="Split-screen review editor" />
+        <img src="../img/portfolio/peer-survey/4.png" alt="Inline comments panel with category tags" />
+        <img src="../img/portfolio/peer-survey/5.png" alt="Received feedback read-only view" />
       </div>
     </div>
+
     <div id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
     <script>
       const lightbox = document.getElementById('lightbox');

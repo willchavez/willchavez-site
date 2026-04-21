@@ -1,149 +1,194 @@
 <!DOCTYPE html>
-<html class="bg-near-white">
+<html>
   <head>
     <meta charset="UTF-8" />
-    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
-    <meta
-      content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
-      name="viewport"
-    />
-    <meta
-      name="description"
-      content="This is a blog website for William Chavez."
-    />
-    <meta name="keywords" content="" />
-    <meta name="author" content="William Chavez" />
-    <link rel="stylesheet" type="text/css" href="css/tachyons.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Will Chavez — 6</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <title>William Chavez — Design Technologist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-RPXX4TMRSH"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
+      html, body {
+        background: #f7f5f2;
+        font-family: "Source Serif 4", Georgia, serif;
+        color: #1a1a1a;
+        font-size: 17px;
       }
-      gtag("js", new Date());
 
-      gtag("config", "G-RPXX4TMRSH");
-    </script>
-    <!-- Style sheets -->
-    <link rel="stylesheet" href="https://use.typekit.net/ezn2wcq.css" />
+      body { padding: 7.5rem 4rem 6rem; }
+
+      /* Header */
+      .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 4rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #b05a3a;
+      }
+
+      h1 {
+        font-size: 1.9rem;
+        font-weight: 400;
+        color: #1a1a1a;
+        line-height: 1.3;
+      }
+
+      .cursor {
+        display: inline-block;
+        width: 0.55em;
+        height: 0.85em;
+        background: #b05a3a;
+        vertical-align: baseline;
+        animation: blink 1.1s step-end infinite;
+        margin-left: 3px;
+      }
+
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+
+      .pronouns {
+        font-size: 0.85rem;
+        color: #888;
+        margin-top: 0.3rem;
+      }
+
+      .title img {
+        max-width: 52px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+      }
+
+      /* Two-column sections */
+      .section {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 0 3rem;
+        margin-bottom: 2.5rem;
+        align-items: start;
+      }
+
+      .section-label {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #111;
+        padding-top: 0.1rem;
+        line-height: 1.8;
+        letter-spacing: -0.02em;
+      }
+
+      .section-label::before {
+        content: "// ";
+        color: #b05a3a;
+        opacity: 0.7;
+      }
+
+      /* List */
+      ol {
+        list-style: none;
+        padding-left: 0.25rem;
+        border-left: 1px solid #b05a3a;
+        padding-left: 1rem;
+      }
+
+      li {
+        position: relative;
+        margin-bottom: 0.7rem;
+        font-size: 0.88rem;
+        line-height: 1.8;
+        letter-spacing: -0.02em;
+        color: #000;
+      }
+
+      li::before {
+        content: "> ";
+        color: #aaa;
+      }
+
+      a {
+        color: #1a1a1a;
+        text-decoration-color: #b05a3a;
+        text-underline-offset: 3px;
+      }
+
+      a:hover { text-decoration: none; }
+
+      .back {
+        font-size: 0.72rem;
+        color: #888;
+        margin-bottom: 2.5rem;
+        display: block;
+        text-decoration: none;
+      }
+
+      .back:hover { color: #1a1a1a; }
+
+      .footer { font-size: 0.88rem; color: #444; line-height: 1.55; }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 0 3rem;
+      }
+
+      @media (max-width: 640px) {
+        body { padding: 2.5rem 1.5rem 4rem; }
+        .section, .footer-grid { grid-template-columns: 1fr; gap: 0.4rem 0; }
+        .title img { max-width: 40px; }
+      }
+    </style>
   </head>
   <body>
     <div class="title">
-      <h1 class="f3 f2-m f1-l">Will Chavez (he/him)</h1>
-      <img
-        src="https://cdn.jsdelivr.net/gh/willchavez/willchavez-site/img/will.png"
-        alt="Will Chavez"
-      />
+      <div>
+        <h1>Will Chavez<span class="cursor"></span></h1>
+        <div class="pronouns">he/him</div>
+      </div>
+      <img src="https://cdn.jsdelivr.net/gh/willchavez/willchavez-site/img/will.png" alt="Will Chavez" />
     </div>
 
-    <h2 class="summary lh-copy">
-      I prototype, design, and build new software experiences and tooling like
-    </h2>
-    <ol class="summary">
-      <li>
-        icons, emoji, and illustrations @
-        <a href="https://fluent2.microsoft.design/">fluent design studio</a>
-      </li>
-      <li>
-        digital security & risk engineering team @
-        <a class="summary__company" href="https://www.microsoft.com/en-us/"
-          >Microsoft</a
-        >
-      </li>
-      <li>
-        <a href="https://xcompanalytics.com/">XComp Analytics</a> @
-        <a href="https://www.ibm.com/garage">IBM Garage</a>
-      </li>
-      <li>
-        <a
-          href="https://www.ibm.com/products/watsonx-assistant?p1=Search&p4=43700080276655105&p5=p&p9=58700008726615145"
-          >chatbots</a
-        >
-        @ Watson
-      </li>
-      <li>
-        r&d projects @
-        <a href="https://www.lockheedmartin.com/">Lockheed Martin</a>
-      </li>
-    </ol>
+    <div class="section">
+      <span class="section-label">I prototype, design, and build new software experiences like</span>
+      <ol>
+        <li>gen ai experiences & prototyping @ <a href="https://fluent2.microsoft.design/">fluent design studio</a></li>
+        <li>digital security & risk engineering team @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
+        <li><a href="https://xcompanalytics.com/">XComp Analytics</a> @ <a href="https://www.ibm.com/garage">IBM Garage</a></li>
+        <li><a href="https://www.ibm.com/products/watsonx-assistant">chatbots</a> @ Watson</li>
+        <li>r&d projects @ <a href="https://www.lockheedmartin.com/">Lockheed Martin</a></li>
+      </ol>
+    </div>
 
-    <h2 class="summary lh-copy">Currently, I'm</h2>
-    <ol class="summary">
-      <li>
-        taking an HCI course @
-        <a href="https://omscs.gatech.edu/">Georgia Tech</a>
-      </li>
-      <li>
-        prototyping new AI experiences @
-        <a href="https://www.microsoft.com/en-us/">Microsoft</a>
-      </li>
-      <li>
-        mentoring early-in-career new hires @
-        <a href="https://digitalnest.org/">Digital Nest</a>
-      </li>
-      <li>
-        working on my spanish on <a href="https://preply.com/">Preply</a> 🙇🏽
-      </li>
-      <li>
-        learning Ableton Live and creating
-        <a href="https://soundcloud.com/william-chavez-salinas/sets/2026-ep"
-          >music</a
-        >
-      </li>
-      <li>
-        <a href="https://www.goodreads.com/user/show/126295152-will-chavez"
-          >reading</a
-        >
-        whenever I can
-      </li>
-    </ol>
+    <div class="section">
+      <span class="section-label">Currently, I'm</span>
+      <ol>
+        <li>taking an HCI course @ <a href="https://omscs.gatech.edu/">Georgia Tech</a></li>
+        <li>prototyping new AI experiences @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
+        <li>mentoring early-in-career new hires @ <a href="https://digitalnest.org/">Digital Nest</a></li>
+        <li>working on my spanish on <a href="https://preply.com/">Preply</a> 🙇🏽</li>
+        <li>learning Ableton Live and creating <a href="https://soundcloud.com/william-chavez-salinas/sets/2026-ep">music</a></li>
+        <li><a href="https://www.goodreads.com/user/show/126295152-will-chavez">reading</a> whenever I can</li>
+      </ol>
+    </div>
 
-    <h2 class="summary lh-copy">Previously, I've</h2>
-    <ol class="summary">
-      <li class="">
-        taken vocal / piano / ensemble lessons @
-        <a href="https://www.seattlejazzacademy.com/">SJA</a>
-      </li>
-      <li>
-        played piano in a
-        <a href="https://www.youtube.com/watch?v=VOtTwHimb8A">jazz quintet</a>
-      </li>
-      <li>
-        volunteered development to
-        <a
-          href="https://medium.com/@willchavez/rebuilding-hireharlem-com-f07773edb7dc"
-          >Hire Harlem</a
-        >, a site that spotlighted minority-owned businesses
-      </li>
-      <li>
-        kept an ongoing playlist of my currently listened to tracks via
-        <a
-          href="https://open.spotify.com/user/wchavezsalinas?si=af87c79d6a7a479f"
-          >Spotify</a
-        >
-        /
-        <a href="https://music.apple.com/profile/willchavez">Apple Music</a>
-        for the past 8 years
-      </li>
-      <li>
-        kept a <a href="https://www.instagram.com/willchavez/">horrible</a>
-        <a href="https://www.linkedin.com/in/willchavez/">amount</a> of
-        <a href="https://x.com/_willchavez">social</a>
-        <a href="https://medium.com/@willchavez">media</a>
-        <a href="https://letterboxd.com/willchavez/">profiles</a>
-      </li>
-    </ol>
-    <h2 class="summary lh-copy">
-      Shoot me an <a href="mailto:wchavezsalinas@gmail.com">email</a> if you'd
-      like to check out my portfolio
-    </h2>
+    <div class="section">
+      <span class="section-label">Previously, I've</span>
+      <ol>
+        <li>shipped <a href="https://github.com/microsoft/fluentui-system-icons">icons</a>, <a href="https://github.com/microsoft/fluentui-emoji">emoji</a> 🫠, and <a href="https://github.com/microsoft/fluentui-emoji-animated">animated emoji</a> 🪄 @ <a href="https://fluent2.microsoft.design/">fluent design studio</a></li>
+        <li>taken vocal / piano / ensemble lessons @ <a href="https://www.seattlejazzacademy.com/">SJA</a></li>
+        <li>played piano in a <a href="https://www.youtube.com/watch?v=VOtTwHimb8A">jazz quintet</a></li>
+        <li>volunteered development to <a href="https://medium.com/@willchavez/rebuilding-hireharlem-com-f07773edb7dc">Hire Harlem</a>, a site that spotlighted minority-owned businesses</li>
+        <li>kept an ongoing playlist via <a href="https://open.spotify.com/user/wchavezsalinas">Spotify</a> / <a href="https://music.apple.com/profile/willchavez">Apple Music</a> for the past 8 years</li>
+        <li>kept a <a href="https://www.instagram.com/willchavez/">horrible</a> <a href="https://www.linkedin.com/in/willchavez/">amount</a> of <a href="https://x.com/_willchavez">social</a> <a href="https://medium.com/@willchavez">media</a> <a href="https://letterboxd.com/willchavez/">profiles</a></li>
+      </ol>
+    </div>
+
+    <div class="footer-grid">
+      <span></span>
+      <p class="footer">check out my <a href="work.html">work</a>, or shoot me an <a href="mailto:wchavezsalinas@gmail.com">email</a></p>
+    </div>
   </body>
 </html>

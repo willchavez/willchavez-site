@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Icon Scaling Tool — Will Chavez" />
+    <meta name="description" content="GenUI — Bebop Deep Work — Will Chavez" />
     <meta name="author" content="William Chavez" />
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,7 +17,7 @@
       gtag('js', new Date());
       gtag('config', 'G-RPXX4TMRSH');
     </script>
-    <title>Will Chavez — Icon Scaling Tool</title>
+    <title>Will Chavez — GenUI / Bebop </title>
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -83,17 +83,15 @@
       .back { font-size: 0.72rem; color: #888; margin-bottom: 2.5rem; display: block; text-decoration: none; }
       .back:hover { color: #1a1a1a; }
 
-      /*
-        4 portrait images: export (596×1122), headless (800×1045), rename gif (292×540), squash (592×1116)
-        All portrait-ish — 4-column row. headless is slightly wider so it'll be a touch taller, which is fine.
-      */
+      .img-grid img { cursor: zoom-in; }
+
+      /* 5 landscape images (2432×1930, ~1.26 ratio) — 2-col grid, last spans full width */
       .img-grid {
         border-left: 1px solid #b05a3a;
         padding-left: 1rem;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 0.5rem;
-        align-items: start;
       }
 
       .img-grid img {
@@ -104,7 +102,7 @@
         border: 1px solid #e0dcd7;
       }
 
-      .img-grid img { cursor: zoom-in; }
+      .img-grid img.full { grid-column: 1 / -1; }
 
       #lightbox {
         display: none;
@@ -134,7 +132,8 @@
       @media (max-width: 640px) {
         body { padding: 2.5rem 1.5rem 4rem; }
         .section { grid-template-columns: 1fr; gap: 0.4rem 0; }
-        .img-grid { grid-template-columns: repeat(2, 1fr); }
+        .img-grid { grid-template-columns: 1fr; }
+        .img-grid img.full { grid-column: 1; }
       }
     </style>
   </head>
@@ -143,35 +142,36 @@
 
     <div class="title">
       <div>
-        <h1>Icon Scaling Tool</h1>
-        <div class="subtitle">@ <a href="https://fluent2.microsoft.design/">Fluent Design Studio</a>, Microsoft</div>
+        <h1>GenUI — Bebop</h1>
+        <div class="subtitle">@ <a href="https://www.microsoft.com/en-us/">Microsoft</a></div>
       </div>
     </div>
 
     <div class="section">
       <span class="section-label">about</span>
-      <p>A <a href="https://www.figma.com/community/plugin/875501505522624941/icon-scaling-tool">Figma plugin</a> used internally at Microsoft and available world-wide. Scales icons in Figma and exports them in PDF & SVG formats. Built in close collaboration with designers and woven into the bi-weekly icon push that ships updates across Microsoft's product surfaces.</p>
+      <p>Exploratory deep work focused on shaping next-generation Copilot output. This work pushed beyond static responses into composable, structured UI — blending conversational AI with editorial layout systems to make AI output feel less like a wall of text and more like something you'd actually want to read.</p>
     </div>
 
     <div class="section">
       <span class="section-label">contributions</span>
       <ol>
-        <li>worked directly with designers to understand their workflow needs and iterated on the plugin accordingly</li>
-        <li>made the plugin completely headless so it could run as part of the automated bi-weekly icon release pipeline</li>
-        <li>combined vector paths to reduce SVG node count (squashing), cutting file size and improving render performance</li>
-        <li>added metadata export for each icon component — covering metaphors, descriptions, sizes, and themes</li>
+        <li>prototyped rich output patterns that move beyond simple chat responses toward structured, scannable layouts</li>
+        <li>explored layout, hierarchy, and composition systems for AI-generated UI</li>
+        <li>bridged design and engineering through production-minded prototypes built to validate ideas quickly with stakeholders</li>
       </ol>
     </div>
 
     <div class="section">
       <span class="section-label">screenshots</span>
       <div class="img-grid">
-        <img src="../img/portfolio/icon-scaling-tool/ist-export.png" alt="Export panel" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-headless.png" alt="Headless mode" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-rename.gif" alt="Rename demo" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-squash.png" alt="Squash/combine paths" />
+        <img src="../img/portfolio/genui/1.png" alt="GenUI screenshot 1" />
+        <img src="../img/portfolio/genui/2.png" alt="GenUI screenshot 2" />
+        <img src="../img/portfolio/genui/3.png" alt="GenUI screenshot 3" />
+        <img src="../img/portfolio/genui/4.png" alt="GenUI screenshot 4" />
+        <img class="full" src="../img/portfolio/genui/5.png" alt="GenUI screenshot 5" />
       </div>
     </div>
+
     <div id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
     <script>
       const lightbox = document.getElementById('lightbox');

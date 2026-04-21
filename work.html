@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Work — William Chavez, Design Technologist" />
+    <meta name="author" content="William Chavez" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet" />
+    <title>Will Chavez — Work</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RPXX4TMRSH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RPXX4TMRSH");
+    </script>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body {
+        background: #f7f5f2;
+        font-family: "Source Serif 4", Georgia, serif;
+        color: #1a1a1a;
+        font-size: 17px;
+      }
+
+      body { padding: 4rem 4rem 6rem; }
+
+      .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 4rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #b05a3a;
+      }
+
+      h1 {
+        font-size: 1.9rem;
+        font-weight: 400;
+        color: #1a1a1a;
+        line-height: 1.3;
+      }
+
+      .pronouns {
+        font-size: 0.85rem;
+        color: #888;
+        margin-top: 0.3rem;
+      }
+
+      .title img {
+        max-width: 52px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+      }
+
+      .section {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 0 3rem;
+        margin-bottom: 2.5rem;
+        align-items: start;
+      }
+
+      .section-label {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #111;
+        padding-top: 0.1rem;
+        line-height: 1.8;
+        letter-spacing: -0.02em;
+      }
+
+      .section-label::before {
+        content: "// ";
+        color: #b05a3a;
+        opacity: 0.7;
+      }
+
+      ol {
+        list-style: none;
+        border-left: 1px solid #b05a3a;
+        padding-left: 1rem;
+      }
+
+      li {
+        position: relative;
+        margin-bottom: 0.7rem;
+        font-size: 0.88rem;
+        line-height: 1.8;
+        letter-spacing: -0.02em;
+        color: #000;
+      }
+
+      li::before {
+        content: "> ";
+        color: #aaa;
+      }
+
+      a {
+        color: #1a1a1a;
+        text-decoration-color: #b05a3a;
+        text-underline-offset: 3px;
+      }
+
+      a:hover { text-decoration: none; }
+
+      .back {
+        font-size: 0.72rem;
+        color: #888;
+        margin-bottom: 2.5rem;
+        display: block;
+        text-decoration: none;
+      }
+
+      .back:hover { color: #1a1a1a; }
+
+      .footer { font-size: 0.88rem; color: #444; line-height: 1.55; }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 0 3rem;
+      }
+
+      @media (max-width: 640px) {
+        body { padding: 2.5rem 1.5rem 4rem; }
+        .section, .footer-grid { grid-template-columns: 1fr; gap: 0.4rem 0; }
+        .title img { max-width: 40px; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="back" href="index-6.html">← index</a>
+
+    <div class="title">
+      <div>
+        <h1>Will Chavez — Work</h1>
+        <div class="pronouns">he/him</div>
+      </div>
+      <img src="https://cdn.jsdelivr.net/gh/willchavez/willchavez-site/img/will.png" alt="Will Chavez" />
+    </div>
+
+    <div class="section">
+      <span class="section-label">projects</span>
+      <ol>
+        <li><a href="portfolio/genui-bebop.html">GenUI — Bebop</a> — shaping next-gen Copilot output through composable, structured UI @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
+        <li><a href="portfolio/peer-survey.html">PeerSurvey redesign</a> — rethinking peer review in Canvas with a comment-centric, split-screen interface @ <a href="https://omscs.gatech.edu/">Georgia Tech</a></li>
+        <li><a href="portfolio/youtube-redesign.html">YouTube subscription redesign</a> — folder-based subscription organization with scoped search, evaluated across two rounds with 31 participants @ <a href="https://omscs.gatech.edu/">Georgia Tech</a></li>
+        <li><a href="portfolio/agent-builder.html">Agent Builder</a> — prototyping agent creation and configuration flows inside Copilot @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
+        <li><a href="portfolio/nav2.html">Nav 2.0</a> — prototyping next-gen navigation patterns for Copilot @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
+        <li><a href="portfolio/flubert.html">Flubert</a> — an LLM-powered Figma plugin that analyzes UI against Fluent Design System guidelines @ <a href="https://fluent2.microsoft.design/">Microsoft</a></li>
+        <li><a href="portfolio/icon-scaling-tool.html">icon scaling tool</a> — a Figma plugin used by designers across Microsoft to scale and export iconography</li>
+        <li><a href="portfolio/visual-diff.html">visual diff analyzer</a> — tooling to track changes in design assets at scale @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
+        <li><a href="portfolio/fluent.html">Fluent repos</a> — maintaining <a href="https://github.com/microsoft/fluentui-system-icons">icons</a>, <a href="https://github.com/microsoft/fluentui-emoji">emoji</a>, and <a href="https://github.com/microsoft/fluentui-emoji-animated">animated emoji</a> for the Fluent Design System</li>
+        <li><a href="https://xcompanalytics.com/">XComp Analytics</a> — a compensation analytics platform built with the <a href="https://www.ibm.com/garage">IBM Garage</a> team</li>
+        <li><a href="portfolio/hireharlem.html">Hire Harlem</a> — a site that spotlighted minority-owned businesses in Harlem and Oakland</li>
+        <li><a href="https://www.ibm.com/products/watsonx-assistant">Watson Assistant</a> — built third-party integration channels connecting to Slack and Facebook Messenger @ <a href="https://www.ibm.com/en-us">IBM</a></li>
+      </ol>
+    </div>
+
+    <div class="footer-grid">
+      <span></span>
+      <p class="footer">shoot me an <a href="mailto:wchavezsalinas@gmail.com">email</a> to connect</p>
+    </div>
+  </body>
+</html>

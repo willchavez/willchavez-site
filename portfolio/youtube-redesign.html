@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Icon Scaling Tool — Will Chavez" />
+    <meta name="description" content="YouTube Subscription Redesign — Will Chavez" />
     <meta name="author" content="William Chavez" />
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,7 +17,7 @@
       gtag('js', new Date());
       gtag('config', 'G-RPXX4TMRSH');
     </script>
-    <title>Will Chavez — Icon Scaling Tool</title>
+    <title>Will Chavez — YouTube Subscription Redesign</title>
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -83,15 +83,14 @@
       .back { font-size: 0.72rem; color: #888; margin-bottom: 2.5rem; display: block; text-decoration: none; }
       .back:hover { color: #1a1a1a; }
 
-      /*
-        4 portrait images: export (596×1122), headless (800×1045), rename gif (292×540), squash (592×1116)
-        All portrait-ish — 4-column row. headless is slightly wider so it'll be a touch taller, which is fine.
-      */
+      .img-grid img { cursor: zoom-in; }
+
+      /* 5 landscape screenshots (1440×900, ratio 1.6) — 1 full + 2-col pairs */
       .img-grid {
         border-left: 1px solid #b05a3a;
         padding-left: 1rem;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 0.5rem;
         align-items: start;
       }
@@ -104,7 +103,7 @@
         border: 1px solid #e0dcd7;
       }
 
-      .img-grid img { cursor: zoom-in; }
+      .img-grid img.full { grid-column: 1 / -1; }
 
       #lightbox {
         display: none;
@@ -134,7 +133,8 @@
       @media (max-width: 640px) {
         body { padding: 2.5rem 1.5rem 4rem; }
         .section { grid-template-columns: 1fr; gap: 0.4rem 0; }
-        .img-grid { grid-template-columns: repeat(2, 1fr); }
+        .img-grid { grid-template-columns: 1fr; }
+        .img-grid img.full { grid-column: 1; }
       }
     </style>
   </head>
@@ -143,35 +143,43 @@
 
     <div class="title">
       <div>
-        <h1>Icon Scaling Tool</h1>
-        <div class="subtitle">@ <a href="https://fluent2.microsoft.design/">Fluent Design Studio</a>, Microsoft</div>
+        <h1>YouTube Subscription Redesign</h1>
+        <div class="subtitle">@ <a href="https://omscs.gatech.edu/">Georgia Tech</a></div>
       </div>
     </div>
 
     <div class="section">
       <span class="section-label">about</span>
-      <p>A <a href="https://www.figma.com/community/plugin/875501505522624941/icon-scaling-tool">Figma plugin</a> used internally at Microsoft and available world-wide. Scales icons in Figma and exports them in PDF & SVG formats. Built in close collaboration with designers and woven into the bi-weekly icon push that ships updates across Microsoft's product surfaces.</p>
+      <p>HCI individual project redesigning YouTube's subscription management experience. YouTube gives users almost no control over how their subscribed channels are organized — the result is a long, cluttered list that most people abandon in favor of search or the Home feed. This project ran a full design cycle: survey-based needfinding with 25 participants, heuristic evaluation, three competing low-fidelity prototypes evaluated with 6 participants, and a medium-fidelity final prototype evaluated with 25 more. The winning design pairs a folder-based subscription sidebar with scoped search and filtering — putting users back in control without requiring constant manual upkeep.</p>
     </div>
 
     <div class="section">
       <span class="section-label">contributions</span>
       <ol>
-        <li>worked directly with designers to understand their workflow needs and iterated on the plugin accordingly</li>
-        <li>made the plugin completely headless so it could run as part of the automated bi-weekly icon release pipeline</li>
-        <li>combined vector paths to reduce SVG node count (squashing), cutting file size and improving render performance</li>
-        <li>added metadata export for each icon component — covering metaphors, descriptions, sizes, and themes</li>
+        <li>ran a 22-question needfinding survey (25 responses) and heuristic evaluation against Nielsen's usability principles — clutter, lack of grouping, and memory burden emerged as the top pain points</li>
+        <li>designed and compared three lo-fi prototypes: folder-based sidebar, scoped search + filters, and a subscriptions dashboard — evaluated with 6 participants using a Friedman test across four metrics</li>
+        <li>folder prototype won across all measures (ease 4.17, control 4.33, overall preference 4.17) and was selected by 4 of 6 participants as their top choice</li>
+        <li>built a medium-fidelity Figma prototype combining the top two concepts: collapsible folder sidebar with channel counts, scoped "search subscriptions" with folder-level filtering, and a "move to folder" overflow menu</li>
+        <li>final evaluation (25 participants) showed strongly positive results across all metrics — 96–100% of participants rated key usability dimensions 4 or 5 out of 5</li>
       </ol>
+    </div>
+
+    <div class="section">
+      <span class="section-label">prototype</span>
+      <p><a href="https://www.figma.com/proto/VMiBVQUaOBnqpjfg0OhJPh/Youtube-Subscriptions?node-id=2-1355&scaling=scale-down-width&page-id=0%3A1" target="_blank" rel="noopener">view Figma prototype →</a></p>
     </div>
 
     <div class="section">
       <span class="section-label">screenshots</span>
       <div class="img-grid">
-        <img src="../img/portfolio/icon-scaling-tool/ist-export.png" alt="Export panel" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-headless.png" alt="Headless mode" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-rename.gif" alt="Rename demo" />
-        <img src="../img/portfolio/icon-scaling-tool/ist-squash.png" alt="Squash/combine paths" />
+        <img class="full" src="../img/portfolio/youtube-redesign/1.png" alt="Folder-based subscriptions sidebar with Music & Audio expanded" />
+        <img src="../img/portfolio/youtube-redesign/4.png" alt="Tech & Gear folder expanded showing channels" />
+        <img src="../img/portfolio/youtube-redesign/5.png" alt="Move to folder overflow menu" />
+        <img src="../img/portfolio/youtube-redesign/2.png" alt="Create new folder modal" />
+        <img src="../img/portfolio/youtube-redesign/3.png" alt="Home feed with all folders collapsed after creation" />
       </div>
     </div>
+
     <div id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
     <script>
       const lightbox = document.getElementById('lightbox');
