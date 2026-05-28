@@ -6,9 +6,7 @@
     <meta name="description" content="Work — William Chavez, Design Technologist" />
     <meta name="author" content="William Chavez" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="preload" href="fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
     <title>Will Chavez — Work</title>
 
     <!-- Google tag (gtag.js) -->
@@ -22,9 +20,30 @@
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; }
 
+      /* Self-hosted + preloaded so the font is ready before first paint
+         (no swap, no jump). Variable font covers weights 200-900. */
+      @font-face {
+        font-family: "Source Serif 4";
+        font-style: normal;
+        font-weight: 200 900;
+        font-display: swap;
+        src: url("fonts/source-serif-4-latin.woff2") format("woff2");
+      }
+
+      /* Metric-matched fallback: Georgia sized to match Source Serif 4
+         so there's no layout shift if the local font is ever delayed. */
+      @font-face {
+        font-family: "Source Serif Fallback";
+        src: local("Georgia");
+        size-adjust: 108.59%;
+        ascent-override: 95.41%;
+        descent-override: 30.85%;
+        line-gap-override: 0%;
+      }
+
       html, body {
         background: #f7f5f2;
-        font-family: "Source Serif 4", Georgia, serif;
+        font-family: "Source Serif 4", "Source Serif Fallback", Georgia, serif;
         color: #1a1a1a;
         font-size: 17px;
       }
@@ -69,7 +88,7 @@
 
       .section-label {
         font-size: 1rem;
-        font-weight: 500;
+        font-weight: 400;
         color: #111;
         padding-top: 0.1rem;
         line-height: 1.8;
@@ -127,9 +146,18 @@
         gap: 0 3rem;
       }
 
+      /* Larger screens: widen the label column so it stays proportional */
+      @media (min-width: 1400px) {
+        .section, .footer-grid { grid-template-columns: 300px 1fr; }
+      }
+
+      @media (min-width: 1920px) {
+        .section, .footer-grid { grid-template-columns: 25% 1fr; }
+      }
+
       @media (max-width: 640px) {
         body { padding: 2.5rem 1.5rem 4rem; }
-        .section, .footer-grid { grid-template-columns: 1fr; gap: 0.4rem 0; }
+        .section, .footer-grid { grid-template-columns: 1fr; gap: 1rem 0; }
         .title img { max-width: 40px; }
       }
     </style>
