@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Bebop — Will Chavez" />
+    <meta name="author" content="William Chavez" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RPXX4TMRSH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RPXX4TMRSH');
+    </script>
+    <title>Will Chavez — Bebop</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body {
+        background: #f7f5f2;
+        font-family: "Source Serif 4", Georgia, serif;
+        color: #1a1a1a;
+        font-size: 17px;
+      }
+
+      body { padding: 4rem 4rem 6rem; }
+
+      .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 4rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #b05a3a;
+      }
+
+      h1 { font-size: 1.9rem; font-weight: 400; color: #1a1a1a; line-height: 1.3; }
+
+      .subtitle { font-size: 0.85rem; color: #888; margin-top: 0.3rem; }
+
+      .section {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 0 3rem;
+        margin-bottom: 2.5rem;
+        align-items: start;
+      }
+
+      .section-label {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #111;
+        padding-top: 0.1rem;
+        line-height: 1.8;
+        letter-spacing: -0.02em;
+      }
+
+      .section-label::before { content: "// "; color: #b05a3a; opacity: 0.7; }
+
+      .section p { font-size: 0.88rem; line-height: 1.8; letter-spacing: -0.02em; color: #000; }
+
+      ol { list-style: none; border-left: 1px solid #b05a3a; padding-left: 1rem; }
+
+      li {
+        position: relative;
+        margin-bottom: 0.7rem;
+        font-size: 0.88rem;
+        line-height: 1.8;
+        letter-spacing: -0.02em;
+        color: #000;
+      }
+
+      li::before { content: "> "; color: #aaa; }
+
+      a { color: #1a1a1a; text-decoration-color: #b05a3a; text-underline-offset: 3px; }
+      a:hover { text-decoration: none; }
+
+      .back { font-size: 0.72rem; color: #888; margin-bottom: 2.5rem; display: block; text-decoration: none; }
+      .back:hover { color: #1a1a1a; }
+
+      .img-grid img { cursor: zoom-in; }
+
+      .img-grid {
+        border-left: 1px solid #b05a3a;
+        padding-left: 1rem;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        align-items: start;
+      }
+
+      .img-grid img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 4px;
+        border: 1px solid #e0dcd7;
+      }
+
+      #lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(26, 26, 26, 0.9);
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        cursor: zoom-out;
+      }
+
+      #lightbox.open { display: flex; }
+
+      #lightbox img {
+        max-width: 90vw;
+        max-height: 90vh;
+        width: auto;
+        height: auto;
+        border-radius: 4px;
+        border: 1px solid #e0dcd7;
+        box-shadow: 0 8px 48px rgba(0, 0, 0, 0.5);
+        cursor: default;
+      }
+
+      @media (max-width: 640px) {
+        body { padding: 2.5rem 1.5rem 4rem; }
+        .section { grid-template-columns: 1fr; gap: 0.4rem 0; }
+        .img-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="back" href="../work.html">← work</a>
+
+    <div class="title">
+      <div>
+        <h1>Bebop</h1>
+        <div class="subtitle">@ <a href="https://www.microsoft.com/en-us/">Microsoft</a></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <span class="section-label">about</span>
+      <p>Product design and prototyping work that shaped the new Microsoft 365 Copilot experience. This work focused on making Copilot interactions more usable and expressive through tighter UI patterns, richer response behaviors, and clearer interaction affordances.</p>
+    </div>
+
+    <div class="section">
+      <span class="section-label">contributions</span>
+      <ol>
+        <li>prototyped and refined core interaction patterns used in the updated M365 Copilot experience</li>
+        <li>explored response composition and interface details to improve clarity, speed, and confidence during everyday tasks</li>
+        <li>partnered across design and engineering to validate concepts quickly through high-fidelity, production-minded prototypes</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <span class="section-label">screenshots</span>
+      <div class="img-grid">
+        <img src="../img/portfolio/bebop/send.gif" alt="Bebop send interaction" />
+        <img src="../img/portfolio/bebop/zoomedout.gif" alt="Bebop zoomed-out view" />
+        <img src="../img/portfolio/bebop/ciq-1.gif" alt="Bebop CIQ interaction 1" />
+        <img src="../img/portfolio/bebop/ciq-working.gif" alt="Bebop CIQ working state" />
+        <img src="../img/portfolio/bebop/refiners1.gif" alt="Bebop refiners interaction" />
+        <img src="../img/portfolio/bebop/proactive-assistance-button-bar.gif" alt="Bebop proactive assistance button bar" />
+        <img src="../img/portfolio/bebop/testing%20input.png" alt="Bebop testing input screen" />
+        <img src="../img/portfolio/bebop/refiner.png" alt="Bebop refiner details" />
+      </div>
+    </div>
+
+    <div id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
+    <script>
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      document.querySelectorAll('.img-grid img').forEach(img => {
+        img.addEventListener('click', () => {
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt;
+          lightbox.classList.add('open');
+        });
+      });
+      lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') lightbox.classList.remove('open'); });
+    </script>
+  </body>
+</html>
