@@ -155,9 +155,13 @@
         .section, .footer-grid { grid-template-columns: 25% 1fr; }
       }
 
+      /* Stack into a single column before the content column gets too cramped */
+      @media (max-width: 820px) {
+        .section, .footer-grid { grid-template-columns: 1fr; gap: 1rem 0; }
+      }
+
       @media (max-width: 640px) {
         body { padding: 2.5rem 1.5rem 4rem; }
-        .section, .footer-grid { grid-template-columns: 1fr; gap: 1rem 0; }
         .title img { max-width: 40px; }
       }
     </style>

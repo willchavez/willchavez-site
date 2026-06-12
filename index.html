@@ -163,9 +163,13 @@
         .section, .footer-grid { grid-template-columns: 25% 1fr; }
       }
 
+      /* Stack into a single column before the content column gets too cramped */
+      @media (max-width: 820px) {
+        .section, .footer-grid { grid-template-columns: 1fr; gap: 1rem 0; }
+      }
+
       @media (max-width: 640px) {
         body { padding: 2.5rem 1.5rem 4rem; }
-        .section, .footer-grid { grid-template-columns: 1fr; gap: 1rem 0; }
         .title img { max-width: 40px; }
       }
     </style>
@@ -182,10 +186,10 @@
     <div class="section">
       <span class="section-label">I prototype, design, and build new software experiences like</span>
       <ol>
-        <li>gen ai experiences & prototyping @ <a href="https://fluent2.microsoft.design/">fluent design studio</a></li>
+        <li>gen AI interfaces and design systems @ <a href="https://fluent2.microsoft.design/">fluent design studio</a></li>
         <li>digital security & risk engineering team @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
         <li><a href="https://xcompanalytics.com/">XComp Analytics</a> @ <a href="https://www.ibm.com/garage">IBM Garage</a></li>
-        <li><a href="https://www.ibm.com/products/watsonx-assistant">chatbots</a> @ Watson</li>
+        <li><a href="https://www.ibm.com/products/watsonx-assistant">chat assistants</a> @ Watson</li>
         <li>r&d projects @ <a href="https://www.lockheedmartin.com/">Lockheed Martin</a></li>
       </ol>
     </div>
@@ -193,8 +197,8 @@
     <div class="section">
       <span class="section-label">Currently, I'm</span>
       <ol>
-        <li>taking an HCI course @ <a href="https://omscs.gatech.edu/">Georgia Tech</a></li>
-        <li>prototyping new AI experiences @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
+        <li>taking the summer semester off from <a href="https://omscs.gatech.edu/">school</a></li>
+        <li>building with AI @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
         <li>mentoring early-in-career new hires @ <a href="https://digitalnest.org/">Digital Nest</a></li>
         <li>working on my spanish on <a href="https://preply.com/">Preply</a> 🙇🏽</li>
         <li>learning Ableton Live and creating <a href="https://soundcloud.com/william-chavez-salinas/sets/2026-ep">music</a></li>
