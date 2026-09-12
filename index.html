@@ -123,6 +123,130 @@
         font-size: 1rem;
         font-weight: 400;
         line-height: 1.8;
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Will Chavez — UX Engineer</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="preload" href="fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      @font-face {
+        font-family: "Source Serif 4";
+        font-style: normal;
+        font-weight: 200 900;
+        font-display: swap;
+        src: url("fonts/source-serif-4-latin.woff2") format("woff2");
+      }
+
+      @font-face {
+        font-family: "Source Serif Fallback";
+        src: local("Georgia");
+        size-adjust: 108.59%;
+        ascent-override: 95.41%;
+        descent-override: 30.85%;
+        line-gap-override: 0%;
+      }
+
+      :root {
+        color-scheme: light dark;
+        --paper: #f7f5f2;
+        --ink: #1a1a1a;
+        --muted: #756f69;
+        --rust: #b05a3a;
+        --hairline: #ddd5cd;
+        --portrait-paper: #f1ebe3;
+      }
+
+      html, body {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Source Serif 4", "Source Serif Fallback", Georgia, serif;
+        font-size: 17px;
+        font-optical-sizing: auto;
+        font-variant-numeric: oldstyle-nums;
+      }
+
+      body {
+        padding: 7.5rem 4rem 6rem;
+        transition: background-color 280ms ease, color 280ms ease;
+      }
+
+      .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 4rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--rust);
+      }
+
+      h1 {
+        color: var(--ink);
+        font-size: 1.9rem;
+        font-weight: 420;
+        line-height: 1.3;
+        letter-spacing: -0.025em;
+        text-wrap: balance;
+      }
+
+      .cursor {
+        display: inline-block;
+        width: 0.55em;
+        height: 0.85em;
+        margin-left: 3px;
+        vertical-align: -0.04em;
+        background: var(--rust);
+        cursor: pointer;
+        transform-origin: bottom;
+        animation: breathe 3.4s ease-in-out infinite;
+      }
+
+      @keyframes breathe {
+        0%, 100% { transform: scaleY(0.82); opacity: 0.74; }
+        50% { transform: scaleY(1.08); opacity: 1; }
+      }
+
+      .pronouns {
+        margin-top: 0.3rem;
+        color: var(--muted);
+        font-size: 0.85rem;
+        font-variant-caps: all-small-caps;
+        letter-spacing: 0.07em;
+      }
+
+      .portrait {
+        width: 52px;
+        height: 52px;
+        padding: 2px;
+        border: 1px solid color-mix(in srgb, var(--rust) 62%, var(--hairline));
+        border-radius: 8px;
+        background: var(--portrait-paper);
+        object-fit: contain;
+        transition: transform 420ms cubic-bezier(.2, 1.5, .3, 1), box-shadow 280ms ease;
+      }
+
+      .portrait:hover, .portrait:focus-visible, .portrait.tilt {
+        transform: translateY(-2px) rotate(4deg) scale(1.04);
+        box-shadow: 0 8px 20px color-mix(in srgb, var(--rust) 16%, transparent);
+      }
+
+      .section {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 0 3rem;
+        margin-bottom: 2.5rem;
+        align-items: start;
+      }
+
+      .section-label {
+        padding-top: 0.1rem;
+        color: var(--ink);
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.8;
         letter-spacing: -0.02em;
         text-wrap: balance;
       }
@@ -149,7 +273,14 @@
       a {
         color: var(--ink);
         text-decoration: none;
-        background: linear-gradient(color-mix(in srgb, var(--rust) 22%, transparent), color-mix(in srgb, var(--rust) 22%, transparent)) 0 100% / 0 100% no-repeat;
+        /* hover fill blooms outward from the cursor's entry point (--o, set by JS).
+           background-position-x stays at the origin: as size grows 0->100%,
+           the covered span runs from --o*(1-s) to --o*(1-s)+s, i.e. the point
+           out to both ends. Collapse shrinks back toward the exit point. */
+        background-image: linear-gradient(color-mix(in srgb, var(--rust) 22%, transparent), color-mix(in srgb, var(--rust) 22%, transparent));
+        background-repeat: no-repeat;
+        background-position: calc(var(--o, 0.5) * 100%) 100%;
+        background-size: 0% 100%;
         box-shadow: inset 0 -1px var(--rust);
         transition: background-size 320ms cubic-bezier(.2, .8, .2, 1), color 200ms ease;
       }
@@ -291,7 +422,26 @@
       });
 
       document.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("pointerdown", () => link.classList.add("pressed"));
+        // Record where the pointer entered/left the link as a 0..1 fraction of
+        // the relevant line box (links can wrap, so pick the rect under the
+        // pointer). The CSS background-position uses it as the bloom origin.
+        const setOrigin = (event) => {
+          if (event.clientX == null) return;
+          let rect = null;
+          for (const r of link.getClientRects()) {
+            if (event.clientY >= r.top && event.clientY <= r.bottom) { rect = r; break; }
+          }
+          rect = rect || link.getBoundingClientRect();
+          if (!rect.width) return;
+          const o = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
+          link.style.setProperty("--o", o.toFixed(4));
+        };
+        link.addEventListener("pointerenter", (event) => { if (event.pointerType === "mouse") setOrigin(event); });
+        link.addEventListener("pointerleave", (event) => { if (event.pointerType === "mouse") setOrigin(event); });
+        link.addEventListener("pointerdown", (event) => {
+          setOrigin(event); // touch tap: fill flashes from the tapped point
+          link.classList.add("pressed");
+        });
         ["pointerup", "pointerleave", "pointercancel"].forEach((event) =>
           link.addEventListener(event, () => link.classList.remove("pressed"))
         );
