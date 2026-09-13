@@ -204,10 +204,14 @@
         display: inline-block;
         filter: saturate(0.45);
         transform: translateY(1px) rotate(0);
-        transition: transform 450ms cubic-bezier(.2, 1.5, .3, 1), filter 300ms ease;
+        /* same gentle ease family as the link fill - soft, no snap/bounce */
+        transition: transform 480ms cubic-bezier(.22, 1, .36, 1), filter 300ms ease-out;
       }
 
-      li:hover .emoji, li.revealed .emoji {
+      /* the emoji belongs to the link right before it, so it reacts only when
+         its own anchor is hovered/focused/pressed - not when the rest of the
+         line is hovered. li.revealed stays as the tap-on-line touch fallback. */
+      a:hover + .emoji, a:focus-visible + .emoji, a.pressed + .emoji, li.revealed .emoji {
         filter: saturate(1.1);
         transform: translateY(-2px) rotate(-9deg) scale(1.18);
       }
