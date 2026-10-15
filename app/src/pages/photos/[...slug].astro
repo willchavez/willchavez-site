@@ -1,0 +1,16 @@
+---
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { getPhotos, fmtDate, img } from "../../lib/content";
+export async function getStaticPaths() {
+  return (await getPhotos()).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const meta = [fmtDate(d.date), d.place].filter(Boolean).join(" · ");
+---
+<Base title={d.title ?? "Photo"} current="photos" heading={d.title ?? "Photo"} sub={meta} description={d.caption}>
+  <a class="back" href="/photos">← photos</a>
+  <img class="photo-full" src={img(d.image, 1600)} srcset={`${img(d.image, 960)} 960w, ${img(d.image, 1600)} 1600w`} sizes="(max-width: 900px) 100vw, 62rem" alt={d.alt ?? d.title ?? ""} decoding="async" />
+  {d.caption && <p class="caption">{d.caption}</p>}
+</Base>
