@@ -1,0 +1,41 @@
+---
+import Base from "../layouts/Base.astro";
+import { getWriting, getPhotos, getEnjoying, fmtDate } from "../lib/content";
+
+const [writing, photos, enjoying] = await Promise.all([getWriting(), getPhotos(), getEnjoying()]);
+const latest = [
+  ...writing.map((e) => ({ when: e.data.date, label: e.data.title, href: `/writing/${e.id}`, kind: "writing" })),
+  ...photos.map((e) => ({ when: e.data.date, label: e.data.title ?? "a photo", href: `/photos/${e.id}`, kind: "photo" })),
+  ...enjoying.filter((e) => e.data.status === "enjoyed").map((e) => ({ when: e.data.date, label: e.data.title, href: `/enjoying/${e.id}`, kind: e.data.kind })),
+].sort((a, b) => b.when.getTime() - a.when.getTime()).slice(0, 4);
+---
+<Base current="home">
+<div class="section">
+  <span class="section-label">I prototype, design, and build</span>
+  <ol>
+    <li>gen AI interfaces and design systems @ <a href="https://fluent2.microsoft.design/">fluent design studio</a></li>
+  </ol>
+</div>
+<div class="section">
+  <span class="section-label">Currently, I'm</span>
+  <ol>
+    <li>back in <a href="https://omscs.gatech.edu/">school</a> @ Georgia Tech - currently taking <a href="https://omscs.gatech.edu/cs-6795-introduction-cognitive-science">CogSci</a></li>
+    <li>working on my spanish on <a href="https://preply.com/">Preply</a> <span class="emoji">🙇🏽</span></li>
+    <li>learning Ableton Live and creating <a href="https://soundcloud.com/william-chavez-salinas/sets/2026-ep">music</a></li>
+    <li>making little bleeps and bloops with Teenage Engineering synths</li>
+    <li><a href="https://www.goodreads.com/user/show/126295152-will-chavez">reading</a> whenever I can</li>
+  </ol>
+</div>
+  {latest.length > 0 && (
+    <div class="section">
+      <span class="section-label">Latest</span>
+      <ol>
+        {latest.map((l) => (<li><a href={l.href}>{l.label}</a> <span class="muted">· {l.kind}, {fmtDate(l.when)}</span></li>))}
+      </ol>
+    </div>
+  )}
+  <div class="footer-grid">
+    <span></span>
+    <p class="footer">check out my <a href="/work">work</a> or <a href="/about">the longer version</a>, or shoot me an <a href="mailto:wchavezsalinas@gmail.com">email</a></p>
+  </div>
+</Base>
