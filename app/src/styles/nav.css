@@ -1,0 +1,58 @@
+/* top bar: avatar + navigation. phones get a dropdown pill, desktop gets a
+   segmented switch that rests as just the current page and opens on hover/focus. */
+.topbar { position: relative; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2.6rem; }
+.avatar { display: block; box-shadow: none; border-radius: 8px; line-height: 0; }
+.avatar::before { display: none; }
+.avatar:hover, .avatar:focus-visible { background: none; }
+.topbar .portrait { width: 48px; height: 48px; display: block; }
+
+:root { --fill: #9c4b2e; --fill-ink: #fbf9f6; }
+@media (prefers-color-scheme: dark) { :root { --fill: #df7955; --fill-ink: #171411; } }
+
+.nav a { box-shadow: none; }
+.nav a::before { display: none; }
+
+/* dropdown pill (phones) */
+.pill { position: relative; }
+.pill > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: 0.6rem;
+  min-height: 48px; padding: 0 1rem; border: 1px solid var(--rust); border-radius: 999px;
+  color: var(--rust); letter-spacing: -0.02em; user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.pill > summary::-webkit-details-marker { display: none; }
+.pill > summary::after {
+  content: ""; width: 0.42em; height: 0.42em; margin: -0.18em 0 0 0.1em;
+  border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); transition: transform 240ms ease;
+}
+.pill[open] > summary::after { transform: rotate(-135deg); margin-top: 0.1em; }
+.pill > summary:focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
+.pill .menu {
+  position: absolute; z-index: 20; top: 58px; left: 0; min-width: 15rem; padding: 0.4rem;
+  background: var(--paper); border: 1px solid var(--rust); border-radius: 16px;
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--rust) 16%, transparent);
+}
+.pill .menu a { display: flex; align-items: center; justify-content: space-between; min-height: 46px; padding: 0 0.8rem; border-radius: 10px; letter-spacing: -0.02em; }
+.pill .menu a::after { content: attr(data-count); color: var(--muted); font-size: 0.78rem; }
+.pill .menu a span::before { content: "// "; color: var(--rust); opacity: 0.75; }
+.pill .menu a[aria-current="page"] { background: color-mix(in srgb, var(--rust) 14%, transparent); }
+.pill .menu a:hover, .pill .menu a:focus-visible { background: color-mix(in srgb, var(--rust) 12%, transparent); }
+
+/* segmented switch (desktop) */
+.seg { display: none; }
+@media (min-width: 821px) {
+  .pill { display: none; }
+  .seg { display: inline-flex; padding: 4px; border: 1px solid var(--rust); border-radius: 999px; }
+  .seg a {
+    display: flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border-radius: 999px;
+    white-space: nowrap; overflow: hidden; letter-spacing: -0.02em; font-size: 0.98rem;
+    transition: background 300ms ease, color 300ms ease, max-width 450ms cubic-bezier(.22, 1, .36, 1), padding 450ms cubic-bezier(.22, 1, .36, 1), opacity 300ms ease;
+  }
+  .seg a:hover, .seg a:focus-visible { background: color-mix(in srgb, var(--rust) 12%, transparent); }
+  .seg a[aria-current="page"] { background: var(--fill); color: var(--fill-ink); }
+}
+/* rest as just the current page, but only where hover exists. touch laptops keep the full switch. */
+@media (min-width: 821px) and (hover: hover) {
+  .seg a { max-width: 11rem; }
+  .seg:not(:hover):not(:focus-within) a:not([aria-current="page"]) { max-width: 0; padding-left: 0; padding-right: 0; opacity: 0; }
+}
+@media (max-width: 640px) { .topbar { margin-bottom: 2rem; } }
