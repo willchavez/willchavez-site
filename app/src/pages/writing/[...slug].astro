@@ -1,0 +1,15 @@
+---
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { getWriting, fmtDate, img } from "../../lib/content";
+export async function getStaticPaths() {
+  return (await getWriting()).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<Base title={entry.data.title} current="writing" heading={entry.data.title} sub={fmtDate(entry.data.date)} description={entry.data.summary}>
+  <a class="back" href="/writing">← writing</a>
+  {entry.data.cover && <img class="photo-full" style="margin-bottom:1.6rem" src={img(entry.data.cover, 1600)} alt="" />}
+  <div class="prose"><Content /></div>
+</Base>
