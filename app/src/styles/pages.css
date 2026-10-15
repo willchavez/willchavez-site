@@ -1,0 +1,68 @@
+.page-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; padding-bottom: 1.6rem; border-bottom: 1px solid var(--rust); }
+.page-head h1 { margin: 0; }
+.pronouns a { box-shadow: none; }
+main { display: block; }
+
+.muted { color: var(--muted); }
+.small { font-size: 0.85rem; }
+.sc { color: var(--muted); font-size: 0.85rem; font-variant-caps: all-small-caps; letter-spacing: 0.07em; }
+.rating { color: var(--rust); letter-spacing: 0.15em; }
+li .note { display: block; color: var(--muted); }
+
+/* empty states */
+.empty { padding-left: 1rem; border-left: 1px solid var(--rust); max-width: 34rem; }
+.empty p { font-size: 0.95rem; line-height: 1.8; letter-spacing: -0.02em; }
+.empty p + p { margin-top: 0.6rem; color: var(--muted); font-size: 0.88rem; }
+.empty .cursor { margin-left: 4px; }
+.empty[hidden] { display: none; }
+
+/* lists of entries */
+.entries { list-style: none; border: 0; padding: 0; }
+.entries li { margin: 0; padding: 0.9rem 0; border-bottom: 1px solid var(--hairline); font-size: 0.95rem; line-height: 1.6; }
+.entries li::before { content: none; }
+.entries li:first-child { padding-top: 0; }
+.entries .t { display: block; font-size: 1.02rem; letter-spacing: -0.02em; }
+.entries .m { color: var(--muted); font-size: 0.85rem; }
+.entries .s { color: var(--muted); font-size: 0.9rem; margin-top: 0.15rem; }
+
+/* enjoying */
+.chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+.chip { min-height: 44px; padding: 0 0.95rem; border: 1px solid var(--hairline); border-radius: 999px; background: none; color: var(--ink); font: inherit; font-size: 0.88rem; cursor: pointer; letter-spacing: -0.01em; }
+.chip:hover { border-color: var(--rust); }
+.chip[aria-pressed="true"] { border-color: var(--rust); color: var(--rust); background: color-mix(in srgb, var(--rust) 10%, transparent); }
+.chip:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px; }
+.ent { display: grid; grid-template-columns: 4.6rem 1fr; gap: 0 0.9rem; padding: 0.85rem 0; border-bottom: 1px solid var(--hairline); }
+.ent[hidden] { display: none; }
+.ent .k { color: var(--rust); font-size: 0.8rem; font-variant-caps: all-small-caps; letter-spacing: 0.07em; padding-top: 0.25rem; }
+.ent .cover { width: 100%; max-width: 9rem; border-radius: 6px; margin: 0.5rem 0 0.2rem; display: block; }
+
+/* writing / reviews body text */
+.prose { max-width: 38rem; font-size: 1rem; line-height: 1.75; letter-spacing: -0.01em; }
+.prose > * + * { margin-top: 1em; }
+.prose h2, .prose h3 { font-weight: 450; letter-spacing: -0.02em; margin-top: 1.8em; }
+.prose img { max-width: 100%; height: auto; border-radius: 6px; }
+.prose blockquote { border-left: 1px solid var(--rust); padding-left: 1rem; color: var(--muted); }
+.prose ul, .prose ol { padding-left: 1.3rem; }
+.prose li { font-size: inherit; margin-bottom: 0.3em; }
+.prose li::before { content: none; }
+.prose hr { border: 0; border-top: 1px solid var(--hairline); }
+.prose pre, .prose code { font-size: 0.88em; }
+.prose pre { overflow-x: auto; padding: 0.8rem 1rem; background: color-mix(in srgb, var(--rust) 7%, transparent); border-radius: 6px; }
+.byline { margin-bottom: 1.6rem; }
+.back { display: inline-block; margin-bottom: 1.6rem; font-size: 0.9rem; }
+
+/* photos */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.7rem; }
+.grid a { display: block; box-shadow: none; border-radius: 6px; overflow: hidden; line-height: 0; background: var(--portrait-paper); }
+.grid a::before { display: none; }
+.grid img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; transition: transform 420ms cubic-bezier(.22, 1, .36, 1); }
+.grid a:hover img, .grid a:focus-visible img { transform: scale(1.03); }
+.photo-full { width: 100%; max-width: 62rem; height: auto; display: block; border-radius: 6px; }
+.caption { margin-top: 0.9rem; max-width: 38rem; }
+
+@media (max-width: 640px) {
+  .page-head { margin-bottom: 2rem; }
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .ent { grid-template-columns: 3.9rem 1fr; }
+}
+.ent .m { display: block; }
