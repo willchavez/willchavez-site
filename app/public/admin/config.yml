@@ -1,0 +1,75 @@
+# Sveltia CMS. Edits are commits to the repo, so there is no server and no database.
+# Sign in with a GitHub personal access token (fine-grained, this repo only, Contents: read and write).
+backend:
+  name: github
+  repo: willchavez/willchavez-site
+  # While this lives on a branch, the editor writes to the branch, not master.
+  # When the site is merged, change this to master.
+  branch: site-v2
+
+site_url: https://willchavez.com
+display_url: https://willchavez.com
+media_folder: app/public/uploads
+public_folder: /uploads
+
+collections:
+  - name: writing
+    label: Writing
+    label_singular: Post
+    folder: app/src/content/writing
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - { name: summary, label: One-line summary, widget: text, required: false, hint: Shows in the list and in link previews. }
+      - { name: cover, label: Cover image, widget: image, required: false }
+      - { name: draft, label: Draft, widget: boolean, default: false, hint: Drafts are not published. }
+      - { name: body, label: Post, widget: markdown }
+
+  - name: photos
+    label: Photos
+    label_singular: Photo
+    folder: app/src/content/photos
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: image, label: Photo, widget: image }
+      - { name: date, label: Date taken, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - { name: caption, label: Caption, widget: text, required: false }
+      - { name: alt, label: Alt text, widget: string, required: false, hint: Describe the photo for screen readers. }
+      - { name: place, label: Place, widget: string, required: false }
+      - { name: draft, label: Draft, widget: boolean, default: false }
+      - { name: body, label: Notes, widget: markdown, required: false }
+
+  - name: enjoying
+    label: Enjoying
+    label_singular: Item
+    folder: app/src/content/enjoying
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}} ({{status}})"
+    sortable_fields: [date, title, status]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: kind, label: Type, widget: select, options: [music, film, game, paper, book] }
+      - { name: status, label: Status, widget: select, options: ["up next", "enjoyed"], default: "up next", hint: Change to enjoyed when you are done. It moves over on the site. }
+      - { name: creator, label: Artist / director / author, widget: string, required: false }
+      - { name: year, label: Year, widget: number, value_type: int, required: false }
+      - { name: date, label: "Date (added, or finished once enjoyed)", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - { name: rating, label: Rating (1 to 5), widget: number, value_type: int, min: 1, max: 5, required: false }
+      - { name: cover, label: Cover art, widget: image, required: false }
+      - { name: link, label: Link, widget: string, required: false, hint: "Where to listen, watch or read it." }
+      - { name: draft, label: Draft, widget: boolean, default: false }
+      - { name: body, label: Review, widget: markdown, required: false }
