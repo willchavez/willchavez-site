@@ -3,7 +3,7 @@
 # without overwriting anything Astro made. Output: app/dist
 set -e
 cd "$(dirname "$0")"
-npm ci
+npm install
 npm run build
 for f in CNAME favicon.ico portfolio.html projects.html fonts img css js dist portfolio blog; do
   [ -e "../$f" ] && cp -rn "../$f" dist/ || true
