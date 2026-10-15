@@ -1,0 +1,77 @@
+---
+import Base from "../../layouts/Base.astro";
+import Empty from "../../components/Empty.astro";
+import { getEnjoying, fmtDate, img, VERB, KIND_PLURAL } from "../../lib/content";
+import { KINDS } from "../../content.config";
+const items = await getEnjoying();
+const nextCount = items.filter((i) => i.data.status === "up next").length;
+const doneCount = items.length - nextCount;
+const stars = (n: number) => "★".repeat(n) + "☆".repeat(5 - n);
+---
+<Base title="Enjoying" current="enjoying" heading="Enjoying" sub="music, film, games, papers, books" description="What Will Chavez is enjoying, and what's up next">
+  <div class="section">
+    <span class="section-label">Enjoying</span>
+    <div>
+      <div class="chips" role="group" aria-label="enjoyed or up next">
+        <button class="chip" type="button" data-status="enjoyed" aria-pressed="true">enjoyed{doneCount ? ` · ${doneCount}` : ""}</button>
+        <button class="chip" type="button" data-status="up next" aria-pressed="false">up next{nextCount ? ` · ${nextCount}` : ""}</button>
+      </div>
+      <div class="chips" role="group" aria-label="filter by type" id="kinds">
+        <button class="chip" type="button" data-kind="all" aria-pressed="true">all</button>
+        {KINDS.map((k) => <button class="chip" type="button" data-kind={k} aria-pressed="false">{KIND_PLURAL[k]}</button>)}
+      </div>
+
+      <div id="list">
+        {items.map((i) => (
+          <div class="ent" data-status={i.data.status} data-kind={i.data.kind}>
+            <span class="k">{i.data.status === "up next" ? `to ${VERB[i.data.kind]}` : i.data.kind}</span>
+            <div>
+              {i.data.status === "enjoyed"
+                ? <a class="t" href={`/enjoying/${i.id}`}>{i.data.title}</a>
+                : i.data.link ? <a class="t" href={i.data.link}>{i.data.title}</a> : <span class="t">{i.data.title}</span>}
+              <span class="m">{[i.data.creator, i.data.year].filter(Boolean).join(" · ")}</span>
+              {i.data.rating && <div class="rating" aria-label={`${i.data.rating} out of 5`}>{stars(i.data.rating)}</div>}
+              {i.data.cover && <img class="cover" src={img(i.data.cover, 480)} alt="" loading="lazy" decoding="async" />}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <Empty attrs={{ id: "empty-enjoyed", hidden: true }} line="nothing enjoyed yet. reviews and favorites go here" hint="music, films, games, papers and books, with a rating and a few words when there's something to say." />
+      <Empty attrs={{ id: "empty-next", hidden: true }} line="the queue is empty. nothing waiting to be watched, read or heard" hint="things to get to, one tap to move them over to enjoyed once done." />
+      <Empty attrs={{ id: "empty-filter", hidden: true }} line="nothing in this one yet" />
+    </div>
+  </div>
+</Base>
+<script>
+  // enjoyed / up next, plus type filter. state lives in the URL hash so it can be linked.
+  const rows = [...document.querySelectorAll<HTMLElement>(".ent")];
+  const statusBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-status].chip")];
+  const kindBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
+  const show = (id: string, on: boolean) => { const el = document.getElementById(id); if (el) el.hidden = !on; };
+  let status = "enjoyed", kind = "all";
+  const fromHash = () => {
+    const h = decodeURIComponent(location.hash.slice(1));
+    const [s, k] = h.split("/");
+    if (s === "next" || s === "up next") status = "up next"; else status = "enjoyed";
+    kind = k || "all";
+  };
+  const apply = () => {
+    let shown = 0;
+    rows.forEach((r) => {
+      const ok = r.dataset.status === status && (kind === "all" || r.dataset.kind === kind);
+      r.hidden = !ok; if (ok) shown++;
+    });
+    statusBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.status === status)));
+    kindBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.kind === kind)));
+    const inStatus = rows.filter((r) => r.dataset.status === status).length;
+    show("empty-enjoyed", inStatus === 0 && status === "enjoyed");
+    show("empty-next", inStatus === 0 && status === "up next");
+    show("empty-filter", inStatus > 0 && shown === 0);
+  };
+  const push = () => history.replaceState(null, "", `#${status === "up next" ? "next" : "enjoyed"}${kind === "all" ? "" : "/" + kind}`);
+  statusBtns.forEach((b) => b.addEventListener("click", () => { status = b.dataset.status!; push(); apply(); }));
+  kindBtns.forEach((b) => b.addEventListener("click", () => { kind = b.dataset.kind!; push(); apply(); }));
+  addEventListener("hashchange", () => { fromHash(); apply(); });
+  fromHash(); apply();
+</script>
