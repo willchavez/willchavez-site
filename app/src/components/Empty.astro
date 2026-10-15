@@ -1,0 +1,8 @@
+---
+// A deliberate empty state. Lowercase, casual, with the blinking cursor.
+const { line, hint } = Astro.props;
+---
+<div class="empty" {...Astro.props.attrs}>
+  <p>{line}<span class="cursor" aria-hidden="true"></span></p>
+  {hint && <p>{hint}</p>}
+</div>
