@@ -9,7 +9,7 @@ const nextCount = items.filter((i) => i.data.status === "up next").length;
 const doneCount = items.length - nextCount;
 const stars = (n: number) => "★".repeat(n) + "☆".repeat(5 - n);
 ---
-<Base title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, games, books, and papers I’m spending time with." description="What Will Chavez is enjoying, and what's up next">
+<Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, games, books, and papers I’m spending time with." description="What Will Chavez is enjoying, and what's up next">
   <div class="section">
     <div>
       <div class="chips" role="group" aria-label="enjoyed or up next">

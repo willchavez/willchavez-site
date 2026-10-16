@@ -5,7 +5,7 @@ import "../styles/pages.css";
 import Nav from "../components/Nav.astro";
 import { getWriting, getPhotos, getEnjoying } from "../lib/content";
 
-const { title, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, analytics = false, showHeading = true } = Astro.props;
+const { title, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, analytics = false, showHeading = true, showPageTitle = true } = Astro.props;
 const [w, p, e] = await Promise.all([getWriting(), getPhotos(), getEnjoying()]);
 const counts = { notes: w.length, photos: p.length, enjoying: e.length };
 const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engineer";
@@ -33,9 +33,9 @@ const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engin
   </head>
   <body class:list={[showHeading && "content-shell", `route-${current}`]}>
     <Nav current={current} counts={counts} />
-    {showHeading && <div class="page-head">
+    {showHeading && <div class:list={["page-head", !showPageTitle && "page-head-minimal"]}>
       <div>
-        <h1>{heading}</h1>
+        <h1 class:list={[!showPageTitle && "sr-only"]}>{heading}</h1>
         <div class="pronouns">{sub ?? "he/him · Design technologist @ Microsoft"}</div>
       </div>
     </div>}

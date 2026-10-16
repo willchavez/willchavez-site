@@ -4,7 +4,7 @@ import Empty from "../../components/Empty.astro";
 import { getPhotos, img } from "../../lib/content";
 const photos = await getPhotos();
 ---
-<Base title="Photos" current="photos" heading="Photos" sub="Photographs and the stories behind them." description="Photos by Will Chavez">
+<Base showPageTitle={false} title="Photos" current="photos" heading="Photos" sub="Photographs and the stories behind them." description="Photos by Will Chavez">
   <div class="section">
     {photos.length === 0 ? (
       <Empty line="No photos yet." hint="I’ll share photographs and a little context about them here." />
