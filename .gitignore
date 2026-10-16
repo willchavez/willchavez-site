@@ -2,3 +2,7 @@ _site
 .sass-cache
 .jekyll-metadata
 .DS_Store
+app/node_modules
+app/dist
+app/.astro
+app/.soundcloud-preview

@@ -1,0 +1,9 @@
+---
+import microsoft from "../assets/brands/microsoft.svg?raw";
+import ibm from "../assets/brands/ibm.svg?raw";
+import lockheed from "../assets/brands/lockheed-martin.svg?raw";
+const marks = { microsoft, ibm, "lockheed-martin": lockheed };
+interface Props { company: keyof typeof marks }
+const { company } = Astro.props;
+---
+<span class:list={["work-logo", `work-logo-${company}`]} aria-hidden="true" set:html={marks[company]} />

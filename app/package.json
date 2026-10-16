@@ -1,0 +1,16 @@
+{
+  "name": "willchavez-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/images.mjs && node scripts/admin.mjs",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.0",
+    "@sveltia/cms": "^0.244.0",
+    "astro": "^5.0.0",
+    "sharp": "^0.34.0"
+  }
+}

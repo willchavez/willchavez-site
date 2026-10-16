@@ -1,0 +1,41 @@
+name: Build local preview
+
+on:
+  push:
+    branches: [site-v2, codex/site-v2-local]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build site and legacy pages
+        run: sh app/build.sh
+      - name: Check SoundCloud links and render isolated player previews
+        run: |
+          node --test app/scripts/soundcloud.test.mjs
+          node --test app/scripts/hover-nav.test.mjs
+          node app/scripts/soundcloud-preview.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: soundcloud-preview
+          path: app/.soundcloud-preview
+          include-hidden-files: true
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-preview
+          path: app/dist
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package-lock
+          path: app/package-lock.json
+          if-no-files-found: error

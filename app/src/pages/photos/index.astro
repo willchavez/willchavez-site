@@ -1,0 +1,21 @@
+---
+import Base from "../../layouts/Base.astro";
+import Empty from "../../components/Empty.astro";
+import { getPhotos, img } from "../../lib/content";
+const photos = await getPhotos();
+---
+<Base showPageTitle={false} title="Photos" current="photos" heading="Photos" sub="Photographs and the stories behind them." description="Photos by Will Chavez">
+  <div class="section">
+    {photos.length === 0 ? (
+      <Empty line="No photos yet." hint="I’ll share photographs and a little context about them here." />
+    ) : (
+      <div class="grid">
+        {photos.map((p) => (
+          <a href={`/photos/${p.id}`} aria-label={p.data.title ?? p.data.alt ?? "photo"}>
+            <img src={img(p.data.image, 480)} srcset={`${img(p.data.image, 480)} 480w, ${img(p.data.image, 960)} 960w`} sizes="(max-width: 640px) 50vw, 220px" alt={p.data.alt ?? p.data.title ?? ""} loading="lazy" decoding="async" />
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</Base>

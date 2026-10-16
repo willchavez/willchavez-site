@@ -1,0 +1,8 @@
+---
+import { getWriting } from "../../lib/content";
+export async function getStaticPaths() {
+  return (await getWriting()).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+return Astro.redirect(`/notes/${entry.id}`, 301);
+---

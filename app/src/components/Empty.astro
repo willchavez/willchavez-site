@@ -1,0 +1,9 @@
+---
+// A quiet empty state with the same circular detail as the page headers.
+const { line, hint } = Astro.props;
+---
+<div class="empty" {...Astro.props.attrs}>
+  <span class="empty-mark" aria-hidden="true"></span>
+  <p>{line}</p>
+  {hint && <p>{hint}</p>}
+</div>
