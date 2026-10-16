@@ -18,15 +18,19 @@
 .entries .t { display: inline; font-size: 1.45rem; letter-spacing: -.025em; line-height: 1.4; }
 .entries .m { display: block; color: var(--muted); font-size: .85rem; margin-top: .6rem; }
 .entries .s { color: var(--muted); font-size: 1rem; margin-top: .55rem; max-width: 36rem; }
-.note-list { display: grid; gap: 1rem; }
-.note-list li.note-card { position: relative; margin: 0; padding: 1.5rem 1.65rem 1.4rem; border-radius: 1.35rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
-.note-card::before { content: ""; position: absolute; left: .75rem; top: 1.85rem; width: .36rem; height: .36rem; border-radius: 50%; background: var(--rust); opacity: .8; }
+.route-notes main:has(.note-index) { max-width: 60rem; }
+.note-list { display: grid; gap: 0; }
+.note-list li.note-card { display: grid; grid-template-columns: 8.25rem minmax(0, 1fr); align-items: center; gap: 1.3rem; margin: 0; padding: 1.25rem 0; border-bottom: 1px solid color-mix(in srgb, var(--rust) 20%, transparent); }
+.note-thumb { min-width: 0; overflow: hidden; aspect-ratio: 4 / 3; border-radius: 1rem; background: color-mix(in srgb, var(--paper) 90%, var(--rust) 10%); }
+.note-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
+.note-card-copy { min-width: 0; }
 .note-card-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
-.note-card .t { box-shadow: none; }
+.note-card .t { box-shadow: none; font-size: 1.35rem; }
 .note-card .t::before { display: none; }
-.note-card .m { margin: 0; white-space: nowrap; }
-.note-card .s { margin-top: .7rem; }
-.note-card .note-topics { margin-top: 1rem; }
+.note-card .m { flex: 0 0 auto; margin: 0; white-space: nowrap; }
+.note-card .s { margin-top: .4rem; display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.note-card .note-topics { margin-top: .7rem; }
+.note-card .note-topic { background: color-mix(in srgb, var(--rust) 7%, var(--paper)); font-size: .7rem; min-height: 26px; padding-inline: .58rem; }
 .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .9rem; }
 .chip { min-height: 44px; padding: 0 1rem; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--rust) 6%, transparent); color: var(--ink); font: inherit; font-size: .9rem; cursor: pointer; }
 .chip:hover { background: color-mix(in srgb, var(--rust) 13%, transparent); }
@@ -69,7 +73,7 @@
 .note-source::before { display: none; }
 .note-source span { color: var(--rust); }
 .byline { margin-bottom: 1.5rem; }
-.back { display: inline-flex; align-items: center; min-height: 44px; padding: .4rem 1rem; background: color-mix(in srgb, var(--rust) 8%, transparent); border-radius: 999px; box-shadow: none; margin-bottom: 2rem; font-size: .9rem; }
+.back { display: inline-flex; align-items: center; min-height: 32px; padding: .1rem 0; background: transparent; border-radius: 0; box-shadow: none; margin-bottom: 1.3rem; color: var(--muted); font-size: .82rem; }
 .back::before { display: none; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.4rem; }
 .grid a { display: block; box-shadow: none; border-radius: 1.2rem; overflow: hidden; line-height: 0; background: var(--portrait-paper); }
@@ -94,9 +98,16 @@
   .page-head { margin-bottom: 2.5rem; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
   .ent { grid-template-columns: 1fr; gap: .5rem; }
-  .note-card-heading { align-items: flex-start; flex-direction: column; gap: .35rem; }
-  .note-list li.note-card { padding: 1.3rem 1.2rem 1.2rem 1.45rem; }
-  .note-card::before { left: .65rem; top: 1.75rem; width: .3rem; height: .3rem; }
+  .route-notes main:has(.note-index) { max-width: 44rem; }
+  .note-list { gap: .7rem; }
+  .note-list li.note-card { grid-template-columns: 5.1rem minmax(0, 1fr); align-items: start; gap: .85rem; padding: .9rem; border: 0; border-radius: 1.1rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
+  .note-thumb { border-radius: .75rem; }
+  .note-card-heading { align-items: flex-start; flex-direction: column; gap: .18rem; }
+  .note-card .t { font-size: 1.08rem; line-height: 1.3; }
+  .note-card .m { font-size: .75rem; }
+  .note-card .s { margin-top: .4rem; font-size: .88rem; -webkit-line-clamp: 3; }
+  .note-card .note-topics { margin-top: .55rem; gap: .28rem; }
+  .note-card .note-topic { min-height: 22px; font-size: .65rem; padding-inline: .45rem; }
   .note-reading { padding: 1.15rem; border-radius: 1.2rem; }
   .note-reading .prose .note-image-grid { gap: .5rem; }
 }

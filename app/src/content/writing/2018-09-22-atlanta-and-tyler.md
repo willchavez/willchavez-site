@@ -2,6 +2,7 @@
 title: "Atlanta & Tyler"
 date: 2018-09-22
 summary: "In the beginning of February I wasn’t doing much, going out a lot, so I started developing a serious case of FOMO while looking through social media. My best friend was in Dallas and had been…"
+thumbnail: "/uploads/medium/2018-09-22-atlanta-and-tyler-01.webp"
 source: "https://medium.com/@willchavez/atlanta-tyler-debf041903b0"
 topics:
   - "Travel"

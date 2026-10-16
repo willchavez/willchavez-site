@@ -2,6 +2,7 @@
 title: "At IBM in Raleigh & San Francisco"
 date: 2020-09-08
 summary: "I started my career at IBM in Raleigh, NC working on a team that made applications with Watson AI. I remember going in the first day and being astounded at all the different tech that was being…"
+thumbnail: "/uploads/medium/2020-09-08-ibm-in-raleigh-and-san-francisco-04.webp"
 source: "https://medium.com/@willchavez/ibm-in-raleigh-san-francisco-55774d1f443f"
 topics:
   - "Career"
