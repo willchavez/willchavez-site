@@ -9,7 +9,7 @@ const latest = [
   ...enjoying.filter((e) => e.data.status === "enjoyed").map((e) => ({ when: e.data.date, label: e.data.title, href: `/enjoying/${e.id}`, kind: e.data.kind })),
 ].sort((a, b) => b.when.getTime() - a.when.getTime()).slice(0, 4);
 ---
-<Base current="home">
+<Base title="Work" current="work" heading="Will Chavez" sub="he/him · Design technologist @ Microsoft">
 <div class="section">
   <span class="section-label">I prototype, design, and build</span>
   <ol>
@@ -26,6 +26,15 @@ const latest = [
     <li><a href="https://www.goodreads.com/user/show/126295152-will-chavez">reading</a> whenever I can</li>
   </ol>
 </div>
+<div class="section">
+  <span class="section-label">Before that, I built</span>
+  <ol>
+    <li>shipped <a href="https://github.com/microsoft/fluentui-system-icons">icons</a>, <a href="https://github.com/microsoft/fluentui-emoji">emoji</a> <span class="emoji">🫠</span>, and <a href="https://github.com/microsoft/fluentui-emoji-animated">animated emoji</a> <span class="emoji">🪄</span> @ <a href="https://fluent2.microsoft.design/">fluent design studio</a></li>
+    <li>new experiences for the digital security &amp; risk engineering team @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
+    <li><a href="https://xcompanalytics.com/">XComp Analytics</a> @ <a href="https://www.ibm.com/garage">IBM Garage</a></li>
+    <li><a href="https://www.ibm.com/products/watsonx-assistant">chat assistants</a> @ Watson and r&amp;d projects @ <a href="https://www.lockheedmartin.com/">Lockheed Martin</a></li>
+  </ol>
+</div>
   {latest.length > 0 && (
     <div class="section">
       <span class="section-label">Latest</span>
@@ -36,6 +45,6 @@ const latest = [
   )}
   <div class="footer-grid">
     <span></span>
-    <p class="footer">check out my <a href="/work">work</a> or <a href="/about">the longer version</a>, or shoot me an <a href="mailto:wchavezsalinas@gmail.com">email</a></p>
+    <p class="footer">see <a href="/work">portfolio</a> for projects, <a href="/about">about</a> for the longer version, or shoot me an <a href="mailto:wchavezsalinas@gmail.com">email</a></p>
   </div>
 </Base>
