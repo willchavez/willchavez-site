@@ -18,10 +18,10 @@ const kindCount = (kind: string) => items.filter((i) => i.data.status === "enjoy
         <button class="chip" type="button" data-status="up next" aria-pressed="false">Up next{nextCount ? ` · ${nextCount}` : ""}</button>
       </div>
       <div class="chips" role="group" aria-label="filter by type" id="kinds">
-        <button class="chip" type="button" data-kind="all" aria-pressed="true">All<span class="chip-count" data-count aria-hidden="true" hidden={doneCount === 0}>{doneCount || ""}</span></button>
+        <button class="chip" type="button" data-kind="all" aria-pressed="true">All<span class="chip-count" data-count hidden={doneCount === 0}>{doneCount || ""}</span></button>
         {KINDS.map((k) => {
           const count = kindCount(k);
-          return <button class="chip" type="button" data-kind={k} aria-pressed="false">{KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1)}<span class="chip-count" data-count aria-hidden="true" hidden={count === 0}>{count || ""}</span></button>;
+          return <button class="chip" type="button" data-kind={k} aria-pressed="false">{KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1)}<span class="chip-count" data-count hidden={count === 0}>{count || ""}</span></button>;
         })}
       </div>
 
