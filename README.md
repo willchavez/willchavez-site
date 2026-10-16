@@ -18,6 +18,8 @@ python3 app/scripts/preview.py
 Open http://localhost:4321. Stop with Ctrl+C. This serves the built snapshot,
 including fonts, legacy portfolio pages, extensionless routes, and `/admin/`.
 Source edits require another Actions build and artifact download.
+The download destination must be empty; move an older `app/dist` build aside
+before downloading a replacement so deleted pages do not linger.
 The editor still targets the real `site-v2` branch when you save content.
 
 ## Build on a machine where npm is allowed
