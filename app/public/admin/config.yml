@@ -3,9 +3,8 @@
 backend:
   name: github
   repo: willchavez/willchavez-site
-  # While this lives on a branch, the editor writes to the branch, not master.
-  # When the site is merged, change this to master.
-  branch: site-v2
+  # The live CMS writes content to master, which triggers the Pages build.
+  branch: master
 
 site_url: https://willchavez.com
 display_url: https://willchavez.com
