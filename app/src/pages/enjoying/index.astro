@@ -29,7 +29,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
               <div class="ent-heading">
                 <div class="ent-titleline">
                   <span class="k">{i.data.kind}</span>
-                  <a class="t" href={`/enjoying/${i.id}`}>{i.data.title}</a>
+                  <a class="t" href={`/enjoying/${i.id}?from=all`} data-enjoying-entry>{i.data.title}</a>
                 </div>
                 {i.data.date && <time class="recorded" datetime={i.data.date.toISOString()}>{fmtDate(i.data.date)}</time>}
               </div>
@@ -70,6 +70,12 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     rows.forEach((r) => {
       const ok = kind === "all" || r.dataset.kind === kind;
       r.hidden = !ok; if (ok) shown++;
+      const entry = r.querySelector<HTMLAnchorElement>("[data-enjoying-entry]");
+      if (entry) {
+        const url = new URL(entry.href);
+        url.searchParams.set("from", kind);
+        entry.href = url.pathname + url.search;
+      }
     });
     kindBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.kind === kind)));
     show("empty-list", rows.length === 0);

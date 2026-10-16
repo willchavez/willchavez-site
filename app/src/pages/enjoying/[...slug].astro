@@ -3,7 +3,7 @@ import { render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import SoundCloud from "../../components/SoundCloud.astro";
 import { soundCloudURL } from "../../lib/soundcloud.mjs";
-import { getEnjoying, fmtDate, img } from "../../lib/content";
+import { getEnjoying, fmtDate, img, KIND_PLURAL } from "../../lib/content";
 export async function getStaticPaths() {
   return (await getEnjoying()).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
 }
@@ -13,16 +13,32 @@ const { Content } = await render(entry);
 const meta = [d.kind, d.creator, d.year, d.date && fmtDate(d.date)].filter(Boolean).join(" · ");
 const stars = d.rating && (Number.isInteger(d.rating) ? "★".repeat(d.rating) + "☆".repeat(5 - d.rating) : "★".repeat(Math.floor(d.rating)) + "½");
 const youtubeId = d.kind === "music" && d.link?.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/)?.[1];
+const filterLabels = Object.fromEntries([
+  ["all", "All"],
+  ...Object.entries(KIND_PLURAL).map(([kind, label]) => [kind, label.charAt(0).toUpperCase() + label.slice(1)]),
+]);
 ---
 <Base title={d.title} current="enjoying" heading={d.title} sub={meta} description={`${d.title}${d.creator ? ", " + d.creator : ""}`}>
-  <a class="back" href="/enjoying">Back to Enjoying</a>
-  {d.cover && <img class="photo-full" style="max-width:18rem;margin-bottom:1.4rem" src={img(d.cover, 960)} alt="" decoding="async" />}
+  <a class="back" href={`/enjoying#${d.kind}`} data-enjoying-back data-kind={d.kind} data-filter-labels={JSON.stringify(filterLabels)}>Back to {filterLabels[d.kind]}</a>
+  {d.cover && !youtubeId && <img class="photo-full" style="max-width:18rem;margin-bottom:1.4rem" src={img(d.cover, 960)} alt="" decoding="async" />}
   {d.rating && <div class="rating byline" aria-label={`${d.rating} out of 5`}>{stars}</div>}
   <div class="prose"><Content /></div>
   {youtubeId && <div class="youtube-embed"><iframe src={`https://www.youtube-nocookie.com/embed/${youtubeId}`} title={d.title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen /></div>}
   <SoundCloud url={d.link} title={d.title} />
   {d.link && !soundCloudURL(d.link) && !youtubeId && <p class="byline" style="margin-top:1.4rem"><a href={d.link}>Open link</a></p>}
 </Base>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const back = document.querySelector<HTMLAnchorElement>("[data-enjoying-back]");
+    if (!back) return;
+    const labels: Record<string, string> = JSON.parse(back.dataset.filterLabels!);
+    const from = new URLSearchParams(location.search).get("from");
+    const kind = from && Object.hasOwn(labels, from) ? from : back.dataset.kind!;
+    back.textContent = `Back to ${labels[kind]}`;
+    back.href = kind === "all" ? "/enjoying" : `/enjoying#${kind}`;
+  });
+</script>
 
 <style>
   .youtube-embed { width: min(100%, 48rem); aspect-ratio: 16 / 9; margin-top: 1.5rem; overflow: hidden; border-radius: 1rem; background: var(--ink); }
