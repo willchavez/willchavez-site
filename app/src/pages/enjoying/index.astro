@@ -19,7 +19,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
         })}
       </div>
 
-      <div id="enjoying-results">
+      <div id="enjoying-results" data-kind="all">
       <div id="list">
         {items.map((i) => {
           const displayDate = i.data.date ?? i.data.releaseDate;
@@ -78,6 +78,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     kind = validKinds.has(candidate) ? candidate : "all";
   };
   const apply = () => {
+    results.dataset.kind = kind;
     let shown = 0;
     rows.forEach((r) => {
       const ok = kind === "all" || r.dataset.kind === kind;
@@ -121,6 +122,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   });
 </script>
 <style>
+  #enjoying-results:not([data-kind="all"]) .k { display: none; }
   #enjoying-results.is-leaving { animation: var(--content-exit-animation); }
   #enjoying-results.is-entering { animation: var(--content-enter-animation); }
 </style>
