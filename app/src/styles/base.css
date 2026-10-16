@@ -3,6 +3,12 @@
 @font-face { font-family: "Source Serif Fallback"; src: local("Georgia"); size-adjust: 108.59%; ascent-override: 95.41%; descent-override: 30.85%; line-gap-override: 0%; }
 :root { color-scheme: light dark; --paper: #f7f5f2; --ink: #1a1a1a; --muted: #756f69; --rust: #9c4b2e; --hairline: #ddd5cd; --portrait-paper: #f1ebe3; }
 html, body { background: var(--paper); color: var(--ink); font-family: "Source Serif 4", "Source Serif Fallback", Georgia, serif; font-size: 17px; font-optical-sizing: auto; font-variant-numeric: oldstyle-nums; }
+html { scrollbar-gutter: stable; }
+/* Keep navigation still; give the reading area a small, quick entrance. */
+::view-transition-old(page-content) { animation: content-out 100ms ease-out both; }
+::view-transition-new(page-content) { animation: content-in 220ms cubic-bezier(.22, 1, .36, 1) both; }
+@keyframes content-out { to { opacity: 0; } }
+@keyframes content-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 body { max-width: 1160px; margin: 0 auto; padding: 3rem 3.5rem 4rem; }
 h1 { font-size: clamp(2.8rem, 5vw, 4rem); font-weight: 450; letter-spacing: -.045em; line-height: 1.15; text-wrap: balance; }
 h2, h3, h4 { font-weight: 500; }

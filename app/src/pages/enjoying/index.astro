@@ -45,6 +45,12 @@ const stars = (n: number) => "★".repeat(n) + "☆".repeat(5 - n);
   </div>
 </Base>
 <script>
+  let cleanup = () => {};
+  document.addEventListener("astro:page-load", () => {
+  cleanup();
+  if (!document.querySelector("#kinds")) return;
+  const controller = new AbortController();
+  cleanup = () => controller.abort();
   // enjoyed / up next, plus type filter. state lives in the URL hash so it can be linked.
   const rows = [...document.querySelectorAll<HTMLElement>(".ent")];
   const statusBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-status].chip")];
@@ -70,9 +76,10 @@ const stars = (n: number) => "★".repeat(n) + "☆".repeat(5 - n);
     show("empty-next", inStatus === 0 && status === "up next");
     show("empty-filter", inStatus > 0 && shown === 0);
   };
-  const push = () => history.replaceState(null, "", `#${status === "up next" ? "next" : "enjoyed"}${kind === "all" ? "" : "/" + kind}`);
+  const push = () => history.replaceState(history.state, "", `#${status === "up next" ? "next" : "enjoyed"}${kind === "all" ? "" : "/" + kind}`);
   statusBtns.forEach((b) => b.addEventListener("click", () => { status = b.dataset.status!; push(); apply(); }));
   kindBtns.forEach((b) => b.addEventListener("click", () => { kind = b.dataset.kind!; push(); apply(); }));
-  addEventListener("hashchange", () => { fromHash(); apply(); });
+  addEventListener("hashchange", () => { fromHash(); apply(); }, { signal: controller.signal });
   fromHash(); apply();
+  });
 </script>

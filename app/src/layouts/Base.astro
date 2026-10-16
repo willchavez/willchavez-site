@@ -3,6 +3,7 @@ import "../styles/base.css";
 import "../styles/nav.css";
 import "../styles/pages.css";
 import Nav from "../components/Nav.astro";
+import { ClientRouter } from "astro:transitions";
 import { getWriting, getPhotos, getEnjoying } from "../lib/content";
 
 const { title, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, analytics = false, showHeading = true, showPageTitle = true } = Astro.props;
@@ -11,13 +12,14 @@ const counts = { notes: w.length, photos: p.length, enjoying: e.length };
 const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engineer";
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="author" content="William Chavez" />
     <title>{pageTitle}</title>
+    <ClientRouter fallback="swap" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="alternate" type="application/rss+xml" title="Will Chavez" href="/rss.xml" />
     <link rel="preload" href="/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -33,6 +35,7 @@ const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engin
   </head>
   <body class:list={[showHeading && "content-shell", `route-${current}`]}>
     <Nav current={current} counts={counts} />
+    <div class="page-content" transition:name="page-content">
     {showHeading && <div class:list={["page-head", !showPageTitle && "page-head-minimal"]}>
       <div>
         <h1 class:list={[!showPageTitle && "sr-only"]}>{heading}</h1>
@@ -42,6 +45,7 @@ const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engin
     <main>
       <slot />
     </main>
+    </div>
     <script>
       import "../scripts/site.js";
     </script>

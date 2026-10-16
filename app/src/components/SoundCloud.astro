@@ -17,7 +17,10 @@ const player = await soundCloudPlayer(url);
   </div>
 )}
 <script>
-  document.querySelectorAll<HTMLButtonElement>("[data-soundcloud-src]").forEach((button) => {
+  const enhanced = new WeakSet();
+  const enhancePlayers = () => document.querySelectorAll<HTMLButtonElement>("[data-soundcloud-src]").forEach((button) => {
+    if (enhanced.has(button)) return;
+    enhanced.add(button);
     button.hidden = false;
     button.addEventListener("click", () => {
       const frame = document.createElement("iframe");
@@ -32,6 +35,7 @@ const player = await soundCloudPlayer(url);
       frame.focus();
     }, { once: true });
   });
+  document.addEventListener("astro:page-load", enhancePlayers);
 </script>
 <style>
   .soundcloud { margin: 1.5rem 0; max-width: 38rem; }

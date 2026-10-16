@@ -9,7 +9,7 @@ const items = [
 ];
 const here = items.find((i) => i.id === current) ?? items[0];
 ---
-<div class="topbar">
+<div class="topbar" data-current={current} transition:persist="site-navigation" transition:animate="none">
   <a class="avatar" href="/" aria-label="work"><img class="portrait" src="/img/will.png" alt="Will Chavez" /></a>
   <nav class="nav" aria-label="sections">
     <details class="pill">
@@ -29,7 +29,10 @@ const here = items.find((i) => i.id === current) ?? items[0];
 </div>
 <script>
   import { createHoverNav } from "../lib/hover-nav.mjs";
+  import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
+  const topbar = document.querySelector<HTMLElement>(".topbar")!;
   const switcher = document.querySelector<HTMLElement>(".seg");
+  let reconcileHover = () => {};
   if (switcher) {
     const hoverDesktop = matchMedia("(min-width: 821px) and (hover: hover)");
     const intent = createHoverNav((expanded) => switcher.toggleAttribute("data-expanded", expanded));
@@ -43,6 +46,13 @@ const here = items.find((i) => i.id === current) ?? items[0];
     });
     hoverDesktop.addEventListener("change", () => intent.reset());
     window.addEventListener("blur", () => intent.reset());
+    reconcileHover = () => {
+      // Pointer clicks must not leave the picker pinned open by link focus.
+      const active = document.activeElement as HTMLElement;
+      if (switcher.contains(active) && !active.matches(":focus-visible")) active.blur();
+      if (hoverDesktop.matches && switcher.matches(":hover")) intent.enter();
+      else intent.leave();
+    };
   }
   // close the phone menu on Escape or when tapping elsewhere
   const pill = document.querySelector<HTMLDetailsElement>(".pill");
@@ -52,4 +62,26 @@ const here = items.find((i) => i.id === current) ?? items[0];
     });
     addEventListener("click", (e) => { if (pill.open && !pill.contains(e.target as Node)) pill.open = false; });
   }
+  // Keep the actual navigation element and its hover timers across page changes.
+  // Only copy page-specific labels and selection from the incoming HTML.
+  document.addEventListener("astro:before-swap", (event: TransitionBeforeSwapEvent) => {
+    const incoming = event.newDocument.querySelector<HTMLElement>(".topbar");
+    if (!incoming) return;
+    topbar.dataset.current = incoming.dataset.current;
+    topbar.querySelectorAll<HTMLAnchorElement>(".nav a").forEach((link) => {
+      const next = [...incoming.querySelectorAll<HTMLAnchorElement>(".nav a")].find((a) =>
+        a.getAttribute("href") === link.getAttribute("href") && a.parentElement?.className === link.parentElement?.className);
+      if (next?.hasAttribute("aria-current")) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+      if (next?.hasAttribute("data-count")) link.dataset.count = next.dataset.count;
+    });
+    const summary = pill?.querySelector("summary");
+    const nextSummary = incoming.querySelector("summary");
+    if (summary && nextSummary) {
+      summary.textContent = nextSummary.textContent;
+      summary.setAttribute("aria-label", nextSummary.getAttribute("aria-label")!);
+    }
+    if (pill) pill.open = false;
+  });
+  document.addEventListener("astro:page-load", reconcileHover);
 </script>

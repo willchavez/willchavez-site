@@ -1,13 +1,20 @@
+const enhanced = new WeakSet();
+function enhancePage() {
       const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
       const portrait = document.querySelector(".portrait");
 
+      if (portrait && !enhanced.has(portrait)) {
+      enhanced.add(portrait);
       portrait.addEventListener("click", () => {
         if (reduceMotion.matches) return;
         portrait.classList.add("tilt");
         setTimeout(() => portrait.classList.remove("tilt"), 800);
       });
 
+      }
       document.querySelectorAll("li:has(.emoji)").forEach((line) => {
+        if (enhanced.has(line)) return;
+        enhanced.add(line);
         line.addEventListener("click", () => {
           if (reduceMotion.matches) return;
           line.classList.add("revealed");
@@ -20,9 +27,11 @@
       // so those get a "wrapped" class that swaps in a background-drawn fill.
       const markWrap = (link) => link.classList.toggle("wrapped", link.getClientRects().length > 1);
       allLinks.forEach(markWrap);
-      addEventListener("resize", () => allLinks.forEach(markWrap));
+
 
       allLinks.forEach((link) => {
+        if (enhanced.has(link)) return;
+        enhanced.add(link);
         // Record where the pointer entered/left the link as a 0..1 fraction of
         // the relevant line box (links can wrap, so pick the rect under the
         // pointer). The CSS transform-origin uses it as the bloom origin.
@@ -48,3 +57,9 @@
           link.addEventListener(event, () => link.classList.remove("pressed"))
         );
       });
+
+}
+document.addEventListener("astro:page-load", enhancePage);
+addEventListener("resize", () => document.querySelectorAll("a").forEach((link) =>
+  link.classList.toggle("wrapped", link.getClientRects().length > 1)
+));

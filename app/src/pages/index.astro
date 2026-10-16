@@ -64,10 +64,12 @@ import CompanyLogo from "../components/CompanyLogo.astro";
     </footer>
   </div>
 </Base>
-<script is:inline>
+<script is:inline data-astro-rerun>
+{
   // Temporary branch previews: same content, three visual directions.
   const direction = new URLSearchParams(location.search).get("direction");
   if (["rounded", "quiet", "split"].includes(direction)) {
     document.querySelector(".work-page").dataset.direction = direction;
   }
+}
 </script>
