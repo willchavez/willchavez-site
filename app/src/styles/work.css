@@ -23,6 +23,15 @@ body:has(.work-page) .nav a, body:has(.work-page) .pill summary { text-transform
 .work-team { font-size: 1.1rem; font-weight: 500; margin: .3rem 0 .7rem; }
 .work-description > p:not(.work-team) { font-size: .96rem; line-height: 1.75; }
 .work-description .work-secondary { color: var(--muted); margin-top: .75rem; }
+.work-company { display: flex; align-items: center; gap: .65rem; }
+.work-company h3 { flex: 0 1 auto; }
+.work-logo { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; flex: 0 0 2rem; color: var(--ink); }
+.work-logo svg { display: block; width: 100%; height: 100%; }
+.work-logo-microsoft svg { width: 1.25rem; height: 1.25rem; }
+.work-team-section + .work-team-section { margin-top: 1.5rem; }
+.work-team-section .work-team { margin-bottom: .2rem; }
+.work-team-section p:not(.work-role-meta) { font-size: .94rem; line-height: 1.75; margin-top: .6rem; }
+.work-team-section .work-role-meta { font-size: .76rem; line-height: 1.6; color: var(--muted); }
 .work-footer { margin: 4rem 0 0 15rem; font-size: .88rem; line-height: 1.7; color: var(--muted); }
 .work-footer p + p { margin-top: .7rem; }
 

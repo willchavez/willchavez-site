@@ -55,6 +55,6 @@ page; `/work` redirects there. `/writing` and its posts redirect to `/notes`.
 Notes still use `app/src/content/writing` so existing CMS content stays intact.
 
 Work-page design studies on this branch share the same experience content:
-`/?direction=rounded` (default), `/?direction=quiet`, and `/?direction=split`.
+`/?direction=rounded`, `/?direction=quiet`, and `/?direction=split` (default).
 These do not add password protection to the legacy portfolio. That content and
 its images remain public until a separate protected hosting/source plan is implemented.

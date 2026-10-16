@@ -1,39 +1,63 @@
 ---
 import Base from "../layouts/Base.astro";
 import "../styles/work.css";
+import CompanyLogo from "../components/CompanyLogo.astro";
 ---
 <Base title="Work" current="work" showHeading={false} description="Will Chavez is a design technologist at Microsoft, working on generative AI interfaces, design systems, and tools for designers.">
-  <div class="work-page" data-direction="rounded">
+  <div class="work-page" data-direction="split">
     <header class="work-intro">
-      <span class="work-eyebrow"><span class="work-dot" aria-hidden="true"></span> Design technologist <span class="work-pronouns">· He/him</span></span>
+      <span class="work-eyebrow"><span class="work-dot" aria-hidden="true"></span> Senior UX Engineer <span class="work-pronouns">· He/him</span></span>
       <h1>Will Chavez</h1>
       <p class="work-lead">I prototype AI interfaces and build tools for designers.</p>
-      <p class="work-summary">I’m a design technologist in Microsoft’s Fluent Design Studio. I work on generative AI experiences and design systems.</p>
+      <p class="work-summary">I’m a Senior UX Engineer at Microsoft, working on Copilot experiences and design systems.</p>
       <a class="work-contact" href="mailto:wchavezsalinas@gmail.com">Get in touch <span aria-hidden="true">↗</span></a>
     </header>
 
     <section class="work-experience" aria-labelledby="experience-title">
       <h2 class="work-section-title" id="experience-title">My experience</h2>
       <article class="work-role">
-        <div class="work-company"><h3>Microsoft</h3><span class="work-period">Current</span></div>
+        <div class="work-company"><CompanyLogo company="microsoft" /><h3>Microsoft</h3><span class="work-period">Current</span></div>
         <div class="work-description">
-          <p class="work-team">Fluent Design Studio</p>
-          <p>My work includes Copilot interfaces, shared icon and emoji libraries, and tools that help designers build and maintain them.</p>
-          <p class="work-secondary">Earlier at Microsoft, I worked on experiences for the digital security and risk engineering team.</p>
+          <section class="work-team-section" aria-labelledby="team-copilot">
+            <h4 class="work-team" id="team-copilot">Copilot</h4>
+            <p class="work-role-meta">Senior UX Engineer · 2023–Present</p>
+            <p>I prototype AI-powered interfaces and interaction patterns with design, product, and engineering teams.</p>
+          </section>
+          <section class="work-team-section" aria-labelledby="team-fluent">
+            <h4 class="work-team" id="team-fluent">Fluent Design Studio</h4>
+            <p class="work-role-meta">UX Engineer II · 2021–2023</p>
+            <p>I built tools and automated workflows for Fluent icons and emoji, from Figma exports to asset comparisons and release reporting.</p>
+          </section>
+          <section class="work-team-section" aria-labelledby="team-security">
+            <h4 class="work-team" id="team-security">Security Engineering</h4>
+            <p class="work-role-meta">Software Engineer II · 2020–2021</p>
+            <p>I built front-end experiences for Secure Admin Services, helping modernize internal security tools.</p>
+          </section>
         </div>
       </article>
       <article class="work-role">
-        <div class="work-company"><h3>IBM</h3></div>
+        <div class="work-company"><CompanyLogo company="ibm" /><h3>IBM</h3></div>
         <div class="work-description">
-          <p class="work-team">IBM Garage &amp; Watson Assistant</p>
-          <p>I built an education analytics platform with IBM Garage and third-party integrations for Watson Assistant.</p>
+          <section class="work-team-section" aria-labelledby="team-garage">
+            <h4 class="work-team" id="team-garage">IBM Cloud Garage</h4>
+            <p class="work-role-meta">Software Engineer II · 2018–2020</p>
+            <p>I led software projects with startups and teams across design and engineering, using the IBM Garage Method and design thinking.</p>
+          </section>
+          <section class="work-team-section" aria-labelledby="team-watson">
+            <h4 class="work-team" id="team-watson">IBM Watson</h4>
+            <p class="work-role-meta">Software Engineer · 2016–2018</p>
+            <p>I built full-stack experiences for Watson Company Profiler and Watson Assistant, including integrations with Slack and Facebook Messenger.</p>
+          </section>
         </div>
       </article>
       <article class="work-role">
-        <div class="work-company"><h3>Lockheed Martin</h3></div>
+        <div class="work-company"><CompanyLogo company="lockheed-martin" /><h3>Lockheed Martin</h3></div>
         <div class="work-description">
-          <p class="work-team">Research &amp; development</p>
-          <p>I worked on research and development projects.</p>
+          <section class="work-team-section" aria-labelledby="team-research">
+            <h4 class="work-team" id="team-research">Research &amp; Development</h4>
+            <p class="work-role-meta">Software Engineer · 2015–2016</p>
+            <p>I developed full-stack mobile applications on a research and development team.</p>
+          </section>
         </div>
       </article>
     </section>
