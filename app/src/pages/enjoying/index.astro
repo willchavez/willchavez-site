@@ -19,8 +19,11 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
         })}
       </div>
 
+      <div id="enjoying-results">
       <div id="list">
-        {items.map((i) => (
+        {items.map((i) => {
+          const displayDate = i.data.date ?? i.data.releaseDate;
+          return (
           <div class="ent" data-kind={i.data.kind}>
             {i.data.cover
               ? <img class="cover" src={img(i.data.cover, 240)} alt="" loading="lazy" decoding="async" />
@@ -31,18 +34,20 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
                   <span class="k">{i.data.kind}</span>
                   <a class="t" href={`/enjoying/${i.id}?from=all`} data-enjoying-entry>{i.data.title}</a>
                 </div>
-                {i.data.date && <time class="recorded" datetime={i.data.date.toISOString()}>{fmtDate(i.data.date)}</time>}
+                {displayDate && <time class="recorded" datetime={displayDate.toISOString()} title={i.data.date ? undefined : "U.S. public release date"}>{!i.data.date && "Released "}{fmtDate(displayDate)}</time>}
               </div>
               <span class="m">{[i.data.creator, i.data.year].filter(Boolean).join(" · ")}</span>
               {i.data.rating && <div class="rating" aria-label={`${i.data.rating} out of 5`}>{stars(i.data.rating)}</div>}
               <SoundCloud url={i.data.link} title={i.data.title} />
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       <Empty attrs={{ id: "empty-list", hidden: true }} line="Nothing here yet." hint="I’ll collect things I’ve enjoyed, with a few words when I have something to say." />
       <Empty attrs={{ id: "empty-filter", hidden: true }} line="Nothing matches these filters yet." />
+      </div>
     </div>
   </div>
 </Base>
@@ -52,13 +57,20 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   cleanup();
   if (!document.querySelector("#kinds")) return;
   const controller = new AbortController();
-  cleanup = () => controller.abort();
+  const results = document.getElementById("enjoying-results")!;
+  cleanup = () => {
+    controller.abort();
+    results.getAnimations().forEach((animation) => animation.cancel());
+  };
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   // Type filter state lives in the URL hash so it can be linked.
   const rows = [...document.querySelectorAll<HTMLElement>(".ent")];
   const kindBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
   const validKinds = new Set(kindBtns.map((b) => b.dataset.kind || "all"));
   const show = (id: string, on: boolean) => { const el = document.getElementById(id); if (el) el.hidden = !on; };
   let kind = "all";
+  let requestedKind = kind;
+  let changeId = 0;
   const fromHash = () => {
     const h = decodeURIComponent(location.hash.slice(1));
     // Accept old #enjoyed/type and #next/type links, but keep new links short.
@@ -82,8 +94,34 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     show("empty-filter", rows.length > 0 && shown === 0);
   };
   const push = () => history.replaceState(history.state, "", kind === "all" ? `${location.pathname}${location.search}` : `#${kind}`);
-  kindBtns.forEach((b) => b.addEventListener("click", () => { kind = b.dataset.kind!; push(); apply(); }));
-  addEventListener("hashchange", () => { fromHash(); apply(); }, { signal: controller.signal });
-  fromHash(); apply();
+  const resetAnimation = () => {
+    results.classList.remove("is-entering", "is-leaving");
+    results.getAnimations().forEach((animation) => animation.cancel());
+  };
+  const select = async (next: string) => {
+    if (next === requestedKind) return;
+    requestedKind = next;
+    const request = ++changeId;
+    resetAnimation();
+    if (!reducedMotion.matches) {
+      results.classList.add("is-leaving");
+      await Promise.allSettled(results.getAnimations().map((animation) => animation.finished));
+    }
+    if (request !== changeId || controller.signal.aborted) return;
+    kind = next;
+    push(); apply();
+    results.classList.remove("is-leaving");
+    if (!reducedMotion.matches) results.classList.add("is-entering");
+  };
+  kindBtns.forEach((b) => b.addEventListener("click", () => select(b.dataset.kind!)));
+  addEventListener("hashchange", () => {
+    ++changeId; resetAnimation();
+    fromHash(); requestedKind = kind; apply();
+  }, { signal: controller.signal });
+  fromHash(); requestedKind = kind; apply();
   });
 </script>
+<style>
+  #enjoying-results.is-leaving { animation: var(--content-exit-animation); }
+  #enjoying-results.is-entering { animation: var(--content-enter-animation); }
+</style>

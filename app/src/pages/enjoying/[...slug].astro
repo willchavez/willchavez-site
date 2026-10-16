@@ -10,7 +10,8 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const d = entry.data;
 const { Content } = await render(entry);
-const meta = [d.kind, d.creator, d.year, d.date && fmtDate(d.date)].filter(Boolean).join(" · ");
+const displayDate = d.date ?? d.releaseDate;
+const meta = [d.kind, d.creator, d.year, displayDate && `${d.date ? "" : "Released "}${fmtDate(displayDate)}`].filter(Boolean).join(" · ");
 const stars = d.rating && (Number.isInteger(d.rating) ? "★".repeat(d.rating) + "☆".repeat(5 - d.rating) : "★".repeat(Math.floor(d.rating)) + "½");
 const youtubeId = d.kind === "music" && d.link?.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/)?.[1];
 const filterLabels = Object.fromEntries([

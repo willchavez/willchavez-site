@@ -5,8 +5,9 @@
 html, body { background: var(--paper); color: var(--ink); font-family: "Source Serif 4", "Source Serif Fallback", Georgia, serif; font-size: 17px; font-optical-sizing: auto; font-variant-numeric: oldstyle-nums; }
 html { scrollbar-gutter: stable; }
 /* Keep navigation still; give the reading area a small, quick entrance. */
-::view-transition-old(page-content) { animation: content-out 100ms ease-out both; }
-::view-transition-new(page-content) { animation: content-in 220ms cubic-bezier(.22, 1, .36, 1) both; }
+:root { --content-exit-animation: content-out 100ms ease-out both; --content-enter-animation: content-in 220ms cubic-bezier(.22, 1, .36, 1) both; }
+::view-transition-old(page-content) { animation: var(--content-exit-animation); }
+::view-transition-new(page-content) { animation: var(--content-enter-animation); }
 @keyframes content-out { to { opacity: 0; } }
 @keyframes content-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 body { max-width: 1160px; margin: 0 auto; padding: 3rem 3.5rem 4rem; }
