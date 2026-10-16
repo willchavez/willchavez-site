@@ -7,7 +7,7 @@ import { KINDS } from "../../content.config";
 const items = await getEnjoying();
 const nextCount = items.filter((i) => i.data.status === "up next").length;
 const doneCount = items.length - nextCount;
-const stars = (n: number) => "★".repeat(n) + "☆".repeat(5 - n);
+const stars = (n: number) => Number.isInteger(n) ? "★".repeat(n) + "☆".repeat(5 - n) : "★".repeat(Math.floor(n)) + "½";
 ---
 <Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, games, books, and papers I’m spending time with." description="What Will Chavez is enjoying, and what's up next">
   <div class="section">
