@@ -40,8 +40,8 @@ try {
     assert.ok(redirect.includes(`url=${destination}`));
   }
   const home = await readFile(path.join(scratch, "dist/index.html"), "utf8");
-  assert.ok(home.includes("selected work"));
-  assert.ok(home.includes('href="/notes/player-check"'));
+  assert.ok(home.includes("My experience"));
+  assert.ok(!home.includes('href="/portfolio/'));
   assert.ok(!home.includes("currently, i'm"));
   await rm(output, { recursive: true, force: true });
   await cp(path.join(scratch, "dist"), output, { recursive: true });

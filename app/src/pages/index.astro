@@ -1,58 +1,53 @@
 ---
 import Base from "../layouts/Base.astro";
-import { getWriting, getPhotos, getEnjoying, fmtDate } from "../lib/content";
-
-const [writing, photos, enjoying] = await Promise.all([getWriting(), getPhotos(), getEnjoying()]);
-const latest = [
-  ...writing.map((e) => ({ when: e.data.date, label: e.data.title, href: `/notes/${e.id}`, kind: "note" })),
-  ...photos.map((e) => ({ when: e.data.date, label: e.data.title ?? "a photo", href: `/photos/${e.id}`, kind: "photo" })),
-  ...enjoying.filter((e) => e.data.status === "enjoyed").map((e) => ({ when: e.data.date, label: e.data.title, href: `/enjoying/${e.id}`, kind: e.data.kind })),
-].sort((a, b) => b.when.getTime() - a.when.getTime()).slice(0, 4);
+import "../styles/work.css";
 ---
-<Base title="Work" current="work" heading="Will Chavez" sub="he/him · Design technologist @ Microsoft">
-<div class="section">
-  <span class="section-label">i prototype, design, and build</span>
-  <ol>
-    <li>gen AI interfaces and design systems @ <a href="https://fluent2.microsoft.design/">fluent design studio</a></li>
-  </ol>
-</div>
-<div class="section">
-      <span class="section-label">selected work</span>
-      <ol>
-        <li><a href="/portfolio/genui-bebop.html">GenUI</a> — shaping next-gen Copilot output through composable, structured UI @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
-        <li><a href="/portfolio/bebop.html">Bebop</a> — a <a href="https://www.microsoft.com/en-us/microsoft-365/blog/2026/05/28/introducing-a-new-design-for-microsoft-365-copilot/">new design</a> of M365 Copilot from <a href="https://www.microsoft.com/en-us/">Microsoft</a>, featured in Microsoft’s “Introducing a new design for Microsoft 365 Copilot” article</li>
-        <li><a href="/portfolio/peer-survey.html">PeerSurvey redesign</a> — rethinking peer review in Canvas with a comment-centric, split-screen interface @ <a href="https://omscs.gatech.edu/">Georgia Tech</a></li>
-        <li><a href="/portfolio/youtube-redesign.html">YouTube subscription redesign</a> — folder-based subscription organization with scoped search, evaluated across two rounds with 31 participants @ <a href="https://omscs.gatech.edu/">Georgia Tech</a></li>
-      </ol>
-    </div>
-    <div class="section">
-      <span class="section-label">more work</span>
-      <ol>
-        <li><a href="/portfolio/agent-builder.html">Agent Builder</a> — prototyping agent creation and configuration flows inside Copilot @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
-        <li><a href="/portfolio/nav2.html">Nav 2.0</a> — prototyping next-gen navigation patterns for Copilot @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
-        <li><a href="/portfolio/flubert.html">Flubert</a> — an LLM-powered Figma plugin that analyzes UI against Fluent Design System guidelines @ <a href="https://fluent2.microsoft.design/">Microsoft</a></li>
-        <li><a href="/portfolio/icon-scaling-tool.html">icon scaling tool</a> — a Figma plugin used by designers across Microsoft to scale and export iconography</li>
-        <li><a href="/portfolio/visual-diff.html">visual diff analyzer</a> — tooling to track changes in design assets at scale @ <a href="https://www.microsoft.com/en-us/">Microsoft</a></li>
-        <li><a href="/portfolio/fluent.html">Fluent repos</a> — maintaining <a href="https://github.com/microsoft/fluentui-system-icons">icons</a>, <a href="https://github.com/microsoft/fluentui-emoji">emoji</a>, and <a href="https://github.com/microsoft/fluentui-emoji-animated">animated emoji</a> for the Fluent Design System</li>
-        <li><a href="https://xcompanalytics.com/">XComp Analytics</a> — an education analytics platform built with the <a href="https://www.ibm.com/garage">IBM Garage</a> team</li>
-        <li><a href="/portfolio/hireharlem.html">Hire Harlem</a> — a site that spotlighted minority-owned businesses in Harlem and Oakland</li>
-        <li><a href="https://www.ibm.com/products/watsonx-assistant">Watson Assistant</a> — built third-party integration channels connecting to Slack and Facebook Messenger @ <a href="https://www.ibm.com/en-us">IBM</a></li>
-      </ol>
-    </div>
-<div class="section">
-  <span class="section-label">before that</span>
-  <p>previously building at <a href="https://www.ibm.com/garage">IBM</a> and <a href="https://www.lockheedmartin.com/">Lockheed Martin</a>.</p>
-</div>
-  {latest.length > 0 && (
-    <div class="section">
-      <span class="section-label">latest</span>
-      <ol>
-        {latest.map((l) => (<li><a href={l.href}>{l.label}</a> <span class="muted">· {l.kind}, {fmtDate(l.when)}</span></li>))}
-      </ol>
-    </div>
-  )}
-  <div class="footer-grid">
-    <span></span>
-    <p class="footer">see <a href="/about">about</a> for the longer version, or shoot me an <a href="mailto:wchavezsalinas@gmail.com">email</a></p>
+<Base title="Work" current="work" showHeading={false} description="Will Chavez is a design technologist at Microsoft, working on generative AI interfaces, design systems, and tools for designers.">
+  <div class="work-page" data-direction="rounded">
+    <header class="work-intro">
+      <span class="work-eyebrow"><span class="work-dot" aria-hidden="true"></span> Design technologist <span class="work-pronouns">· He/him</span></span>
+      <h1>Will Chavez</h1>
+      <p class="work-lead">I prototype AI interfaces and build tools for designers.</p>
+      <p class="work-summary">I’m a design technologist in Microsoft’s Fluent Design Studio. I work on generative AI experiences and design systems.</p>
+      <a class="work-contact" href="mailto:wchavezsalinas@gmail.com">Get in touch <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <section class="work-experience" aria-labelledby="experience-title">
+      <h2 class="work-section-title" id="experience-title">My experience</h2>
+      <article class="work-role">
+        <div class="work-company"><h3>Microsoft</h3><span class="work-period">Current</span></div>
+        <div class="work-description">
+          <p class="work-team">Fluent Design Studio</p>
+          <p>My work includes Copilot interfaces, shared icon and emoji libraries, and tools that help designers build and maintain them.</p>
+          <p class="work-secondary">Earlier at Microsoft, I worked on experiences for the digital security and risk engineering team.</p>
+        </div>
+      </article>
+      <article class="work-role">
+        <div class="work-company"><h3>IBM</h3></div>
+        <div class="work-description">
+          <p class="work-team">IBM Garage &amp; Watson Assistant</p>
+          <p>I built an education analytics platform with IBM Garage and third-party integrations for Watson Assistant.</p>
+        </div>
+      </article>
+      <article class="work-role">
+        <div class="work-company"><h3>Lockheed Martin</h3></div>
+        <div class="work-description">
+          <p class="work-team">Research &amp; development</p>
+          <p>I worked on research and development projects.</p>
+        </div>
+      </article>
+    </section>
+
+    <footer class="work-footer">
+      <p>For selected project work, <a href="mailto:wchavezsalinas@gmail.com?subject=Portfolio%20request">email me</a>.</p>
+      <p>Outside of work, I make music, take photos, and keep learning. <a href="/about">More about me</a>.</p>
+    </footer>
   </div>
 </Base>
+<script is:inline>
+  // Temporary branch previews: same content, three visual directions.
+  const direction = new URLSearchParams(location.search).get("direction");
+  if (["rounded", "quiet", "split"].includes(direction)) {
+    document.querySelector(".work-page").dataset.direction = direction;
+  }
+</script>

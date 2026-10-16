@@ -5,7 +5,7 @@ import "../styles/pages.css";
 import Nav from "../components/Nav.astro";
 import { getWriting, getPhotos, getEnjoying } from "../lib/content";
 
-const { title, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, analytics = false } = Astro.props;
+const { title, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, analytics = false, showHeading = true } = Astro.props;
 const [w, p, e] = await Promise.all([getWriting(), getPhotos(), getEnjoying()]);
 const counts = { notes: w.length, photos: p.length, enjoying: e.length };
 const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engineer";
@@ -32,13 +32,13 @@ const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engin
     </>)}
   </head>
   <body>
-    <Nav current={current} counts={counts} />
-    <div class="page-head">
+    <Nav current={current} counts={counts} showSlashes={showHeading} />
+    {showHeading && <div class="page-head">
       <div>
         <h1>{heading}<span class="cursor" role="button" tabindex="0" aria-label="Play cursor animation"></span></h1>
         <div class="pronouns">{sub ?? "he/him · Design technologist @ Microsoft"}</div>
       </div>
-    </div>
+    </div>}
     <main>
       <slot />
     </main>

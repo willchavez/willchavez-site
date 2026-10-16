@@ -73,8 +73,8 @@
         });
       }
 
-      cursor.addEventListener("click", playCursorAnimation);
-      cursor.addEventListener("keydown", (event) => {
+      cursor?.addEventListener("click", playCursorAnimation);
+      cursor?.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           playCursorAnimation(event);
