@@ -70,6 +70,7 @@
 .note-detail-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem 1rem; margin-top: 2.5rem; }
 .note-topics { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 0; }
 .note-topic { display: inline-flex; align-items: center; min-height: 30px; padding: .15rem .7rem; border-radius: 999px; background: color-mix(in srgb, var(--paper) 76%, var(--rust) 8%); color: var(--muted); font-size: .76rem; line-height: 1.2; }
+.note-topics > li { margin: 0; padding: 0; }
 .note-reading { max-width: 41rem; padding: clamp(1.2rem, 3.5vw, 2.4rem); border-radius: 1.5rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
 .note-reading .note-deck { max-width: none; }
 .note-reading .prose { max-width: none; }
