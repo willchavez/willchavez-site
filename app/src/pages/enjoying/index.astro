@@ -33,10 +33,12 @@ const kindCount = (kind: string) => items.filter((i) => i.data.status === "enjoy
               : <div class="cover cover-empty" aria-hidden="true" />}
             <div class="ent-copy">
               <div class="ent-heading">
-                <span class="k">{i.data.kind}</span>
-              {i.data.status === "enjoyed"
-                ? <a class="t" href={`/enjoying/${i.id}`}>{i.data.title}</a>
-                : i.data.link ? <a class="t" href={i.data.link}>{i.data.title}</a> : <span class="t">{i.data.title}</span>}
+                <div class="ent-titleline">
+                  <span class="k">{i.data.kind}</span>
+                  {i.data.status === "enjoyed"
+                    ? <a class="t" href={`/enjoying/${i.id}`}>{i.data.title}</a>
+                    : i.data.link ? <a class="t" href={i.data.link}>{i.data.title}</a> : <span class="t">{i.data.title}</span>}
+                </div>
                 {i.data.date && <time class="recorded" datetime={i.data.date.toISOString()}>{fmtDate(i.data.date)}</time>}
               </div>
               <span class="m">{[i.data.creator, i.data.year].filter(Boolean).join(" · ")}</span>

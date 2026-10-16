@@ -47,11 +47,15 @@
 .ent[data-kind="book"] .cover { aspect-ratio: 2 / 3; }
 .ent .cover-empty { opacity: .45; }
 .ent-copy { min-width: 0; }
-.ent-heading { display: flex; align-items: baseline; flex-wrap: wrap; gap: .25rem .65rem; }
-.ent .k { display: inline-flex; align-items: center; min-height: 1.35rem; padding: 0 .5rem; border-radius: 999px; background: color-mix(in srgb, var(--rust) 10%, transparent); color: var(--muted); font-size: .7rem; line-height: 1; text-transform: capitalize; }
+.ent-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: .35rem 1rem; }
+.ent-titleline { min-width: 0; line-height: 1.55; }
+.ent .k { display: inline-flex; align-items: center; min-height: 1.35rem; margin-right: .45rem; padding: 0 .5rem; border-radius: 999px; background: color-mix(in srgb, var(--rust) 10%, transparent); color: var(--muted); font-size: .7rem; line-height: 1; text-transform: capitalize; vertical-align: .08em; }
 .ent .t { font-size: 1.2rem; letter-spacing: -.02em; }
+.ent a.t { box-shadow: none; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--rust) 60%, transparent); text-decoration-thickness: 1px; text-underline-offset: .15em; }
+.ent a.t::before { display: none; }
+.ent a.t:hover, .ent a.t:focus-visible { color: var(--rust); }
 .ent .m { display: block; color: var(--muted); font-size: .88rem; margin-top: .3rem; }
-.ent .recorded { margin-left: auto; color: var(--muted); font-size: .78rem; white-space: nowrap; }
+.ent .recorded { margin-top: .25rem; color: var(--muted); font-size: .78rem; white-space: nowrap; }
 .prose { max-width: 38rem; font-size: 1.08rem; line-height: 1.8; }
 .prose > * + * { margin-top: 1.2em; }
 .prose h2, .prose h3 { letter-spacing: -.025em; margin-top: 1.8em; }
@@ -107,7 +111,8 @@
   .ent { grid-template-columns: 3.8rem minmax(0, 1fr); gap: 0 .8rem; padding-bottom: 1.35rem; }
   .ent .cover { width: 3.8rem; border-radius: .55rem; }
   .ent .t { font-size: 1.08rem; }
-  .ent .recorded { margin-left: 0; flex-basis: 100%; }
+  .ent-heading { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
+  .ent .recorded { grid-column: 1; grid-row: 2; margin-top: .1rem; }
   .route-notes main:has(.note-index) { max-width: 44rem; }
   .note-list { gap: .7rem; }
   .note-list li.note-card { grid-template-columns: 5.1rem minmax(0, 1fr); align-items: start; gap: .85rem; padding: .9rem; border: 0; border-radius: 1.1rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
