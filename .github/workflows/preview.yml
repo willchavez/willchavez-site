@@ -18,6 +18,15 @@ jobs:
           node-version: 22
       - name: Build site and legacy pages
         run: sh app/build.sh
+      - name: Check SoundCloud links and render isolated player previews
+        run: |
+          node --test app/scripts/soundcloud.test.mjs
+          node app/scripts/soundcloud-preview.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: soundcloud-preview
+          path: app/.soundcloud-preview
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: local-preview

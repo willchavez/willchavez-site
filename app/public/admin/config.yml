@@ -28,6 +28,12 @@ collections:
       - { name: date, label: Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
       - { name: summary, label: One-line summary, widget: text, required: false, hint: Shows in the list and in link previews. }
       - { name: cover, label: Cover image, widget: image, required: false }
+      - name: soundcloud
+        label: SoundCloud link
+        widget: string
+        required: false
+        hint: "Paste a track or playlist link, including phone share links. Readers tap to load the player. No embed code needed."
+        pattern: ['^https://(www\.|m\.|on\.)?soundcloud\.com/[^\s]+$', 'Paste an HTTPS SoundCloud link, not embed code.']
       - { name: draft, label: Draft, widget: boolean, default: false, hint: Drafts are not published. }
       - { name: body, label: Post, widget: markdown }
 
@@ -70,6 +76,6 @@ collections:
       - { name: date, label: "Date (added, or finished once enjoyed)", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
       - { name: rating, label: Rating (1 to 5), widget: number, value_type: int, min: 1, max: 5, required: false }
       - { name: cover, label: Cover art, widget: image, required: false }
-      - { name: link, label: Link, widget: string, required: false, hint: "Where to listen, watch or read it." }
+      - { name: link, label: Link, widget: string, required: false, hint: "Where to listen, watch or read it. SoundCloud track and playlist links get a player automatically." }
       - { name: draft, label: Draft, widget: boolean, default: false }
       - { name: body, label: Review, widget: markdown, required: false }

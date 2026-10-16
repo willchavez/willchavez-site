@@ -1,5 +1,6 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
+import { soundCloudURL } from "./lib/soundcloud.mjs";
 
 // Three kinds of things you can post. Each is a folder of markdown files that
 // the CMS at /admin writes to. Nothing here is seeded: empty folders render
@@ -12,6 +13,7 @@ const writing = defineCollection({
     date: z.coerce.date(),
     summary: z.string().optional(),
     cover: z.string().optional(),
+    soundcloud: z.string().trim().refine((value) => !value || Boolean(soundCloudURL(value)), "Use an https://soundcloud.com or https://on.soundcloud.com link.").optional(),
     draft: z.boolean().default(false),
   }),
 });

@@ -20,8 +20,9 @@ class PreviewHandler(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=4321)
+    parser.add_argument("--directory", type=Path, default=Path(__file__).resolve().parents[1] / "dist")
     args = parser.parse_args()
-    output = Path(__file__).resolve().parents[1] / "dist"
+    output = args.directory.resolve()
     if not (output / "index.html").is_file():
         parser.error("app/dist is missing. Download the local-preview Actions artifact first.")
     handler = partial(PreviewHandler, directory=str(output))

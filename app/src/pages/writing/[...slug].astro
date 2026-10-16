@@ -1,6 +1,7 @@
 ---
 import { render } from "astro:content";
 import Base from "../../layouts/Base.astro";
+import SoundCloud from "../../components/SoundCloud.astro";
 import { getWriting, fmtDate, img } from "../../lib/content";
 export async function getStaticPaths() {
   return (await getWriting()).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
@@ -12,4 +13,5 @@ const { Content } = await render(entry);
   <a class="back" href="/writing">← writing</a>
   {entry.data.cover && <img class="photo-full" style="margin-bottom:1.6rem" src={img(entry.data.cover, 1600)} alt="" />}
   <div class="prose"><Content /></div>
+  <SoundCloud url={entry.data.soundcloud} title={entry.data.title} />
 </Base>

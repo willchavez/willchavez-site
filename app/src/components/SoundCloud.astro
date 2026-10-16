@@ -1,0 +1,44 @@
+---
+import { soundCloudPlayer } from "../lib/soundcloud.mjs";
+interface Props { url?: string; title: string }
+const { url, title } = Astro.props;
+const player = await soundCloudPlayer(url);
+---
+{player && (
+  <div class="soundcloud">
+    {player.src && (
+      <div class="soundcloud-slot" data-soundcloud-slot>
+        <button hidden type="button" class="soundcloud-load" data-soundcloud-src={player.src} data-height={player.height} data-title={`SoundCloud player: ${title}`}>
+          load soundcloud player <span aria-hidden="true">↗</span>
+        </button>
+      </div>
+    )}
+    <p class="soundcloud-link"><a href={player.url}>listen on soundcloud</a></p>
+  </div>
+)}
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-soundcloud-src]").forEach((button) => {
+    button.hidden = false;
+    button.addEventListener("click", () => {
+      const frame = document.createElement("iframe");
+      frame.src = button.dataset.soundcloudSrc!;
+      frame.title = button.dataset.title!;
+      frame.height = button.dataset.height!;
+      frame.width = "100%";
+      frame.allow = "autoplay";
+      frame.referrerPolicy = "no-referrer";
+      frame.className = "soundcloud-frame";
+      button.closest("[data-soundcloud-slot]")!.replaceChildren(frame);
+      frame.focus();
+    }, { once: true });
+  });
+</script>
+<style>
+  .soundcloud { margin: 1.5rem 0; max-width: 38rem; }
+  .soundcloud-load { padding: .6rem 0; min-height: 44px; border: 0; background: none; color: var(--rust); font: inherit; cursor: pointer; text-align: left; text-decoration: underline; text-underline-offset: .2em; }
+  .soundcloud-load:hover { color: var(--ink); }
+  .soundcloud-load:focus-visible { outline: 2px solid var(--rust); outline-offset: 4px; }
+  .soundcloud-load[hidden] { display: none; }
+  .soundcloud-link { margin: .5rem 0 0; font-size: .85rem; }
+  .soundcloud-slot :global(.soundcloud-frame) { display: block; width: 100%; border: 0; }
+</style>

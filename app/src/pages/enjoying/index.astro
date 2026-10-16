@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Empty from "../../components/Empty.astro";
+import SoundCloud from "../../components/SoundCloud.astro";
 import { getEnjoying, fmtDate, img, VERB, KIND_PLURAL } from "../../lib/content";
 import { KINDS } from "../../content.config";
 const items = await getEnjoying();
@@ -32,6 +33,7 @@ const stars = (n: number) => "★".repeat(n) + "☆".repeat(5 - n);
               <span class="m">{[i.data.creator, i.data.year].filter(Boolean).join(" · ")}</span>
               {i.data.rating && <div class="rating" aria-label={`${i.data.rating} out of 5`}>{stars(i.data.rating)}</div>}
               {i.data.cover && <img class="cover" src={img(i.data.cover, 480)} alt="" loading="lazy" decoding="async" />}
+              <SoundCloud url={i.data.link} title={i.data.title} />
             </div>
           </div>
         ))}
