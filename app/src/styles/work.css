@@ -28,6 +28,7 @@ body:has(.work-page) .nav a, body:has(.work-page) .pill summary { text-transform
 .work-logo { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; flex: 0 0 2rem; color: var(--ink); }
 .work-logo svg { display: block; width: 100%; height: 100%; }
 .work-logo-microsoft svg { width: 1.25rem; height: 1.25rem; }
+.work-logo-ibm { width: 3.6rem; flex-basis: 3.6rem; margin-right: .4rem; }
 .work-team-section + .work-team-section { margin-top: 1.5rem; }
 .work-team-section .work-team { margin-bottom: .2rem; }
 .work-team-section p:not(.work-role-meta) { font-size: .94rem; line-height: 1.75; margin-top: .6rem; }
