@@ -4,11 +4,10 @@ date: 2020-09-08
 summary: "I started my career at IBM in Raleigh, NC working on a team that made applications with Watson AI. I remember going in the first day and being astounded at all the different tech that was being…"
 source: "https://medium.com/@willchavez/ibm-in-raleigh-san-francisco-55774d1f443f"
 topics:
-  - "developer"
-  - "development"
-  - "experience"
-  - "friends"
-  - "ibm"
+  - "Career"
+  - "IBM"
+  - "Raleigh"
+  - "San Francisco"
 draft: false
 deck: "Today I start my new position on the DSRE team at Microsoft in Redmond, Washington. I took a week to myself before starting my new role to explore neighborhoods in Seattle and began to reflect on my past four years at IBM."
 ---
@@ -17,9 +16,13 @@ I started my career at IBM in Raleigh, NC working on a team that made applicatio
 
 It was in that product team in Raleigh that I learned how collaborate across different engineering disciplines. I remember being amazed that there were entire teams dedicated to DevOps, seeing some of my coworkers that exclusively worked on problems within the AI space of our project, and being amazed at the massive amounts of slack channels that you could go to for help on any problem. I was a bit overwhelmed at first but my managers always gave me room to breathe and reassured me that I was headed in the right direction. By my second project there, I was in the flow of things, contributing with more efficiency, and learning how to pool my resources to get my tasks done. Shoutout to my work crew down there, and my Raleigh family.
 
-![A flowering tree on the IBM Raleigh campus](/uploads/medium/2020-09-08-ibm-in-raleigh-and-san-francisco-01.webp)
+<div class="note-image-grid" aria-label="Photos from Raleigh">
 
-![Shadows from a solar eclipse on a Raleigh sidewalk](/uploads/medium/2020-09-08-ibm-in-raleigh-and-san-francisco-02.webp)
+<figure><img src="/uploads/medium/2020-09-08-ibm-in-raleigh-and-san-francisco-01.webp" alt="A flowering tree on the IBM Raleigh campus"></figure>
+
+<figure><img src="/uploads/medium/2020-09-08-ibm-in-raleigh-and-san-francisco-02.webp" alt="Shadows from a solar eclipse on a Raleigh sidewalk"></figure>
+
+</div>
 
 *Raleigh campus in the spring, and the solar eclipse in 2017.*
 

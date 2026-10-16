@@ -4,11 +4,10 @@ date: 2020-03-20
 summary: "Hi! My name is Will! I’m a Software Engineer at IBM and I moved to San Francisco in September, 2018 for a new position at the IBM Garage. Before moving to SF, I was living in Raleigh, NC and…"
 source: "https://medium.com/@willchavez/rebuilding-hireharlem-com-f07773edb7dc"
 topics:
-  - "coding"
-  - "react"
-  - "harlem"
-  - "tech"
-  - "leadership-development"
+  - "Design"
+  - "Code"
+  - "Community"
+  - "Harlem"
 draft: false
 deck: "How Alex Ocampo and I rebuilt hireharlem.com"
 ---

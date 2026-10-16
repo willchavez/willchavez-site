@@ -4,11 +4,10 @@ date: 2018-09-16
 summary: "When I arrived in Barcelona, the first thing I did after getting through the airport was finding a cell phone provider to get a 4G data plan. So I used my broken, stutter-filled Spanish to ask the…"
 source: "https://medium.com/@willchavez/barcelona-spain-831a5c9ba230"
 topics:
-  - "spain"
-  - "festivals"
-  - "architecture"
-  - "travel"
-  - "barcelona"
+  - "Travel"
+  - "Music"
+  - "Barcelona"
+  - "Architecture"
 draft: false
 deck: "During the end of May and beginning of June, I went to Spain, then to Copenhagen, then back to Spain. I primarily went to attend a music festival, Primavera Sound in Barcelona, and I decided to make a vacation out of it and take in what both of those cities had to offer."
 ---

@@ -11,14 +11,16 @@ const { Content } = await render(entry);
 ---
 <Base title={entry.data.title} current="notes" heading={entry.data.title} sub={fmtDate(entry.data.date)} description={entry.data.summary}>
   <a class="back" href="/notes">Back to Notes</a>
-  {entry.data.deck && <p class="note-deck">{entry.data.deck}</p>}
-  {entry.data.cover && <img class="photo-full" style="margin-bottom:1.6rem" src={img(entry.data.cover, 1600)} alt="" />}
-  <div class="prose"><Content /></div>
-  {(entry.data.topics.length > 0 || entry.data.source) && <footer class="note-detail-meta">
-    {entry.data.topics.length > 0 && <div class="note-topics" aria-label="Topics">
-      {entry.data.topics.map((topic) => <span class="note-topic">{topic}</span>)}
-    </div>}
-    {entry.data.source && <a class="note-source" href={entry.data.source} target="_blank" rel="noreferrer">Originally published on Medium <span aria-hidden="true">↗</span></a>}
-  </footer>}
-  <SoundCloud url={entry.data.soundcloud} title={entry.data.title} />
+  <article class="note-reading">
+    {entry.data.deck && <p class="note-deck">{entry.data.deck}</p>}
+    {entry.data.cover && <img class="photo-full" style="margin-bottom:1.6rem" src={img(entry.data.cover, 1600)} alt="" />}
+    <div class:list={["prose", `note-${entry.id}`]}><Content /></div>
+    {(entry.data.topics.length > 0 || entry.data.source) && <footer class="note-detail-meta">
+      {entry.data.topics.length > 0 && <ul class="note-topics" aria-label="Topics">
+        {entry.data.topics.map((topic) => <li class="note-topic">{topic}</li>)}
+      </ul>}
+      {entry.data.source && <a class="note-source" href={entry.data.source} target="_blank" rel="noreferrer">Originally published on Medium <span aria-hidden="true">↗</span></a>}
+    </footer>}
+    <SoundCloud url={entry.data.soundcloud} title={entry.data.title} />
+  </article>
 </Base>
