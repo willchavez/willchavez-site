@@ -2,6 +2,7 @@
 title: "GOT ’EM — SNKRS Generator"
 date: 2021-09-15
 summary: "Sneaker culture is something I’ve participated since I was in high school around 2009. Over the past couple of years people who have bought Nike shoes have typically used an app called SNKRS…"
+thumbnail: "/uploads/medium/2021-09-15-got-em-snkrs-generator-01.webp"
 source: "https://medium.com/@willchavez/got-em-snkrs-generator-ef799b2db42d"
 topics:
   - "Sneakers"

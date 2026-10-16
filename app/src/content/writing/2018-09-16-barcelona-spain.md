@@ -2,6 +2,7 @@
 title: "Barcelona, Spain"
 date: 2018-09-16
 summary: "When I arrived in Barcelona, the first thing I did after getting through the airport was finding a cell phone provider to get a 4G data plan. So I used my broken, stutter-filled Spanish to ask the…"
+thumbnail: "/uploads/medium/2018-09-16-barcelona-spain-04.webp"
 source: "https://medium.com/@willchavez/barcelona-spain-831a5c9ba230"
 topics:
   - "Travel"

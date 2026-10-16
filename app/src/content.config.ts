@@ -13,6 +13,7 @@ const writing = defineCollection({
     date: z.coerce.date(),
     summary: z.string().optional(),
     deck: z.string().optional(),
+    thumbnail: z.string().optional(),
     cover: z.string().optional(),
     source: z.string().url().optional(),
     topics: z.array(z.string()).default([]),

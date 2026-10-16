@@ -2,6 +2,7 @@
 title: "Asheville/Knoxville"
 date: 2018-09-22
 summary: "Towards the end of March, my team at IBM was given Thu+Fri off and during the beginning of that week I started looking into a strange little festival that I heard of, called Big Ears. It had been…"
+thumbnail: "/uploads/medium/2018-09-22-asheville-knoxville-01.webp"
 source: "https://medium.com/@willchavez/asheville-knoxville-93fd2f53b5f3"
 topics:
   - "Travel"
