@@ -21,7 +21,8 @@
 .route-notes main:has(.note-index) { max-width: 60rem; }
 .note-list { display: grid; gap: 0; }
 .note-list li.note-card { display: grid; grid-template-columns: 8.25rem minmax(0, 1fr); align-items: center; gap: 1.3rem; margin: 0; padding: 1.25rem 0; border-bottom: 1px solid color-mix(in srgb, var(--rust) 20%, transparent); }
-.note-thumb { min-width: 0; overflow: hidden; aspect-ratio: 4 / 3; border-radius: 1rem; background: color-mix(in srgb, var(--paper) 90%, var(--rust) 10%); }
+.note-thumb { display: block; min-width: 0; overflow: hidden; aspect-ratio: 4 / 3; border-radius: 1rem; box-shadow: none; background: color-mix(in srgb, var(--paper) 90%, var(--rust) 10%); }
+.note-thumb::before, .cover-link::before { display: none; }
 .note-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
 .note-card-copy { min-width: 0; }
 .note-card-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
@@ -43,6 +44,7 @@
 .chip:focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
 .ent { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr); gap: 0 1.1rem; padding: 0 0 1.8rem; align-items: start; }
 .ent[hidden] { display: none; }
+.ent .cover-link { display: block; grid-column: 1; grid-row: 1; box-shadow: none; border-radius: .65rem; }
 .ent .cover { display: block; grid-column: 1; grid-row: 1; width: 4.6rem; aspect-ratio: 3 / 2; object-fit: cover; border-radius: .65rem; background: color-mix(in srgb, var(--rust) 10%, var(--paper)); }
 .ent[data-kind="book"] .cover { aspect-ratio: 2 / 3; }
 .ent .cover-empty { opacity: .45; }

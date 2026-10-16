@@ -12,7 +12,7 @@ const posts = await getWriting();
       <ol class="entries note-list">
         {posts.map((p) => (
           <li class:list={["note-card", !p.data.thumbnail && "note-card-text"]}>
-            {p.data.thumbnail && <div class="note-thumb"><img src={img(p.data.thumbnail, 480)} alt="" loading="lazy" decoding="async" /></div>}
+            {p.data.thumbnail && <a class="note-thumb" href={`/notes/${p.id}`} aria-label={`Read ${p.data.title}`}><img src={img(p.data.thumbnail, 480)} alt="" loading="lazy" decoding="async" /></a>}
             <div class="note-card-copy">
               <div class="note-card-heading">
                 <a class="t" href={`/notes/${p.id}`}>{p.data.title}</a>
