@@ -1,7 +1,7 @@
 /* top bar: avatar + navigation. phones get a dropdown pill, desktop gets a
    segmented switch that rests as just the current page and opens on hover/focus. */
-.topbar { position: relative; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2.6rem; }
-.avatar { display: block; box-shadow: none; border-radius: 8px; line-height: 0; }
+.topbar { position: relative; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 4.5rem; }
+.avatar { display: block; box-shadow: none; border-radius: 50%; line-height: 0; }
 .avatar::before { display: none; }
 .avatar:hover, .avatar:focus-visible { background: none; }
 .topbar .portrait { width: 48px; height: 48px; display: block; }
@@ -33,7 +33,6 @@
 }
 .pill .menu a { display: flex; align-items: center; justify-content: space-between; min-height: 46px; padding: 0 0.8rem; border-radius: 10px; letter-spacing: -0.02em; }
 .pill .menu a::after { content: attr(data-count); color: var(--muted); font-size: 0.78rem; }
-.pill .menu a span::before { content: "// "; color: var(--rust); opacity: 0.75; }
 .pill .menu a[aria-current="page"] { background: color-mix(in srgb, var(--rust) 14%, transparent); }
 .pill .menu a:hover, .pill .menu a:focus-visible { background: color-mix(in srgb, var(--rust) 12%, transparent); }
 
@@ -59,4 +58,4 @@
     transition-delay: 0s, 0s, 300ms, 300ms, 300ms;
   }
 }
-@media (max-width: 640px) { .topbar { margin-bottom: 2rem; } }
+@media (max-width: 640px) { .topbar { margin-bottom: 3.5rem; } }

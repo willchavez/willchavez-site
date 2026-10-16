@@ -14,6 +14,7 @@ try {
   await symlink(path.join(app, "node_modules"), path.join(scratch, "node_modules"), "dir");
   const fixtures = [
     ["writing/player-check.md", 'title: SoundCloud player check\nsoundcloud: https://soundcloud.com/william-chavez-salinas/sets/2026-ep', "Isolated preview of the optional player beneath a note. This is not a published post."],
+    ["photos/layout-check.md", 'title: Photo layout check\nimage: /img/will.png\nalt: Will Chavez’s illustrated portrait\ncaption: Isolated photo layout preview.', ""],
     ["writing/plain-check.md", 'title: Note without music', "No player should appear on this page."],
     ["enjoying/player-check.md", 'title: Playlist player check\nkind: music\nstatus: enjoyed\nlink: https://soundcloud.com/william-chavez-salinas/sets/2026-ep', "Isolated review preview."],
     ["enjoying/queue-check.md", 'title: Track player check\nkind: music\nstatus: up next\nlink: https://soundcloud.com/forss/flickermood', ""],
@@ -27,7 +28,7 @@ try {
   execFileSync("npm", ["run", "build"], { cwd: scratch, stdio: "inherit" });
   const html = await readFile(path.join(scratch, "dist/notes/player-check.html"), "utf8");
   assert.ok(html.includes("data-soundcloud-src="));
-  assert.ok(html.includes("listen on soundcloud"));
+  assert.ok(html.includes("Listen on SoundCloud"));
   assert.ok(!html.includes("<iframe"), "No third-party frame before the reader clicks");
   const plain = await readFile(path.join(scratch, "dist/notes/plain-check.html"), "utf8");
   assert.ok(!plain.includes("data-soundcloud-src="));

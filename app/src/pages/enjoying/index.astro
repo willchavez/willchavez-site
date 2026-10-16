@@ -9,17 +9,16 @@ const nextCount = items.filter((i) => i.data.status === "up next").length;
 const doneCount = items.length - nextCount;
 const stars = (n: number) => "★".repeat(n) + "☆".repeat(5 - n);
 ---
-<Base title="Enjoying" current="enjoying" heading="Enjoying" sub="music, film, games, papers, books" description="What Will Chavez is enjoying, and what's up next">
+<Base title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, games, books, and papers I’m spending time with." description="What Will Chavez is enjoying, and what's up next">
   <div class="section">
-    <span class="section-label">Enjoying</span>
     <div>
       <div class="chips" role="group" aria-label="enjoyed or up next">
-        <button class="chip" type="button" data-status="enjoyed" aria-pressed="true">enjoyed{doneCount ? ` · ${doneCount}` : ""}</button>
-        <button class="chip" type="button" data-status="up next" aria-pressed="false">up next{nextCount ? ` · ${nextCount}` : ""}</button>
+        <button class="chip" type="button" data-status="enjoyed" aria-pressed="true">Enjoyed{doneCount ? ` · ${doneCount}` : ""}</button>
+        <button class="chip" type="button" data-status="up next" aria-pressed="false">Up next{nextCount ? ` · ${nextCount}` : ""}</button>
       </div>
       <div class="chips" role="group" aria-label="filter by type" id="kinds">
-        <button class="chip" type="button" data-kind="all" aria-pressed="true">all</button>
-        {KINDS.map((k) => <button class="chip" type="button" data-kind={k} aria-pressed="false">{KIND_PLURAL[k]}</button>)}
+        <button class="chip" type="button" data-kind="all" aria-pressed="true">All</button>
+        {KINDS.map((k) => <button class="chip" type="button" data-kind={k} aria-pressed="false">{KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1)}</button>)}
       </div>
 
       <div id="list">
@@ -39,9 +38,9 @@ const stars = (n: number) => "★".repeat(n) + "☆".repeat(5 - n);
         ))}
       </div>
 
-      <Empty attrs={{ id: "empty-enjoyed", hidden: true }} line="nothing enjoyed yet. reviews and favorites go here" hint="music, films, games, papers and books, with a rating and a few words when there's something to say." />
-      <Empty attrs={{ id: "empty-next", hidden: true }} line="the queue is empty. nothing waiting to be watched, read or heard" hint="things to get to, one tap to move them over to enjoyed once done." />
-      <Empty attrs={{ id: "empty-filter", hidden: true }} line="nothing in this one yet" />
+      <Empty attrs={{ id: "empty-enjoyed", hidden: true }} line="Nothing here yet." hint="I’ll collect things I’ve enjoyed, with a few words when I have something to say." />
+      <Empty attrs={{ id: "empty-next", hidden: true }} line="My queue is empty." hint="Things I want to listen to, watch, play, or read will appear here." />
+      <Empty attrs={{ id: "empty-filter", hidden: true }} line="Nothing matches these filters yet." />
     </div>
   </div>
 </Base>

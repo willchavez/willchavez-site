@@ -31,11 +31,11 @@ const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engin
       </script>
     </>)}
   </head>
-  <body>
-    <Nav current={current} counts={counts} showSlashes={showHeading} />
+  <body class:list={[showHeading && "content-shell", `route-${current}`]}>
+    <Nav current={current} counts={counts} />
     {showHeading && <div class="page-head">
       <div>
-        <h1>{heading}<span class="cursor" role="button" tabindex="0" aria-label="Play cursor animation"></span></h1>
+        <h1>{heading}</h1>
         <div class="pronouns">{sub ?? "he/him · Design technologist @ Microsoft"}</div>
       </div>
     </div>}

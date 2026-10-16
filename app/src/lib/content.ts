@@ -14,7 +14,7 @@ export async function getEnjoying() {
 }
 
 export const fmtDate = (d: Date) =>
-  d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).toLowerCase();
+  d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 
 // Uploaded photos are resized at build time (scripts/images.mjs) to
 // /uploads/w/<width>/<name>.webp. In dev those don't exist, so use the original.

@@ -4,11 +4,10 @@ import Empty from "../../components/Empty.astro";
 import { getWriting, fmtDate } from "../../lib/content";
 const posts = await getWriting();
 ---
-<Base title="Notes" current="notes" heading="Notes" sub="notes, half-ideas, longer posts" description="Notes by Will Chavez">
+<Base title="Notes" current="notes" heading="Notes" sub="Thoughts, things I’m learning, and occasional longer posts." description="Notes by Will Chavez">
   <div class="section">
-    <span class="section-label">notes</span>
     {posts.length === 0 ? (
-      <Empty line="nothing here yet. notes will land here when i have something to share" hint="short thoughts, things i'm learning, and occasional longer posts." />
+      <Empty line="No notes yet." hint="I’ll add something here when I have a thought to share." />
     ) : (
       <ol class="entries">
         {posts.map((p) => (

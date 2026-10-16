@@ -4,11 +4,10 @@ import Empty from "../../components/Empty.astro";
 import { getPhotos, img } from "../../lib/content";
 const photos = await getPhotos();
 ---
-<Base title="Photos" current="photos" heading="Photos" sub="pictures i took" description="Photos by Will Chavez">
+<Base title="Photos" current="photos" heading="Photos" sub="Photographs and the stories behind them." description="Photos by Will Chavez">
   <div class="section">
-    <span class="section-label">Photos</span>
     {photos.length === 0 ? (
-      <Empty line="no photos yet. the first one is coming" hint="a photo i loved, with a line about it. they'll land here as a grid, newest first." />
+      <Empty line="No photos yet." hint="I’ll share photographs and a little context about them here." />
     ) : (
       <div class="grid">
         {photos.map((p) => (

@@ -13,10 +13,10 @@ const { Content } = await render(entry);
 const meta = [d.kind, d.creator, d.year, fmtDate(d.date)].filter(Boolean).join(" · ");
 ---
 <Base title={d.title} current="enjoying" heading={d.title} sub={meta} description={`${d.title}${d.creator ? ", " + d.creator : ""}`}>
-  <a class="back" href="/enjoying">← enjoying</a>
+  <a class="back" href="/enjoying">Back to Enjoying</a>
   {d.cover && <img class="photo-full" style="max-width:18rem;margin-bottom:1.4rem" src={img(d.cover, 960)} alt="" decoding="async" />}
   {d.rating && <div class="rating byline" aria-label={`${d.rating} out of 5`}>{"★".repeat(d.rating) + "☆".repeat(5 - d.rating)}</div>}
   <div class="prose"><Content /></div>
   <SoundCloud url={d.link} title={d.title} />
-  {d.link && !soundCloudURL(d.link) && <p class="byline" style="margin-top:1.4rem"><a href={d.link}>link</a></p>}
+  {d.link && !soundCloudURL(d.link) && <p class="byline" style="margin-top:1.4rem"><a href={d.link}>Open link</a></p>}
 </Base>

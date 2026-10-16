@@ -1,6 +1,5 @@
       const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
       const portrait = document.querySelector(".portrait");
-      const cursor = document.querySelector(".cursor");
 
       portrait.addEventListener("click", () => {
         if (reduceMotion.matches) return;
@@ -48,35 +47,4 @@
         ["pointerup", "pointerleave", "pointercancel"].forEach((event) =>
           link.addEventListener(event, () => link.classList.remove("pressed"))
         );
-      });
-
-      function playCursorAnimation(event) {
-        if (reduceMotion.matches) return;
-        const rect = cursor.getBoundingClientRect();
-        const x = event.clientX || rect.left + rect.width / 2;
-        const y = event.clientY || rect.top + rect.height / 2;
-        // shuffle the marks so each click spawns them in a different order
-        const marks = ["✦", "//", "↗", "◼", "~"];
-        for (let i = marks.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [marks[i], marks[j]] = [marks[j], marks[i]];
-        }
-        marks.forEach((mark, index) => {
-          const stamp = document.createElement("i");
-          stamp.className = "stamp";
-          stamp.textContent = mark;
-          stamp.style.left = `${x + (index - 2) * 17}px`;
-          stamp.style.top = `${y + Math.sin(index) * 14}px`;
-          stamp.style.animationDelay = `${index * 0.05}s`;
-          document.body.append(stamp);
-          setTimeout(() => stamp.remove(), 1200);
-        });
-      }
-
-      cursor?.addEventListener("click", playCursorAnimation);
-      cursor?.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          playCursorAnimation(event);
-        }
       });
