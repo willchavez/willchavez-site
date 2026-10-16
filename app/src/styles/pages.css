@@ -93,6 +93,9 @@
 .byline { margin-bottom: 1.5rem; }
 .back { display: inline-flex; align-items: center; min-height: 32px; padding: .1rem 0; background: transparent; border-radius: 0; box-shadow: none; margin-bottom: 1.3rem; color: var(--muted); font-size: .82rem; }
 .back::before { display: none; }
+.route-notes .page-head { max-width: 52rem; }
+.route-notes main:has(.note-reading) { max-width: 52rem; }
+.note-reading { max-width: 48rem; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.4rem; }
 .grid a { display: block; box-shadow: none; border-radius: 1.2rem; overflow: hidden; line-height: 0; background: var(--portrait-paper); }
 .grid a::before { display: none; }
