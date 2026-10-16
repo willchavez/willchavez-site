@@ -3,7 +3,7 @@ title: "When the filter knob moves on its own"
 date: 2026-10-16
 summary: "I had a hard time understanding envelope filters on the OP-XY until I pictured one as the cutoff knob moving over time."
 deck: "An envelope makes the filter cutoff move for you, shaped by attack, decay, sustain, and release."
-thumbnail: "/synth-lessons-preview.svg"
+thumbnail: "/synth-lessons-thumbnail.webp"
 topics:
   - Music
   - Creative coding
@@ -17,7 +17,7 @@ Turning the cutoff knob changes the tone right away. A filter envelope moves tha
 
 I started building this browser companion to make that relationship easier to see and hear. The filter envelope lesson shows the cutoff movement alongside the ADSR shape, and lets you play a note to hear the two move together.
 
-![A filter cutoff knob changes the tone now; a filter envelope moves it through attack, decay, sustain, and release.](/synth-lessons-preview.svg)
+![A screen recording of the filter envelope lesson, showing the cutoff and envelope curves move together as a note plays.](/synth-lessons-demo.gif)
 
 <figure class="synth-demo">
   <iframe src="https://willchavez.github.io/synth-lessons/" title="Interactive OP-XY synthesis lessons" loading="lazy" allow="autoplay"></iframe>
