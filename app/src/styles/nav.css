@@ -53,6 +53,10 @@
 /* rest as just the current page, but only where hover exists. touch laptops keep the full switch. */
 @media (min-width: 821px) and (hover: hover) {
   .seg a { max-width: 11rem; }
-  .seg:not(:hover):not(:focus-within) a:not([aria-current="page"]) { max-width: 0; padding-left: 0; padding-right: 0; opacity: 0; }
+  .seg:not(:hover):not(:focus-within) a:not([aria-current="page"]) {
+    max-width: 0; padding-left: 0; padding-right: 0; opacity: 0;
+    /* Pause before closing; re-entry cancels the delay and opens immediately. */
+    transition-delay: 0s, 0s, 300ms, 300ms, 300ms;
+  }
 }
 @media (max-width: 640px) { .topbar { margin-bottom: 2rem; } }
