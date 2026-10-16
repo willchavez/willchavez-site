@@ -30,7 +30,7 @@
 .note-card .m { flex: 0 0 auto; margin: 0; white-space: nowrap; }
 .note-card .s { margin-top: .4rem; display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .note-card .note-topics { margin-top: .7rem; }
-.note-card .note-topic { background: color-mix(in srgb, var(--rust) 7%, var(--paper)); font-size: .7rem; min-height: 26px; padding-inline: .58rem; }
+.note-card .note-topic { font-size: .7rem; min-height: 26px; padding-inline: .58rem; }
 .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .9rem; }
 .chip { min-height: 44px; padding: 0 1rem; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--rust) 6%, transparent); color: var(--ink); font: inherit; font-size: .9rem; cursor: pointer; }
 .chip-count { margin-left: .35em; font-size: .78em; font-variant-numeric: tabular-nums; opacity: .72; }
@@ -69,7 +69,7 @@
 .note-deck::before { content: ""; display: inline-block; width: .48rem; height: .48rem; margin: 0 .7rem .18rem 0; border-radius: 50%; background: var(--rust); }
 .note-detail-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem 1rem; margin-top: 2.5rem; }
 .note-topics { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 0; }
-.note-topic { display: inline-flex; align-items: center; min-height: 30px; padding: .15rem .7rem; border-radius: 999px; background: color-mix(in srgb, var(--paper) 76%, var(--rust) 8%); color: var(--muted); font-size: .76rem; line-height: 1.2; }
+.note-topic { display: inline-flex; align-items: center; min-height: 30px; padding: .15rem .7rem; border: 1px solid color-mix(in srgb, var(--rust) 28%, var(--paper)); border-radius: 999px; background: color-mix(in srgb, var(--rust) 18%, var(--paper)); color: color-mix(in srgb, var(--rust) 72%, var(--ink)); font-size: .76rem; line-height: 1.2; }
 .note-topics > li { margin: 0; padding: 0; }
 .note-reading { max-width: 41rem; padding: clamp(1.2rem, 3.5vw, 2.4rem); border-radius: 1.5rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
 .note-reading .note-deck { max-width: none; }
