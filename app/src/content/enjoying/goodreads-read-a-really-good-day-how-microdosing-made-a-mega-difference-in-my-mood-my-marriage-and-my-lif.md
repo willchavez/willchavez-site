@@ -6,6 +6,6 @@ year: 2017
 status: "enjoyed"
 date: "2021-03-20"
 rating: 4
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515159863l/35969592.jpg"
+cover: "/uploads/enjoying/goodreads-read-a-really-good-day-how-microdosing-made-a-mega-difference-in-my-mood-my-marriage-and-my-lif.webp"
 link: "https://www.goodreads.com/book/show/35969592"
 ---

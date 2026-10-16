@@ -6,6 +6,6 @@ year: 2020
 status: "enjoyed"
 date: "2020-12-26"
 rating: 5
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1599399790l/50892261.jpg"
+cover: "/uploads/enjoying/goodreads-read-once-i-was-you-a-memoir-of-love-and-hate-in-a-torn-america.webp"
 link: "https://www.goodreads.com/book/show/50892261"
 ---

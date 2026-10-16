@@ -6,6 +6,6 @@ year: 2025
 status: "enjoyed"
 date: "2025-12-17"
 rating: 4
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1747142606l/219848315._SY475_.jpg"
+cover: "/uploads/enjoying/goodreads-read-the-emperor-of-gladness.webp"
 link: "https://www.goodreads.com/book/show/219848315"
 ---

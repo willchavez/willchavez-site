@@ -6,6 +6,6 @@ year: 2022
 status: "enjoyed"
 date: "2024-01-01"
 rating: 5
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626958856l/57427936._SY475_.jpg"
+cover: "/uploads/enjoying/goodreads-read-seeking-fortune-elsewhere-stories.webp"
 link: "https://www.goodreads.com/book/show/57427936"
 ---

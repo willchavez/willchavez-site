@@ -6,6 +6,6 @@ year: 2021
 status: "enjoyed"
 date: "2021-07-28"
 rating: 4
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606106010l/53330118.jpg"
+cover: "/uploads/enjoying/goodreads-read-chatter-the-voice-in-our-head-why-it-matters-and-how-to-harness-it.webp"
 link: "https://www.goodreads.com/book/show/53330118"
 ---

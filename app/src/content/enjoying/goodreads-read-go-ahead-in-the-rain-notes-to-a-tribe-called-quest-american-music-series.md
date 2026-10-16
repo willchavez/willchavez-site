@@ -6,6 +6,6 @@ year: 2019
 status: "enjoyed"
 date: "2024-02-07"
 rating: 5
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541340690l/41864516.jpg"
+cover: "/uploads/enjoying/goodreads-read-go-ahead-in-the-rain-notes-to-a-tribe-called-quest-american-music-series.webp"
 link: "https://www.goodreads.com/book/show/41864516"
 ---

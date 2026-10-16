@@ -8,6 +8,7 @@ const items = await getEnjoying();
 const nextCount = items.filter((i) => i.data.status === "up next").length;
 const doneCount = items.length - nextCount;
 const stars = (n: number) => Number.isInteger(n) ? "★".repeat(n) + "☆".repeat(5 - n) : "★".repeat(Math.floor(n)) + "½";
+const kindCount = (kind: string) => items.filter((i) => i.data.status === "enjoyed" && i.data.kind === kind).length;
 ---
 <Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, games, books, and papers I’m spending time with." description="What Will Chavez is enjoying, and what's up next">
   <div class="section">
@@ -17,15 +18,18 @@ const stars = (n: number) => Number.isInteger(n) ? "★".repeat(n) + "☆".repea
         <button class="chip" type="button" data-status="up next" aria-pressed="false">Up next{nextCount ? ` · ${nextCount}` : ""}</button>
       </div>
       <div class="chips" role="group" aria-label="filter by type" id="kinds">
-        <button class="chip" type="button" data-kind="all" aria-pressed="true">All</button>
-        {KINDS.map((k) => <button class="chip" type="button" data-kind={k} aria-pressed="false">{KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1)}</button>)}
+        <button class="chip" type="button" data-kind="all" aria-pressed="true">All<span class="chip-count" data-count aria-hidden="true" hidden={doneCount === 0}>{doneCount || ""}</span></button>
+        {KINDS.map((k) => {
+          const count = kindCount(k);
+          return <button class="chip" type="button" data-kind={k} aria-pressed="false">{KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1)}<span class="chip-count" data-count aria-hidden="true" hidden={count === 0}>{count || ""}</span></button>;
+        })}
       </div>
 
       <div id="list">
         {items.map((i) => (
           <div class="ent" data-status={i.data.status} data-kind={i.data.kind}>
             {i.data.cover
-              ? <img class="cover" src={img(i.data.cover, 480)} alt="" loading="lazy" decoding="async" />
+              ? <img class="cover" src={img(i.data.cover, 240)} alt="" loading="lazy" decoding="async" />
               : <div class="cover cover-empty" aria-hidden="true" />}
             <div class="ent-copy">
               <div class="ent-heading">
@@ -60,6 +64,12 @@ const stars = (n: number) => Number.isInteger(n) ? "★".repeat(n) + "☆".repea
   const rows = [...document.querySelectorAll<HTMLElement>(".ent")];
   const statusBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-status].chip")];
   const kindBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
+  const countFor = (kind: string) => rows.filter((r) => r.dataset.status === status && (kind === "all" || r.dataset.kind === kind)).length;
+  const updateCounts = () => kindBtns.forEach((button) => {
+    const count = countFor(button.dataset.kind || "all");
+    const badge = button.querySelector<HTMLElement>("[data-count]");
+    if (badge) { badge.textContent = count ? String(count) : ""; badge.hidden = count === 0; }
+  });
   const show = (id: string, on: boolean) => { const el = document.getElementById(id); if (el) el.hidden = !on; };
   let status = "enjoyed", kind = "all";
   const fromHash = () => {
@@ -76,6 +86,7 @@ const stars = (n: number) => Number.isInteger(n) ? "★".repeat(n) + "☆".repea
     });
     statusBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.status === status)));
     kindBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.kind === kind)));
+    updateCounts();
     const inStatus = rows.filter((r) => r.dataset.status === status).length;
     show("empty-enjoyed", inStatus === 0 && status === "enjoyed");
     show("empty-next", inStatus === 0 && status === "up next");

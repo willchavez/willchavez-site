@@ -6,6 +6,6 @@ year: 2021
 status: "enjoyed"
 date: "2024-11-30"
 rating: 4
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620695382l/55384168.jpg"
+cover: "/uploads/enjoying/goodreads-read-no-bad-parts.webp"
 link: "https://www.goodreads.com/book/show/55384168"
 ---

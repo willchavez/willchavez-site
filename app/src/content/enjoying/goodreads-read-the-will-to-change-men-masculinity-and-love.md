@@ -6,6 +6,6 @@ year: 2003
 status: "enjoyed"
 date: "2020-12-09"
 rating: 5
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1747666075l/17601.jpg"
+cover: "/uploads/enjoying/goodreads-read-the-will-to-change-men-masculinity-and-love.webp"
 link: "https://www.goodreads.com/book/show/17601"
 ---

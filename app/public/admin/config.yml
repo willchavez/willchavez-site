@@ -83,7 +83,7 @@ collections:
       - { name: year, label: Year, widget: number, value_type: int, required: false }
       - { name: date, label: "Date added or finished", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: true, required: false }
       - { name: rating, label: Rating (1 to 5, half stars allowed), widget: number, value_type: float, min: 0.5, max: 5, step: 0.5, required: false }
-      - { name: cover, label: Cover art, widget: image, required: false }
+      - { name: cover, label: Cover art, widget: image, required: false, hint: Upload cover art here. The site generates a small, fast thumbnail and larger page image during the build. }
       - { name: link, label: Link, widget: string, required: false, hint: "Where to listen, watch or read it. SoundCloud track and playlist links get a player automatically." }
       - { name: sortOrder, label: Profile list order, widget: number, value_type: int, required: false, hint: "Keeps imported profile lists in their source order when exact dates are unavailable." }
       - { name: draft, label: Draft, widget: boolean, default: false }

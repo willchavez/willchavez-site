@@ -4,6 +4,6 @@ kind: "film"
 year: 1952
 status: "up next"
 sortOrder: 66
-cover: "https://a.ltrbxd.com/resized/sm/upload/8l/xx/8i/v5/singin-in-the-rain-1200-1200-675-675-crop-000000.jpg?v=777530184a"
+cover: "/uploads/enjoying/letterboxd-watchlist-singin-in-the-rain.webp"
 link: "https://letterboxd.com/film/singin-in-the-rain/"
 ---

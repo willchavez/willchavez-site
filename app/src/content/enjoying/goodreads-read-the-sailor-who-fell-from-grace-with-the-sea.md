@@ -6,6 +6,6 @@ year: 1963
 status: "enjoyed"
 date: "2020-11-08"
 rating: 5
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1472629976l/23346687._SY475_.jpg"
+cover: "/uploads/enjoying/goodreads-read-the-sailor-who-fell-from-grace-with-the-sea.webp"
 link: "https://www.goodreads.com/book/show/23346687"
 ---

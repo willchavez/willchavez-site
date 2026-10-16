@@ -6,7 +6,7 @@ import sharp from "sharp";
 
 const src = "public/uploads";
 const out = "dist/uploads/w";
-const widths = [480, 960, 1600];
+const widths = [240, 480, 960, 1600];
 const exts = new Set([".jpg", ".jpeg", ".png", ".webp", ".heic", ".avif"]);
 
 function walk(dir) {

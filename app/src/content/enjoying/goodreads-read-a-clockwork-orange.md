@@ -6,6 +6,6 @@ year: 1962
 status: "enjoyed"
 date: "2024-05-21"
 rating: 4
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549260060l/41817486.jpg"
+cover: "/uploads/enjoying/goodreads-read-a-clockwork-orange.webp"
 link: "https://www.goodreads.com/book/show/41817486"
 ---

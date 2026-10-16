@@ -6,6 +6,6 @@ year: 1984
 status: "enjoyed"
 date: "2020-11-12"
 rating: 5
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348245688l/139253.jpg"
+cover: "/uploads/enjoying/goodreads-read-the-house-on-mango-street.webp"
 link: "https://www.goodreads.com/book/show/139253"
 ---

@@ -6,6 +6,6 @@ year: 1958
 status: "enjoyed"
 date: "2021-05-15"
 rating: 5
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1781793855l/6490587._SY475_.jpg"
+cover: "/uploads/enjoying/goodreads-read-things-fall-apart-the-african-trilogy-1.webp"
 link: "https://www.goodreads.com/book/show/6490587"
 ---

@@ -6,6 +6,6 @@ year: 1965
 status: "enjoyed"
 date: "2022-02-26"
 rating: 5
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686130721l/38469._SY475_.jpg"
+cover: "/uploads/enjoying/goodreads-read-going-to-meet-the-man.webp"
 link: "https://www.goodreads.com/book/show/38469"
 ---

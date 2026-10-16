@@ -6,6 +6,6 @@ year: 2015
 status: "enjoyed"
 date: "2021-04-17"
 rating: 5
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447140494l/25330108.jpg"
+cover: "/uploads/enjoying/goodreads-read-freedom-is-a-constant-struggle-ferguson-palestine-and-the-foundations-of-a-movement.webp"
 link: "https://www.goodreads.com/book/show/25330108"
 ---

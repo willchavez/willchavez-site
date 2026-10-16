@@ -5,6 +5,6 @@ creator: "Adrian Matejka"
 status: "enjoyed"
 date: "2026-06-18"
 rating: 4
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1778963175l/252308448._SY475_.jpg"
+cover: "/uploads/enjoying/goodreads-read-poetry-magazine-may-2026.webp"
 link: "https://www.goodreads.com/book/show/252308448"
 ---

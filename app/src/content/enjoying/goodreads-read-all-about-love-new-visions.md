@@ -6,6 +6,6 @@ year: 1999
 status: "enjoyed"
 date: "2021-06-11"
 rating: 5
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520297939l/218042.jpg"
+cover: "/uploads/enjoying/goodreads-read-all-about-love-new-visions.webp"
 link: "https://www.goodreads.com/book/show/218042"
 ---

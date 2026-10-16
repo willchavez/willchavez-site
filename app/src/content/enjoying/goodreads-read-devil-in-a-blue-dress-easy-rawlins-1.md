@@ -6,6 +6,6 @@ year: 1990
 status: "enjoyed"
 date: "2021-01-04"
 rating: 5
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336545202l/37100.jpg"
+cover: "/uploads/enjoying/goodreads-read-devil-in-a-blue-dress-easy-rawlins-1.webp"
 link: "https://www.goodreads.com/book/show/37100"
 ---

@@ -6,6 +6,6 @@ year: 2023
 status: "enjoyed"
 date: "2024-08-14"
 rating: 3
-cover: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689090540l/63133205._SY475_.jpg"
+cover: "/uploads/enjoying/goodreads-read-the-woman-in-me.webp"
 link: "https://www.goodreads.com/book/show/63133205"
 ---
