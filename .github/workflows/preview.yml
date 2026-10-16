@@ -26,6 +26,7 @@ jobs:
         with:
           name: soundcloud-preview
           path: app/.soundcloud-preview
+          include-hidden-files: true
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
