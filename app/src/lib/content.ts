@@ -10,7 +10,9 @@ export async function getPhotos() {
   return (await getCollection("photos", (e) => !e.data.draft)).sort(byDateDesc);
 }
 export async function getEnjoying() {
-  return (await getCollection("enjoying", (e) => !e.data.draft)).sort(byDateDesc);
+  return (await getCollection("enjoying", (e) => !e.data.draft)).sort((a, b) =>
+    (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0),
+  );
 }
 
 export const fmtDate = (d: Date) =>

@@ -10,7 +10,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const d = entry.data;
 const { Content } = await render(entry);
-const meta = [d.kind, d.creator, d.year, fmtDate(d.date)].filter(Boolean).join(" · ");
+const meta = [d.kind, d.creator, d.year, d.date && fmtDate(d.date)].filter(Boolean).join(" · ");
 const stars = d.rating && (Number.isInteger(d.rating) ? "★".repeat(d.rating) + "☆".repeat(5 - d.rating) : "★".repeat(Math.floor(d.rating)) + "½");
 ---
 <Base title={d.title} current="enjoying" heading={d.title} sub={meta} description={`${d.title}${d.creator ? ", " + d.creator : ""}`}>

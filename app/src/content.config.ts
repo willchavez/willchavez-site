@@ -46,7 +46,7 @@ const enjoying = defineCollection({
     creator: z.string().optional(),
     year: z.number().optional(),
     status: z.enum(["up next", "enjoyed"]).default("up next"),
-    date: z.coerce.date(),
+    date: z.coerce.date().optional(),
     rating: z.number().min(0.5).max(5).multipleOf(0.5).optional(),
     cover: z.string().optional(),
     link: z.string().optional(),
