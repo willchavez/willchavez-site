@@ -3,7 +3,6 @@ title: "A Clockwork Orange"
 kind: "book"
 creator: "Anthony Burgess"
 year: 1962
-status: "enjoyed"
 date: "2024-05-21"
 rating: 4
 cover: "/uploads/enjoying/goodreads-read-a-clockwork-orange.webp"

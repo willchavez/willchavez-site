@@ -3,7 +3,6 @@ title: "Kafka on the Shore"
 kind: "book"
 creator: "Haruki Murakami"
 year: 2002
-status: "enjoyed"
 date: "2021-01-24"
 rating: 5
 cover: "/uploads/enjoying/goodreads-read-kafka-on-the-shore.webp"

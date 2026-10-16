@@ -3,7 +3,6 @@ title: "The House on Mango Street"
 kind: "book"
 creator: "Sandra Cisneros"
 year: 1984
-status: "enjoyed"
 date: "2020-11-12"
 rating: 5
 cover: "/uploads/enjoying/goodreads-read-the-house-on-mango-street.webp"

@@ -2,7 +2,6 @@
 title: "One Battle After Another"
 kind: "film"
 year: 2025
-status: "enjoyed"
 date: "2025-10-20"
 cover: "/uploads/enjoying/letterboxd-film-one-battle-after-another.webp"
 rating: 5

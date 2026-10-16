@@ -2,7 +2,6 @@
 title: "28 Years Later: The Bone Temple"
 kind: "film"
 year: 2026
-status: "enjoyed"
 date: "2026-01-19"
 cover: "/uploads/enjoying/letterboxd-film-28-years-later-the-bone-temple.webp"
 rating: 4

@@ -2,7 +2,6 @@
 title: "A Poet"
 kind: "film"
 year: 2025
-status: "enjoyed"
 date: "2026-09-27"
 cover: "/uploads/enjoying/letterboxd-film-a-poet.webp"
 rating: 4.5

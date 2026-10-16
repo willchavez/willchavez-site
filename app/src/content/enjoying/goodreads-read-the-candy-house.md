@@ -3,7 +3,6 @@ title: "The Candy House"
 kind: "book"
 creator: "Jennifer Egan"
 year: 2022
-status: "enjoyed"
 date: "2023-02-21"
 rating: 4
 cover: "/uploads/enjoying/goodreads-read-the-candy-house.webp"

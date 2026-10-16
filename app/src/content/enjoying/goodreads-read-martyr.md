@@ -3,7 +3,6 @@ title: "Martyr!"
 kind: "book"
 creator: "Kaveh Akbar"
 year: 2024
-status: "enjoyed"
 date: "2024-12-24"
 rating: 5
 cover: "/uploads/enjoying/goodreads-read-martyr.webp"

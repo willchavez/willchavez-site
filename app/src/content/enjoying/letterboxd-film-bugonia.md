@@ -2,7 +2,6 @@
 title: "Bugonia"
 kind: "film"
 year: 2025
-status: "enjoyed"
 date: "2026-01-03"
 cover: "/uploads/enjoying/letterboxd-film-bugonia.webp"
 rating: 4

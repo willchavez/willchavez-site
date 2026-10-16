@@ -3,7 +3,6 @@ title: "The Emperor of Gladness"
 kind: "book"
 creator: "Ocean Vuong"
 year: 2025
-status: "enjoyed"
 date: "2025-12-17"
 rating: 4
 cover: "/uploads/enjoying/goodreads-read-the-emperor-of-gladness.webp"

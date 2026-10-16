@@ -5,7 +5,7 @@ import SoundCloud from "../../components/SoundCloud.astro";
 import { soundCloudURL } from "../../lib/soundcloud.mjs";
 import { getEnjoying, fmtDate, img } from "../../lib/content";
 export async function getStaticPaths() {
-  return (await getEnjoying()).filter((e) => e.data.status === "enjoyed").map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+  return (await getEnjoying()).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
 }
 const { entry } = Astro.props;
 const d = entry.data;

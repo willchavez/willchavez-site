@@ -18,9 +18,9 @@ try {
     ["writing/player-check.md", 'title: SoundCloud player check\nsoundcloud: https://soundcloud.com/william-chavez-salinas/sets/2026-ep', "Isolated preview of the optional player beneath a note. This is not a published post."],
     ["photos/layout-check.md", 'title: Photo layout check\nimage: /img/will.png\nalt: Will Chavez’s illustrated portrait\ncaption: Isolated photo layout preview.', ""],
     ["writing/plain-check.md", 'title: Note without music', "No player should appear on this page."],
-    ["enjoying/player-check.md", 'title: Playlist player check\nkind: music\nstatus: enjoyed\nlink: https://soundcloud.com/william-chavez-salinas/sets/2026-ep', "Isolated review preview."],
-    ["enjoying/queue-check.md", 'title: Track player check\nkind: music\nstatus: up next\nlink: https://soundcloud.com/forss/flickermood', ""],
-    ["enjoying/link-check.md", 'title: Ordinary link check\nkind: book\nstatus: enjoyed\nlink: https://example.com', "Ordinary links still work."],
+    ["enjoying/player-check.md", 'title: Playlist player check\nkind: music\nlink: https://soundcloud.com/william-chavez-salinas/sets/2026-ep', "Isolated review preview."],
+    ["enjoying/track-check.md", 'title: Track player check\nkind: music\nlink: https://soundcloud.com/forss/flickermood', ""],
+    ["enjoying/link-check.md", 'title: Ordinary link check\nkind: book\nlink: https://example.com', "Ordinary links still work."],
   ];
   for (const [name, fields, body] of fixtures) {
     const target = path.join(scratch, "src/content", name);

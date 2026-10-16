@@ -3,7 +3,6 @@ title: "Freedom is a Constant Struggle: Ferguson, Palestine and the Foundations 
 kind: "book"
 creator: "Angela Y. Davis"
 year: 2015
-status: "enjoyed"
 date: "2021-04-17"
 rating: 5
 cover: "/uploads/enjoying/goodreads-read-freedom-is-a-constant-struggle-ferguson-palestine-and-the-foundations-of-a-movement.webp"

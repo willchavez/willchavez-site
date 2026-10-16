@@ -2,7 +2,6 @@
 title: "I Love Boosters"
 kind: "film"
 year: 2026
-status: "enjoyed"
 date: "2026-05-28"
 cover: "/uploads/enjoying/letterboxd-film-i-love-boosters.webp"
 rating: 4
