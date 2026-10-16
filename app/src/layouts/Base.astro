@@ -4,11 +4,11 @@ import "../styles/nav.css";
 import "../styles/pages.css";
 import Nav from "../components/Nav.astro";
 import { ClientRouter } from "astro:transitions";
-import { getWriting, getPhotos, getEnjoying } from "../lib/content";
+import { getWriting, getEnjoying } from "../lib/content";
 
 const { title, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, analytics = false, showHeading = true, showPageTitle = true } = Astro.props;
-const [w, p, e] = await Promise.all([getWriting(), getPhotos(), getEnjoying()]);
-const counts = { notes: w.length, photos: p.length, enjoying: e.length };
+const [w, e] = await Promise.all([getWriting(), getEnjoying()]);
+const counts = { notes: w.length, enjoying: e.length };
 const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engineer";
 ---
 <!doctype html>
