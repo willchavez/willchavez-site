@@ -4,11 +4,9 @@ date: 2021-09-15
 summary: "Sneaker culture is something I’ve participated since I was in high school around 2009. Over the past couple of years people who have bought Nike shoes have typically used an app called SNKRS…"
 source: "https://medium.com/@willchavez/got-em-snkrs-generator-ef799b2db42d"
 topics:
-  - "sneakers"
-  - "fashion"
-  - "projects"
-  - "programming"
-  - "glitch"
+  - "Sneakers"
+  - "Side project"
+  - "Creative coding"
 draft: false
 ---
 
@@ -34,16 +32,20 @@ The entire site took about an hour of coding on [Glitch.com](http://glitch.com).
 
 Some test images…
 
-![A hand holding a toy character, added to the SNKRS mockup](/uploads/medium/2021-09-15-got-em-snkrs-generator-02.webp)
+<div class="note-image-grid" aria-label="Test images from the GOT ’EM generator">
 
-![A fluffy white dog in a shop window](/uploads/medium/2021-09-15-got-em-snkrs-generator-03.webp)
+<figure><img src="/uploads/medium/2021-09-15-got-em-snkrs-generator-02.webp" alt="A hand holding a toy character, added to the SNKRS mockup"></figure>
 
-![A hand holding a small character figure](/uploads/medium/2021-09-15-got-em-snkrs-generator-04.webp)
+<figure><img src="/uploads/medium/2021-09-15-got-em-snkrs-generator-03.webp" alt="A fluffy white dog in a shop window"></figure>
 
-![An illustrated red-haired character](/uploads/medium/2021-09-15-got-em-snkrs-generator-05.webp)
+<figure><img src="/uploads/medium/2021-09-15-got-em-snkrs-generator-04.webp" alt="A hand holding a small character figure"></figure>
 
-![A tabby cat lying on a rug](/uploads/medium/2021-09-15-got-em-snkrs-generator-06.webp)
+<figure><img src="/uploads/medium/2021-09-15-got-em-snkrs-generator-05.webp" alt="An illustrated red-haired character"></figure>
 
-![An illustration of a frog playing a ukulele](/uploads/medium/2021-09-15-got-em-snkrs-generator-07.webp)
+<figure><img src="/uploads/medium/2021-09-15-got-em-snkrs-generator-06.webp" alt="A tabby cat lying on a rug"></figure>
+
+<figure><img src="/uploads/medium/2021-09-15-got-em-snkrs-generator-07.webp" alt="An illustration of a frog playing a ukulele"></figure>
+
+</div>
 
 Feel free to reach out if you have any questions on the site. [Instagram](https://www.instagram.com/willchavez/), [Twitter](https://twitter.com/_willchavez).

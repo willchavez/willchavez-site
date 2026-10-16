@@ -4,10 +4,10 @@ date: 2018-09-22
 summary: "In the beginning of February I wasn’t doing much, going out a lot, so I started developing a serious case of FOMO while looking through social media. My best friend was in Dallas and had been…"
 source: "https://medium.com/@willchavez/atlanta-tyler-debf041903b0"
 topics:
-  - "personal"
-  - "music"
-  - "tyler-the-creator"
-  - "atlanta"
+  - "Travel"
+  - "Music"
+  - "Atlanta"
+  - "Tyler, the Creator"
 draft: false
 deck: "Very last minute trip to the ATL to see Tyler."
 ---
@@ -32,9 +32,13 @@ Next day I woke up early and drove back. All in all, it was a small but fun trip
 
 Some of the pics from that day.
 
-![Vince Staples performing onstage at Infinite Energy Stadium](/uploads/medium/2018-09-22-atlanta-and-tyler-01.webp)
+<div class="note-image-grid" aria-label="Photos from the Atlanta concert">
 
-![A concert stage lit in yellow and purple](/uploads/medium/2018-09-22-atlanta-and-tyler-02.webp)
+<figure><img src="/uploads/medium/2018-09-22-atlanta-and-tyler-01.webp" alt="Vince Staples performing onstage at Infinite Energy Stadium"></figure>
+
+<figure><img src="/uploads/medium/2018-09-22-atlanta-and-tyler-02.webp" alt="A concert stage lit in yellow and purple"></figure>
+
+</div>
 
 *Vince & Tyler at Infinite Energy Stadium*
 

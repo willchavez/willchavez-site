@@ -18,6 +18,15 @@
 .entries .t { display: inline; font-size: 1.45rem; letter-spacing: -.025em; line-height: 1.4; }
 .entries .m { display: block; color: var(--muted); font-size: .85rem; margin-top: .6rem; }
 .entries .s { color: var(--muted); font-size: 1rem; margin-top: .55rem; max-width: 36rem; }
+.note-list { display: grid; gap: 1rem; }
+.note-list li.note-card { position: relative; margin: 0; padding: 1.5rem 1.65rem 1.4rem; border-radius: 1.35rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
+.note-card::before { content: ""; position: absolute; left: .75rem; top: 1.85rem; width: .36rem; height: .36rem; border-radius: 50%; background: var(--rust); opacity: .8; }
+.note-card-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.note-card .t { box-shadow: none; }
+.note-card .t::before { display: none; }
+.note-card .m { margin: 0; white-space: nowrap; }
+.note-card .s { margin-top: .7rem; }
+.note-card .note-topics { margin-top: 1rem; }
 .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .9rem; }
 .chip { min-height: 44px; padding: 0 1rem; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--rust) 6%, transparent); color: var(--ink); font: inherit; font-size: .9rem; cursor: pointer; }
 .chip:hover { background: color-mix(in srgb, var(--rust) 13%, transparent); }
@@ -44,8 +53,18 @@
 .note-deck { max-width: 38rem; margin: 0 0 2rem; color: var(--muted); font-size: clamp(1.2rem, 2.5vw, 1.55rem); line-height: 1.55; letter-spacing: -.015em; }
 .note-deck::before { content: ""; display: inline-block; width: .48rem; height: .48rem; margin: 0 .7rem .18rem 0; border-radius: 50%; background: var(--rust); }
 .note-detail-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem 1rem; margin-top: 2.5rem; }
-.note-topics { display: flex; flex-wrap: wrap; gap: .4rem; }
-.note-topic { display: inline-flex; align-items: center; min-height: 32px; padding: .2rem .75rem; border-radius: 999px; background: color-mix(in srgb, var(--rust) 8%, transparent); color: var(--muted); font-size: .78rem; text-transform: capitalize; }
+.note-topics { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 0; }
+.note-topic { display: inline-flex; align-items: center; min-height: 30px; padding: .15rem .7rem; border-radius: 999px; background: color-mix(in srgb, var(--paper) 76%, var(--rust) 8%); color: var(--muted); font-size: .76rem; line-height: 1.2; }
+.note-reading { max-width: 41rem; padding: clamp(1.2rem, 3.5vw, 2.4rem); border-radius: 1.5rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
+.note-reading .note-deck { max-width: none; }
+.note-reading .prose { max-width: none; }
+.note-reading .prose img { display: block; }
+.note-reading .prose .note-image-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: .8rem; margin: 1.8rem 0; }
+.note-reading .prose .note-image-grid figure { min-width: 0; margin: 0; padding: .35rem; border-radius: 1rem; background: color-mix(in srgb, var(--paper) 68%, transparent); }
+.note-reading .prose .note-image-grid img { width: 100%; height: 100%; border-radius: .75rem; object-fit: contain; }
+.note-reading .prose .note-image-grid figure:has(img[src*="got-em-snkrs-generator"]) img { max-height: 29rem; }
+.note-reading .prose .note-image-grid figure:has(img[src*="asheville-knoxville"]) img { max-height: 22rem; }
+.note-reading .note-detail-meta { padding-top: 1.2rem; border-top: 1px solid color-mix(in srgb, var(--rust) 20%, transparent); }
 .note-source { display: inline-flex; align-items: center; gap: .4rem; min-height: 40px; padding: .25rem .8rem; border-radius: 999px; background: var(--portrait-paper); box-shadow: none; font-size: .82rem; }
 .note-source::before { display: none; }
 .note-source span { color: var(--rust); }
@@ -75,4 +94,9 @@
   .page-head { margin-bottom: 2.5rem; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
   .ent { grid-template-columns: 1fr; gap: .5rem; }
+  .note-card-heading { align-items: flex-start; flex-direction: column; gap: .35rem; }
+  .note-list li.note-card { padding: 1.3rem 1.2rem 1.2rem 1.45rem; }
+  .note-card::before { left: .65rem; top: 1.75rem; width: .3rem; height: .3rem; }
+  .note-reading { padding: 1.15rem; border-radius: 1.2rem; }
+  .note-reading .prose .note-image-grid { gap: .5rem; }
 }

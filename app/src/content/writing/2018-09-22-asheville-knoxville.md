@@ -4,11 +4,10 @@ date: 2018-09-22
 summary: "Towards the end of March, my team at IBM was given Thu+Fri off and during the beginning of that week I started looking into a strange little festival that I heard of, called Big Ears. It had been…"
 source: "https://medium.com/@willchavez/asheville-knoxville-93fd2f53b5f3"
 topics:
-  - "knoxville"
-  - "music"
-  - "personal"
-  - "moog"
-  - "asheville"
+  - "Travel"
+  - "Music"
+  - "Asheville"
+  - "Knoxville"
 draft: false
 deck: "Small journey through Asheville and Knoxville omw to spend a day at Big Ears Festival 2017."
 ---
@@ -29,32 +28,36 @@ There’s something indescribable about traveling to a new city, exploring the a
 
 Some images from my trip.
 
-![The Moog Music factory in Asheville](/uploads/medium/2018-09-22-asheville-knoxville-01.webp)
+<div class="note-image-grid" aria-label="Photos from Asheville and Knoxville">
 
-![Synthesizers and patch cables inside the Moog Music factory](/uploads/medium/2018-09-22-asheville-knoxville-02.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-01.webp" alt="The Moog Music factory in Asheville"></figure>
 
-![A pork dish at Cúrate in Asheville](/uploads/medium/2018-09-22-asheville-knoxville-03.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-02.webp" alt="Synthesizers and patch cables inside the Moog Music factory"></figure>
 
-![Tapas and drinks at Cúrate](/uploads/medium/2018-09-22-asheville-knoxville-04.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-03.webp" alt="A pork dish at Cúrate in Asheville"></figure>
 
-![Rows of records inside a record shop](/uploads/medium/2018-09-22-asheville-knoxville-05.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-04.webp" alt="Tapas and drinks at Cúrate"></figure>
 
-![A colorful storefront with a “you are beautiful” sign](/uploads/medium/2018-09-22-asheville-knoxville-06.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-05.webp" alt="Rows of records inside a record shop"></figure>
 
-![A glass of beer on an outdoor picnic table](/uploads/medium/2018-09-22-asheville-knoxville-07.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-06.webp" alt="A colorful storefront with a “you are beautiful” sign"></figure>
 
-![Equipment inside the New Belgium brewery](/uploads/medium/2018-09-22-asheville-knoxville-08.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-07.webp" alt="A glass of beer on an outdoor picnic table"></figure>
 
-![A beer beside a window at the brewery](/uploads/medium/2018-09-22-asheville-knoxville-09.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-08.webp" alt="Equipment inside the New Belgium brewery"></figure>
 
-![A blue-lit artwork inside a Knoxville museum](/uploads/medium/2018-09-22-asheville-knoxville-10.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-09.webp" alt="A beer beside a window at the brewery"></figure>
 
-![A colorful grid artwork inside a Knoxville museum](/uploads/medium/2018-09-22-asheville-knoxville-11.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-10.webp" alt="A blue-lit artwork inside a Knoxville museum"></figure>
 
-![A blue-lit stage at the Big Ears Festival](/uploads/medium/2018-09-22-asheville-knoxville-12.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-11.webp" alt="A colorful grid artwork inside a Knoxville museum"></figure>
 
-![A performer playing keyboard at the festival](/uploads/medium/2018-09-22-asheville-knoxville-13.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-12.webp" alt="A blue-lit stage at the Big Ears Festival"></figure>
 
-![A DJ performing under blue lights at the festival](/uploads/medium/2018-09-22-asheville-knoxville-14.webp)
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-13.webp" alt="A performer playing keyboard at the festival"></figure>
+
+<figure><img src="/uploads/medium/2018-09-22-asheville-knoxville-14.webp" alt="A DJ performing under blue lights at the festival"></figure>
+
+</div>
 
 Originally published on willchavez.com on April 9, 2018.
