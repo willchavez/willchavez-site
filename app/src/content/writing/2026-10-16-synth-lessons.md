@@ -26,6 +26,6 @@ I started building this browser companion to make that relationship easier to se
 
 From there, I added lessons on the amp envelope and LFO, then a playground that brings the pieces together: a waveform, a filter, two ADSR envelopes, and an LFO you can send to the filter, volume, or pitch. It has a touch-friendly keyboard, a few starter sounds, and live graphs for the different parts of the signal.
 
-<p class="synth-project-links"><a href="https://willchavez.github.io/synth-lessons/demo.html" target="_blank" rel="noreferrer">Open the full synth playground ↗</a><a href="https://github.com/willchavez/synth-lessons" target="_blank" rel="noreferrer">Browse the code on GitHub ↗</a></p>
+<p class="synth-project-links"><a href="https://willchavez.github.io/synth-lessons/demo.html" target="_blank" rel="noreferrer">Open the full synth playground <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 12 12 4M5 4h7v7" /></svg></a><a href="https://github.com/willchavez/synth-lessons" target="_blank" rel="noreferrer">Browse the code on GitHub <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 12 12 4M5 4h7v7" /></svg></a></p>
 
 The project is plain HTML, CSS, and JavaScript, with no dependencies or build step. The audio uses the Web Audio API and an AudioWorklet. It’s a learning companion, not an OP-XY emulator: the SVF and ladder filters are simplified models, so they won’t sound exactly like the hardware. I’m still shaping the lessons and the instrument around them.

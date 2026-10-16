@@ -10,7 +10,7 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
 <Base title={entry.data.title} current="notes" heading={entry.data.title} sub={fmtDate(entry.data.date)} description={entry.data.summary}>
-  <a class="back" href="/notes">← Back to Notes</a>
+  <a class="back" href="/notes"><svg class="icon-arrow-left" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M12.5 8h-9m0 0 4-4m-4 4 4 4" /></svg>Back to Notes</a>
   <article class="note-reading">
     {entry.data.deck && <p class="note-deck">{entry.data.deck}</p>}
     {entry.data.cover && <img class="photo-full" style="margin-bottom:1.6rem" src={img(entry.data.cover, 1600)} alt="" />}
@@ -19,7 +19,7 @@ const { Content } = await render(entry);
       {entry.data.topics.length > 0 && <ul class="note-topics" aria-label="Topics">
         {entry.data.topics.map((topic) => <li class="note-topic">{topic}</li>)}
       </ul>}
-      {entry.data.source && <a class="note-source" href={entry.data.source} target="_blank" rel="noreferrer">Originally published on Medium <span aria-hidden="true">↗</span></a>}
+      {entry.data.source && <a class="note-source" href={entry.data.source} target="_blank" rel="noreferrer">Originally published on Medium <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 12 12 4M5 4h7v7" /></svg></a>}
     </footer>}
     <SoundCloud url={entry.data.soundcloud} title={entry.data.title} />
   </article>
