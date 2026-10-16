@@ -17,7 +17,7 @@ body:has(.work-page) .nav a, body:has(.work-page) .pill summary { text-transform
 .work-contact:hover { filter: brightness(.92); }
 .work-section-title { font-size: .9rem; font-weight: 450; color: var(--muted); margin: 0 0 2.2rem; }
 .work-role { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 1.5rem 3rem; margin: 0 0 2.7rem; }
-.work-company h3 { display: inline-block; padding: .35rem .9rem; background: color-mix(in srgb, var(--work-accent) 9%, transparent); border-radius: 999px; font-size: 1.05rem; font-weight: 450; letter-spacing: -.02em; }
+.work-company h3 { display: inline-block; padding: 0; font-size: 1.2rem; font-weight: 500; letter-spacing: -.025em; line-height: 1.4; }
 .work-period { display: block; font-size: .78rem; color: var(--muted); margin: .55rem 0 0 .9rem; }
 .work-description { max-width: 37rem; }
 .work-team { font-size: 1.1rem; font-weight: 500; margin: .3rem 0 .7rem; }
@@ -61,7 +61,7 @@ body:has([data-direction="quiet"]) { max-width: 920px; }
 [data-direction="split"] .work-section-title { margin-top: .1rem; }
 [data-direction="split"] .work-role { grid-template-columns: 1fr; gap: .8rem; }
 [data-direction="split"] .work-company { display: flex; align-items: center; gap: .7rem; }
-[data-direction="split"] .work-company h3 { padding: .4rem 1rem; }
+[data-direction="split"] .work-company h3 { padding: 0; }
 [data-direction="split"] .work-period { margin: 0; }
 [data-direction="split"] .work-team { font-size: 1rem; }
 [data-direction="split"] .work-description > p:not(.work-team) { font-size: .94rem; }
