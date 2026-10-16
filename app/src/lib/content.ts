@@ -11,7 +11,9 @@ export async function getPhotos() {
 }
 export async function getEnjoying() {
   return (await getCollection("enjoying", (e) => !e.data.draft)).sort((a, b) =>
-    (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0),
+    (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0) ||
+    (a.data.sortOrder ?? Number.MAX_SAFE_INTEGER) - (b.data.sortOrder ?? Number.MAX_SAFE_INTEGER) ||
+    a.id.localeCompare(b.id),
   );
 }
 

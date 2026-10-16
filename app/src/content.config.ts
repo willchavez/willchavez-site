@@ -50,6 +50,7 @@ const enjoying = defineCollection({
     rating: z.number().min(0.5).max(5).multipleOf(0.5).optional(),
     cover: z.string().optional(),
     link: z.string().optional(),
+    sortOrder: z.number().optional(),
     draft: z.boolean().default(false),
   }),
 });

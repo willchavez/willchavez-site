@@ -39,12 +39,17 @@
 #kinds .chip { background: transparent; color: var(--muted); }
 #kinds .chip[aria-pressed="true"], #kinds .chip:hover { background: color-mix(in srgb, var(--rust) 10%, transparent); color: var(--ink); }
 .chip:focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
-.ent { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr); gap: 0 1.2rem; padding: 0 0 2.5rem; }
+.ent { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr); gap: 0 1.1rem; padding: 0 0 1.8rem; align-items: start; }
 .ent[hidden] { display: none; }
-.ent .k { color: var(--muted); font-size: .8rem; padding-top: .3rem; text-transform: capitalize; }
+.ent .cover { display: block; grid-column: 1; grid-row: 1; width: 4.6rem; aspect-ratio: 3 / 2; object-fit: cover; border-radius: .65rem; background: color-mix(in srgb, var(--rust) 10%, var(--paper)); }
+.ent[data-kind="book"] .cover { aspect-ratio: 2 / 3; }
+.ent .cover-empty { opacity: .45; }
+.ent-copy { min-width: 0; }
+.ent-heading { display: flex; align-items: baseline; flex-wrap: wrap; gap: .25rem .65rem; }
+.ent .k { display: inline-flex; align-items: center; min-height: 1.35rem; padding: 0 .5rem; border-radius: 999px; background: color-mix(in srgb, var(--rust) 10%, transparent); color: var(--muted); font-size: .7rem; line-height: 1; text-transform: capitalize; }
 .ent .t { font-size: 1.2rem; letter-spacing: -.02em; }
 .ent .m { display: block; color: var(--muted); font-size: .88rem; margin-top: .3rem; }
-.ent .cover { width: 100%; max-width: 10rem; border-radius: 1rem; margin: .8rem 0 .2rem; display: block; }
+.ent .recorded { margin-left: auto; color: var(--muted); font-size: .78rem; white-space: nowrap; }
 .prose { max-width: 38rem; font-size: 1.08rem; line-height: 1.8; }
 .prose > * + * { margin-top: 1.2em; }
 .prose h2, .prose h3 { letter-spacing: -.025em; margin-top: 1.8em; }
@@ -97,7 +102,10 @@
 @media (max-width: 640px) {
   .page-head { margin-bottom: 2.5rem; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
-  .ent { grid-template-columns: 1fr; gap: .5rem; }
+  .ent { grid-template-columns: 3.8rem minmax(0, 1fr); gap: 0 .8rem; padding-bottom: 1.35rem; }
+  .ent .cover { width: 3.8rem; border-radius: .55rem; }
+  .ent .t { font-size: 1.08rem; }
+  .ent .recorded { margin-left: 0; flex-basis: 100%; }
   .route-notes main:has(.note-index) { max-width: 44rem; }
   .note-list { gap: .7rem; }
   .note-list li.note-card { grid-template-columns: 5.1rem minmax(0, 1fr); align-items: start; gap: .85rem; padding: .9rem; border: 0; border-radius: 1.1rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }

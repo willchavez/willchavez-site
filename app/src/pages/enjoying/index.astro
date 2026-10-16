@@ -2,7 +2,7 @@
 import Base from "../../layouts/Base.astro";
 import Empty from "../../components/Empty.astro";
 import SoundCloud from "../../components/SoundCloud.astro";
-import { getEnjoying, fmtDate, img, VERB, KIND_PLURAL } from "../../lib/content";
+import { getEnjoying, fmtDate, img, KIND_PLURAL } from "../../lib/content";
 import { KINDS } from "../../content.config";
 const items = await getEnjoying();
 const nextCount = items.filter((i) => i.data.status === "up next").length;
@@ -24,14 +24,19 @@ const stars = (n: number) => Number.isInteger(n) ? "★".repeat(n) + "☆".repea
       <div id="list">
         {items.map((i) => (
           <div class="ent" data-status={i.data.status} data-kind={i.data.kind}>
-            <span class="k">{i.data.status === "up next" ? `to ${VERB[i.data.kind]}` : i.data.kind}</span>
-            <div>
+            {i.data.cover
+              ? <img class="cover" src={img(i.data.cover, 480)} alt="" loading="lazy" decoding="async" />
+              : <div class="cover cover-empty" aria-hidden="true" />}
+            <div class="ent-copy">
+              <div class="ent-heading">
+                <span class="k">{i.data.kind}</span>
               {i.data.status === "enjoyed"
                 ? <a class="t" href={`/enjoying/${i.id}`}>{i.data.title}</a>
                 : i.data.link ? <a class="t" href={i.data.link}>{i.data.title}</a> : <span class="t">{i.data.title}</span>}
+                {i.data.date && <time class="recorded" datetime={i.data.date.toISOString()}>{fmtDate(i.data.date)}</time>}
+              </div>
               <span class="m">{[i.data.creator, i.data.year].filter(Boolean).join(" · ")}</span>
               {i.data.rating && <div class="rating" aria-label={`${i.data.rating} out of 5`}>{stars(i.data.rating)}</div>}
-              {i.data.cover && <img class="cover" src={img(i.data.cover, 480)} alt="" loading="lazy" decoding="async" />}
               <SoundCloud url={i.data.link} title={i.data.title} />
             </div>
           </div>
