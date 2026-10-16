@@ -2,9 +2,8 @@ import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 import { soundCloudURL } from "./lib/soundcloud.mjs";
 
-// Three kinds of things you can post. Each is a folder of markdown files that
-// the CMS at /admin writes to. Nothing here is seeded: empty folders render
-// as designed empty states.
+// Content lives in Markdown files in the repository. Empty collections render
+// their designed empty states.
 
 const writing = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/writing" }),
