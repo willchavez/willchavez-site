@@ -1,5 +1,5 @@
 // Isolated rendering fixtures for browser QA. Never adds posts to the real site.
-import { cp, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -11,7 +11,9 @@ const scratch = await mkdtemp(path.join(tmpdir(), "soundcloud-preview-"));
 const output = path.join(app, ".soundcloud-preview");
 try {
   await cp(app, scratch, { recursive: true, filter: (source) => !["node_modules", "dist", ".astro", ".soundcloud-preview"].includes(path.basename(source)) });
-  await symlink(path.join(app, "node_modules"), path.join(scratch, "node_modules"), "dir");
+  // Astro's built-in .astro components must compile inside the same project root.
+  // A dependency symlink outside this fixture root breaks their virtual CSS modules.
+  await cp(path.join(app, "node_modules"), path.join(scratch, "node_modules"), { recursive: true });
   const fixtures = [
     ["writing/player-check.md", 'title: SoundCloud player check\nsoundcloud: https://soundcloud.com/william-chavez-salinas/sets/2026-ep', "Isolated preview of the optional player beneath a note. This is not a published post."],
     ["photos/layout-check.md", 'title: Photo layout check\nimage: /img/will.png\nalt: Will Chavez’s illustrated portrait\ncaption: Isolated photo layout preview.', ""],
