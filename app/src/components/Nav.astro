@@ -28,6 +28,22 @@ const here = items.find((i) => i.id === current) ?? items[0];
   </nav>
 </div>
 <script>
+  import { createHoverNav } from "../lib/hover-nav.mjs";
+  const switcher = document.querySelector<HTMLElement>(".seg");
+  if (switcher) {
+    const hoverDesktop = matchMedia("(min-width: 821px) and (hover: hover)");
+    const intent = createHoverNav((expanded) => switcher.toggleAttribute("data-expanded", expanded));
+    switcher.setAttribute("data-hover-intent", "");
+    switcher.addEventListener("pointerenter", () => { if (hoverDesktop.matches) intent.enter(); });
+    switcher.addEventListener("pointerleave", () => intent.leave());
+    switcher.addEventListener("pointercancel", () => intent.leave());
+    switcher.addEventListener("focusin", () => { if (hoverDesktop.matches) intent.focus(); });
+    switcher.addEventListener("focusout", (event) => {
+      if (!switcher.contains(event.relatedTarget as Node)) intent.blur();
+    });
+    hoverDesktop.addEventListener("change", () => intent.reset());
+    window.addEventListener("blur", () => intent.reset());
+  }
   // close the phone menu on Escape or when tapping elsewhere
   const pill = document.querySelector<HTMLDetailsElement>(".pill");
   if (pill) {

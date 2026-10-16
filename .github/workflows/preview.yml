@@ -21,6 +21,7 @@ jobs:
       - name: Check SoundCloud links and render isolated player previews
         run: |
           node --test app/scripts/soundcloud.test.mjs
+          node --test app/scripts/hover-nav.test.mjs
           node app/scripts/soundcloud-preview.mjs
       - uses: actions/upload-artifact@v4
         with:

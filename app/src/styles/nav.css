@@ -44,7 +44,7 @@
   .seg a {
     display: flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border-radius: 999px;
     white-space: nowrap; overflow: hidden; letter-spacing: -0.02em; font-size: 0.98rem;
-    transition: background 300ms ease, color 300ms ease, max-width 450ms cubic-bezier(.22, 1, .36, 1), padding 450ms cubic-bezier(.22, 1, .36, 1), opacity 300ms ease;
+    transition: background 180ms ease, color 180ms ease, max-width 320ms cubic-bezier(.22, 1, .36, 1), padding 320ms cubic-bezier(.22, 1, .36, 1), opacity 180ms ease;
   }
   .seg a:hover, .seg a:focus-visible { background: color-mix(in srgb, var(--rust) 12%, transparent); }
   .seg a[aria-current="page"] { background: var(--fill); color: var(--fill-ink); }
@@ -52,10 +52,9 @@
 /* rest as just the current page, but only where hover exists. touch laptops keep the full switch. */
 @media (min-width: 821px) and (hover: hover) {
   .seg a { max-width: 11rem; }
-  .seg:not(:hover):not(:focus-within) a:not([aria-current="page"]) {
+  .seg[data-hover-intent]:not([data-expanded]):not(:focus-within) a:not([aria-current="page"]),
+  .seg:not([data-hover-intent]):not(:hover):not(:focus-within) a:not([aria-current="page"]) {
     max-width: 0; padding-left: 0; padding-right: 0; opacity: 0;
-    /* Pause before closing; re-entry cancels the delay and opens immediately. */
-    transition-delay: 0s, 0s, 300ms, 300ms, 300ms;
   }
 }
 @media (max-width: 640px) { .topbar { margin-bottom: 3.5rem; } }
