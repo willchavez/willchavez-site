@@ -82,4 +82,5 @@ body:has([data-direction="quiet"]) { max-width: 920px; }
   .work-footer { margin-left: 0; }
   .work-page[data-direction="split"] { display: block; }
   [data-direction="split"] .work-intro { margin-bottom: 3.5rem; }
+  [data-direction="split"] .work-eyebrow { display: none; }
 }
