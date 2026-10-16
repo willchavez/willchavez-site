@@ -56,9 +56,13 @@
 .about-copy h2 { font-size: 1.3rem; letter-spacing: -.02em; margin-bottom: .85rem; }
 .about-copy p { font-size: 1.03rem; }
 .about-copy p + p { margin-top: 1rem; }
-.social-links { display: flex; flex-wrap: wrap; gap: .8rem 1.2rem; list-style: none; padding: 0; margin-top: 1.2rem; }
+.social-links { display: flex; flex-wrap: wrap; gap: .25rem 1.2rem; list-style: none; padding: 0; margin-top: 1rem; }
 .social-links li { margin: 0; padding: 0; }
-.social-links a { display: inline-flex; align-items: center; min-height: 44px; }
+.social-links a { display: inline-flex; align-items: center; gap: .45rem; min-height: 44px; box-shadow: none; font-size: .88rem; color: var(--muted); }
+.social-links a::before { position: static; inset: auto; z-index: auto; display: block; flex: 0 0 .3rem; width: .3rem; height: .3rem; border-radius: 50%; background: var(--rust); opacity: .6; transform: none; transition: opacity 180ms ease; }
+.social-links a::after { content: "↗"; font-size: .8em; opacity: .55; transition: opacity 180ms ease; }
+.social-links a:hover, .social-links a:focus-visible { color: var(--ink); }
+.social-links a:hover::before, .social-links a:focus-visible::before, .social-links a:hover::after, .social-links a:focus-visible::after { opacity: 1; }
 @media (max-width: 640px) {
   .page-head { margin-bottom: 2.5rem; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
