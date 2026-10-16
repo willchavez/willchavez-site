@@ -35,7 +35,7 @@ generated `app/package-lock.json`.
 
 ## SoundCloud in posts
 
-In the CMS writing collection, use the optional **SoundCloud link** field for
+In the CMS Notes collection, use the optional **SoundCloud link** field for
 a track or playlist. In Enjoying, paste it into the existing **Link** field.
 The player appears beneath a post and in Enjoying's list, including Up Next.
 Readers choose **load soundcloud player** before any embedded SoundCloud
@@ -49,3 +49,7 @@ avoid that extra lookup. No embed HTML or API key is needed.
 
 The Actions `soundcloud-preview` artifact contains isolated test posts for
 browser checks. They are never included in the `local-preview` site artifact.
+
+The main tabs are work, notes, photos, enjoying, and about. Work is the landing
+page; `/work` redirects there. `/writing` and its posts redirect to `/notes`.
+Notes still use `app/src/content/writing` so existing CMS content stays intact.

@@ -14,8 +14,8 @@ public_folder: /uploads
 
 collections:
   - name: writing
-    label: Writing
-    label_singular: Post
+    label: Notes
+    label_singular: Note
     folder: app/src/content/writing
     create: true
     extension: md
@@ -35,7 +35,7 @@ collections:
         hint: "Paste a track or playlist link, including phone share links. Readers tap to load the player. No embed code needed."
         pattern: ['^https://(www\.|m\.|on\.)?soundcloud\.com/[^\s]+$', 'Paste an HTTPS SoundCloud link, not embed code.']
       - { name: draft, label: Draft, widget: boolean, default: false, hint: Drafts are not published. }
-      - { name: body, label: Post, widget: markdown }
+      - { name: body, label: Note, widget: markdown }
 
   - name: photos
     label: Photos

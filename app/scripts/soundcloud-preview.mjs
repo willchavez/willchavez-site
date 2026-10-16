@@ -25,15 +25,24 @@ try {
     await writeFile(target, `---\n${fields}\ndate: 2026-10-15\n---\n${body}\n`);
   }
   execFileSync("npm", ["run", "build"], { cwd: scratch, stdio: "inherit" });
-  const html = await readFile(path.join(scratch, "dist/writing/player-check.html"), "utf8");
+  const html = await readFile(path.join(scratch, "dist/notes/player-check.html"), "utf8");
   assert.ok(html.includes("data-soundcloud-src="));
   assert.ok(html.includes("listen on soundcloud"));
   assert.ok(!html.includes("<iframe"), "No third-party frame before the reader clicks");
-  const plain = await readFile(path.join(scratch, "dist/writing/plain-check.html"), "utf8");
+  const plain = await readFile(path.join(scratch, "dist/notes/plain-check.html"), "utf8");
   assert.ok(!plain.includes("data-soundcloud-src="));
   const ordinary = await readFile(path.join(scratch, "dist/enjoying/link-check.html"), "utf8");
   assert.ok(ordinary.includes('href="https://example.com"'));
   assert.ok(!ordinary.includes("data-soundcloud-src="));
+  for (const [file, destination] of [["work.html", "/"], ["writing.html", "/notes"], ["writing/player-check.html", "/notes/player-check"]]) {
+    const redirect = await readFile(path.join(scratch, "dist", file), "utf8");
+    assert.ok(redirect.includes('http-equiv="refresh"'));
+    assert.ok(redirect.includes(`url=${destination}`));
+  }
+  const home = await readFile(path.join(scratch, "dist/index.html"), "utf8");
+  assert.ok(home.includes("selected work"));
+  assert.ok(home.includes('href="/notes/player-check"'));
+  assert.ok(!home.includes("currently, i'm"));
   await rm(output, { recursive: true, force: true });
   await cp(path.join(scratch, "dist"), output, { recursive: true });
   for (const asset of ["fonts", "img", "favicon.ico"]) {
