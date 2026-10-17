@@ -8,6 +8,12 @@ html { scrollbar-gutter: stable; }
 :root { --content-exit-animation: content-out 100ms ease-out both; --content-enter-animation: content-in 220ms cubic-bezier(.22, 1, .36, 1) both; }
 ::view-transition-old(page-content) { animation: var(--content-exit-animation); }
 ::view-transition-new(page-content) { animation: var(--content-enter-animation); }
+@media (max-width: 820px) {
+  /* On phones, make section changes feel immediate; the brief content fade can
+     read as a delayed response to a tap, especially on a warm navigation menu. */
+  ::view-transition-old(page-content),
+  ::view-transition-new(page-content) { animation: none !important; }
+}
 @keyframes content-out { to { opacity: 0; } }
 @keyframes content-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 body { max-width: 1160px; margin: 0 auto; padding: 3rem 3.5rem 4rem; }
