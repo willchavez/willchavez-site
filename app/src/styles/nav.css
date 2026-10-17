@@ -31,10 +31,13 @@
   background: var(--paper); border: 1px solid var(--rust); border-radius: 16px;
   box-shadow: 0 14px 30px color-mix(in srgb, var(--rust) 16%, transparent);
 }
-.pill .menu a { display: flex; align-items: center; justify-content: space-between; min-height: 46px; padding: 0 0.8rem; border-radius: 10px; letter-spacing: -0.02em; }
+.pill .menu a { display: flex; align-items: center; justify-content: space-between; min-height: 46px; padding: 0 0.8rem; border-radius: 10px; letter-spacing: -0.02em; -webkit-tap-highlight-color: transparent; }
 .pill .menu a::after { content: attr(data-count); color: var(--muted); font-size: 0.78rem; }
 .pill .menu a[aria-current="page"] { background: color-mix(in srgb, var(--rust) 14%, transparent); }
 .pill .menu a:hover, .pill .menu a:focus-visible { background: color-mix(in srgb, var(--rust) 12%, transparent); }
+@media (hover: none) {
+  .pill .menu a:hover:not([aria-current="page"]) { background: transparent; }
+}
 
 /* segmented switch (desktop) */
 .seg { display: none; }

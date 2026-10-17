@@ -134,8 +134,11 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     results.classList.remove("is-leaving");
     if (animate) results.classList.add("is-entering");
   };
-  kindBtns.forEach((b) => b.addEventListener("click", () => {
-    if (b.closest("#kind-menu") && kindMenu) kindMenu.open = false;
+  kindBtns.forEach((b) => b.addEventListener("click", (event) => {
+    if (b.closest("#kind-menu") && kindMenu) {
+      if (event.detail > 0) b.blur();
+      kindMenu.open = false;
+    }
     select(b.dataset.kind!);
   }));
   if (kindMenu) {
