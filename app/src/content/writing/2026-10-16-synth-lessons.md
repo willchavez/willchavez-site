@@ -1,8 +1,8 @@
 ---
 title: "When the filter knob moves on its own"
 date: 2026-10-16
-summary: "I had a hard time understanding envelope filters on the OP-XY until I pictured one as the cutoff knob moving over time."
-deck: "An envelope makes the filter cutoff move for you, shaped by attack, decay, sustain, and release."
+summary: "A little OP-XY browser companion that started with one question: what if I could see the filter knob move?"
+deck: "Envelope filters clicked when I imagined an invisible hand moving the cutoff knob while a note plays."
 thumbnail: "/synth-lessons-thumbnail.webp"
 topics:
   - Music
@@ -11,11 +11,11 @@ topics:
 draft: false
 ---
 
-I had a hard time understanding the filter envelope on my OP-XY. What finally helped was picturing it as the filter cutoff knob moving for me while a note plays.
+I couldn't quite get the filter envelope on my OP-XY to click. Then I pictured an invisible hand moving the cutoff knob while a note plays, and suddenly I had something I could follow.
 
-Turning the cutoff knob changes the tone right away. A filter envelope moves that same cutoff automatically over time: it opens, settles, holds, and returns. Attack, decay, sustain, and release shape that motion; envelope amount controls how far the cutoff travels.
+Turn the cutoff knob and the tone changes right away. An envelope moves that same knob for you over time: it opens, settles, holds, and returns. Attack, decay, sustain, and release shape the motion; envelope amount decides how far the knob travels.
 
-I started building this browser companion to make that relationship easier to see and hear. The filter envelope lesson shows the cutoff movement alongside the ADSR shape, and lets you play a note to hear the two move together.
+I made this browser companion to see and hear that relationship together. In the filter lesson, the cutoff movement sits next to the ADSR shape, and you can play a note to watch and listen as they move together. That was the little idea that got me going.
 
 ![A screen recording of the filter envelope lesson, showing the cutoff and envelope curves move together as a note plays.](/synth-lessons-demo.gif)
 
@@ -24,8 +24,8 @@ I started building this browser companion to make that relationship easier to se
   <figcaption>Open “02 filter envelope” in the lesson tabs to try the idea that started the project.</figcaption>
 </figure>
 
-From there, I added lessons on the amp envelope and LFO, then a playground that brings the pieces together: a waveform, a filter, two ADSR envelopes, and an LFO you can send to the filter, volume, or pitch. It has a touch-friendly keyboard, a few starter sounds, and live graphs for the different parts of the signal.
+Once that started making sense, I added lessons on the amp envelope and LFO, then built a playground to try the pieces together: a waveform, a filter, two ADSR envelopes, and an LFO you can send to the filter, volume, or pitch. There’s a touch-friendly keyboard, a few starter sounds, and live graphs so you can see what’s happening as you play.
 
 <p class="synth-project-links"><a href="https://willchavez.github.io/synth-lessons/demo.html" target="_blank" rel="noreferrer">Open the full synth playground <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 12 12 4M5 4h7v7" /></svg></a><a href="https://github.com/willchavez/synth-lessons" target="_blank" rel="noreferrer">Browse the code on GitHub <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 12 12 4M5 4h7v7" /></svg></a></p>
 
-The project is plain HTML, CSS, and JavaScript, with no dependencies or build step. The audio uses the Web Audio API and an AudioWorklet. It’s a learning companion, not an OP-XY emulator: the SVF and ladder filters are simplified models, so they won’t sound exactly like the hardware. I’m still shaping the lessons and the instrument around them.
+It’s a small learning project built with HTML, CSS, JavaScript, and the Web Audio API. The filters are simplified models, so this won’t sound exactly like the OP-XY. That’s okay: I mainly wanted a place to poke at the pieces and make them a little less mysterious. I’m still tinkering with the lessons and the instrument.
