@@ -1,8 +1,8 @@
 ---
-title: "Making navigation feel like a place to return"
+title: "Four days to make a navigation idea tangible"
 date: 2025-06-21
-summary: "Ankit and I explored how a crowded navigation pane could help people find their way back to work, discover what they could do, and stay oriented."
-deck: "A reflection on a navigation exploration we presented at work in June 2025."
+summary: "I built the prototype while Ankit led product planning, negotiated scope, and stepped in when I was out. Four days taught us how much good work depends on choosing what not to build."
+deck: "We had four days to turn a navigation direction into something people could try. I focused on development; Ankit PMed the work and helped us decide what fit the time."
 thumbnail: "/uploads/medium/navigation-explorations-controls.png"
 topics:
   - Design
@@ -11,22 +11,24 @@ topics:
 draft: false
 ---
 
-In June 2025, Ankit and I shared a set of navigation explorations at work. We started with a familiar problem: as a product grows, its navigation can become a list of places and controls that people have to learn before they can get back to what they were doing.
+In June 2025, Ankit and I had four days to make a navigation exploration tangible. We were looking at a pane that had grown into a collection of destinations, tools, and ongoing work. The challenge was to make it easier to find things without trying to solve every navigation problem at once.
+
+I focused on development: restructuring the navigation and adding most recently used (MRU) logic for agents, so the pane could bring useful work back into view. Ankit PMed the effort, worked through priorities with partner teams, and helped turn a broad set of ideas into a buildable plan.
 
 <figure class="nav2-figure">
   <img src="/uploads/medium/navigation-explorations-prototype.gif" alt="Animated prototype of a Copilot navigation pane with Chat, Library, Create, Agents, Notebooks, and recent conversations." loading="lazy" />
-  <figcaption>The working prototype let us explore how navigation could connect starting new work with returning to existing work.</figcaption>
+  <figcaption>The working prototype connected starting something new with returning to existing work.</figcaption>
 </figure>
 
-We wanted the pane to do more than help someone start a new conversation. It also needed to make ongoing work easier to find, leave room to discover useful tools, and keep the interface calm enough to scan. That meant looking closely at the small things: how sections group related items, what stays visible, and where actions appear when you need them.
+The slides capture the real shape of that four-day push: I was heads-down in the code while Ankit handled planning and the conversations that kept the work pointed at a useful problem. We were pairing across technical UX and product management, and that changed how I thought about implementation. A feature can be interesting and still be the wrong thing to spend the next day building.
 
-The most useful part of the work was making the ideas tangible. Instead of debating static screens, we built an interactive prototype and used it to walk through different ways of organizing and revealing content. Presenting it gave us a better way to talk about the tradeoffs: structure can make a busy space easier to understand, while too much structure can make the navigation itself feel like work.
+We made explicit decisions about what would not fit. We left drag-and-drop reordering for pinned agents and notebooks out of the prototype. We also deferred the full install-an-agent, ask it something, and find it later flow, plus MRU behavior for notebooks. Each was a reasonable next step; none was essential to demonstrate the navigation structure we were trying to evaluate. Keeping that boundary clear was part of the design work.
 
 <figure class="nav2-figure">
   <img src="/uploads/medium/navigation-explorations-controls.png" alt="Navigation prototype showing a contextual menu with Share, Pin, and Uninstall actions for an agent." loading="lazy" />
-  <figcaption>We also explored keeping item-level actions close by, so controls appeared in context instead of adding more permanent clutter to the pane.</figcaption>
+  <figcaption>We explored which actions belonged with an item, while keeping the everyday navigation focused.</figcaption>
 </figure>
 
-I came away thinking about navigation as a place to return to, not just a menu to pass through. People need a clear sense of where they are, a reliable path back to what matters, and enough flexibility to make the space feel like theirs. The details of grouping, recency, and interaction all add up to that feeling.
+When I was out for two days, Ankit stepped in and continued working on the prototype so it could support a follow-up presentation. Knowing someone had the context and could carry the work forward was generous, and it made the collaboration feel like more than a handoff between roles.
 
-It was a good reminder that a prototype can help a team reason together. Ankit and I could try an idea, see where it felt confusing, and make the conversation more concrete. I gave a talk about our work afterward, and I liked having a chance to share not only the screens, but the questions that shaped them.
+The project taught me that good technical execution starts before the code. I learned to ask more about the audience, the purpose, and what a review needed to answer; to negotiate scope around those answers; and to accept that a convincing prototype is often a deliberate slice, not a complete product. Four days was short, but it was enough to learn how much better the work gets when the tradeoffs are part of the conversation.
