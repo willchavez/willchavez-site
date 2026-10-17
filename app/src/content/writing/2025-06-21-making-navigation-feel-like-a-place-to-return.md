@@ -1,6 +1,6 @@
 ---
 title: "Four days to make a navigation idea tangible"
-date: 2025-06-21
+date: 2025-12-06
 summary: "I built the prototype while Ankit led product planning, negotiated scope, and stepped in when I was out. Four days taught us how much good work depends on choosing what not to build."
 deck: "We had four days to turn a navigation direction into something people could try. I focused on development; Ankit PMed the work and helped us decide what fit the time."
 thumbnail: "/uploads/medium/navigation-explorations-controls.png"
