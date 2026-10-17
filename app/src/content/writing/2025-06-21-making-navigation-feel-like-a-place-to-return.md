@@ -20,7 +20,7 @@ I focused on development: restructuring the navigation and adding most recently 
   <figcaption>The working prototype connected starting something new with returning to existing work.</figcaption>
 </figure>
 
-The slides capture the real shape of that four-day push: I was heads-down in the code while Ankit handled planning and the conversations that kept the work pointed at a useful problem. We were pairing across technical UX and product management, and that changed how I thought about implementation. A feature can be interesting and still be the wrong thing to spend the next day building.
+Over those four days, I was heads-down in the code while Ankit handled planning and the conversations that kept the work pointed at a useful problem. We were pairing across technical UX and product management, and that changed how I thought about implementation. A feature can be interesting and still be the wrong thing to spend the next day building.
 
 We made explicit decisions about what would not fit. We left drag-and-drop reordering for pinned agents and notebooks out of the prototype. We also deferred the full install-an-agent, ask it something, and find it later flow, plus MRU behavior for notebooks. Each was a reasonable next step; none was essential to demonstrate the navigation structure we were trying to evaluate. Keeping that boundary clear was part of the design work.
 
