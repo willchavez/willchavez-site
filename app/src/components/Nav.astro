@@ -56,11 +56,6 @@ const here = items.find((i) => i.id === current) ?? items[0];
   // close the phone menu on Escape or when tapping elsewhere
   const pill = document.querySelector<HTMLDetailsElement>(".pill");
   if (pill) {
-    // Close as soon as a destination is tapped; astro:before-swap can wait
-    // for the next document to load, which otherwise leaves the menu hanging open.
-    pill.addEventListener("click", (e) => {
-      if ((e.target as Element).closest(".menu a")) pill.open = false;
-    });
     addEventListener("keydown", (e) => {
       if (e.key === "Escape" && pill.open) { pill.open = false; pill.querySelector("summary")?.focus(); }
     });
