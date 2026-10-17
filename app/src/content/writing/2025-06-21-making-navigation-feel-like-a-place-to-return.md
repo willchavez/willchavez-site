@@ -37,6 +37,10 @@ We made explicit decisions about what would not fit. We left drag-and-drop reord
 
 When I was out for two days, Ankit stepped in and continued working on the prototype so it could support a follow-up presentation. Knowing someone had the context and could carry the work forward was generous, and it made the collaboration feel like more than a handoff between roles.
 
+## From prototype to public rollout
+
+Later that year, Microsoft began publicly rolling out an updated navigation experience for the Microsoft 365 Copilot web app. It brought agents, notebooks, and recent chats into the navigation pane—areas we had explored in our prototype. The product has evolved since, but it was exciting to see a related direction reach people. The rollout was [documented by Topedia](https://blog.topedia.com/posts/updated-navigation-experience-in-the-microsoft-365-copilot-web-app).
+
 ## What I learned
 
 The project taught me that good technical execution starts before the code. I learned to ask more about the audience, the purpose, and what a review needed to answer; to negotiate scope around those answers; and to accept that a convincing prototype is often a deliberate slice, not a complete product. Four days was short, but it was enough to learn how much better the work gets when the tradeoffs are part of the conversation.
