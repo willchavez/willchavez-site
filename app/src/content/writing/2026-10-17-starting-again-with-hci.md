@@ -1,6 +1,6 @@
 ---
 title: "Starting again with HCI"
-date: 2026-10-17
+date: 2026-05-17
 summary: "An intense HCI class, two very different projects, and a reminder that learning is allowed to be messy."
 deck: "I came close to dropping the class. I stayed, learned to see design problems differently, and came away more certain that design engineering is where I belong."
 thumbnail: "/uploads/medium/hci-youtube-subscriptions.png"
