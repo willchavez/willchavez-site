@@ -9,7 +9,7 @@ const items = [
 const here = items.find((i) => i.id === current) ?? items[0];
 ---
 <div class="topbar" data-current={current} transition:persist="site-navigation" transition:animate="none">
-  <a class="avatar" href="/" aria-label="work"><img class="portrait" src="/img/will.png" alt="Will Chavez" /></a>
+  <a class="avatar" href="/" aria-label="work"><img class="portrait" src="/img/will.webp" width="144" height="144" alt="Will Chavez" decoding="async" /></a>
   <nav class="nav" aria-label="sections">
     <details class="pill">
       <summary aria-label={`menu, you are on ${here.label}`}>{here.label}</summary>

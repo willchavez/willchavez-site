@@ -1,5 +1,5 @@
-// Resize everything in public/uploads into web sizes after `astro build`.
-// Phone photos are several MB; this keeps pages light. Originals stay in the repo.
+// Resize public/uploads into responsive WebP sizes after `astro build`.
+// Includes animated GIFs; originals stay in the repo.
 import fs from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
@@ -7,7 +7,7 @@ import sharp from "sharp";
 const src = "public/uploads";
 const out = "dist/uploads/w";
 const widths = [240, 480, 960, 1600];
-const exts = new Set([".jpg", ".jpeg", ".png", ".webp", ".heic", ".avif"]);
+const exts = new Set([".jpg", ".jpeg", ".png", ".webp", ".heic", ".avif", ".gif"]);
 
 function walk(dir) {
   if (!fs.existsSync(dir)) return [];
@@ -24,7 +24,9 @@ for (const file of walk(src)) {
   for (const w of widths) {
     const dest = path.join(out, String(w), rel + ".webp");
     fs.mkdirSync(path.dirname(dest), { recursive: true });
-    await sharp(file).rotate().resize({ width: w, withoutEnlargement: true }).webp({ quality: 82 }).toFile(dest);
+    const animated = path.extname(file).toLowerCase() === ".gif";
+    const image = animated ? sharp(file, { animated: true }) : sharp(file);
+    await image.rotate().resize({ width: w, withoutEnlargement: true }).webp({ quality: 82 }).toFile(dest);
   }
   n++;
 }
