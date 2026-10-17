@@ -39,10 +39,19 @@
 .chip-count[hidden] { display: none; }
 .chip:hover { background: color-mix(in srgb, var(--rust) 13%, transparent); }
 .chip[aria-pressed="true"] { background: var(--fill); color: var(--fill-ink); }
-#kinds { margin-bottom: 2.5rem; }
-#kinds .chip { background: transparent; color: var(--muted); }
-#kinds .chip[aria-pressed="true"], #kinds .chip:hover { background: color-mix(in srgb, var(--rust) 10%, transparent); color: var(--ink); }
+#kind-tabs { margin-bottom: 2.5rem; }
+#kind-tabs .chip { background: transparent; color: var(--muted); }
+#kind-tabs .chip[aria-pressed="true"], #kind-tabs .chip:hover { background: color-mix(in srgb, var(--rust) 10%, transparent); color: var(--ink); }
 .chip:focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
+.enjoying-kind-menu { display: none; }
+.enjoying-kind-menu > summary { list-style: none; }
+.enjoying-kind-menu > summary::-webkit-details-marker { display: none; }
+.enjoying-kind-menu > summary svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; transition: transform 180ms ease; }
+.enjoying-kind-menu[open] > summary svg { transform: rotate(180deg); }
+.enjoying-kind-menu > summary:focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
+.enjoying-kind-options { display: grid; gap: .2rem; }
+.enjoying-kind-options .chip { display: flex; align-items: center; justify-content: space-between; width: 100%; text-align: left; }
+.enjoying-kind-options .chip[aria-pressed="true"] { background: color-mix(in srgb, var(--rust) 10%, transparent); color: var(--ink); }
 .ent { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr); gap: 0 1.1rem; padding: 0 0 1.8rem; align-items: start; }
 .ent[hidden] { display: none; }
 .ent .cover-link { display: block; grid-column: 1; grid-row: 1; box-shadow: none; border-radius: .65rem; }
@@ -152,4 +161,13 @@
   .note-reading { padding: 1.15rem; border-radius: 1.2rem; }
   .note-reading .prose .note-image-grid { gap: .5rem; }
   .synth-demo iframe { height: 760px; }
+}
+@media (max-width: 820px) {
+  #kind-tabs { display: none; }
+  .enjoying-kind-menu { position: relative; z-index: 5; display: block; width: min(100%, 19rem); margin: 0 0 2rem; }
+  .enjoying-kind-menu > summary { display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 .9rem 0 1rem; border: 1px solid var(--hairline); border-radius: .8rem; background: color-mix(in srgb, var(--rust) 5%, var(--paper)); color: var(--ink); cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .enjoying-kind-menu[open] > summary { border-color: color-mix(in srgb, var(--rust) 38%, var(--hairline)); border-radius: .8rem .8rem .35rem .35rem; }
+  .enjoying-kind-options { position: absolute; top: calc(100% - 1px); left: 0; right: 0; padding: .35rem; border: 1px solid color-mix(in srgb, var(--rust) 38%, var(--hairline)); border-top: 0; border-radius: 0 0 .8rem .8rem; background: var(--paper); box-shadow: 0 12px 24px color-mix(in srgb, var(--ink) 10%, transparent); }
+  .enjoying-kind-options .chip { min-height: 42px; padding-inline: .7rem; border-radius: .55rem; background: transparent; color: var(--muted); }
+  .enjoying-kind-options .chip:hover, .enjoying-kind-options .chip[aria-pressed="true"] { background: color-mix(in srgb, var(--rust) 9%, transparent); color: var(--ink); }
 }

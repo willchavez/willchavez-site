@@ -11,13 +11,29 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
 <Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, games, books, and papers I’ve spent time with." description="What Will Chavez has been enjoying">
   <div class="section">
     <div>
-      <div class="chips" role="group" aria-label="filter by type" id="kinds">
-        <button class="chip" type="button" data-kind="all" aria-pressed="true">All<span class="chip-count" data-count hidden={items.length === 0}>{items.length || ""}</span></button>
+      <div class="chips" role="group" aria-label="Filter by type" id="kind-tabs">
+        <button class="chip" type="button" data-kind="all" data-label="All" aria-pressed="true">All<span class="chip-count" data-count hidden={items.length === 0}>{items.length || ""}</span></button>
         {KINDS.map((k) => {
           const count = kindCount(k);
-          return <button class="chip" type="button" data-kind={k} aria-pressed="false">{KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1)}<span class="chip-count" data-count hidden={count === 0}>{count || ""}</span></button>;
+          const label = KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1);
+          return <button class="chip" type="button" data-kind={k} data-label={label} aria-pressed="false">{label}<span class="chip-count" data-count hidden={count === 0}>{count || ""}</span></button>;
         })}
       </div>
+
+      <details class="enjoying-kind-menu" id="kind-menu">
+        <summary aria-label="Filter enjoying items by type">
+          <span id="kind-current">All</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
+        </summary>
+        <div class="enjoying-kind-options" role="group" aria-label="Filter by type">
+          <button class="chip" type="button" data-kind="all" data-label="All" aria-pressed="true">All<span class="chip-count" data-count hidden={items.length === 0}>{items.length || ""}</span></button>
+          {KINDS.map((k) => {
+            const count = kindCount(k);
+            const label = KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1);
+            return <button class="chip" type="button" data-kind={k} data-label={label} aria-pressed="false">{label}<span class="chip-count" data-count hidden={count === 0}>{count || ""}</span></button>;
+          })}
+        </div>
+      </details>
 
       <div id="enjoying-results" data-kind="all">
       <div id="list">
@@ -55,7 +71,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   let cleanup = () => {};
   document.addEventListener("astro:page-load", () => {
   cleanup();
-  if (!document.querySelector("#kinds")) return;
+  if (!document.querySelector("#kind-tabs")) return;
   const controller = new AbortController();
   const results = document.getElementById("enjoying-results")!;
   cleanup = () => {
@@ -90,6 +106,8 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
       });
     });
     kindBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.kind === kind)));
+    const currentLabel = document.getElementById("kind-current");
+    if (currentLabel) currentLabel.textContent = kindBtns.find((b) => b.dataset.kind === kind)?.dataset.label || "All";
     show("empty-list", rows.length === 0);
     show("empty-filter", rows.length > 0 && shown === 0);
   };
@@ -113,7 +131,10 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     results.classList.remove("is-leaving");
     if (!reducedMotion.matches) results.classList.add("is-entering");
   };
-  kindBtns.forEach((b) => b.addEventListener("click", () => select(b.dataset.kind!)));
+  kindBtns.forEach((b) => b.addEventListener("click", () => {
+    select(b.dataset.kind!);
+    if (b.closest("#kind-menu")) (document.getElementById("kind-menu") as HTMLDetailsElement).open = false;
+  }));
   addEventListener("hashchange", () => {
     ++changeId; resetAnimation();
     fromHash(); requestedKind = kind; apply();
