@@ -82,6 +82,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   // Type filter state lives in the URL hash so it can be linked.
   const rows = [...document.querySelectorAll<HTMLElement>(".ent")];
   const kindBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
+  const kindMenu = document.getElementById("kind-menu") as HTMLDetailsElement | null;
   const validKinds = new Set(kindBtns.map((b) => b.dataset.kind || "all"));
   const show = (id: string, on: boolean) => { const el = document.getElementById(id); if (el) el.hidden = !on; };
   let kind = "all";
@@ -133,8 +134,19 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   };
   kindBtns.forEach((b) => b.addEventListener("click", () => {
     select(b.dataset.kind!);
-    if (b.closest("#kind-menu")) (document.getElementById("kind-menu") as HTMLDetailsElement).open = false;
+    if (b.closest("#kind-menu") && kindMenu) kindMenu.open = false;
   }));
+  if (kindMenu) {
+    addEventListener("click", (event) => {
+      if (kindMenu.open && !kindMenu.contains(event.target as Node)) kindMenu.open = false;
+    }, { signal: controller.signal });
+    addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && kindMenu.open) {
+        kindMenu.open = false;
+        kindMenu.querySelector("summary")?.focus();
+      }
+    }, { signal: controller.signal });
+  }
   addEventListener("hashchange", () => {
     ++changeId; resetAnimation();
     fromHash(); requestedKind = kind; apply();
