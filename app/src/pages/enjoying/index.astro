@@ -83,6 +83,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   const rows = [...document.querySelectorAll<HTMLElement>(".ent")];
   const kindBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
   const kindMenu = document.getElementById("kind-menu") as HTMLDetailsElement | null;
+  const shouldAnimateFilter = () => !reducedMotion.matches && matchMedia("(min-width: 821px)").matches;
   const validKinds = new Set(kindBtns.map((b) => b.dataset.kind || "all"));
   const show = (id: string, on: boolean) => { const el = document.getElementById(id); if (el) el.hidden = !on; };
   let kind = "all";
@@ -121,8 +122,9 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     if (next === requestedKind) return;
     requestedKind = next;
     const request = ++changeId;
+    const animate = shouldAnimateFilter();
     resetAnimation();
-    if (!reducedMotion.matches) {
+    if (animate) {
       results.classList.add("is-leaving");
       await Promise.allSettled(results.getAnimations().map((animation) => animation.finished));
     }
@@ -130,11 +132,11 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     kind = next;
     push(); apply();
     results.classList.remove("is-leaving");
-    if (!reducedMotion.matches) results.classList.add("is-entering");
+    if (animate) results.classList.add("is-entering");
   };
   kindBtns.forEach((b) => b.addEventListener("click", () => {
-    select(b.dataset.kind!);
     if (b.closest("#kind-menu") && kindMenu) kindMenu.open = false;
+    select(b.dataset.kind!);
   }));
   if (kindMenu) {
     addEventListener("click", (event) => {
