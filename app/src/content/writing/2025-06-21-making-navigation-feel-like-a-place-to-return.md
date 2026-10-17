@@ -11,7 +11,7 @@ topics:
 draft: false
 ---
 
-In June 2025, Ankit and I had four days to make a navigation exploration tangible. We were looking at a pane that had grown into a collection of destinations, tools, and ongoing work. The challenge was to make it easier to find things without trying to solve every navigation problem at once.
+In June 2025, [Ankit](https://ankitpotdar.com/) and I had four days to make a navigation exploration tangible. We were looking at a pane that had grown into a collection of destinations, tools, and ongoing work. The challenge was to make it easier to find things without trying to solve every navigation problem at once.
 
 ## A four-day build
 
