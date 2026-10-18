@@ -51,7 +51,8 @@
     transform: translate(var(--indicator-x, 0), var(--indicator-y, 0));
     opacity: 0;
   }
-  .seg-indicator[data-ready] { opacity: 1; transition: transform 360ms cubic-bezier(.22, 1, .36, 1), width 360ms cubic-bezier(.22, 1, .36, 1), height 360ms cubic-bezier(.22, 1, .36, 1); }
+  .seg-indicator[data-ready] { opacity: 1; }
+  .seg[data-animate] .seg-indicator { transition: transform 360ms cubic-bezier(.22, 1, .36, 1), width 360ms cubic-bezier(.22, 1, .36, 1), height 360ms cubic-bezier(.22, 1, .36, 1); }
   .seg a {
     position: relative; z-index: 1; display: flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border-radius: 999px;
     white-space: nowrap; overflow: hidden; letter-spacing: -0.02em; font-size: 0.98rem;

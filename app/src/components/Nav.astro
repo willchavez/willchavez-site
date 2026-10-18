@@ -38,10 +38,12 @@ const here = items.find((i) => i.id === current) ?? items[0];
     if (!switcher || !indicator) return;
     const active = switcher.querySelector<HTMLElement>('a[aria-current="page"]');
     if (!active) return;
-    indicator.style.setProperty("--indicator-x", `${active.offsetLeft}px`);
-    indicator.style.setProperty("--indicator-y", `${active.offsetTop}px`);
-    indicator.style.setProperty("--indicator-width", `${active.offsetWidth}px`);
-    indicator.style.setProperty("--indicator-height", `${active.offsetHeight}px`);
+    const activeRect = active.getBoundingClientRect();
+    const switcherRect = switcher.getBoundingClientRect();
+    indicator.style.setProperty("--indicator-x", `${activeRect.left - switcherRect.left - switcher.clientLeft}px`);
+    indicator.style.setProperty("--indicator-y", `${activeRect.top - switcherRect.top - switcher.clientTop}px`);
+    indicator.style.setProperty("--indicator-width", `${activeRect.width}px`);
+    indicator.style.setProperty("--indicator-height", `${activeRect.height}px`);
     indicator.dataset.ready = "";
   };
   const scheduleIndicatorCorrection = () => {
@@ -90,6 +92,7 @@ const here = items.find((i) => i.id === current) ?? items[0];
   document.addEventListener("astro:before-swap", (event: TransitionBeforeSwapEvent) => {
     const incoming = event.newDocument.querySelector<HTMLElement>(".topbar");
     if (!incoming) return;
+    const sectionChanged = topbar.dataset.current !== incoming.dataset.current;
     topbar.dataset.current = incoming.dataset.current;
     topbar.querySelectorAll<HTMLAnchorElement>(".nav a").forEach((link) => {
       const next = [...incoming.querySelectorAll<HTMLAnchorElement>(".nav a")].find((a) =>
@@ -105,9 +108,11 @@ const here = items.find((i) => i.id === current) ?? items[0];
       summary.setAttribute("aria-label", nextSummary.getAttribute("aria-label")!);
     }
     if (pill) pill.open = false;
+    if (sectionChanged && switcher) switcher.dataset.animate = "";
     scheduleIndicatorCorrection();
   });
   document.addEventListener("astro:page-load", reconcileHover);
   window.addEventListener("resize", scheduleIndicatorCorrection);
   scheduleIndicatorCorrection();
+  document.fonts?.ready.then(scheduleIndicatorCorrection);
 </script>
