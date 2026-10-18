@@ -1,0 +1,22 @@
+name: Astro 7 upgrade audit
+
+on:
+  push:
+    branches: ["codex/astro7-upgrade-audit"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - name: Build site
+        run: sh app/build.sh
