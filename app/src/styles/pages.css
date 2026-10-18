@@ -64,6 +64,7 @@
 .ent-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: .35rem 1rem; }
 .ent-titleline { min-width: 0; line-height: 1.55; overflow-wrap: anywhere; }
 .ent .k { display: inline-flex; align-items: center; min-height: 1.35rem; padding: 0 .58rem; border-radius: 999px; background: color-mix(in srgb, var(--rust) 14%, var(--paper)); color: color-mix(in srgb, var(--rust) 76%, var(--ink)); font-size: .72rem; line-height: 1; text-transform: capitalize; vertical-align: middle; white-space: nowrap; }
+#enjoying-results[data-kind]:not([data-kind="all"]) .ent .k { display: none; }
 .ent-meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: .3rem .6rem; margin-top: .3rem; }
 .ent .t { font-size: 1.2rem; letter-spacing: -.02em; }
 .ent a.t { box-shadow: none; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--rust) 60%, transparent); text-decoration-thickness: 1px; text-underline-offset: .15em; }
