@@ -52,7 +52,8 @@
     opacity: 0;
   }
   .seg-indicator[data-ready] { opacity: 1; }
-  .seg[data-animate] .seg-indicator { transition: transform 360ms cubic-bezier(.22, 1, .36, 1), width 360ms cubic-bezier(.22, 1, .36, 1), height 360ms cubic-bezier(.22, 1, .36, 1); }
+  .seg[data-animate] .seg-indicator { transition: transform 320ms cubic-bezier(.22, 1, .36, 1), width 320ms cubic-bezier(.22, 1, .36, 1), height 320ms cubic-bezier(.22, 1, .36, 1); }
+  .seg[data-layout-changing] .seg-indicator { transition: none; }
   .seg a {
     position: relative; z-index: 1; display: flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border-radius: 999px;
     white-space: nowrap; overflow: hidden; letter-spacing: -0.02em; font-size: 0.98rem;
@@ -64,8 +65,6 @@
 /* rest as just the current page, but only where hover exists. touch laptops keep the full switch. */
 @media (min-width: 821px) and (hover: hover) {
   .seg a { max-width: 11rem; }
-  /* During collapse, follow the active link's changing layout without lag. */
-  .seg[data-hover-intent]:not([data-expanded]):not(:focus-within) .seg-indicator { transition: none; }
   .seg[data-hover-intent]:not([data-expanded]):not(:focus-within) a:not([aria-current="page"]),
   .seg:not([data-hover-intent]):not(:hover):not(:focus-within) a:not([aria-current="page"]) {
     max-width: 0; padding-left: 0; padding-right: 0; opacity: 0;

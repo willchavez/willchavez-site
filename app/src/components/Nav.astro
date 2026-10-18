@@ -56,30 +56,36 @@ const here = items.find((i) => i.id === current) ?? items[0];
   let reconcileHover = () => {};
   if (switcher) {
     const hoverDesktop = matchMedia("(min-width: 821px) and (hover: hover)");
-    const intent = createHoverNav((expanded) => switcher.toggleAttribute("data-expanded", expanded));
     switcher.setAttribute("data-hover-intent", "");
-    // As the compact nav closes, its links change width and the active item
-    // shifts back to the first slot. Keep the shared highlight attached to it.
+    // Track the active link while the compact navigation changes its layout.
     const indicatorObserver = new ResizeObserver(() => {
-      cancelAnimationFrame(indicatorFrame);
-      indicatorFrame = requestAnimationFrame(moveIndicator);
+      moveIndicator();
     });
     switcher.querySelectorAll("a").forEach((link) => indicatorObserver.observe(link));
-    switcher.addEventListener("pointerenter", () => { if (hoverDesktop.matches) intent.enter(); });
-    switcher.addEventListener("pointerleave", () => intent.leave());
-    switcher.addEventListener("pointercancel", () => intent.leave());
-    switcher.addEventListener("focusin", () => { if (hoverDesktop.matches) intent.focus(); });
+    let layoutTimer: number | undefined;
+    const setExpanded = (expanded: boolean) => {
+      switcher.toggleAttribute("data-expanded", expanded);
+      switcher.setAttribute("data-layout-changing", "");
+      if (layoutTimer !== undefined) clearTimeout(layoutTimer);
+      layoutTimer = window.setTimeout(() => switcher.removeAttribute("data-layout-changing"), 340);
+    };
+    // Keep the highlight locked to the links while they expand or collapse.
+    const hoverIntent = createHoverNav(setExpanded);
+    switcher.addEventListener("pointerenter", () => { if (hoverDesktop.matches) hoverIntent.enter(); });
+    switcher.addEventListener("pointerleave", () => hoverIntent.leave());
+    switcher.addEventListener("pointercancel", () => hoverIntent.leave());
+    switcher.addEventListener("focusin", () => { if (hoverDesktop.matches) hoverIntent.focus(); });
     switcher.addEventListener("focusout", (event) => {
-      if (!switcher.contains(event.relatedTarget as Node)) intent.blur();
+      if (!switcher.contains(event.relatedTarget as Node)) hoverIntent.blur();
     });
-    hoverDesktop.addEventListener("change", () => intent.reset());
-    window.addEventListener("blur", () => intent.reset());
+    hoverDesktop.addEventListener("change", () => hoverIntent.reset());
+    window.addEventListener("blur", () => hoverIntent.reset());
     reconcileHover = () => {
       // Pointer clicks must not leave the picker pinned open by link focus.
       const active = document.activeElement as HTMLElement;
       if (switcher.contains(active) && !active.matches(":focus-visible")) active.blur();
-      if (hoverDesktop.matches && switcher.matches(":hover")) intent.enter();
-      else intent.leave();
+      if (hoverDesktop.matches && switcher.matches(":hover")) hoverIntent.enter();
+      else hoverIntent.leave();
     };
   }
   // close the phone menu on Escape or when tapping elsewhere
