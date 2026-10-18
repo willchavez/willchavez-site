@@ -10,6 +10,7 @@ const { title, current = "work", description = "Will Chavez, design technologist
 const [w, e] = await Promise.all([getWriting(), getEnjoying()]);
 const counts = { notes: w.length, enjoying: e.length };
 const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engineer";
+const currentYear = new Date().getFullYear();
 ---
 <!doctype html>
 <html lang="en" transition:animate="none">
@@ -51,6 +52,22 @@ const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engin
       <slot />
     </main>
     </div>
+    <footer class="site-footer" aria-labelledby="site-elsewhere">
+      <div class="site-footer-intro">
+        <h2 id="site-elsewhere">Elsewhere</h2>
+        <p>You can find me around the web, or <a href="mailto:wchavezsalinas@gmail.com">send me an email</a>.</p>
+      </div>
+      <div class="site-footer-bottom">
+        <p class="site-copyright">© {currentYear} Will Chavez · <a href="/rss.xml">RSS</a></p>
+        <ul class="social-links">
+          <li><a href="https://www.instagram.com/willchavez/">Instagram</a></li>
+          <li><a href="https://www.linkedin.com/in/willchavez/">LinkedIn</a></li>
+          <li><a href="https://x.com/_willchavez">X</a></li>
+          <li><a href="https://medium.com/@willchavez">Medium</a></li>
+          <li><a href="https://letterboxd.com/willchavez/">Letterboxd</a></li>
+        </ul>
+      </div>
+    </footer>
     <script>
       import "../scripts/site.js";
     </script>

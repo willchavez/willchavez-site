@@ -142,9 +142,6 @@
 .social-links a::before { position: static; inset: auto; z-index: auto; display: block; flex: 0 0 .3rem; width: .3rem; height: .3rem; border-radius: 50%; background: var(--rust); opacity: .6; transform: none; transition: opacity 180ms ease; }
 .social-links a:hover, .social-links a:focus-visible { color: var(--ink); }
 .social-links a:hover::before, .social-links a:focus-visible::before { opacity: 1; }
-.about-footer { margin-top: 3.5rem; padding-top: 1.2rem; border-top: 1px solid color-mix(in srgb, var(--rust) 20%, transparent); }
-.about-footer h2 { font-size: 1.05rem; font-weight: 500; color: var(--muted); }
-.about-footer .social-links { margin-top: .35rem; }
 .icon-arrow, .icon-arrow-left { display: inline-block; flex: 0 0 auto; width: .9em; height: .9em; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; vertical-align: -.08em; }
 .icon-arrow-left { width: .85em; height: .85em; }
 @media (max-width: 640px) {
