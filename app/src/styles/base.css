@@ -21,8 +21,10 @@ h2, h3, h4 { font-weight: 500; }
 p { line-height: 1.75; }
 .pronouns { margin-top: .9rem; color: var(--muted); font-size: 1.05rem; line-height: 1.6; max-width: 38rem; }
 .pronouns-metadata { display: flex; align-items: baseline; flex-wrap: wrap; gap: .35rem .6rem; }
-.pronouns-metadata-split .metadata-authors { flex: 1 1 0; min-width: 0; }
-.pronouns-metadata-split .metadata-secondary { flex-basis: 100%; }
+.pronouns-metadata-split { display: block; }
+.pronouns-metadata-split .metadata-kind { float: left; margin: 0 .6rem 0 0; }
+.pronouns-metadata-split .metadata-authors { display: inline; }
+.pronouns-metadata-split .metadata-secondary { display: block; clear: both; margin-top: .2rem; }
 .metadata-kind { display: inline-flex; align-items: center; min-height: 1.45rem; padding: .05rem .58rem; border-radius: 999px; background: color-mix(in srgb, var(--rust) 14%, var(--paper)); color: color-mix(in srgb, var(--rust) 76%, var(--ink)); font-size: .75em; line-height: 1.15; text-transform: capitalize; white-space: nowrap; }
 .portrait { width: 48px; height: 48px; padding: 2px; border: 1px solid color-mix(in srgb, var(--rust) 50%, var(--hairline)); border-radius: 50%; background: var(--portrait-paper); object-fit: contain; transition: transform 420ms cubic-bezier(.2, 1.5, .3, 1); }
 .portrait:hover, .portrait.tilt { transform: translateY(-2px) rotate(4deg) scale(1.04); }
