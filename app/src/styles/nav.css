@@ -43,14 +43,22 @@
 .seg { display: none; }
 @media (min-width: 821px) {
   .pill { display: none; }
-  .seg { display: inline-flex; padding: 4px; border: 1px solid var(--rust); border-radius: 999px; }
+  .seg { position: relative; isolation: isolate; display: inline-flex; padding: 4px; border: 1px solid var(--rust); border-radius: 999px; }
+  .seg-indicator {
+    position: absolute; z-index: 0; top: 0; left: 0;
+    width: var(--indicator-width, 0); height: var(--indicator-height, 0);
+    border-radius: 999px; background: var(--fill); pointer-events: none;
+    transform: translate(var(--indicator-x, 0), var(--indicator-y, 0));
+    opacity: 0;
+  }
+  .seg-indicator[data-ready] { opacity: 1; transition: transform 360ms cubic-bezier(.22, 1, .36, 1), width 360ms cubic-bezier(.22, 1, .36, 1), height 360ms cubic-bezier(.22, 1, .36, 1); }
   .seg a {
-    display: flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border-radius: 999px;
+    position: relative; z-index: 1; display: flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border-radius: 999px;
     white-space: nowrap; overflow: hidden; letter-spacing: -0.02em; font-size: 0.98rem;
     transition: background 180ms ease, color 180ms ease, max-width 320ms cubic-bezier(.22, 1, .36, 1), padding 320ms cubic-bezier(.22, 1, .36, 1), opacity 180ms ease;
   }
   .seg a:hover, .seg a:focus-visible { background: color-mix(in srgb, var(--rust) 12%, transparent); }
-  .seg a[aria-current="page"] { background: var(--fill); color: var(--fill-ink); }
+  .seg a[aria-current="page"] { background: transparent; color: var(--fill-ink); }
 }
 /* rest as just the current page, but only where hover exists. touch laptops keep the full switch. */
 @media (min-width: 821px) and (hover: hover) {

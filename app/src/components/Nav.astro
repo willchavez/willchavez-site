@@ -20,6 +20,7 @@ const here = items.find((i) => i.id === current) ?? items[0];
       </div>
     </details>
     <div class="seg">
+      <span class="seg-indicator" aria-hidden="true"></span>
       {items.map((i) => (
         <a href={i.href} aria-current={i.id === current ? "page" : undefined}>{i.label}</a>
       ))}
@@ -31,6 +32,23 @@ const here = items.find((i) => i.id === current) ?? items[0];
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
   const topbar = document.querySelector<HTMLElement>(".topbar")!;
   const switcher = document.querySelector<HTMLElement>(".seg");
+  const indicator = switcher?.querySelector<HTMLElement>(".seg-indicator");
+  let indicatorTimer: number | undefined;
+  const moveIndicator = () => {
+    if (!switcher || !indicator) return;
+    const active = switcher.querySelector<HTMLElement>('a[aria-current="page"]');
+    if (!active) return;
+    indicator.style.setProperty("--indicator-x", `${active.offsetLeft}px`);
+    indicator.style.setProperty("--indicator-y", `${active.offsetTop}px`);
+    indicator.style.setProperty("--indicator-width", `${active.offsetWidth}px`);
+    indicator.style.setProperty("--indicator-height", `${active.offsetHeight}px`);
+    indicator.dataset.ready = "";
+  };
+  const scheduleIndicatorCorrection = () => {
+    if (indicatorTimer) clearTimeout(indicatorTimer);
+    requestAnimationFrame(moveIndicator);
+    indicatorTimer = window.setTimeout(moveIndicator, 360);
+  };
   let reconcileHover = () => {};
   if (switcher) {
     const hoverDesktop = matchMedia("(min-width: 821px) and (hover: hover)");
@@ -87,6 +105,9 @@ const here = items.find((i) => i.id === current) ?? items[0];
       summary.setAttribute("aria-label", nextSummary.getAttribute("aria-label")!);
     }
     if (pill) pill.open = false;
+    scheduleIndicatorCorrection();
   });
   document.addEventListener("astro:page-load", reconcileHover);
+  window.addEventListener("resize", scheduleIndicatorCorrection);
+  scheduleIndicatorCorrection();
 </script>
