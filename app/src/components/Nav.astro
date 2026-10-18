@@ -20,9 +20,11 @@ const here = items.find((i) => i.id === current) ?? items[0];
       </div>
     </details>
     <div class="seg">
-      <span class="seg-indicator" aria-hidden="true"></span>
       {items.map((i) => (
-        <a href={i.href} aria-current={i.id === current ? "page" : undefined}>{i.label}</a>
+        <a href={i.href} aria-current={i.id === current ? "page" : undefined}>
+          {i.id === current && <span class="seg-indicator" aria-hidden="true"></span>}
+          <span class="seg-label">{i.label}</span>
+        </a>
       ))}
     </div>
   </nav>
@@ -32,45 +34,12 @@ const here = items.find((i) => i.id === current) ?? items[0];
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
   const topbar = document.querySelector<HTMLElement>(".topbar")!;
   const switcher = document.querySelector<HTMLElement>(".seg");
-  const indicator = switcher?.querySelector<HTMLElement>(".seg-indicator");
-  let indicatorTimer: number | undefined;
-  let indicatorFrame = 0;
-  const moveIndicator = () => {
-    if (!switcher || !indicator) return;
-    const active = switcher.querySelector<HTMLElement>('a[aria-current="page"]');
-    if (!active) return;
-    const activeRect = active.getBoundingClientRect();
-    const switcherRect = switcher.getBoundingClientRect();
-    indicator.style.setProperty("--indicator-x", `${activeRect.left - switcherRect.left - switcher.clientLeft}px`);
-    indicator.style.setProperty("--indicator-y", `${activeRect.top - switcherRect.top - switcher.clientTop}px`);
-    indicator.style.setProperty("--indicator-width", `${activeRect.width}px`);
-    indicator.style.setProperty("--indicator-height", `${activeRect.height}px`);
-    indicator.dataset.ready = "";
-  };
-  const scheduleIndicatorCorrection = () => {
-    if (indicatorTimer) clearTimeout(indicatorTimer);
-    cancelAnimationFrame(indicatorFrame);
-    indicatorFrame = requestAnimationFrame(moveIndicator);
-    indicatorTimer = window.setTimeout(moveIndicator, 360);
-  };
+  let indicatorAnimation: Animation | undefined;
   let reconcileHover = () => {};
   if (switcher) {
     const hoverDesktop = matchMedia("(min-width: 821px) and (hover: hover)");
     switcher.setAttribute("data-hover-intent", "");
-    // Track the active link while the compact navigation changes its layout.
-    const indicatorObserver = new ResizeObserver(() => {
-      moveIndicator();
-    });
-    switcher.querySelectorAll("a").forEach((link) => indicatorObserver.observe(link));
-    let layoutTimer: number | undefined;
-    const setExpanded = (expanded: boolean) => {
-      switcher.toggleAttribute("data-expanded", expanded);
-      switcher.setAttribute("data-layout-changing", "");
-      if (layoutTimer !== undefined) clearTimeout(layoutTimer);
-      layoutTimer = window.setTimeout(() => switcher.removeAttribute("data-layout-changing"), 340);
-    };
-    // Keep the highlight locked to the links while they expand or collapse.
-    const hoverIntent = createHoverNav(setExpanded);
+    const hoverIntent = createHoverNav((expanded) => switcher.toggleAttribute("data-expanded", expanded));
     switcher.addEventListener("pointerenter", () => { if (hoverDesktop.matches) hoverIntent.enter(); });
     switcher.addEventListener("pointerleave", () => hoverIntent.leave());
     switcher.addEventListener("pointercancel", () => hoverIntent.leave());
@@ -108,6 +77,8 @@ const here = items.find((i) => i.id === current) ?? items[0];
     const incoming = event.newDocument.querySelector<HTMLElement>(".topbar");
     if (!incoming) return;
     const sectionChanged = topbar.dataset.current !== incoming.dataset.current;
+    const indicator = switcher?.querySelector<HTMLElement>(".seg-indicator");
+    const previousRect = sectionChanged ? indicator?.getBoundingClientRect() : undefined;
     topbar.dataset.current = incoming.dataset.current;
     topbar.querySelectorAll<HTMLAnchorElement>(".nav a").forEach((link) => {
       const next = [...incoming.querySelectorAll<HTMLAnchorElement>(".nav a")].find((a) =>
@@ -123,11 +94,36 @@ const here = items.find((i) => i.id === current) ?? items[0];
       summary.setAttribute("aria-label", nextSummary.getAttribute("aria-label")!);
     }
     if (pill) pill.open = false;
-    if (sectionChanged && switcher) switcher.dataset.animate = "";
-    scheduleIndicatorCorrection();
+    if (sectionChanged && switcher && indicator) {
+      const nextActive = switcher.querySelector<HTMLElement>('a[aria-current="page"]');
+      if (nextActive) {
+        nextActive.prepend(indicator);
+        const nextRect = nextActive.getBoundingClientRect();
+        if (previousRect && previousRect.width > 0 && previousRect.height > 0 && nextRect.width > 0 && nextRect.height > 0 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          const x = previousRect.left - nextRect.left;
+          const y = previousRect.top - nextRect.top;
+          const scaleX = previousRect.width / nextRect.width;
+          const scaleY = previousRect.height / nextRect.height;
+          indicatorAnimation?.cancel();
+          switcher.dataset.indicatorMoving = "";
+          const animation = indicator.animate(
+            [
+              { transform: `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY})` },
+              { transform: "translate(0, 0) scale(1, 1)" },
+            ],
+            { duration: 320, easing: "cubic-bezier(.22, 1, .36, 1)" },
+          );
+          indicatorAnimation = animation;
+          const clearIndicatorMoving = () => {
+            if (indicatorAnimation !== animation) return;
+            indicatorAnimation = undefined;
+            switcher.removeAttribute("data-indicator-moving");
+          };
+          animation.onfinish = clearIndicatorMoving;
+          animation.oncancel = clearIndicatorMoving;
+        }
+      }
+    }
   });
   document.addEventListener("astro:page-load", reconcileHover);
-  window.addEventListener("resize", scheduleIndicatorCorrection);
-  scheduleIndicatorCorrection();
-  document.fonts?.ready.then(scheduleIndicatorCorrection);
 </script>
