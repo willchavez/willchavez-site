@@ -47,12 +47,14 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
             <div class="ent-copy">
               <div class="ent-heading">
                 <div class="ent-titleline">
-                  <span class="k">{i.data.kind}</span>
                   <a class="t" href={`/enjoying/${i.id}?from=all`} data-enjoying-entry>{i.data.title}</a>
                 </div>
                 {displayDate && <time class="recorded" datetime={displayDate.toISOString()} title={i.data.date ? undefined : "U.S. public release date"}>{!i.data.date && "Released "}{fmtDate(displayDate)}</time>}
               </div>
-              <span class="m">{[i.data.creator, i.data.year].filter(Boolean).join(" · ")}</span>
+              <div class="ent-meta">
+                <span class="k">{i.data.kind}</span>
+                <span class="m">{[i.data.creator, i.data.publication, i.data.year].filter(Boolean).join(" · ")}</span>
+              </div>
               {i.data.rating && <div class="rating" aria-label={`${i.data.rating} out of 5`}>{stars(i.data.rating)}</div>}
               <SoundCloud url={i.data.link} title={i.data.title} />
             </div>
@@ -160,7 +162,6 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   });
 </script>
 <style>
-  #enjoying-results:not([data-kind="all"]) .k { display: none; }
   #enjoying-results.is-leaving { animation: var(--content-exit-animation); }
   #enjoying-results.is-entering { animation: var(--content-enter-animation); }
 </style>
