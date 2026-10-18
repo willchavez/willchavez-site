@@ -21,11 +21,14 @@ const here = items.find((i) => i.id === current) ?? items[0];
     </details>
     <div class="seg">
       {items.map((i) => (
-        <a href={i.href} aria-current={i.id === current ? "page" : undefined}>
+        <a href={i.href} data-id={i.id} aria-current={i.id === current ? "page" : undefined}>
           {i.id === current && <span class="seg-indicator" aria-hidden="true"></span>}
           <span class="seg-label">{i.label}</span>
         </a>
       ))}
+      <div class="seg-ink" aria-hidden="true">
+        {items.map((i) => <span data-id={i.id} data-current={i.id === current ? "true" : undefined}>{i.label}</span>)}
+      </div>
     </div>
   </nav>
 </div>
@@ -34,18 +37,47 @@ const here = items.find((i) => i.id === current) ?? items[0];
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
   const topbar = document.querySelector<HTMLElement>(".topbar")!;
   const switcher = document.querySelector<HTMLElement>(".seg");
+  const ink = switcher?.querySelector<HTMLElement>(".seg-ink");
   let indicatorAnimation: Animation | undefined;
+  let inkFrame = 0;
+  let syncInkClip = () => {};
+  let trackInkToIndicator = (_duration?: number) => {};
   let reconcileHover = () => {};
   if (switcher) {
+    syncInkClip = () => {
+      if (!switcher || !ink) return;
+      const indicator = switcher.querySelector<HTMLElement>(".seg-indicator");
+      if (!indicator) return;
+      const clip = ink.getBoundingClientRect();
+      const pill = indicator.getBoundingClientRect();
+      const top = Math.max(0, pill.top - clip.top);
+      const right = Math.max(0, clip.right - pill.right);
+      const bottom = Math.max(0, clip.bottom - pill.bottom);
+      const left = Math.max(0, pill.left - clip.left);
+      ink.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px round 999px)`;
+    };
+    trackInkToIndicator = (duration = 380) => {
+      cancelAnimationFrame(inkFrame);
+      const started = performance.now();
+      const tick = (now: number) => {
+        syncInkClip();
+        if (now - started < duration) inkFrame = requestAnimationFrame(tick);
+      };
+      inkFrame = requestAnimationFrame(tick);
+    };
+    syncInkClip();
     const hoverDesktop = matchMedia("(min-width: 821px) and (hover: hover)");
     switcher.setAttribute("data-hover-intent", "");
-    const hoverIntent = createHoverNav((expanded) => switcher.toggleAttribute("data-expanded", expanded));
-    switcher.addEventListener("pointerenter", () => { if (hoverDesktop.matches) hoverIntent.enter(); });
-    switcher.addEventListener("pointerleave", () => hoverIntent.leave());
+    const hoverIntent = createHoverNav((expanded) => {
+      switcher.toggleAttribute("data-expanded", expanded);
+      trackInkToIndicator(760);
+    });
+    switcher.addEventListener("pointerenter", () => { if (hoverDesktop.matches) hoverIntent.enter(); trackInkToIndicator(); });
+    switcher.addEventListener("pointerleave", () => { hoverIntent.leave(); trackInkToIndicator(760); });
     switcher.addEventListener("pointercancel", () => hoverIntent.leave());
-    switcher.addEventListener("focusin", () => { if (hoverDesktop.matches) hoverIntent.focus(); });
+    switcher.addEventListener("focusin", () => { if (hoverDesktop.matches) hoverIntent.focus(); trackInkToIndicator(); });
     switcher.addEventListener("focusout", (event) => {
-      if (!switcher.contains(event.relatedTarget as Node)) hoverIntent.blur();
+      if (!switcher.contains(event.relatedTarget as Node)) { hoverIntent.blur(); trackInkToIndicator(); }
     });
     hoverDesktop.addEventListener("change", () => hoverIntent.reset());
     window.addEventListener("blur", () => hoverIntent.reset());
@@ -87,6 +119,10 @@ const here = items.find((i) => i.id === current) ?? items[0];
       else link.removeAttribute("aria-current");
       if (next?.hasAttribute("data-count")) link.dataset.count = next.dataset.count;
     });
+    const selectedId = switcher?.querySelector<HTMLAnchorElement>('a[aria-current="page"]')?.dataset.id;
+    ink?.querySelectorAll<HTMLElement>("[data-id]").forEach((label) => {
+      label.toggleAttribute("data-current", label.dataset.id === selectedId);
+    });
     const summary = pill?.querySelector("summary");
     const nextSummary = incoming.querySelector("summary");
     if (summary && nextSummary) {
@@ -114,14 +150,16 @@ const here = items.find((i) => i.id === current) ?? items[0];
             { duration: 320, easing: "cubic-bezier(.22, 1, .36, 1)" },
           );
           indicatorAnimation = animation;
+          trackInkToIndicator(340);
           const clearIndicatorMoving = () => {
             if (indicatorAnimation !== animation) return;
             indicatorAnimation = undefined;
             switcher.removeAttribute("data-indicator-moving");
+            syncInkClip();
           };
           animation.onfinish = clearIndicatorMoving;
           animation.oncancel = clearIndicatorMoving;
-        }
+        } else syncInkClip();
       }
     }
   });

@@ -55,15 +55,30 @@
     transition: background 180ms ease, color 180ms ease, max-width 320ms cubic-bezier(.22, 1, .36, 1), padding 320ms cubic-bezier(.22, 1, .36, 1), opacity 180ms ease;
   }
   .seg-label { position: relative; z-index: 1; }
+  .seg-ink {
+    position: absolute; z-index: 2; inset: 1px; display: flex; align-items: stretch;
+    padding: 4px; pointer-events: none; overflow: hidden; clip-path: inset(0 round 999px);
+  }
+  .seg-ink > span {
+    display: flex; align-items: center; flex: none; min-height: 44px; max-width: 11rem;
+    padding: 0 1.1rem; border-radius: 999px; color: var(--fill-ink); white-space: nowrap;
+    overflow: hidden; letter-spacing: -0.02em; font-size: 0.98rem;
+    transition: max-width 320ms cubic-bezier(.22, 1, .36, 1), padding 320ms cubic-bezier(.22, 1, .36, 1), opacity 180ms ease;
+  }
   .seg[data-indicator-moving] a[aria-current="page"] { overflow: visible; }
   .seg a:hover, .seg a:focus-visible { background: color-mix(in srgb, var(--rust) 12%, transparent); }
-  .seg a[aria-current="page"] { background: transparent; color: var(--fill-ink); }
+  .seg a[aria-current="page"] { background: transparent; color: inherit; }
 }
 /* rest as just the current page, but only where hover exists. touch laptops keep the full switch. */
 @media (min-width: 821px) and (hover: hover) {
   .seg a { max-width: 11rem; }
+  .seg-ink > span { max-width: 11rem; }
   .seg[data-hover-intent]:not([data-expanded]):not(:focus-within) a:not([aria-current="page"]),
   .seg:not([data-hover-intent]):not(:hover):not(:focus-within) a:not([aria-current="page"]) {
+    max-width: 0; padding-left: 0; padding-right: 0; opacity: 0;
+  }
+  .seg[data-hover-intent]:not([data-expanded]):not(:focus-within) .seg-ink > span:not([data-current]),
+  .seg:not([data-hover-intent]):not(:hover):not(:focus-within) .seg-ink > span:not([data-current]) {
     max-width: 0; padding-left: 0; padding-right: 0; opacity: 0;
   }
 }
