@@ -33,6 +33,9 @@ ol, ul { padding-left: 1.2rem; }
 li { padding-left: .25rem; margin-bottom: .6rem; line-height: 1.75; }
 li::marker { color: var(--rust); }
 a { color: var(--ink); text-decoration: none; position: relative; isolation: isolate; box-shadow: inset 0 -1px color-mix(in srgb, var(--rust) 60%, transparent); transition: color 200ms ease; }
+@media (hover: none) {
+  html body a, html body .chip, html body .pill > summary, html body .pill .menu a, html body .enjoying-kind-menu > summary { -webkit-tap-highlight-color: rgba(156, 75, 46, .18); }
+}
 a::before { content: ""; position: absolute; inset: 0; z-index: -1; background: color-mix(in srgb, var(--rust) 16%, transparent); border-radius: 6px; opacity: 0; transform: scaleX(0); transform-origin: calc(var(--o, .5) * 100%) 50%; transition: transform 400ms cubic-bezier(.22, 1, .36, 1), opacity 250ms ease-out; }
 a.wrapped { box-decoration-break: clone; border-radius: 0; background-image: linear-gradient(color-mix(in srgb, var(--rust) calc(var(--fo, 0) * 16%), transparent), color-mix(in srgb, var(--rust) calc(var(--fo, 0) * 16%), transparent)); background-repeat: no-repeat; background-position: calc(var(--o, .5) * 100%) 100%; background-size: 0% 100%; transition: background-size 400ms ease, --fo 250ms ease-out; }
 a.wrapped::before { content: none; }
