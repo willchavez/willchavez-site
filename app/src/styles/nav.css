@@ -64,6 +64,8 @@
 /* rest as just the current page, but only where hover exists. touch laptops keep the full switch. */
 @media (min-width: 821px) and (hover: hover) {
   .seg a { max-width: 11rem; }
+  /* During collapse, follow the active link's changing layout without lag. */
+  .seg[data-hover-intent]:not([data-expanded]):not(:focus-within) .seg-indicator { transition: none; }
   .seg[data-hover-intent]:not([data-expanded]):not(:focus-within) a:not([aria-current="page"]),
   .seg:not([data-hover-intent]):not(:hover):not(:focus-within) a:not([aria-current="page"]) {
     max-width: 0; padding-left: 0; padding-right: 0; opacity: 0;
