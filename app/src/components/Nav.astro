@@ -50,6 +50,15 @@ const here = items.find((i) => i.id === current) ?? items[0];
       if (!indicator) return;
       const clip = ink.getBoundingClientRect();
       const pill = indicator.getBoundingClientRect();
+      const labels = switcher.querySelectorAll<HTMLElement>(".seg-label");
+      const inkLabels = ink.querySelectorAll<HTMLElement>("[data-id]");
+      labels.forEach((label, index) => {
+        const overlayLabel = inkLabels[index];
+        if (!overlayLabel) return;
+        const rect = label.getBoundingClientRect();
+        overlayLabel.style.left = `${rect.left - clip.left}px`;
+        overlayLabel.style.top = `${rect.top - clip.top}px`;
+      });
       const top = Math.max(0, pill.top - clip.top);
       const right = Math.max(0, clip.right - pill.right);
       const bottom = Math.max(0, clip.bottom - pill.bottom);
