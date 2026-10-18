@@ -6,10 +6,10 @@ import Nav from "../components/Nav.astro";
 import { ClientRouter } from "astro:transitions";
 import { getWriting, getEnjoying } from "../lib/content";
 
-const { title, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, subKind, subAfter, compactTitle = false, analytics = false, showHeading = true, showPageTitle = true } = Astro.props;
+const { title, titleExact = false, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, subKind, subAfter, compactTitle = false, analytics = false, showHeading = true, showPageTitle = true } = Astro.props;
 const [w, e] = await Promise.all([getWriting(), getEnjoying()]);
 const counts = { notes: w.length, enjoying: e.length };
-const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engineer";
+const pageTitle = title ? (titleExact ? title : `${title} — Will Chavez`) : "Will Chavez — UX Engineer";
 const currentYear = new Date().getFullYear();
 ---
 <!doctype html>
