@@ -6,7 +6,7 @@ import Nav from "../components/Nav.astro";
 import { ClientRouter } from "astro:transitions";
 import { getWriting, getEnjoying } from "../lib/content";
 
-const { title, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, subKind, compactTitle = false, analytics = false, showHeading = true, showPageTitle = true } = Astro.props;
+const { title, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, subKind, subAfter, compactTitle = false, analytics = false, showHeading = true, showPageTitle = true } = Astro.props;
 const [w, e] = await Promise.all([getWriting(), getEnjoying()]);
 const counts = { notes: w.length, enjoying: e.length };
 const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engineer";
@@ -39,9 +39,11 @@ const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engin
     {showHeading && <div class:list={["page-head", !showPageTitle && "page-head-minimal"]}>
       <div>
         <h1 class:list={[!showPageTitle && "sr-only", compactTitle && "page-title-compact"]}>{heading}</h1>
-        <div class:list={["pronouns", subKind && "pronouns-metadata"]}>
+        <div class:list={["pronouns", subKind && "pronouns-metadata", subAfter && "pronouns-metadata-split"]}>
           {subKind && <span class="metadata-kind">{subKind}</span>}
-          <span>{sub ?? "he/him · Design technologist @ Microsoft"}</span>
+          {sub && <span class={subAfter ? "metadata-authors" : undefined}>{sub}</span>}
+          {subAfter && <span class="metadata-secondary">{subAfter}</span>}
+          {!sub && <span>he/him · Design technologist @ Microsoft</span>}
         </div>
       </div>
     </div>}
