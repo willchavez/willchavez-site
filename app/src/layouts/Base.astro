@@ -38,9 +38,9 @@ const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engin
     <div class="page-content" transition:name="page-content">
     {showHeading && <div class:list={["page-head", !showPageTitle && "page-head-minimal"]}>
       <div>
+        {subKind && <div class="entry-kind"><span class="metadata-kind">{subKind}</span></div>}
         <h1 class:list={[!showPageTitle && "sr-only", compactTitle && "page-title-compact"]}>{heading}</h1>
         <div class:list={["pronouns", subKind && "pronouns-metadata", subAfter && "pronouns-metadata-split"]}>
-          {subKind && <span class="metadata-kind">{subKind}</span>}
           {sub && <span class={subAfter ? "metadata-authors" : undefined}>{sub}</span>}
           {subAfter && <span class="metadata-secondary">{subAfter}</span>}
           {!sub && <span>he/him · Design technologist @ Microsoft</span>}
