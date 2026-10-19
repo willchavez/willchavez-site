@@ -66,6 +66,7 @@ const here = items.find((i) => i.id === current) ?? items[0];
       const indicator = switcher.querySelector<HTMLElement>(".seg-indicator");
       if (!indicator) return;
       const clip = ink.getBoundingClientRect();
+      if (!clip.width || !clip.height) return;
       const pill = indicator.getBoundingClientRect();
       const labels = switcher.querySelectorAll<HTMLElement>(".seg-label");
       const inkLabels = ink.querySelectorAll<HTMLElement>("[data-id]");
@@ -81,6 +82,7 @@ const here = items.find((i) => i.id === current) ?? items[0];
       const bottom = Math.max(0, clip.bottom - pill.bottom);
       const left = Math.max(0, pill.left - clip.left);
       ink.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px round 999px)`;
+      ink.dataset.ready = "";
     };
     trackInkToIndicator = (duration = 380) => {
       cancelAnimationFrame(inkFrame);
