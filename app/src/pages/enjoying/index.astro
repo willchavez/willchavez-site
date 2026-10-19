@@ -8,7 +8,7 @@ const items = await getEnjoying();
 const stars = (n: number) => Number.isInteger(n) ? "★".repeat(n) + "☆".repeat(5 - n) : "★".repeat(Math.floor(n)) + "½";
 const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).length;
 ---
-<Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, games, books, and papers I’ve spent time with." description="What Will Chavez has been enjoying">
+<Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, books, and papers I’ve spent time with." description="What Will Chavez has been enjoying">
   <div class="section">
     <div>
       <div class="chips" role="group" aria-label="Filter by type" id="kind-tabs">
