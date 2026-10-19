@@ -74,7 +74,20 @@ const here = items.find((i) => i.id === current) ?? items[0];
       };
       inkFrame = requestAnimationFrame(tick);
     };
+    let inkSyncFrame = 0;
+    const scheduleInkSync = () => {
+      cancelAnimationFrame(inkSyncFrame);
+      inkSyncFrame = requestAnimationFrame(() => {
+        inkSyncFrame = 0;
+        syncInkClip();
+      });
+    };
     syncInkClip();
+    window.addEventListener("resize", scheduleInkSync, { passive: true });
+    window.addEventListener("orientationchange", scheduleInkSync, { passive: true });
+    if (document.fonts) void document.fonts.ready.then(scheduleInkSync);
+    const navResizeObserver = new ResizeObserver(scheduleInkSync);
+    navResizeObserver.observe(switcher);
     const hoverDesktop = matchMedia("(min-width: 821px) and (hover: hover)");
     switcher.setAttribute("data-hover-intent", "");
     const hoverIntent = createHoverNav((expanded) => {
