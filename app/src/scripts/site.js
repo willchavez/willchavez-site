@@ -1,6 +1,29 @@
 const enhanced = new WeakSet();
 function enhancePage() {
       const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+      const titleSlot = document.querySelector(".work-title-slot");
+      if (titleSlot && !enhanced.has(titleSlot) && !reduceMotion.matches) {
+        enhanced.add(titleSlot);
+        const titles = ["Design Technologist", "User Experience Engineer", "Design Engineer", "Design Developer", "UI Engineer", "Creative Technologist"];
+        const pause = (duration) => new Promise((resolve) => setTimeout(resolve, duration));
+        void (async () => {
+          let current = titleSlot.querySelector(".work-title-current");
+          for (let step = 1; step <= titles.length; step += 1) {
+            await pause(step === 1 ? 2000 : 1000);
+            if (!titleSlot.isConnected) return;
+            const next = document.createElement("span");
+            next.className = "work-title-current work-title-enter";
+            next.textContent = titles[step % titles.length];
+            current.classList.add("work-title-exit");
+            titleSlot.append(next);
+            await pause(450);
+            if (!titleSlot.isConnected) return;
+            current.remove();
+            next.classList.remove("work-title-enter");
+            current = next;
+          }
+        })();
+      }
       const portrait = document.querySelector(".portrait");
 
       if (portrait && !enhanced.has(portrait)) {
