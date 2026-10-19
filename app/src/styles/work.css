@@ -12,7 +12,7 @@ body:has(.work-page) .nav a, body:has(.work-page) .pill summary { text-transform
 .work-title-measure { visibility: hidden; }
 .work-title-exit { animation: work-title-out 420ms ease-in both; }
 .work-title-enter { animation: work-title-in 420ms ease-out both; }
-@keyframes work-title-out { to { opacity: 0; transform: translateY(100%); } }
+@keyframes work-title-out { 0% { opacity: 1; transform: translateY(0); } 35% { opacity: 0; } 100% { opacity: 0; transform: translateY(100%); } }
 @keyframes work-title-in { from { opacity: 0; transform: translateY(-100%); } to { opacity: 1; transform: translateY(0); } }
 .work-dot { width: .65rem; height: .65rem; flex: 0 0 auto; border-radius: 50%; background: var(--work-accent); }
 .work-pronouns { margin-left: -.2rem; }
