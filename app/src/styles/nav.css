@@ -43,7 +43,7 @@
 .seg { display: none; }
 @media (min-width: 821px) {
   .pill { display: none; }
-  .seg { position: relative; isolation: isolate; display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--rust); border-radius: 999px; }
+  .seg { position: relative; isolation: isolate; display: inline-flex; gap: 4px; padding: 4px 0; border: 1px solid var(--rust); border-radius: 999px; }
   .seg-indicator {
     position: absolute; z-index: -1; inset: 0;
     border-radius: inherit; background: var(--fill); pointer-events: none;
