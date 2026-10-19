@@ -7,7 +7,7 @@ body:has(.work-page) .nav a, body:has(.work-page) .pill summary { text-transform
 .work-page a:focus-visible { outline: 2px solid var(--work-accent); outline-offset: 5px; border-radius: 6px; }
 .work-intro { max-width: 43rem; margin-bottom: 4.5rem; }
 .work-eyebrow { display: flex; align-items: center; gap: .55rem; color: var(--muted); font-size: .88rem; }
-.work-title-slot { display: inline-grid; overflow: hidden; line-height: 1.4; }
+.work-title-slot { display: inline-grid; overflow: visible; line-height: 1.4; }
 .work-title-measure, .work-title-current { grid-area: 1 / 1; white-space: nowrap; }
 .work-title-measure { visibility: hidden; }
 .work-title-exit { animation: work-title-out 420ms ease-in both; }
