@@ -31,9 +31,17 @@ const filterLabels = Object.fromEntries([
 </Base>
 
 <script>
+  const scrollPositionKey = "enjoying:list-scroll-position";
+  const restorePositionKey = "enjoying:restore-list-scroll-position";
+  addEventListener("popstate", () => {
+    if (document.querySelector("[data-enjoying-back]") && sessionStorage.getItem(scrollPositionKey)) {
+      sessionStorage.setItem(restorePositionKey, "true");
+    }
+  });
   document.addEventListener("astro:page-load", () => {
     const back = document.querySelector<HTMLAnchorElement>("[data-enjoying-back]");
     if (!back) return;
+    back.addEventListener("click", () => sessionStorage.setItem(restorePositionKey, "true"), { once: true });
     const labels: Record<string, string> = JSON.parse(back.dataset.filterLabels!);
     const from = new URLSearchParams(location.search).get("from");
     const kind = from && Object.hasOwn(labels, from) ? from : back.dataset.kind!;

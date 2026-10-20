@@ -81,6 +81,8 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     results.getAnimations().forEach((animation) => animation.cancel());
   };
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const scrollPositionKey = "enjoying:list-scroll-position";
+  const restorePositionKey = "enjoying:restore-list-scroll-position";
   // Type filter state lives in the URL hash so it can be linked.
   const rows = [...document.querySelectorAll<HTMLElement>(".ent")];
   const kindBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
@@ -143,6 +145,16 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     }
     select(b.dataset.kind!);
   }));
+  document.addEventListener("click", (event) => {
+    const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
+    if (!link) return;
+    if (link.matches("[data-enjoying-entry]")) {
+      sessionStorage.setItem(scrollPositionKey, JSON.stringify({ top: window.scrollY, kind, path: location.pathname }));
+    } else {
+      sessionStorage.removeItem(scrollPositionKey);
+      sessionStorage.removeItem(restorePositionKey);
+    }
+  }, { capture: true, signal: controller.signal });
   if (kindMenu) {
     addEventListener("click", (event) => {
       if (kindMenu.open && !kindMenu.contains(event.target as Node)) kindMenu.open = false;
@@ -159,6 +171,21 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     fromHash(); requestedKind = kind; apply();
   }, { signal: controller.signal });
   fromHash(); requestedKind = kind; apply();
+  if (sessionStorage.getItem(restorePositionKey) === "true") {
+    sessionStorage.removeItem(restorePositionKey);
+    const savedPosition = sessionStorage.getItem(scrollPositionKey);
+    sessionStorage.removeItem(scrollPositionKey);
+    if (savedPosition) {
+      try {
+        const { top, kind: savedKind, path } = JSON.parse(savedPosition) as { top: number; kind: string; path: string };
+        if (path === location.pathname && savedKind === kind && Number.isFinite(top)) {
+          void document.fonts.ready.then(() => requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo(0, top))));
+        }
+      } catch {
+        // Ignore invalid or stale session data.
+      }
+    }
+  }
   });
 </script>
 <style>

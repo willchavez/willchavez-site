@@ -13,6 +13,9 @@ html { scrollbar-gutter: stable; }
      both pages remain visible together during navigation. */
   .page-content { view-transition-name: none !important; }
 }
+/* The Enjoying list/detail flow changes page height substantially. Avoid a
+   transition that can look like the browser is scrolling up to render it. */
+.route-enjoying .page-content { view-transition-name: none !important; }
 @keyframes content-out { to { opacity: 0; } }
 @keyframes content-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 body { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; max-width: 1160px; margin: 0 auto; padding: 3rem 3.5rem 1.25rem; }
