@@ -49,6 +49,7 @@
   .portfolio-card, .portfolio-card.featured { grid-column: span 3; }
   .portfolio-card.featured .project-info h2 { font-size: 1.55rem; }
   .portfolio-closing { flex-direction: column; }
+  .portfolio-closing > a { align-self: flex-start; }
 }
 @media (max-width: 520px) {
   .portfolio-intro { gap: 1rem; margin-bottom: 1.7rem; }
