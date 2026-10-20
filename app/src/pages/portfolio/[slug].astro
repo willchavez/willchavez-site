@@ -2,6 +2,7 @@
 import Base from "../../layouts/Base.astro";
 import "../../styles/portfolio.css";
 import { portfolioProjects } from "../../data/portfolio-projects";
+import { portfolioImg } from "../../lib/content";
 
 export function getStaticPaths() {
   return portfolioProjects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
@@ -14,7 +15,7 @@ const labelFor = (label: string) => label.replace(/<[^>]*>/g, "").replace(/[â†’â
   <article class="portfolio-project">
     <div class="portfolio-project-category">{project.category}</div>
     <p class="portfolio-project-summary">{project.summary}</p>
-    <figure class="portfolio-cover"><img src={`/${project.cover}`} alt={project.images[0]?.alt ?? project.title} fetchpriority="high" decoding="async" /></figure>
+    <figure class="portfolio-cover"><img src={portfolioImg(project.cover, 960)} srcset={`${portfolioImg(project.cover, 480)} 480w, ${portfolioImg(project.cover, 960)} 960w, ${portfolioImg(project.cover, 1600)} 1600w`} sizes="(max-width: 900px) 100vw, 75vw" alt={project.images[0]?.alt ?? project.title} fetchpriority="high" decoding="async" /></figure>
     <section class="portfolio-project-copy" aria-label="Project details">
       <p>{project.about}</p>
       <h2>My contribution</h2>
@@ -25,7 +26,7 @@ const labelFor = (label: string) => label.replace(/<[^>]*>/g, "").replace(/[â†’â
       </div>}
     </section>
     <section class="portfolio-gallery" aria-label="Project images">
-      {project.images.map((image) => <figure><img src={`/${image.src}`} alt={image.alt} loading="lazy" decoding="async" /><figcaption>{image.alt}</figcaption></figure>)}
+      {project.images.map((image) => <figure><img src={portfolioImg(image.src, 960)} srcset={`${portfolioImg(image.src, 480)} 480w, ${portfolioImg(image.src, 960)} 960w, ${portfolioImg(image.src, 1600)} 1600w`} sizes="(max-width: 900px) 100vw, 75vw" alt={image.alt} loading="lazy" decoding="async" /><figcaption>{image.alt}</figcaption></figure>)}
     </section>
   </article>
 </Base>

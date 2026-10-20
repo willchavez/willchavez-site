@@ -2,6 +2,7 @@
 import Base from "../../layouts/Base.astro";
 import "../../styles/portfolio.css";
 import { portfolioProjects } from "../../data/portfolio-projects";
+import { portfolioImg } from "../../lib/content";
 
 const projectOrder = ["genui-bebop", "bebop", "icon-scaling-tool"];
 const projects = [
@@ -46,7 +47,7 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
           <article class:list={["portfolio-card", featured.has(project.slug) && "featured"]} data-category={project.category}>
             <a class="project-open" href={`/portfolio/${project.slug}`} aria-label={`Explore ${project.title}`}>
               <div class="project-image">
-                <img src={`/${project.cover}`} alt={project.images[0]?.alt ?? project.title} loading="lazy" decoding="async" />
+                <img src={portfolioImg(project.cover, 480)} srcset={`${portfolioImg(project.cover, 480)} 480w, ${portfolioImg(project.cover, 960)} 960w`} sizes="(max-width: 520px) 100vw, (max-width: 820px) 50vw, 33vw" alt={project.images[0]?.alt ?? project.title} loading="lazy" decoding="async" />
                 <span class="explore" aria-hidden="true">View project</span>
               </div>
               <div class="project-info">

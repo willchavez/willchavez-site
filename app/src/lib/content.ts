@@ -28,5 +28,14 @@ export function img(src: string | undefined, width: number) {
   return `/uploads/w/${width}/${name}.webp`;
 }
 
+// Portfolio source files live in the repo's shared img/portfolio directory.
+// The build emits compressed responsive WebP copies alongside those originals.
+export function portfolioImg(src: string, width: number) {
+  if (!import.meta.env.PROD) return `/${src}`;
+  const relative = decodeURIComponent(src.replace(/^\/?img\/portfolio\//, "")).replace(/\.[^.]+$/, "");
+  const encoded = relative.split("/").map(encodeURIComponent).join("/");
+  return `/portfolio-media/w/${width}/${encoded}.webp`;
+}
+
 export const VERB: Record<string, string> = { music: "listen", film: "watch", game: "play", paper: "read", book: "read" };
 export const KIND_PLURAL: Record<string, string> = { music: "music", film: "films", game: "games", paper: "papers", book: "books" };
