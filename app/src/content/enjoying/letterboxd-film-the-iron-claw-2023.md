@@ -2,6 +2,7 @@
 title: "The Iron Claw"
 kind: "film"
 year: 2023
+date: "2024-05-27"
 releaseDate: "2023-12-22"
 releaseDateSource: "https://www.rottentomatoes.com/m/the_iron_claw_2023"
 cover: "/uploads/enjoying/letterboxd-film-the-iron-claw-2023.webp"
