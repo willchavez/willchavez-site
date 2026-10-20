@@ -42,7 +42,6 @@
 .portfolio-gallery figure { margin: 0; }
 .portfolio-gallery img { display: block; width: 100%; max-height: 42rem; object-fit: contain; border: 1px solid var(--hairline); border-radius: .8rem; background: color-mix(in srgb, var(--paper) 72%, var(--rust) 12%); }
 .portfolio-gallery figcaption { margin-top: .45rem; color: var(--muted); font-size: .8rem; }
-.back { gap: .35rem; }
 @media (max-width: 820px) {
   .portfolio-intro { grid-template-columns: 1fr; gap: 1.3rem; }
   .portfolio-intro > p { max-width: 38rem; font-size: 1.1rem; }

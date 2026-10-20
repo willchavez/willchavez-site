@@ -10,7 +10,7 @@ const { project } = Astro.props;
 const labelFor = (label: string) => label.replace(/<[^>]*>/g, "").replace(/[→↗]/g, "").trim();
 ---
 <Base title={project.title} current="portfolio" heading={project.title} sub={project.org} compactTitle description={project.summary}>
-  <a class="back" href="/portfolio"><svg class="icon-arrow-left" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M12.5 8h-9m0 0 4-4m-4 4 4 4" /></svg>Back to projects</a>
+  <a class="back" href="/portfolio"><svg class="icon-arrow-left" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M12.5 8h-9m0 0 4-4m-4 4 4 4" /></svg>Back to Portfolio</a>
   <article class="portfolio-project">
     <div class="portfolio-project-category">{project.category}</div>
     <p class="portfolio-project-summary">{project.summary}</p>
@@ -28,5 +28,4 @@ const labelFor = (label: string) => label.replace(/<[^>]*>/g, "").replace(/[→�
       {project.images.map((image) => <figure><img src={`/${image.src}`} alt={image.alt} loading="lazy" decoding="async" /><figcaption>{image.alt}</figcaption></figure>)}
     </section>
   </article>
-  <a class="back back-bottom" href="/portfolio"><svg class="icon-arrow-left" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M12.5 8h-9m0 0 4-4m-4 4 4 4" /></svg>Back to projects</a>
 </Base>

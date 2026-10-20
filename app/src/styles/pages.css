@@ -118,8 +118,7 @@
 .note-source::before { display: none; }
 .note-source span { color: var(--rust); }
 .byline { margin-bottom: 1.5rem; }
-.back { display: inline-flex; align-items: center; min-height: 32px; padding: .1rem 0; background: transparent; border-radius: 0; box-shadow: none; margin-bottom: 1.3rem; color: var(--muted); font-size: .82rem; }
-.back-bottom { margin-top: 1.8rem; margin-bottom: 0; }
+.back { display: inline-flex; align-items: center; gap: .35rem; min-height: 32px; padding: .1rem 0; background: transparent; border-radius: 0; box-shadow: none; margin-bottom: 1.3rem; color: var(--muted); font-size: .82rem; }
 .back::before { display: none; }
 .route-notes .page-head { max-width: 52rem; }
 .route-notes main:has(.note-reading) { max-width: 52rem; }
