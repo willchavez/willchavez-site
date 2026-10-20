@@ -7,3 +7,5 @@ cover: "/uploads/enjoying/letterboxd-film-i-love-boosters.webp"
 rating: 4
 link: "https://letterboxd.com/film/i-love-boosters/"
 ---
+
+Tons of creativity, reminded me a lot of Pee-wee's Playhouse.

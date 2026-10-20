@@ -7,3 +7,5 @@ cover: "/uploads/enjoying/letterboxd-film-the-odyssey-2026.webp"
 rating: 4.5
 link: "https://letterboxd.com/film/the-odyssey-2026/"
 ---
+
+Wonderful and tragic.
