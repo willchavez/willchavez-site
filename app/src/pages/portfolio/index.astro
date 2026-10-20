@@ -1,0 +1,161 @@
+---
+import Base from "../../layouts/Base.astro";
+import "../../styles/portfolio.css";
+import { portfolioProjects } from "../../data/portfolio-projects";
+
+const projectOrder = ["genui-bebop", "bebop", "icon-scaling-tool"];
+const projects = [
+  ...projectOrder.map((slug) => portfolioProjects.find((project) => project.slug === slug)!).filter(Boolean),
+  ...portfolioProjects.filter((project) => !projectOrder.some((slug) => slug === project.slug)),
+];
+const featured = new Set(["genui-bebop", "bebop"]);
+const categories = [
+  { id: "all", label: "All projects" },
+  { id: "ai-experiences", label: "AI experiences", category: "AI experiences" },
+  { id: "design-tooling", label: "Design tooling", category: "Design tooling" },
+  { id: "research-learning", label: "Research & learning", category: "Research & learning" },
+  { id: "community", label: "Community", category: "Community" },
+];
+const countFor = (category?: string) => category ? projects.filter((project) => project.category === category).length : projects.length;
+---
+<Base title="Portfolio" current="portfolio" heading="Portfolio" showHeading={false} description="Selected design engineering and design technology projects by Will Chavez.">
+  <div class="portfolio-page">
+    <section class="portfolio-intro">
+      <div>
+        <h1>Ideas made<br />tangible.</h1>
+      </div>
+      <p>I build prototypes and tools that help people <em>see an idea, try it, and make it better.</em> A selection of work across AI interfaces, design systems, and community.</p>
+    </section>
+
+    <div class="chips" role="group" aria-label="Filter projects" id="kind-tabs">
+      {categories.map((filter) => <button class="chip" type="button" data-kind={filter.id} data-label={filter.label} aria-pressed={filter.id === "all" ? "true" : "false"}>{filter.label}<span class="chip-count" data-count>{countFor(filter.category)}</span></button>)}
+    </div>
+    <details class="enjoying-kind-menu" id="kind-menu">
+      <summary aria-label="Filter projects by type">
+        <span id="kind-current">All projects</span>
+        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
+      </summary>
+      <div class="enjoying-kind-options" role="group" aria-label="Filter projects">
+        {categories.map((filter) => <button class="chip" type="button" data-kind={filter.id} data-label={filter.label} aria-pressed={filter.id === "all" ? "true" : "false"}>{filter.label}<span class="chip-count" data-count>{countFor(filter.category)}</span></button>)}
+      </div>
+    </details>
+
+    <div id="portfolio-results" data-kind="all">
+      <section class="portfolio-grid" aria-label="Selected projects">
+        {projects.map((project) => (
+          <article class:list={["portfolio-card", featured.has(project.slug) && "featured"]} data-category={project.category}>
+            <a class="project-open" href={`/portfolio/${project.slug}`} aria-label={`Explore ${project.title}`}>
+              <div class="project-image">
+                <img src={`/${project.cover}`} alt={project.images[0]?.alt ?? project.title} loading="lazy" decoding="async" />
+                <span class="explore" aria-hidden="true">View project</span>
+              </div>
+              <div class="project-info">
+                <div class="portfolio-eyebrow">{project.org}</div>
+                <h2>{project.title}</h2>
+                <p>{project.summary}</p>
+                <div class="skills" aria-label="Project tags">{project.skills.split(" · ").map((skill) => <span class="skill-tag">{skill}</span>)}</div>
+              </div>
+            </a>
+          </article>
+        ))}
+      </section>
+    </div>
+    <div class="portfolio-closing">
+      <p>Made with designers, engineers, and a lot of iteration.</p>
+      <a href="mailto:wchavezsalinas@gmail.com">Let’s talk about the work</a>
+    </div>
+  </div>
+</Base>
+
+<script>
+  let cleanup = () => {};
+  document.addEventListener("astro:page-load", () => {
+    cleanup();
+    const results = document.getElementById("portfolio-results");
+    if (!results) return;
+    const controller = new AbortController();
+    cleanup = () => {
+      controller.abort();
+      results.getAnimations().forEach((animation) => animation.cancel());
+    };
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+    const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
+    const kindMenu = document.getElementById("kind-menu") as HTMLDetailsElement | null;
+    const validKinds = new Set(buttons.map((button) => button.dataset.kind || "all"));
+    const shouldAnimate = () => !reducedMotion.matches && matchMedia("(min-width: 821px)").matches;
+    let kind = "all";
+    let requestedKind = kind;
+    let changeId = 0;
+    const fromHash = () => {
+      const candidate = decodeURIComponent(location.hash.slice(1));
+      kind = validKinds.has(candidate) ? candidate : "all";
+    };
+    const apply = () => {
+      results.dataset.kind = kind;
+      const category = categoriesForKind[kind];
+      results.querySelectorAll<HTMLElement>("[data-category]").forEach((card) => {
+        card.hidden = kind !== "all" && card.dataset.category !== category;
+      });
+      buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.kind === kind)));
+      const label = buttons.find((button) => button.dataset.kind === kind)?.dataset.label || "All projects";
+      const current = document.getElementById("kind-current");
+      if (current) current.textContent = label;
+    };
+    const categoriesForKind: Record<string, string | undefined> = {
+      "ai-experiences": "AI experiences",
+      "design-tooling": "Design tooling",
+      "research-learning": "Research & learning",
+      community: "Community",
+    };
+    const push = () => history.replaceState(history.state, "", kind === "all" ? `${location.pathname}${location.search}` : `#${kind}`);
+    const resetAnimation = () => {
+      results.classList.remove("is-entering", "is-leaving");
+      results.getAnimations().forEach((animation) => animation.cancel());
+    };
+    const select = async (next: string) => {
+      if (next === requestedKind) return;
+      requestedKind = next;
+      const request = ++changeId;
+      const animate = shouldAnimate();
+      resetAnimation();
+      if (animate) {
+        results.classList.add("is-leaving");
+        await Promise.allSettled(results.getAnimations().map((animation) => animation.finished));
+      }
+      if (request !== changeId || controller.signal.aborted) return;
+      kind = next;
+      push();
+      apply();
+      results.classList.remove("is-leaving");
+      if (animate) results.classList.add("is-entering");
+    };
+    buttons.forEach((button) => button.addEventListener("click", (event) => {
+      if (button.closest("#kind-menu") && kindMenu) {
+        if (event.detail > 0) button.blur();
+        kindMenu.open = false;
+      }
+      select(button.dataset.kind || "all");
+    }, { signal: controller.signal }));
+    if (kindMenu) {
+      addEventListener("click", (event) => {
+        if (kindMenu.open && !kindMenu.contains(event.target as Node)) kindMenu.open = false;
+      }, { signal: controller.signal });
+      addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && kindMenu.open) {
+          kindMenu.open = false;
+          kindMenu.querySelector("summary")?.focus();
+        }
+      }, { signal: controller.signal });
+    }
+    addEventListener("hashchange", () => {
+      ++changeId;
+      resetAnimation();
+      fromHash();
+      requestedKind = kind;
+      apply();
+    }, { signal: controller.signal });
+    fromHash();
+    requestedKind = kind;
+    apply();
+  });
+</script>
