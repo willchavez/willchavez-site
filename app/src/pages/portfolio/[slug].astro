@@ -1,0 +1,32 @@
+---
+import Base from "../../layouts/Base.astro";
+import "../../styles/portfolio.css";
+import { portfolioProjects } from "../../data/portfolio-projects";
+
+export function getStaticPaths() {
+  return portfolioProjects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+const { project } = Astro.props;
+const labelFor = (label: string) => label.replace(/<[^>]*>/g, "").replace(/[→↗]/g, "").trim();
+---
+<Base title={project.title} current="portfolio" heading={project.title} sub={project.org} compactTitle description={project.summary}>
+  <a class="back" href="/portfolio"><svg class="icon-arrow-left" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M12.5 8h-9m0 0 4-4m-4 4 4 4" /></svg>Back to projects</a>
+  <article class="portfolio-project">
+    <div class="portfolio-project-category">{project.category}</div>
+    <p class="portfolio-project-summary">{project.summary}</p>
+    <figure class="portfolio-cover"><img src={`/${project.cover}`} alt={project.images[0]?.alt ?? project.title} fetchpriority="high" decoding="async" /></figure>
+    <section class="portfolio-project-copy" aria-label="Project details">
+      <p>{project.about}</p>
+      <h2>My contribution</h2>
+      <ul>{project.contributions.map((contribution) => <li>{contribution}</li>)}</ul>
+      <div class="portfolio-project-skills" aria-label="Project tags">{project.skills.split(" · ").map((skill) => <span class="skill-tag">{skill}</span>)}</div>
+      {project.links.length > 0 && <div class="portfolio-project-links">
+        {project.links.map(([url, label]) => <p><a href={url} target="_blank" rel="noreferrer">{labelFor(label)} ↗</a></p>)}
+      </div>}
+    </section>
+    <section class="portfolio-gallery" aria-label="Project images">
+      {project.images.map((image) => <figure><img src={`/${image.src}`} alt={image.alt} loading="lazy" decoding="async" /><figcaption>{image.alt}</figcaption></figure>)}
+    </section>
+  </article>
+  <a class="back back-bottom" href="/portfolio"><svg class="icon-arrow-left" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M12.5 8h-9m0 0 4-4m-4 4 4 4" /></svg>Back to projects</a>
+</Base>
