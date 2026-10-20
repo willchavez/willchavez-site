@@ -57,5 +57,6 @@
   .portfolio-card, .portfolio-card.featured { grid-column: 1; }
   .portfolio-card.featured .project-image { padding: 14px; }
   .portfolio-card.featured .project-info h2, .project-info h2 { font-size: 1.5rem; }
+  .skill-tag { min-height: 1.35rem; padding-inline: .58rem; font-size: .72rem; }
   .portfolio-cover { min-height: 13rem; padding: .9rem; }
 }

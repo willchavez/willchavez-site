@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Will Chavez — Portfolio Presentation" />
+    <meta name="author" content="William Chavez" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="preload" href="fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <title>Will Chavez — Portfolio</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RPXX4TMRSH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RPXX4TMRSH");
+    </script>
+
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      @font-face {
+        font-family: "Source Serif 4";
+        font-style: normal;
+        font-weight: 200 900;
+        font-display: swap;
+        src: url("fonts/source-serif-4-latin.woff2") format("woff2");
+      }
+
+      @font-face {
+        font-family: "Source Serif Fallback";
+        src: local("Georgia");
+        size-adjust: 108.59%;
+        ascent-override: 95.41%;
+        descent-override: 30.85%;
+        line-gap-override: 0%;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      html, body {
+        background: #f7f5f2;
+        font-family: "Source Serif 4", "Source Serif Fallback", Georgia, serif;
+        color: #1a1a1a;
+        font-size: 17px;
+      }
+
+      /* ── top nav ─────────────────────────────── */
+
+      .top-nav {
+        position: sticky;
+        top: 0;
+        background: rgba(247, 245, 242, 0.96);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(176, 90, 58, 0.18);
+        padding: 0.8rem 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 50;
+      }
+
+      .nav-back {
+        font-size: 0.72rem;
+        color: #888;
+        text-decoration: none;
+        letter-spacing: -0.01em;
+      }
+
+      .nav-back:hover { color: #1a1a1a; }
+
+      .nav-projects {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-item {
+        font-size: 0.72rem;
+        color: #bbb;
+        text-decoration: none;
+        letter-spacing: 0.02em;
+        transition: color 0.15s;
+      }
+
+      .nav-item:hover { color: #1a1a1a; }
+      .nav-item.active { color: #b05a3a; }
+
+      .nav-context {
+        font-size: 0.72rem;
+        color: #bbb;
+        letter-spacing: 0.02em;
+      }
+
+      /* ── page header ─────────────────────────── */
+
+      .page-header {
+        padding: 5rem 4rem 4rem;
+        border-bottom: 1px solid #b05a3a;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+
+      .page-header h1 {
+        font-size: 1.9rem;
+        font-weight: 400;
+        line-height: 1.3;
+      }
+
+      .page-header .pronouns {
+        font-size: 0.82rem;
+        color: #888;
+        margin-top: 0.3rem;
+      }
+
+      .page-header .header-right {
+        text-align: right;
+        font-size: 0.75rem;
+        color: #aaa;
+        line-height: 1.7;
+        letter-spacing: 0.02em;
+      }
+
+      .page-header img {
+        max-width: 52px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        display: block;
+        margin-bottom: 0.5rem;
+        margin-left: auto;
+      }
+
+      /* ── intro ───────────────────────────────── */
+
+      .intro-section {
+        padding: 3rem 4rem;
+        border-bottom: 1px solid #e8e4e0;
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 0 3rem;
+        align-items: start;
+      }
+
+      .intro-label {
+        font-size: 0.88rem;
+        color: #b05a3a;
+        opacity: 0.8;
+        line-height: 1.8;
+        letter-spacing: -0.01em;
+      }
+
+      .intro-label::before { content: "// "; }
+
+      .intro-body {
+        font-size: 0.95rem;
+        line-height: 1.85;
+        color: #333;
+        letter-spacing: -0.01em;
+      }
+
+      /* ── project section ─────────────────────── */
+
+      .project {
+        padding: 5rem 4rem 5rem;
+        border-bottom: 1px solid #e8e4e0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .project-watermark {
+        font-size: 9rem;
+        font-weight: 700;
+        color: #b05a3a;
+        opacity: 0.045;
+        position: absolute;
+        top: 2.5rem;
+        left: 2.8rem;
+        line-height: 1;
+        user-select: none;
+        pointer-events: none;
+        letter-spacing: -0.04em;
+      }
+
+      /* ── project header ──────────────────────── */
+
+      .project-header {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 0 3rem;
+        margin-bottom: 3.5rem;
+        align-items: start;
+      }
+
+      .project-tag {
+        font-size: 0.72rem;
+        color: #b05a3a;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding-top: 0.6rem;
+        opacity: 0.85;
+      }
+
+      .project-title {
+        font-size: 2rem;
+        font-weight: 400;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+      }
+
+      .project-meta {
+        font-size: 0.8rem;
+        color: #888;
+        margin-top: 0.3rem;
+        letter-spacing: -0.01em;
+      }
+
+      .project-meta a {
+        color: #888;
+        text-decoration-color: rgba(176, 90, 58, 0.4);
+        text-underline-offset: 3px;
+      }
+
+      .project-question {
+        font-size: 1.15rem;
+        font-style: italic;
+        line-height: 1.6;
+        color: #555;
+        margin-top: 1rem;
+        padding-left: 1rem;
+        border-left: 2px solid #b05a3a;
+        letter-spacing: -0.01em;
+      }
+
+      /* ── content grid ────────────────────────── */
+
+      .content-row {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 0 3rem;
+        margin-bottom: 2.5rem;
+        align-items: start;
+      }
+
+      .content-label {
+        font-size: 0.88rem;
+        color: #b05a3a;
+        opacity: 0.8;
+        padding-top: 0.1rem;
+        line-height: 1.8;
+        letter-spacing: -0.01em;
+      }
+
+      .content-label::before { content: "// "; }
+
+      .content-body {
+        font-size: 0.88rem;
+        line-height: 1.85;
+        color: #1a1a1a;
+        letter-spacing: -0.015em;
+      }
+
+      .content-body p + p { margin-top: 1rem; }
+
+      .content-body a {
+        color: #1a1a1a;
+        text-decoration-color: #b05a3a;
+        text-underline-offset: 3px;
+      }
+
+      .content-body a:hover { text-decoration: none; }
+
+      /* ── decisions list ──────────────────────── */
+
+      .decisions {
+        list-style: none;
+        border-left: 1px solid #b05a3a;
+        padding-left: 1.25rem;
+        margin: 0;
+      }
+
+      .decision-item {
+        margin-bottom: 1.5rem;
+        font-size: 0.88rem;
+        line-height: 1.8;
+        letter-spacing: -0.015em;
+      }
+
+      .decision-item:last-child { margin-bottom: 0; }
+
+      .decision-title {
+        font-weight: 600;
+        color: #1a1a1a;
+        display: block;
+        margin-bottom: 0.25rem;
+      }
+
+      .decision-body {
+        color: #444;
+        display: block;
+      }
+
+      /* ── outcome ─────────────────────────────── */
+
+      .outcome-badge {
+        display: inline-block;
+        background: #b05a3a;
+        color: #f7f5f2;
+        font-size: 0.65rem;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        padding: 0.18rem 0.55rem;
+        border-radius: 2px;
+        margin-right: 0.5rem;
+        vertical-align: middle;
+        position: relative;
+        top: -1px;
+      }
+
+      /* ── image grids ─────────────────────────── */
+
+      .img-grid {
+        border-left: 1px solid #b05a3a;
+        padding-left: 1rem;
+        display: grid;
+        gap: 0.5rem;
+        align-items: start;
+      }
+
+      .img-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+      .img-grid.four-col { grid-template-columns: repeat(4, 1fr); }
+
+      .img-grid img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 4px;
+        border: 1px solid #e0dcd7;
+        cursor: zoom-in;
+      }
+
+      .img-grid img.full { grid-column: 1 / -1; }
+
+      /* ── reflection ──────────────────────────── */
+
+      .reflection {
+        padding: 5rem 4rem 7rem;
+      }
+
+      /* ── lightbox ────────────────────────────── */
+
+      #lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(26, 26, 26, 0.92);
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        cursor: zoom-out;
+      }
+
+      #lightbox.open { display: flex; }
+
+      #lightbox img {
+        max-width: 90vw;
+        max-height: 90vh;
+        width: auto;
+        height: auto;
+        border-radius: 4px;
+        border: 1px solid #e0dcd7;
+        box-shadow: 0 8px 48px rgba(0, 0, 0, 0.5);
+        cursor: default;
+      }
+
+      /* ── keyboard hint ───────────────────────── */
+
+      .key-hint {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 2rem;
+        font-size: 0.68rem;
+        color: #ccc;
+        letter-spacing: 0.04em;
+        pointer-events: none;
+      }
+
+      /* ── responsive ──────────────────────────── */
+
+      @media (min-width: 1400px) {
+        .project-header,
+        .content-row,
+        .intro-section { grid-template-columns: 300px 1fr; }
+      }
+
+      @media (min-width: 1920px) {
+        .project-header,
+        .content-row,
+        .intro-section { grid-template-columns: 25% 1fr; }
+      }
+
+      @media (max-width: 820px) {
+        .project-header,
+        .content-row,
+        .intro-section { grid-template-columns: 1fr; gap: 0.75rem 0; }
+        .project-tag { padding-top: 0; }
+      }
+
+      @media (max-width: 640px) {
+        .top-nav { padding: 0.8rem 1.5rem; }
+        .nav-context { display: none; }
+        .page-header { padding: 3rem 1.5rem 2.5rem; flex-direction: column; gap: 1rem; align-items: flex-start; }
+        .page-header .header-right { text-align: left; }
+        .page-header img { margin-left: 0; }
+        .intro-section { padding: 2rem 1.5rem; }
+        .project { padding: 3.5rem 1.5rem 3.5rem; }
+        .project-watermark { font-size: 5rem; top: 1.5rem; left: 1rem; }
+        .reflection { padding: 3rem 1.5rem 5rem; }
+        .img-grid.two-col { grid-template-columns: 1fr; }
+        .img-grid.four-col { grid-template-columns: repeat(2, 1fr); }
+        .key-hint { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Top nav -->
+    <nav class="top-nav">
+      <a href="work.html" class="nav-back">← work</a>
+      <div class="nav-projects">
+        <a href="#bebop" class="nav-item" data-section="bebop">01 — Bebop</a>
+        <a href="#genui" class="nav-item" data-section="genui">02 — GenUI</a>
+        <a href="#agent-builder" class="nav-item" data-section="agent-builder">03 — Agent Builder</a>
+      </div>
+      <div class="nav-context">selected work</div>
+    </nav>
+
+    <!-- Page header -->
+    <header class="page-header">
+      <div>
+        <h1>Will Chavez</h1>
+        <div class="pronouns">he/him</div>
+      </div>
+      <div class="header-right">
+        <img src="https://cdn.jsdelivr.net/gh/willchavez/willchavez-site/img/will.png" alt="Will Chavez" />
+        selected work
+      </div>
+    </header>
+
+    <!-- Intro -->
+    <section class="intro-section">
+      <span class="intro-label">overview</span>
+      <p class="intro-body">Three projects, three angles on the same challenge: designing AI experiences where the patterns don't exist yet.</p>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- PROJECT 01: BEBOP                                   -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <section class="project" id="bebop">
+      <div class="project-watermark">01</div>
+
+      <div class="project-header">
+        <span class="project-tag">01 · Shipped</span>
+        <div>
+          <h2 class="project-title">Bebop</h2>
+          <div class="project-meta">@ <a href="https://www.microsoft.com/en-us/">Microsoft</a> · M365 Copilot · 2025–2026</div>
+          <p class="project-question">What does a well-designed AI response actually look like?</p>
+        </div>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">context</span>
+        <div class="content-body">
+          <p>Microsoft's redesign of M365 Copilot. When we started, AI output was a wall of text — accurate, but visually inert. My work was about response design: making AI output feel like something worth reading.</p>
+        </div>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">process</span>
+        <ul class="decisions">
+          <li class="decision-item">
+            <span class="decision-title">Needfinding</span>
+            <span class="decision-body">Where responses fell short, what confused users, where existing patterns created friction</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">Design alternatives</span>
+            <span class="decision-body">Multiple directions for response layout, affordance placement, and the input-to-response transition</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">High-fidelity prototypes</span>
+            <span class="decision-body">Timing, motion, and response rhythm — things static designs can't communicate</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">Leadership reviews</span>
+            <span class="decision-body">Structured feedback loops to pressure-test decisions and drive iteration</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">decisions</span>
+        <ul class="decisions">
+          <li class="decision-item">
+            <span class="decision-title">Response composition as a system, not a template</span>
+            <span class="decision-body">Hierarchy patterns and affordance placements that flex with content type — any response had to feel designed, even when the structure was unpredictable</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">Affordances that feel ready, not demanding</span>
+            <span class="decision-body">Refiners, suggestions, follow-ups — available without competing with the response itself</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">The input moment as an emotional beat</span>
+            <span class="decision-body">Making "send" feel like the start of a conversation, not the submission of a form</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">outcome</span>
+        <div class="content-body">
+          <p><span class="outcome-badge">shipped</span> The work shipped as part of the M365 Copilot redesign featured in Microsoft's <a href="https://www.microsoft.com/en-us/microsoft-365/blog/2026/05/28/introducing-a-new-design-for-microsoft-365-copilot/">"Introducing a new design for Microsoft 365 Copilot"</a> article, May 2026.</p>
+        </div>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">screenshots</span>
+        <div class="img-grid two-col">
+          <img src="img/portfolio/bebop/send.gif" alt="Send interaction" />
+          <img src="img/portfolio/bebop/zoomedout.gif" alt="Zoomed-out view" />
+          <img src="img/portfolio/bebop/ciq-1.gif" alt="CIQ interaction" />
+          <img src="img/portfolio/bebop/ciq-working.gif" alt="CIQ working state" />
+          <img src="img/portfolio/bebop/refiners1.gif" alt="Refiners" />
+          <img src="img/portfolio/bebop/proactive-assistance-button-bar.gif" alt="Proactive assistance button bar" />
+          <img src="img/portfolio/bebop/testing%20input.png" alt="Testing input" />
+          <img src="img/portfolio/bebop/refiner.png" alt="Refiner details" />
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- PROJECT 02: GENUI                                   -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <section class="project" id="genui">
+      <div class="project-watermark">02</div>
+
+      <div class="project-header">
+        <span class="project-tag">02 · Exploration</span>
+        <div>
+          <h2 class="project-title">GenUI</h2>
+          <div class="project-meta">@ <a href="https://www.microsoft.com/en-us/">Microsoft</a> · M365 Copilot · 2025–2026</div>
+          <p class="project-question">What if the format of AI output was a design decision, not a technical default?</p>
+        </div>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">context</span>
+        <div class="content-body">
+          <p>If a language model can generate anything, why render its output as markdown? GenUI explored composable, structured UI as an output medium — part of a broader "Expressions" art direction initiative at Microsoft.</p>
+        </div>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">process</span>
+        <ul class="decisions">
+          <li class="decision-item">
+            <span class="decision-title">Part of "Expressions" — a Copilot art direction initiative</span>
+            <span class="decision-body">Defining what Copilot output could look and feel like beyond plain text</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">Prototype-driven</span>
+            <span class="decision-body">No established patterns to follow — the prototype was the design artifact</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">AI-integrated output components</span>
+            <span class="decision-body">Wired real model responses into the structured layouts — not dummy content</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">decisions</span>
+        <ul class="decisions">
+          <li class="decision-item">
+            <span class="decision-title">Layout as a semantic signal</span>
+            <span class="decision-body">Structure communicates the type of response before you read a word</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">When to switch from prose to structure</span>
+            <span class="decision-body">Thresholds based on query complexity, information density, and response length</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">Making the generative feel designed</span>
+            <span class="decision-body">Tight compositional constraints — so output feels crafted, even when assembled dynamically</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">screenshots</span>
+        <div class="img-grid two-col">
+          <img src="img/portfolio/genui/1.png" alt="GenUI screenshot 1" />
+          <img src="img/portfolio/genui/2.png" alt="GenUI screenshot 2" />
+          <img src="img/portfolio/genui/3.png" alt="GenUI screenshot 3" />
+          <img src="img/portfolio/genui/4.png" alt="GenUI screenshot 4" />
+          <img class="full" src="img/portfolio/genui/5.png" alt="GenUI screenshot 5" />
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- PROJECT 03: AGENT BUILDER                          -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <section class="project" id="agent-builder">
+      <div class="project-watermark">03</div>
+
+      <div class="project-header">
+        <span class="project-tag">03 · AI Tooling</span>
+        <div>
+          <h2 class="project-title">Agent Builder</h2>
+          <div class="project-meta">@ <a href="https://www.microsoft.com/en-us/">Microsoft</a> · M365 Copilot · 2024–2025</div>
+          <p class="project-question">How do you make AI agent creation feel like something anyone can do?</p>
+        </div>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">context</span>
+        <div class="content-body">
+          <p>Agent configuration had been a developer task. If agents were going to be first-class in a consumer product, the creation experience had to feel native — not a separate setup wizard users had to context-switch into.</p>
+        </div>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">process</span>
+        <ul class="decisions">
+          <li class="decision-item">
+            <span class="decision-title">Embedded with the Agent Builder team</span>
+            <span class="decision-body">Weekly syncs to align on prototyping progress and keep design and engineering in dialogue</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">Three interaction flows explored in parallel</span>
+            <span class="decision-body">Varying entry point, level of guidance, and degree of control — a real basis for comparison</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">Early and iterative design reviews</span>
+            <span class="decision-body">Shared rough direction early to clarify requirements before they compounded</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">Guided user testing — ~15 participants</span>
+            <span class="decision-body">Walkthroughs of all three flows; surfaced where users got stuck and which felt most natural</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">decisions</span>
+        <ul class="decisions">
+          <li class="decision-item">
+            <span class="decision-title">In-flow creation over wizard UI</span>
+            <span class="decision-body">Creation lives inside the conversation — no context switch, no separate setup screen</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">Progressive complexity without a cliff</span>
+            <span class="decision-body">Low floor for first-timers, high ceiling for power users — no invisible wall between them</span>
+          </li>
+          <li class="decision-item">
+            <span class="decision-title">Making capability legible</span>
+            <span class="decision-body">Lightweight signals so users know what their agent can do — and trust that it will behave as configured</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="content-row">
+        <span class="content-label">screenshots</span>
+        <div class="img-grid two-col">
+          <img src="img/portfolio/agent-builder/followup.gif" alt="Follow-up interaction" />
+          <img src="img/portfolio/agent-builder/1.png" alt="Agent builder early" />
+          <img class="full" src="img/portfolio/agent-builder/spacer-weird.gif" alt="Spacer exploration" />
+          <img class="full" src="img/portfolio/agent-builder/2.png" alt="Agent builder final" />
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REFLECTION                                          -->
+    <!-- ─────────────────────────────────────────────────── -->
+
+    <section class="reflection" id="reflection">
+      <div class="content-row">
+        <span class="content-label">on designing for the new</span>
+        <div class="content-body">
+          <p>AI experiences fail when they look familiar but behave alien. The right starting point is the model's actual behavior — not the nearest UI pattern that looks close enough.</p>
+          <p>The design decisions that matter most are about trust and legibility: what does the system owe the user in terms of transparency about what it's doing?</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Lightbox -->
+    <div id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
+
+    <!-- Keyboard hint -->
+    <div class="key-hint">↑ ↓ to navigate · esc to close</div>
+
+    <script>
+      // ── Lightbox ──────────────────────────────────────
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+
+      document.querySelectorAll('.img-grid img').forEach(img => {
+        img.addEventListener('click', () => {
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt;
+          lightbox.classList.add('open');
+        });
+      });
+
+      lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+
+      // ── Keyboard navigation ───────────────────────────
+      const sections = ['bebop', 'genui', 'agent-builder', 'reflection'];
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          lightbox.classList.remove('open');
+          return;
+        }
+
+        // Arrow key section jumping (only when lightbox is closed)
+        if (lightbox.classList.contains('open')) return;
+
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          const current = getCurrentSection();
+          const next = sections[sections.indexOf(current) + 1];
+          if (next) document.getElementById(next).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          const current = getCurrentSection();
+          const prev = sections[sections.indexOf(current) - 1];
+          if (prev) document.getElementById(prev).scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+
+      function getCurrentSection() {
+        let closest = sections[0];
+        let minDist = Infinity;
+        sections.forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          const dist = Math.abs(el.getBoundingClientRect().top);
+          if (dist < minDist) { minDist = dist; closest = id; }
+        });
+        return closest;
+      }
+
+      // ── Active nav on scroll ──────────────────────────
+      const navItems = document.querySelectorAll('.nav-item[data-section]');
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            navItems.forEach(item => {
+              item.classList.toggle('active', item.dataset.section === id);
+            });
+          }
+        });
+      }, { threshold: 0.25 });
+
+      ['bebop', 'genui', 'agent-builder'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    </script>
+  </body>
+</html>
