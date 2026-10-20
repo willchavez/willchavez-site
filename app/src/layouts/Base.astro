@@ -6,10 +6,11 @@ import Nav from "../components/Nav.astro";
 import { ClientRouter } from "astro:transitions";
 import { getWriting, getEnjoying } from "../lib/content";
 
-const { title, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, analytics = false, showHeading = true, showPageTitle = true } = Astro.props;
+const { title, titleExact = false, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, subKind, subAfter, compactTitle = false, analytics = false, showHeading = true, showPageTitle = true } = Astro.props;
 const [w, e] = await Promise.all([getWriting(), getEnjoying()]);
 const counts = { notes: w.length, enjoying: e.length };
-const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engineer";
+const pageTitle = title ? (titleExact ? title : `${title} — Will Chavez`) : "Will Chavez — UX Engineer";
+const currentYear = new Date().getFullYear();
 ---
 <!doctype html>
 <html lang="en" transition:animate="none">
@@ -38,14 +39,30 @@ const pageTitle = title ? `${title} — Will Chavez` : "Will Chavez — UX Engin
     <div class="page-content" transition:name="page-content">
     {showHeading && <div class:list={["page-head", !showPageTitle && "page-head-minimal"]}>
       <div>
-        <h1 class:list={[!showPageTitle && "sr-only"]}>{heading}</h1>
-        <div class="pronouns">{sub ?? "he/him · Design technologist @ Microsoft"}</div>
+        {subKind && <div class="entry-kind"><span class="metadata-kind">{subKind}</span></div>}
+        <h1 class:list={[!showPageTitle && "sr-only", compactTitle && "page-title-compact"]}>{heading}</h1>
+        <div class:list={["pronouns", subKind && "pronouns-metadata", subAfter && "pronouns-metadata-split"]}>
+          {sub && <span class={subAfter ? "metadata-authors" : undefined}>{sub}</span>}
+          {subAfter && <span class="metadata-secondary">{subAfter}</span>}
+          {!sub && <span>he/him · Design technologist @ Microsoft</span>}
+        </div>
       </div>
     </div>}
     <main>
       <slot />
     </main>
     </div>
+    <footer class="site-footer">
+      <div class="site-footer-bottom">
+        <p class="site-copyright">© {currentYear} Will Chavez</p>
+        <ul class="social-links">
+          <li><a href="https://github.com/willchavez">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/willchavez/">LinkedIn</a></li>
+          <li><a href="https://bsky.app/profile/willchavez.bsky.social">Bluesky</a></li>
+          <li><a href="https://www.instagram.com/willchavez/">Instagram</a></li>
+        </ul>
+      </div>
+    </footer>
     <script>
       import "../scripts/site.js";
     </script>

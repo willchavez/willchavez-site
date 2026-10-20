@@ -9,7 +9,7 @@ const items = [
 const here = items.find((i) => i.id === current) ?? items[0];
 ---
 <div class="topbar" data-current={current} transition:persist="site-navigation" transition:animate="none">
-  <a class="avatar" href="/" aria-label="work"><img class="portrait" src="/img/will.png" alt="Will Chavez" /></a>
+  <a class="avatar" href="/" aria-label="work"><img class="portrait" src="/img/will.webp" width="144" height="144" alt="Will Chavez" decoding="async" /></a>
   <nav class="nav" aria-label="sections">
     <details class="pill">
       <summary aria-label={`menu, you are on ${here.label}`}>{here.label}</summary>
@@ -21,8 +21,14 @@ const here = items.find((i) => i.id === current) ?? items[0];
     </details>
     <div class="seg">
       {items.map((i) => (
-        <a href={i.href} aria-current={i.id === current ? "page" : undefined}>{i.label}</a>
+        <a href={i.href} data-id={i.id} aria-current={i.id === current ? "page" : undefined}>
+          {i.id === current && <span class="seg-indicator" aria-hidden="true"></span>}
+          <span class="seg-label">{i.label}</span>
+        </a>
       ))}
+      <div class="seg-ink" aria-hidden="true">
+        {items.map((i) => <span data-id={i.id} data-current={i.id === current ? "true" : undefined}>{i.label}</span>)}
+      </div>
     </div>
   </nav>
 </div>
@@ -30,32 +36,109 @@ const here = items.find((i) => i.id === current) ?? items[0];
   import { createHoverNav } from "../lib/hover-nav.mjs";
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
   const topbar = document.querySelector<HTMLElement>(".topbar")!;
+  topbar.addEventListener("click", (event) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
+    if (!link || link.target || link.hasAttribute("download")) return;
+    const destination = new URL(link.href, location.href);
+    const current = new URL(location.href);
+    const normalizePath = (path: string) => path.replace(/\/+$/, "") || "/";
+    if (
+      destination.origin === current.origin &&
+      normalizePath(destination.pathname) === normalizePath(current.pathname) &&
+      destination.search === current.search &&
+      destination.hash === current.hash
+    ) {
+      event.preventDefault();
+      if (link === document.activeElement && !link.matches(":focus-visible")) link.blur();
+    }
+  });
   const switcher = document.querySelector<HTMLElement>(".seg");
+  const ink = switcher?.querySelector<HTMLElement>(".seg-ink");
+  let indicatorAnimation: Animation | undefined;
+  let inkFrame = 0;
+  let syncInkClip = () => {};
+  let trackInkToIndicator = (_duration?: number) => {};
   let reconcileHover = () => {};
   if (switcher) {
+    syncInkClip = () => {
+      if (!switcher || !ink) return;
+      const indicator = switcher.querySelector<HTMLElement>(".seg-indicator");
+      if (!indicator) return;
+      const clip = ink.getBoundingClientRect();
+      if (!clip.width || !clip.height) return;
+      const pill = indicator.getBoundingClientRect();
+      const labels = switcher.querySelectorAll<HTMLElement>(".seg-label");
+      const inkLabels = ink.querySelectorAll<HTMLElement>("[data-id]");
+      labels.forEach((label, index) => {
+        const overlayLabel = inkLabels[index];
+        if (!overlayLabel) return;
+        const rect = label.getBoundingClientRect();
+        overlayLabel.style.left = `${rect.left - clip.left}px`;
+        overlayLabel.style.top = `${rect.top - clip.top}px`;
+      });
+      const top = Math.max(0, pill.top - clip.top);
+      const right = Math.max(0, clip.right - pill.right);
+      const bottom = Math.max(0, clip.bottom - pill.bottom);
+      const left = Math.max(0, pill.left - clip.left);
+      ink.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px round 999px)`;
+      ink.dataset.ready = "";
+    };
+    trackInkToIndicator = (duration = 380) => {
+      cancelAnimationFrame(inkFrame);
+      const started = performance.now();
+      const tick = (now: number) => {
+        syncInkClip();
+        if (now - started < duration) inkFrame = requestAnimationFrame(tick);
+      };
+      inkFrame = requestAnimationFrame(tick);
+    };
+    let inkSyncFrame = 0;
+    const scheduleInkSync = () => {
+      cancelAnimationFrame(inkSyncFrame);
+      inkSyncFrame = requestAnimationFrame(() => {
+        inkSyncFrame = 0;
+        syncInkClip();
+      });
+    };
+    syncInkClip();
+    window.addEventListener("resize", scheduleInkSync, { passive: true });
+    window.addEventListener("orientationchange", scheduleInkSync, { passive: true });
+    if (document.fonts) void document.fonts.ready.then(scheduleInkSync);
+    const navResizeObserver = new ResizeObserver(scheduleInkSync);
+    navResizeObserver.observe(switcher);
     const hoverDesktop = matchMedia("(min-width: 821px) and (hover: hover)");
-    const intent = createHoverNav((expanded) => switcher.toggleAttribute("data-expanded", expanded));
     switcher.setAttribute("data-hover-intent", "");
-    switcher.addEventListener("pointerenter", () => { if (hoverDesktop.matches) intent.enter(); });
-    switcher.addEventListener("pointerleave", () => intent.leave());
-    switcher.addEventListener("pointercancel", () => intent.leave());
-    switcher.addEventListener("focusin", () => { if (hoverDesktop.matches) intent.focus(); });
-    switcher.addEventListener("focusout", (event) => {
-      if (!switcher.contains(event.relatedTarget as Node)) intent.blur();
+    const hoverIntent = createHoverNav((expanded) => {
+      switcher.toggleAttribute("data-expanded", expanded);
+      trackInkToIndicator(760);
     });
-    hoverDesktop.addEventListener("change", () => intent.reset());
-    window.addEventListener("blur", () => intent.reset());
+    switcher.addEventListener("pointerenter", () => { if (hoverDesktop.matches) hoverIntent.enter(); trackInkToIndicator(); });
+    switcher.addEventListener("pointerleave", () => { hoverIntent.leave(); trackInkToIndicator(760); });
+    switcher.addEventListener("pointercancel", () => hoverIntent.leave());
+    switcher.addEventListener("focusin", () => { if (hoverDesktop.matches) hoverIntent.focus(); trackInkToIndicator(); });
+    switcher.addEventListener("focusout", (event) => {
+      if (!switcher.contains(event.relatedTarget as Node)) { hoverIntent.blur(); trackInkToIndicator(); }
+    });
+    hoverDesktop.addEventListener("change", () => hoverIntent.reset());
+    window.addEventListener("blur", () => hoverIntent.reset());
     reconcileHover = () => {
       // Pointer clicks must not leave the picker pinned open by link focus.
       const active = document.activeElement as HTMLElement;
       if (switcher.contains(active) && !active.matches(":focus-visible")) active.blur();
-      if (hoverDesktop.matches && switcher.matches(":hover")) intent.enter();
-      else intent.leave();
+      if (hoverDesktop.matches && switcher.matches(":hover")) hoverIntent.enter();
+      else hoverIntent.leave();
     };
   }
   // close the phone menu on Escape or when tapping elsewhere
   const pill = document.querySelector<HTMLDetailsElement>(".pill");
   if (pill) {
+    pill.addEventListener("click", (e) => {
+      const link = e.target instanceof Element ? e.target.closest<HTMLAnchorElement>(".menu a") : null;
+      if (!link) return;
+      if (e.detail > 0) link.blur();
+      pill.open = false;
+    });
     addEventListener("keydown", (e) => {
       if (e.key === "Escape" && pill.open) { pill.open = false; pill.querySelector("summary")?.focus(); }
     });
@@ -66,6 +149,9 @@ const here = items.find((i) => i.id === current) ?? items[0];
   document.addEventListener("astro:before-swap", (event: TransitionBeforeSwapEvent) => {
     const incoming = event.newDocument.querySelector<HTMLElement>(".topbar");
     if (!incoming) return;
+    const sectionChanged = topbar.dataset.current !== incoming.dataset.current;
+    const indicator = switcher?.querySelector<HTMLElement>(".seg-indicator");
+    const previousRect = sectionChanged ? indicator?.getBoundingClientRect() : undefined;
     topbar.dataset.current = incoming.dataset.current;
     topbar.querySelectorAll<HTMLAnchorElement>(".nav a").forEach((link) => {
       const next = [...incoming.querySelectorAll<HTMLAnchorElement>(".nav a")].find((a) =>
@@ -74,6 +160,10 @@ const here = items.find((i) => i.id === current) ?? items[0];
       else link.removeAttribute("aria-current");
       if (next?.hasAttribute("data-count")) link.dataset.count = next.dataset.count;
     });
+    const selectedId = switcher?.querySelector<HTMLAnchorElement>('a[aria-current="page"]')?.dataset.id;
+    ink?.querySelectorAll<HTMLElement>("[data-id]").forEach((label) => {
+      label.toggleAttribute("data-current", label.dataset.id === selectedId);
+    });
     const summary = pill?.querySelector("summary");
     const nextSummary = incoming.querySelector("summary");
     if (summary && nextSummary) {
@@ -81,6 +171,38 @@ const here = items.find((i) => i.id === current) ?? items[0];
       summary.setAttribute("aria-label", nextSummary.getAttribute("aria-label")!);
     }
     if (pill) pill.open = false;
+    if (sectionChanged && switcher && indicator) {
+      const nextActive = switcher.querySelector<HTMLElement>('a[aria-current="page"]');
+      if (nextActive) {
+        nextActive.prepend(indicator);
+        const nextRect = nextActive.getBoundingClientRect();
+        if (previousRect && previousRect.width > 0 && previousRect.height > 0 && nextRect.width > 0 && nextRect.height > 0 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          const x = previousRect.left - nextRect.left;
+          const y = previousRect.top - nextRect.top;
+          const scaleX = previousRect.width / nextRect.width;
+          const scaleY = previousRect.height / nextRect.height;
+          indicatorAnimation?.cancel();
+          switcher.dataset.indicatorMoving = "";
+          const animation = indicator.animate(
+            [
+              { transform: `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY})` },
+              { transform: "translate(0, 0) scale(1, 1)" },
+            ],
+            { duration: 320, easing: "cubic-bezier(.22, 1, .36, 1)" },
+          );
+          indicatorAnimation = animation;
+          trackInkToIndicator(340);
+          const clearIndicatorMoving = () => {
+            if (indicatorAnimation !== animation) return;
+            indicatorAnimation = undefined;
+            switcher.removeAttribute("data-indicator-moving");
+            syncInkClip();
+          };
+          animation.onfinish = clearIndicatorMoving;
+          animation.oncancel = clearIndicatorMoving;
+        } else syncInkClip();
+      }
+    }
   });
   document.addEventListener("astro:page-load", reconcileHover);
 </script>

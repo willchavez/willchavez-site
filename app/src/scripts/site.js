@@ -1,6 +1,30 @@
 const enhanced = new WeakSet();
+function startWorkTitleSequence(titleSlot) {
+  if (!titleSlot || enhanced.has(titleSlot) || matchMedia("(prefers-reduced-motion: reduce)").matches || !titleSlot.getClientRects().length) return;
+  enhanced.add(titleSlot);
+  const titles = ["Design Technologist", "User Experience Engineer", "Design Engineer", "Design Developer", "UI Engineer", "Creative Technologist"];
+  const pause = (duration) => new Promise((resolve) => setTimeout(resolve, duration));
+  void (async () => {
+    let current = titleSlot.querySelector(".work-title-current");
+    for (let step = 1; step <= titles.length; step += 1) {
+      await pause(step === 1 ? 2000 : 1000);
+      if (!titleSlot.isConnected) return;
+      const next = document.createElement("span");
+      next.className = "work-title-current work-title-enter";
+      next.textContent = titles[step % titles.length];
+      current.classList.add("work-title-exit");
+      titleSlot.append(next);
+      await pause(450);
+      if (!titleSlot.isConnected) return;
+      current.remove();
+      next.classList.remove("work-title-enter");
+      current = next;
+    }
+  })();
+}
 function enhancePage() {
       const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+      startWorkTitleSequence(document.querySelector(".work-title-slot"));
       const portrait = document.querySelector(".portrait");
 
       if (portrait && !enhanced.has(portrait)) {
@@ -60,6 +84,7 @@ function enhancePage() {
 
 }
 document.addEventListener("astro:page-load", enhancePage);
-addEventListener("resize", () => document.querySelectorAll("a").forEach((link) =>
-  link.classList.toggle("wrapped", link.getClientRects().length > 1)
-));
+addEventListener("resize", () => {
+  document.querySelectorAll("a").forEach((link) => link.classList.toggle("wrapped", link.getClientRects().length > 1));
+  document.querySelectorAll(".work-title-slot").forEach(startWorkTitleSequence);
+});

@@ -34,14 +34,21 @@ const photos = defineCollection({
   }),
 });
 
-// A curated log of things Will has watched, read, played, or listened to.
-export const KINDS = ["music", "film", "game", "paper", "book"] as const;
+// A curated log of things Will has listened to, watched, or read.
+export const KINDS = [
+  "music",
+  "film",
+  // "game", // Re-enable if games become a bigger part of the Enjoying section.
+  "paper",
+  "book",
+] as const;
 const enjoying = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/enjoying" }),
   schema: z.object({
     title: z.string(),
     kind: z.enum(KINDS),
     creator: z.string().optional(),
+    publication: z.string().optional(),
     year: z.number().optional(),
     date: z.coerce.date().optional(),
     releaseDate: z.coerce.date().optional(),

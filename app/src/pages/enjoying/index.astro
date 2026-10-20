@@ -8,16 +8,32 @@ const items = await getEnjoying();
 const stars = (n: number) => Number.isInteger(n) ? "★".repeat(n) + "☆".repeat(5 - n) : "★".repeat(Math.floor(n)) + "½";
 const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).length;
 ---
-<Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, games, books, and papers I’ve spent time with." description="What Will Chavez has been enjoying">
+<Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, books, and papers I’ve spent time with." description="What Will Chavez has been enjoying">
   <div class="section">
     <div>
-      <div class="chips" role="group" aria-label="filter by type" id="kinds">
-        <button class="chip" type="button" data-kind="all" aria-pressed="true">All<span class="chip-count" data-count hidden={items.length === 0}>{items.length || ""}</span></button>
+      <div class="chips" role="group" aria-label="Filter by type" id="kind-tabs">
+        <button class="chip" type="button" data-kind="all" data-label="All" aria-pressed="true">All<span class="chip-count" data-count hidden={items.length === 0}>{items.length || ""}</span></button>
         {KINDS.map((k) => {
           const count = kindCount(k);
-          return <button class="chip" type="button" data-kind={k} aria-pressed="false">{KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1)}<span class="chip-count" data-count hidden={count === 0}>{count || ""}</span></button>;
+          const label = KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1);
+          return <button class="chip" type="button" data-kind={k} data-label={label} aria-pressed="false">{label}<span class="chip-count" data-count hidden={count === 0}>{count || ""}</span></button>;
         })}
       </div>
+
+      <details class="enjoying-kind-menu" id="kind-menu">
+        <summary aria-label="Filter enjoying items by type">
+          <span id="kind-current">All</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
+        </summary>
+        <div class="enjoying-kind-options" role="group" aria-label="Filter by type">
+          <button class="chip" type="button" data-kind="all" data-label="All" aria-pressed="true">All<span class="chip-count" data-count hidden={items.length === 0}>{items.length || ""}</span></button>
+          {KINDS.map((k) => {
+            const count = kindCount(k);
+            const label = KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1);
+            return <button class="chip" type="button" data-kind={k} data-label={label} aria-pressed="false">{label}<span class="chip-count" data-count hidden={count === 0}>{count || ""}</span></button>;
+          })}
+        </div>
+      </details>
 
       <div id="enjoying-results" data-kind="all">
       <div id="list">
@@ -31,12 +47,14 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
             <div class="ent-copy">
               <div class="ent-heading">
                 <div class="ent-titleline">
-                  <span class="k">{i.data.kind}</span>
                   <a class="t" href={`/enjoying/${i.id}?from=all`} data-enjoying-entry>{i.data.title}</a>
                 </div>
                 {displayDate && <time class="recorded" datetime={displayDate.toISOString()} title={i.data.date ? undefined : "U.S. public release date"}>{!i.data.date && "Released "}{fmtDate(displayDate)}</time>}
               </div>
-              <span class="m">{[i.data.creator, i.data.year].filter(Boolean).join(" · ")}</span>
+              <div class="ent-meta">
+                <span class="k">{i.data.kind}</span>
+                <span class="m">{[i.data.creator, i.data.publication, i.data.year].filter(Boolean).join(" · ")}</span>
+              </div>
               {i.data.rating && <div class="rating" aria-label={`${i.data.rating} out of 5`}>{stars(i.data.rating)}</div>}
               <SoundCloud url={i.data.link} title={i.data.title} />
             </div>
@@ -55,7 +73,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   let cleanup = () => {};
   document.addEventListener("astro:page-load", () => {
   cleanup();
-  if (!document.querySelector("#kinds")) return;
+  if (!document.querySelector("#kind-tabs")) return;
   const controller = new AbortController();
   const results = document.getElementById("enjoying-results")!;
   cleanup = () => {
@@ -66,6 +84,8 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   // Type filter state lives in the URL hash so it can be linked.
   const rows = [...document.querySelectorAll<HTMLElement>(".ent")];
   const kindBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
+  const kindMenu = document.getElementById("kind-menu") as HTMLDetailsElement | null;
+  const shouldAnimateFilter = () => !reducedMotion.matches && matchMedia("(min-width: 821px)").matches;
   const validKinds = new Set(kindBtns.map((b) => b.dataset.kind || "all"));
   const show = (id: string, on: boolean) => { const el = document.getElementById(id); if (el) el.hidden = !on; };
   let kind = "all";
@@ -90,6 +110,8 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
       });
     });
     kindBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.kind === kind)));
+    const currentLabel = document.getElementById("kind-current");
+    if (currentLabel) currentLabel.textContent = kindBtns.find((b) => b.dataset.kind === kind)?.dataset.label || "All";
     show("empty-list", rows.length === 0);
     show("empty-filter", rows.length > 0 && shown === 0);
   };
@@ -102,8 +124,9 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     if (next === requestedKind) return;
     requestedKind = next;
     const request = ++changeId;
+    const animate = shouldAnimateFilter();
     resetAnimation();
-    if (!reducedMotion.matches) {
+    if (animate) {
       results.classList.add("is-leaving");
       await Promise.allSettled(results.getAnimations().map((animation) => animation.finished));
     }
@@ -111,9 +134,26 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     kind = next;
     push(); apply();
     results.classList.remove("is-leaving");
-    if (!reducedMotion.matches) results.classList.add("is-entering");
+    if (animate) results.classList.add("is-entering");
   };
-  kindBtns.forEach((b) => b.addEventListener("click", () => select(b.dataset.kind!)));
+  kindBtns.forEach((b) => b.addEventListener("click", (event) => {
+    if (b.closest("#kind-menu") && kindMenu) {
+      if (event.detail > 0) b.blur();
+      kindMenu.open = false;
+    }
+    select(b.dataset.kind!);
+  }));
+  if (kindMenu) {
+    addEventListener("click", (event) => {
+      if (kindMenu.open && !kindMenu.contains(event.target as Node)) kindMenu.open = false;
+    }, { signal: controller.signal });
+    addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && kindMenu.open) {
+        kindMenu.open = false;
+        kindMenu.querySelector("summary")?.focus();
+      }
+    }, { signal: controller.signal });
+  }
   addEventListener("hashchange", () => {
     ++changeId; resetAnimation();
     fromHash(); requestedKind = kind; apply();
@@ -122,7 +162,6 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   });
 </script>
 <style>
-  #enjoying-results:not([data-kind="all"]) .k { display: none; }
   #enjoying-results.is-leaving { animation: var(--content-exit-animation); }
   #enjoying-results.is-entering { animation: var(--content-enter-animation); }
 </style>
