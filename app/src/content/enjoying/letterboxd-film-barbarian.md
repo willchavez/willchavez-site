@@ -5,7 +5,7 @@ year: 2022
 date: "2025-11-04"
 cover: "/uploads/enjoying/letterboxd-film-barbarian.jpg"
 rating: 4.5
-link: "https://letterboxd.com/film/barbarian/"
+link: "https://letterboxd.com/film/barbarian-2022/"
 ---
 
 This review may contain spoilers.
