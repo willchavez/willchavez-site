@@ -71,11 +71,15 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
 </Base>
 <script>
   let cleanup = () => {};
-  document.addEventListener("astro:page-load", () => {
+  let activeResults: HTMLElement | null = null;
+  const initFilters = () => {
+  const nextResults = document.getElementById("enjoying-results");
+  if (nextResults === activeResults) return;
   cleanup();
-  if (!document.querySelector("#kind-tabs")) return;
+  activeResults = nextResults;
+  if (!nextResults) return;
+  const results = nextResults;
   const controller = new AbortController();
-  const results = document.getElementById("enjoying-results")!;
   cleanup = () => {
     controller.abort();
     results.getAnimations().forEach((animation) => animation.cancel());
@@ -144,7 +148,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
       kindMenu.open = false;
     }
     select(b.dataset.kind!);
-  }));
+  }, { signal: controller.signal }));
   document.addEventListener("click", (event) => {
     const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
     if (!link) return;
@@ -186,7 +190,9 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
       }
     }
   }
-  });
+  };
+  document.addEventListener("astro:page-load", initFilters);
+  initFilters();
 </script>
 <style>
   #enjoying-results.is-leaving { animation: var(--content-exit-animation); }
