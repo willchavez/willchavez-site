@@ -9,8 +9,17 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const cover = entry.data.cover;
+const articleUrl = new URL(Astro.url.pathname, Astro.site ?? "https://willchavez.com").href;
 ---
-<Base title={entry.data.title} current="notes" heading={entry.data.title} sub={fmtDate(entry.data.date)} description={entry.data.summary}>
+<Base title={entry.data.title} current="notes" heading={entry.data.title} sub={fmtDate(entry.data.date)} description={entry.data.summary} socialType="article" structuredData={{
+  "@type": "BlogPosting",
+  "@id": `${articleUrl}#article`,
+  headline: entry.data.title,
+  description: entry.data.summary,
+  datePublished: entry.data.date.toISOString(),
+  author: { "@id": "https://willchavez.com/#person" },
+  mainEntityOfPage: articleUrl,
+}}>
   <a class="back" href="/notes"><svg class="icon-arrow-left" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M12.5 8h-9m0 0 4-4m-4 4 4 4" /></svg>Back to Notes</a>
   <article class="note-reading">
     {entry.data.deck && <p class="note-deck">{entry.data.deck}</p>}

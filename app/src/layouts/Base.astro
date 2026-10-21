@@ -6,11 +6,40 @@ import Nav from "../components/Nav.astro";
 import { ClientRouter } from "astro:transitions";
 import { getWriting, getEnjoying } from "../lib/content";
 
-const { title, titleExact = false, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, subKind, subAfter, compactTitle = false, analytics = false, showHeading = true, showPageTitle = true } = Astro.props;
+const { title, titleExact = false, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, subKind, subAfter, compactTitle = false, analytics = false, showHeading = true, showPageTitle = true, socialType = "website", structuredData } = Astro.props;
 const [w, e] = await Promise.all([getWriting(), getEnjoying()]);
 const counts = { notes: w.length, enjoying: e.length };
 const pageTitle = title ? (titleExact ? title : `${title} — Will Chavez`) : "Will Chavez — UX Engineer";
 const currentYear = new Date().getFullYear();
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://willchavez.com").href;
+const personId = "https://willchavez.com/#person";
+const siteId = "https://willchavez.com/#website";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": personId,
+      name: "Will Chavez",
+      url: "https://willchavez.com/",
+      jobTitle: "Design Technologist",
+      sameAs: [
+        "https://github.com/willchavez",
+        "https://www.linkedin.com/in/willchavez/",
+        "https://bsky.app/profile/willchavez.bsky.social",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": siteId,
+      url: "https://willchavez.com/",
+      name: "Will Chavez",
+      publisher: { "@id": personId },
+      inLanguage: "en-US",
+    },
+    ...(structuredData ? [structuredData] : []),
+  ],
+};
 ---
 <!doctype html>
 <html lang="en" transition:animate="none">
@@ -20,6 +49,16 @@ const currentYear = new Date().getFullYear();
     <meta name="description" content={description} />
     <meta name="author" content="William Chavez" />
     <title>{pageTitle}</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:type" content={socialType} />
+    <meta property="og:site_name" content="Will Chavez" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")} />
     <ClientRouter fallback="swap" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="alternate" type="application/rss+xml" title="Will Chavez" href="/rss.xml" />
