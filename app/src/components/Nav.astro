@@ -152,6 +152,10 @@ const here = items.find((i) => i.id === current) ?? items[0];
     if (!incoming) return;
     const sectionChanged = topbar.dataset.current !== incoming.dataset.current;
     const indicator = switcher?.querySelector<HTMLElement>(".seg-indicator");
+    // A rapid second navigation can interrupt the previous FLIP animation.
+    // Cancel it before measuring so its temporary scale never becomes the
+    // starting geometry for the next route.
+    if (sectionChanged && indicatorAnimation) indicatorAnimation.cancel();
     const previousRect = sectionChanged ? indicator?.getBoundingClientRect() : undefined;
     topbar.dataset.current = incoming.dataset.current;
     topbar.querySelectorAll<HTMLAnchorElement>(".nav a").forEach((link) => {
@@ -182,25 +186,28 @@ const here = items.find((i) => i.id === current) ?? items[0];
           const y = previousRect.top - nextRect.top;
           const scaleX = previousRect.width / nextRect.width;
           const scaleY = previousRect.height / nextRect.height;
-          indicatorAnimation?.cancel();
-          switcher.dataset.indicatorMoving = "";
-          const animation = indicator.animate(
-            [
-              { transform: `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY})` },
-              { transform: "translate(0, 0) scale(1, 1)" },
-            ],
-            { duration: 320, easing: "cubic-bezier(.22, 1, .36, 1)" },
-          );
-          indicatorAnimation = animation;
-          trackInkToIndicator(340);
-          const clearIndicatorMoving = () => {
-            if (indicatorAnimation !== animation) return;
-            indicatorAnimation = undefined;
-            switcher.removeAttribute("data-indicator-moving");
-            syncInkClip();
-          };
-          animation.onfinish = clearIndicatorMoving;
-          animation.oncancel = clearIndicatorMoving;
+          // Only scale between plausible pill sizes. If a link is mid-collapse
+          // during hover, skip the morph rather than stretching across the nav.
+          if (scaleX >= 0.5 && scaleX <= 2 && scaleY >= 0.75 && scaleY <= 1.33) {
+            switcher.dataset.indicatorMoving = "";
+            const animation = indicator.animate(
+              [
+                { transform: `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY})` },
+                { transform: "translate(0, 0) scale(1, 1)" },
+              ],
+              { duration: 320, easing: "cubic-bezier(.22, 1, .36, 1)" },
+            );
+            indicatorAnimation = animation;
+            trackInkToIndicator(340);
+            const clearIndicatorMoving = () => {
+              if (indicatorAnimation !== animation) return;
+              indicatorAnimation = undefined;
+              switcher.removeAttribute("data-indicator-moving");
+              syncInkClip();
+            };
+            animation.onfinish = clearIndicatorMoving;
+            animation.oncancel = clearIndicatorMoving;
+          } else syncInkClip();
         } else syncInkClip();
       }
     }
