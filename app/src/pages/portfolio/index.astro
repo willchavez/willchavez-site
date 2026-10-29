@@ -28,20 +28,32 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
       <p>I build prototypes and tools that help people <em>see an idea, try it, and make it better.</em> A selection of work across AI interfaces, design systems, and community.</p>
     </section>
 
-    <div class="chips" role="group" aria-label="Filter projects" id="kind-tabs">
-      {categories.map((filter) => <button class="chip" type="button" data-kind={filter.id} data-label={filter.label} aria-pressed={filter.id === "all" ? "true" : "false"}>{filter.label}<span class="chip-count" data-count>{countFor(filter.category)}</span></button>)}
-    </div>
-    <details class="enjoying-kind-menu" id="kind-menu">
-      <summary aria-label="Filter projects by type">
-        <span id="kind-current">All projects</span>
-        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
-      </summary>
-      <div class="enjoying-kind-options" role="group" aria-label="Filter projects">
-        {categories.map((filter) => <button class="chip" type="button" data-kind={filter.id} data-label={filter.label} aria-pressed={filter.id === "all" ? "true" : "false"}>{filter.label}<span class="chip-count" data-count>{countFor(filter.category)}</span></button>)}
+    <div class="portfolio-toolbar">
+      <div class="portfolio-filters">
+        <div class="chips" role="group" aria-label="Filter projects" id="kind-tabs">
+          {categories.map((filter) => <button class="chip" type="button" data-kind={filter.id} data-label={filter.label} aria-pressed={filter.id === "all" ? "true" : "false"}>{filter.label}<span class="chip-count" data-count>{countFor(filter.category)}</span></button>)}
+        </div>
+        <details class="enjoying-kind-menu" id="kind-menu">
+          <summary aria-label="Filter projects by type">
+            <span id="kind-current">All projects</span>
+            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
+          </summary>
+          <div class="enjoying-kind-options" role="group" aria-label="Filter projects">
+            {categories.map((filter) => <button class="chip" type="button" data-kind={filter.id} data-label={filter.label} aria-pressed={filter.id === "all" ? "true" : "false"}>{filter.label}<span class="chip-count" data-count>{countFor(filter.category)}</span></button>)}
+          </div>
+        </details>
       </div>
-    </details>
+      <div class="portfolio-view-toggle" role="group" aria-label="Project layout">
+        <button type="button" data-layout-choice="grid" aria-label="Grid view" aria-pressed="true">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="2.5" width="6" height="6" rx="1"/><rect x="11.5" y="2.5" width="6" height="6" rx="1"/><rect x="2.5" y="11.5" width="6" height="6" rx="1"/><rect x="11.5" y="11.5" width="6" height="6" rx="1"/></svg><span>Grid</span>
+        </button>
+        <button type="button" data-layout-choice="list" aria-label="List view" aria-pressed="false">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4h10M7.5 10h10M7.5 16h10"/><circle cx="3.5" cy="4" r=".8"/><circle cx="3.5" cy="10" r=".8"/><circle cx="3.5" cy="16" r=".8"/></svg><span>List</span>
+        </button>
+      </div>
+    </div>
 
-    <div id="portfolio-results" data-kind="all">
+    <div id="portfolio-results" data-kind="all" data-view="grid">
       <section class="portfolio-grid" aria-label="Selected projects">
         {projects.map((project) => (
           <article class:list={["portfolio-card", featured.has(project.slug) && "featured"]} data-category={project.category}>
@@ -81,6 +93,7 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
     };
     const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
     const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
+    const layoutButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-layout-choice]")];
     const kindMenu = document.getElementById("kind-menu") as HTMLDetailsElement | null;
     const validKinds = new Set(buttons.map((button) => button.dataset.kind || "all"));
     const shouldAnimate = () => !reducedMotion.matches && matchMedia("(min-width: 821px)").matches;
@@ -102,6 +115,11 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
       const current = document.getElementById("kind-current");
       if (current) current.textContent = label;
     };
+    layoutButtons.forEach((button) => button.addEventListener("click", () => {
+      const view = button.dataset.layoutChoice === "list" ? "list" : "grid";
+      results.dataset.view = view;
+      layoutButtons.forEach((choice) => choice.setAttribute("aria-pressed", String(choice === button)));
+    }, { signal: controller.signal }));
     const categoriesForKind: Record<string, string | undefined> = {
       "ai-experiences": "AI experiences",
       "design-tooling": "Design tooling",
