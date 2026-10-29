@@ -111,7 +111,7 @@
   #portfolio-results .portfolio-card.featured { grid-column: auto; padding: .9rem; border: 0; border-radius: 1.1rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
   #portfolio-results .project-open { display: grid; grid-template-columns: 5.1rem minmax(0, 1fr); align-items: start; gap: .85rem; }
   #portfolio-results .project-image,
-  #portfolio-results .portfolio-card.featured .project-image { width: 5.1rem; aspect-ratio: 4 / 3; padding: 0; border: 0; border-radius: .75rem; }
+  #portfolio-results .portfolio-card.featured .project-image { width: 5.1rem; aspect-ratio: 4 / 3; margin-left: .25rem; padding: 0; border: 0; border-radius: .75rem; }
   #portfolio-results .project-image img { border-radius: .65rem; object-fit: cover; }
   #portfolio-results .explore { display: none; }
   #portfolio-results .project-info { min-width: 0; padding: 0; }
