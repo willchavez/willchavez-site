@@ -105,6 +105,7 @@
   .portfolio-view-toggle { display: none; }
 }
 @media (max-width: 640px) {
+  #portfolio-results[data-view="list"] .portfolio-grid,
   #portfolio-results .portfolio-grid { display: flex; flex-direction: column; gap: .7rem; max-width: none; margin-inline: 0; }
   #portfolio-results .portfolio-card,
   #portfolio-results .portfolio-card.featured { grid-column: auto; padding: .9rem; border: 0; border-radius: 1.1rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
