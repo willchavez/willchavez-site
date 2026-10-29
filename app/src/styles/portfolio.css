@@ -24,8 +24,8 @@
 .project-info h2 { display: block; margin: .35rem 0 .55rem; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; line-height: 1.2; }
 .portfolio-card.featured .project-info h2 { font-size: 1.85rem; }
 .project-info p { margin: 0; color: var(--muted); font-size: .95rem; line-height: 1.55; }
-.project-info .skills, .portfolio-project-skills { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .8rem; }
-.skill-tag { display: inline-flex; align-items: center; min-height: 26px; padding: .15rem .7rem; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--rust) 18%, var(--paper)); color: color-mix(in srgb, var(--rust) 72%, var(--ink)); font-size: .76rem; line-height: 1.2; }
+.project-info .skills, .portfolio-project-skills { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .8rem; }
+.skill-tag { display: inline-flex; align-items: center; min-height: 23px; padding: .1rem .55rem; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--rust) 10%, var(--paper)); color: color-mix(in srgb, var(--rust) 58%, var(--muted)); font-size: .7rem; line-height: 1.2; }
 .portfolio-closing { display: flex; justify-content: space-between; gap: 1.25rem; margin-top: 4.4rem; padding: 2rem 0 3rem; border-top: 1px solid var(--hairline); color: var(--muted); font-size: .9rem; }
 .portfolio-closing p { margin: 0; }
 .portfolio-project-category { color: var(--rust); font: 600 .72rem/1.6 system-ui, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
@@ -59,6 +59,6 @@
   .portfolio-card.featured .project-image { padding: 14px; }
   .portfolio-card.featured .project-info h2, .project-info h2 { font-size: 1.5rem; }
   .portfolio-eyebrow { font-size: .6rem; }
-  .skill-tag { min-height: 1.35rem; padding-inline: .58rem; font-size: .72rem; }
+  .skill-tag { min-height: 21px; padding-inline: .5rem; font-size: .68rem; }
   .portfolio-cover { min-height: 13rem; padding: .9rem; }
 }
