@@ -8,6 +8,7 @@
 .portfolio-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2.5rem; }
 .portfolio-filters { min-width: 0; }
 .portfolio-filters #kind-tabs { margin: 0; }
+.portfolio-filters .enjoying-kind-menu { display: none; }
 .portfolio-view-toggle { display: inline-flex; flex: 0 0 auto; gap: 2px; padding: 3px; border: 1px solid var(--hairline); border-radius: 999px; background: color-mix(in srgb, var(--rust) 4%, var(--paper)); }
 .portfolio-view-toggle button { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 36px; padding: 0 .75rem; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font: inherit; font-size: .82rem; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 180ms ease, color 180ms ease; }
 .portfolio-view-toggle button[aria-pressed="true"] { background: color-mix(in srgb, var(--rust) 12%, var(--paper)); color: var(--ink); }
@@ -60,6 +61,17 @@
   .portfolio-closing { flex-direction: column; }
   .portfolio-closing > a { align-self: flex-start; }
 }
+@media (max-width: 1080px) {
+  .portfolio-toolbar { gap: .8rem; }
+  .portfolio-filters #kind-tabs { display: none; }
+  .portfolio-filters .enjoying-kind-menu { position: relative; z-index: 5; display: block; width: min(100%, 19rem); margin: 0; }
+  .portfolio-filters .enjoying-kind-menu > summary { display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 .9rem 0 1rem; border: 1px solid var(--hairline); border-radius: .8rem; background: color-mix(in srgb, var(--rust) 5%, var(--paper)); color: var(--ink); cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .portfolio-filters .enjoying-kind-menu[open] > summary { border-color: color-mix(in srgb, var(--rust) 38%, var(--hairline)); }
+  .portfolio-filters .enjoying-kind-options { position: absolute; top: calc(100% + .6rem); left: 0; right: 0; padding: .35rem; border: 1px solid color-mix(in srgb, var(--rust) 38%, var(--hairline)); border-radius: .8rem; background: var(--paper); box-shadow: 0 12px 24px color-mix(in srgb, var(--ink) 10%, transparent); }
+  .portfolio-filters .enjoying-kind-options .chip { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 42px; padding-inline: .7rem; border-radius: .55rem; background: transparent; color: var(--muted); text-align: left; }
+  .portfolio-filters .enjoying-kind-options .chip:hover,
+  .portfolio-filters .enjoying-kind-options .chip[aria-pressed="true"] { background: color-mix(in srgb, var(--rust) 9%, transparent); color: var(--ink); }
+}
 @media (max-width: 520px) {
   .portfolio-intro { gap: 1rem; margin-bottom: 1.7rem; }
   .portfolio-intro h1 { font-size: clamp(2.8rem, 13vw, 4rem); }
@@ -87,20 +99,25 @@
 #portfolio-results[data-view="list"] .project-info p { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 #portfolio-results[data-view="list"] .portfolio-card .skills { display: flex; margin-top: .65rem; }
 @media (max-width: 640px) {
-  .portfolio-toolbar { align-items: stretch; flex-direction: column; gap: .65rem; }
+  .portfolio-toolbar { align-items: stretch; flex-direction: row; gap: .65rem; margin-bottom: 1.7rem; }
   .portfolio-filters { width: 100%; }
   .portfolio-filters .enjoying-kind-menu { width: 100%; margin: 0; }
-  .portfolio-view-toggle { align-self: flex-end; }
-  #portfolio-results[data-view="list"] .portfolio-grid { gap: .7rem; }
-  #portfolio-results[data-view="list"] .portfolio-card,
-  #portfolio-results[data-view="list"] .portfolio-card.featured { padding: .9rem; border: 0; border-radius: 1.1rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
-  #portfolio-results[data-view="list"] .project-open { grid-template-columns: 5.1rem minmax(0, 1fr); align-items: start; gap: .85rem; }
-  #portfolio-results[data-view="list"] .project-image,
-  #portfolio-results[data-view="list"] .portfolio-card.featured .project-image { width: 5.1rem; border-radius: .75rem; }
-  #portfolio-results[data-view="list"] .portfolio-card.featured .project-info h2,
-  #portfolio-results[data-view="list"] .project-info h2 { margin: 0; font-size: 1.08rem; line-height: 1.3; }
-  #portfolio-results[data-view="list"] .portfolio-eyebrow { font-size: .56rem; }
-  #portfolio-results[data-view="list"] .project-info p { margin-top: .4rem; font-size: .88rem; -webkit-line-clamp: 3; }
-  #portfolio-results[data-view="list"] .portfolio-card .skills { gap: .28rem; margin-top: .55rem; }
-  #portfolio-results[data-view="list"] .skill-tag { min-height: 22px; padding-inline: .45rem; font-size: .65rem; }
+  .portfolio-view-toggle { display: none; }
+}
+@media (max-width: 640px) {
+  #portfolio-results .portfolio-grid { display: flex; flex-direction: column; gap: .7rem; max-width: none; margin-inline: 0; }
+  #portfolio-results .portfolio-card,
+  #portfolio-results .portfolio-card.featured { grid-column: auto; padding: .9rem; border: 0; border-radius: 1.1rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
+  #portfolio-results .project-open { display: grid; grid-template-columns: 5.1rem minmax(0, 1fr); align-items: start; gap: .85rem; }
+  #portfolio-results .project-image,
+  #portfolio-results .portfolio-card.featured .project-image { width: 5.1rem; aspect-ratio: 4 / 3; padding: 0; border: 0; border-radius: .75rem; }
+  #portfolio-results .project-image img { border-radius: .65rem; object-fit: cover; }
+  #portfolio-results .explore { display: none; }
+  #portfolio-results .project-info { min-width: 0; padding: 0; }
+  #portfolio-results .portfolio-card.featured .project-info h2,
+  #portfolio-results .project-info h2 { margin: 0; font-size: 1.08rem; line-height: 1.3; }
+  #portfolio-results .portfolio-eyebrow { font-size: .56rem; }
+  #portfolio-results .project-info p { display: -webkit-box; overflow: hidden; margin-top: .4rem; font-size: .88rem; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+  #portfolio-results .portfolio-card .skills { display: flex; flex-wrap: wrap; gap: .28rem; margin-top: .55rem; }
+  #portfolio-results .skill-tag { min-height: 22px; padding: .1rem .45rem; background: color-mix(in srgb, var(--rust) 18%, var(--paper)); color: color-mix(in srgb, var(--rust) 72%, var(--ink)); font-size: .65rem; }
 }

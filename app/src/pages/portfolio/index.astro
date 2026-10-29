@@ -94,6 +94,7 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
     const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
     const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
     const layoutButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-layout-choice]")];
+    const mobileViewport = matchMedia("(max-width: 640px)");
     const kindMenu = document.getElementById("kind-menu") as HTMLDetailsElement | null;
     const validKinds = new Set(buttons.map((button) => button.dataset.kind || "all"));
     const shouldAnimate = () => !reducedMotion.matches && matchMedia("(min-width: 821px)").matches;
@@ -115,11 +116,18 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
       const current = document.getElementById("kind-current");
       if (current) current.textContent = label;
     };
+    let desktopView: "grid" | "list" = "grid";
+    const applyLayout = (view = desktopView) => {
+      if (!mobileViewport.matches) desktopView = view;
+      const activeView = mobileViewport.matches ? "list" : desktopView;
+      results.dataset.view = activeView;
+      layoutButtons.forEach((choice) => choice.setAttribute("aria-pressed", String(choice.dataset.layoutChoice === activeView)));
+    };
     layoutButtons.forEach((button) => button.addEventListener("click", () => {
-      const view = button.dataset.layoutChoice === "list" ? "list" : "grid";
-      results.dataset.view = view;
-      layoutButtons.forEach((choice) => choice.setAttribute("aria-pressed", String(choice === button)));
+      applyLayout(button.dataset.layoutChoice === "list" ? "list" : "grid");
     }, { signal: controller.signal }));
+    mobileViewport.addEventListener("change", () => applyLayout(), { signal: controller.signal });
+    applyLayout();
     const categoriesForKind: Record<string, string | undefined> = {
       "ai-experiences": "AI experiences",
       "design-tooling": "Design tooling",
