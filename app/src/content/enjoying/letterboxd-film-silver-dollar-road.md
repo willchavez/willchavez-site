@@ -1,6 +1,7 @@
 ---
 title: "Silver Dollar Road"
 kind: "film"
+creator: "Raoul Peck"
 year: 2023
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-silver-dollar-road.jpg"

@@ -1,6 +1,7 @@
 ---
 title: "Indiana Jones and the Dial of Destiny"
 kind: "film"
+creator: "James Mangold"
 year: 2023
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-indiana-jones-and-the-dial-of-destiny.jpg"

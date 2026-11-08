@@ -1,12 +1,12 @@
 ---
 import { contentExcerpt } from "../../lib/excerpt";
+import EnjoyingHeading from "../../components/EnjoyingHeading.astro";
 import Base from "../../layouts/Base.astro";
 import Empty from "../../components/Empty.astro";
 import SoundCloud from "../../components/SoundCloud.astro";
-import { getEnjoying, fmtDate, img, KIND_PLURAL } from "../../lib/content";
+import { getEnjoying, img, KIND_PLURAL } from "../../lib/content";
 import { KINDS } from "../../content.config";
 const items = await getEnjoying();
-const stars = (n: number) => Number.isInteger(n) ? "★".repeat(n) + "☆".repeat(5 - n) : "★".repeat(Math.floor(n)) + "½";
 const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).length;
 ---
 <Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, books, and papers I’ve spent time with." description="What Will Chavez has been enjoying">
@@ -39,24 +39,13 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
       <div id="enjoying-results" data-kind="all">
       <div id="list">
         {items.map((i) => {
-          const displayDate = i.data.date ?? i.data.releaseDate;
           return (
           <div class="ent" data-kind={i.data.kind}>
             {i.data.cover
               ? <a class="cover-link" href={`/enjoying/${i.id}?from=all`} data-enjoying-entry aria-label={`View ${i.data.title}`}><img class="cover" src={img(i.data.cover, 240)} alt="" loading="lazy" decoding="async" /></a>
               : <div class="cover cover-empty" aria-hidden="true" />}
             <div class="ent-copy">
-              <div class="ent-heading">
-                <div class="ent-titleline">
-                  <a class="t" href={`/enjoying/${i.id}?from=all`} data-enjoying-entry>{i.data.title}</a>
-                </div>
-                {displayDate && <time class="recorded" datetime={displayDate.toISOString()} title={i.data.date ? undefined : "U.S. public release date"}>{!i.data.date && "Released "}{fmtDate(displayDate)}</time>}
-              </div>
-              <div class="ent-meta">
-                <span class="k">{i.data.kind}</span>
-                <span class="m">{[i.data.creator, i.data.publication, i.data.year].filter(Boolean).join(" · ")}</span>
-              </div>
-              {i.data.rating && <div class="rating" aria-label={`${i.data.rating} out of 5`}>{stars(i.data.rating)}</div>}
+              <EnjoyingHeading data={i.data} href={`/enjoying/${i.id}?from=all`} />
               {contentExcerpt(i.body) && <p class="ent-excerpt">{contentExcerpt(i.body)}</p>}
               <SoundCloud url={i.data.link} title={i.data.title} />
             </div>

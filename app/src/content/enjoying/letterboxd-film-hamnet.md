@@ -1,6 +1,7 @@
 ---
 title: "Hamnet"
 kind: "film"
+creator: "Chloé Zhao"
 year: 2025
 date: "2026-02-07"
 cover: "/uploads/enjoying/letterboxd-film-hamnet.webp"

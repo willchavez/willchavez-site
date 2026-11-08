@@ -1,6 +1,7 @@
 ---
 title: "The Iron Claw"
 kind: "film"
+creator: "Sean Durkin"
 year: 2023
 date: "2024-05-27"
 releaseDate: "2023-12-22"

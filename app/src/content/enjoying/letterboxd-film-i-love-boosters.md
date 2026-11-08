@@ -1,6 +1,7 @@
 ---
 title: "I Love Boosters"
 kind: "film"
+creator: "Boots Riley"
 year: 2026
 date: "2026-05-28"
 cover: "/uploads/enjoying/letterboxd-film-i-love-boosters.webp"

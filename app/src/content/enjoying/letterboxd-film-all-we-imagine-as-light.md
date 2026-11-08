@@ -1,6 +1,7 @@
 ---
 title: "All We Imagine as Light"
 kind: "film"
+creator: "Payal Kapadia"
 year: 2024
 releaseDate: "2024-11-15"
 releaseDateSource: "https://www.rottentomatoes.com/m/all_we_imagine_as_light"

@@ -1,6 +1,7 @@
 ---
 title: "The Wonderful Story of Henry Sugar"
 kind: "film"
+creator: "Wes Anderson"
 year: 2023
 date: "2024-02-18"
 cover: "/uploads/enjoying/letterboxd-film-the-wonderful-story-of-henry-sugar.jpg"

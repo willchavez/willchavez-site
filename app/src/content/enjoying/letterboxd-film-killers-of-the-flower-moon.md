@@ -1,6 +1,7 @@
 ---
 title: "Killers of the Flower Moon"
 kind: "film"
+creator: "Martin Scorsese"
 year: 2023
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-killers-of-the-flower-moon.jpg"

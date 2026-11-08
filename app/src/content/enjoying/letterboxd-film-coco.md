@@ -1,6 +1,7 @@
 ---
 title: "Coco"
 kind: "film"
+creator: "Lee Unkrich"
 year: 2017
 date: "2026-10-25"
 cover: "/uploads/enjoying/letterboxd-film-coco.jpg"

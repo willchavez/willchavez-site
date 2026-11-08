@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { fmtDate } from "../lib/content";
+interface Props {
+  data: CollectionEntry<"enjoying">["data"];
+  href?: string;
+  showDate?: boolean;
+}
+const { data, href, showDate = true } = Astro.props;
+const displayDate = data.date ?? data.releaseDate;
+const metadata = [data.creator, data.publication, data.year].filter(Boolean).join(" · ");
+const stars = data.rating && (Number.isInteger(data.rating)
+  ? "★".repeat(data.rating) + "☆".repeat(5 - data.rating)
+  : "★".repeat(Math.floor(data.rating)) + "½");
+---
+<div class="ent-heading">
+  <div class="ent-titleline">
+    <span class="enjoying-tag">{data.kind}</span>{" "}
+    {href
+      ? <a class="t" href={href} data-enjoying-entry>{data.title}</a>
+      : <h3>{data.title}</h3>}
+  </div>
+  {showDate && displayDate && <time class="recorded" datetime={displayDate.toISOString()} title={data.date ? undefined : "U.S. public release date"}>{!data.date && "Released "}{fmtDate(displayDate)}</time>}
+</div>
+{metadata && <div class="ent-meta enjoying-meta">{metadata}</div>}
+{data.rating && <div class="rating" aria-label={`${data.rating} out of 5`}>{stars}</div>}

@@ -1,6 +1,7 @@
 ---
 title: "Moonstruck"
 kind: "film"
+creator: "Norman Jewison"
 year: 1987
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-moonstruck.jpg"

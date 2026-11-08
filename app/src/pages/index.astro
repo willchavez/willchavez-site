@@ -1,5 +1,6 @@
 ---
 import { contentExcerpt } from "../lib/excerpt";
+import EnjoyingHeading from "../components/EnjoyingHeading.astro";
 import CompanyLogo from "../components/CompanyLogo.astro";
 import Base from "../layouts/Base.astro";
 import "../styles/home.css";
@@ -59,12 +60,15 @@ const enjoying = (await getEnjoying()).filter(p => p.body?.trim()).slice(0, 2);
       <section class="home-section home-notes-section" aria-labelledby="home-notes">
         <div class="home-section-head"><h2 id="home-notes">Notes</h2><a href="/notes">All notes</a></div>
         <p class="home-section-description">Things I’m making, learning, and figuring out.</p>
-        {notes.map(n => <a class="home-note" href={`/notes/${n.id}`}><time datetime={n.data.date.toISOString()}>{fmtDate(n.data.date)}</time><h3>{n.data.title}</h3><p>{n.data.summary}</p></a>)}
+        {notes.map(n => <a class="home-note" href={`/notes/${n.id}`}>
+          {(n.data.thumbnail || n.data.cover) && <img class="home-pick-cover" src={img(n.data.thumbnail || n.data.cover, 240)} alt="" width="64" height="64" loading="lazy" decoding="async" />}
+          <div class="home-pick-copy"><time datetime={n.data.date.toISOString()}>{fmtDate(n.data.date)}</time><h3>{n.data.title}</h3><p>{n.data.summary}</p></div>
+        </a>)}
       </section>
       <section class="home-section home-enjoying-section" aria-labelledby="home-enjoying">
         <div class="home-section-head"><h2 id="home-enjoying">Enjoying</h2><a href="/enjoying">All picks</a></div>
         <p class="home-section-description">Music, films, and books I’ve spent time with.</p>
-        {enjoying.map(e => <a class="home-enjoying" href={`/enjoying/${e.id}`}>{e.data.cover && <img class="home-pick-cover" src={img(e.data.cover, 240)} alt="" width="64" height="64" loading="lazy" decoding="async" />}<div class="home-pick-copy"><span class="home-kicker">{e.data.kind}{e.data.creator && ` · ${e.data.creator}`}</span><h3>{e.data.title}</h3><p>{contentExcerpt(e.body)}</p></div></a>)}
+        {enjoying.map(e => <a class="home-enjoying" href={`/enjoying/${e.id}`}>{e.data.cover && <img class="home-pick-cover" src={img(e.data.cover, 240)} alt="" width="64" height="64" loading="lazy" decoding="async" />}<div class="home-pick-copy"><EnjoyingHeading data={e.data} showDate={false} /><p>{contentExcerpt(e.body)}</p></div></a>)}
       </section>
     </div>
     <div class="home-closing"><p>Have something you want to make?</p><a href="mailto:wchavezsalinas@gmail.com">Let’s talk about it</a></div>

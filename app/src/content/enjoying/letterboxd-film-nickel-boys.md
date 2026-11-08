@@ -1,6 +1,7 @@
 ---
 title: "Nickel Boys"
 kind: "film"
+creator: "RaMell Ross"
 year: 2024
 releaseDate: "2024-12-13"
 releaseDateSource: "https://en.wikipedia.org/wiki/Nickel_Boys"

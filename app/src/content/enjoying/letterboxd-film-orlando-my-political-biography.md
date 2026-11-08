@@ -1,6 +1,7 @@
 ---
 title: "Orlando, My Political Biography"
 kind: "film"
+creator: "Paul B. Preciado"
 year: 2023
 date: "2024-01-21"
 cover: "/uploads/enjoying/letterboxd-film-orlando-my-political-biography.jpg"

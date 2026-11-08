@@ -1,6 +1,7 @@
 ---
 title: "Thelma"
 kind: "film"
+creator: "Josh Margolin"
 year: 2024
 date: "2024-06-28"
 releaseDate: "2024-06-21"

@@ -1,6 +1,7 @@
 ---
 title: "Spanglish"
 kind: "film"
+creator: "James L. Brooks"
 year: 2004
 date: "2026-03-04"
 cover: "/uploads/enjoying/letterboxd-film-spanglish.jpg"

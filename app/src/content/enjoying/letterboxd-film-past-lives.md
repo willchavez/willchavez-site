@@ -1,6 +1,7 @@
 ---
 title: "Past Lives"
 kind: "film"
+creator: "Celine Song"
 year: 2023
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-past-lives.jpg"

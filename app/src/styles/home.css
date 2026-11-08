@@ -47,9 +47,14 @@
 .home-note, .home-enjoying { display: block; padding: 1.1rem; margin-bottom: 1rem; }
 .home-note:last-child, .home-enjoying:last-child { margin-bottom: 0; }
 .home-note time { font-size: .8rem; color: var(--muted); }
-.home-enjoying { display: flex; gap: .85rem; align-items: flex-start; }
+.home-note, .home-enjoying { display: flex; gap: .85rem; align-items: flex-start; }
 .home-pick-cover { flex: 0 0 3rem; width: 3rem; height: 3rem; border-radius: .5rem; object-fit: cover; }
 .home-pick-copy { min-width: 0; }
+.home-journal .ent-heading { display: block; }
+.home-journal .ent-titleline h3 { display: inline; margin: 0; }
+.home-journal .enjoying-meta { font-size: .82rem; margin-top: .25rem; }
+.home-journal .rating { font-size: .9rem; margin-top: .2rem; }
+.home-enjoying .home-pick-copy > p { margin-top: .55rem; }
 .home-journal h3 { font-size: 1.1rem; }
 .home-journal .home-enjoying p { font-size: .9rem; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 .home-closing { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.5rem 0; margin-bottom: 2rem; border-top: 1px solid var(--hairline); }

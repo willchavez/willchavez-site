@@ -1,6 +1,7 @@
 ---
 title: "Anora"
 kind: "film"
+creator: "Sean Baker"
 year: 2024
 releaseDate: "2024-10-18"
 releaseDateSource: "https://en.wikipedia.org/wiki/Anora"

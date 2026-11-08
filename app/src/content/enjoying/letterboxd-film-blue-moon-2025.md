@@ -1,6 +1,7 @@
 ---
 title: "Blue Moon"
 kind: "film"
+creator: "Richard Linklater"
 year: 2025
 date: "2026-11-07"
 cover: "/uploads/enjoying/letterboxd-film-blue-moon-2025.webp"

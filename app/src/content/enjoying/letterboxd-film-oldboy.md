@@ -1,6 +1,7 @@
 ---
 title: "Oldboy"
 kind: "film"
+creator: "Park Chan-wook"
 year: 2003
 date: "2024-05-27"
 cover: "/uploads/enjoying/letterboxd-film-oldboy.jpg"

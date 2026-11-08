@@ -1,6 +1,7 @@
 ---
 title: "Inside Out 2"
 kind: "film"
+creator: "Kelsey Mann"
 year: 2024
 releaseDate: "2024-06-14"
 releaseDateSource: "https://www.rottentomatoes.com/m/inside_out_2"

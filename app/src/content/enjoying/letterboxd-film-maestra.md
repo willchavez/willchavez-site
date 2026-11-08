@@ -1,6 +1,7 @@
 ---
 title: "Maestra"
 kind: "film"
+creator: "Maggie Contreras"
 year: 2023
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-maestra.jpg"

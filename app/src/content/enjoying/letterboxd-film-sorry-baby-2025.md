@@ -1,6 +1,7 @@
 ---
 title: "Sorry, Baby"
 kind: "film"
+creator: "Eva Victor"
 year: 2025
 date: "2025-12-13"
 cover: "/uploads/enjoying/letterboxd-film-sorry-baby-2025.webp"

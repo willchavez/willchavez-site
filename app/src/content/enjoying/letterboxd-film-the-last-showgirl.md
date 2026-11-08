@@ -1,6 +1,7 @@
 ---
 title: "The Last Showgirl"
 kind: "film"
+creator: "Gia Coppola"
 year: 2024
 releaseDate: "2024-12-13"
 releaseDateSource: "https://roadsideattractions.com/roadside-news/"

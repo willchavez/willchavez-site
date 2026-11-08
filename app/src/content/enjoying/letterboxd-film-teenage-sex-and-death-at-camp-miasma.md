@@ -1,6 +1,7 @@
 ---
 title: "Teenage Sex and Death at Camp Miasma"
 kind: "film"
+creator: "Jane Schoenbrun"
 year: 2026
 date: "2026-08-25"
 cover: "/uploads/enjoying/letterboxd-film-teenage-sex-and-death-at-camp-miasma.webp"

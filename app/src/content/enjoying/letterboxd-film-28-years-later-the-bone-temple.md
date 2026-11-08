@@ -1,6 +1,7 @@
 ---
 title: "28 Years Later: The Bone Temple"
 kind: "film"
+creator: "Nia DaCosta"
 year: 2026
 date: "2026-01-19"
 cover: "/uploads/enjoying/letterboxd-film-28-years-later-the-bone-temple.webp"

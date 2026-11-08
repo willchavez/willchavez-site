@@ -1,6 +1,7 @@
 ---
 title: "The Silence of the Lambs"
 kind: "film"
+creator: "Jonathan Demme"
 year: 1991
 date: "2026-10-31"
 cover: "/uploads/enjoying/letterboxd-film-the-silence-of-the-lambs.webp"

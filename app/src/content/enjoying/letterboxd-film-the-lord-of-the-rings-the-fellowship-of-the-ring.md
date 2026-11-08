@@ -1,6 +1,7 @@
 ---
 title: "The Lord of the Rings: The Fellowship of the Ring"
 kind: "film"
+creator: "Peter Jackson"
 year: 2001
 date: "2026-05-19"
 cover: "/uploads/enjoying/letterboxd-film-the-lord-of-the-rings-the-fellowship-of-the-ring.jpg"

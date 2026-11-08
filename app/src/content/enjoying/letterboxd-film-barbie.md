@@ -1,6 +1,7 @@
 ---
 title: "Barbie"
 kind: "film"
+creator: "Greta Gerwig"
 year: 2023
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-barbie.jpg"

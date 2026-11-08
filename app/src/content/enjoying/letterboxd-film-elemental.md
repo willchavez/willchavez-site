@@ -1,6 +1,7 @@
 ---
 title: "Elemental"
 kind: "film"
+creator: "Peter Sohn"
 year: 2023
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-elemental.jpg"

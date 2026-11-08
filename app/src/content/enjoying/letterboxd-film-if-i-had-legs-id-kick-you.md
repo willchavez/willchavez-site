@@ -1,6 +1,7 @@
 ---
 title: "If I Had Legs I'd Kick You"
 kind: "film"
+creator: "Mary Bronstein"
 year: 2025
 date: "2026-02-01"
 cover: "/uploads/enjoying/letterboxd-film-if-i-had-legs-id-kick-you.webp"

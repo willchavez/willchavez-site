@@ -1,6 +1,7 @@
 ---
 title: "The Zone of Interest"
 kind: "film"
+creator: "Jonathan Glazer"
 year: 2023
 date: "2024-01-19"
 cover: "/uploads/enjoying/letterboxd-film-the-zone-of-interest.jpg"

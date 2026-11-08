@@ -1,6 +1,7 @@
 ---
 title: "The Brutalist"
 kind: "film"
+creator: "Brady Corbet"
 year: 2024
 date: "2025-01-20"
 releaseDate: "2024-12-20"

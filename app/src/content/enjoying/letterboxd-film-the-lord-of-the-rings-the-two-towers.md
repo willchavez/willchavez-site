@@ -1,6 +1,7 @@
 ---
 title: "The Lord of the Rings: The Two Towers"
 kind: "film"
+creator: "Peter Jackson"
 year: 2002
 date: "2026-05-22"
 cover: "/uploads/enjoying/letterboxd-film-the-lord-of-the-rings-the-two-towers.jpg"

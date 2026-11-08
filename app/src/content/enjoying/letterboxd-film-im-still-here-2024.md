@@ -1,6 +1,7 @@
 ---
 title: "I'm Still Here"
 kind: "film"
+creator: "Walter Salles"
 year: 2024
 releaseDate: "2025-01-17"
 releaseDateSource: "https://www.slantmagazine.com/release-schedule/2/"

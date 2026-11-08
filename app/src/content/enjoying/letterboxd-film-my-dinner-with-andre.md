@@ -1,6 +1,7 @@
 ---
 title: "My Dinner with Andre"
 kind: "film"
+creator: "Louis Malle"
 year: 1981
 date: "2024-08-23"
 cover: "/uploads/enjoying/letterboxd-film-my-dinner-with-andre.jpg"
