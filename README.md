@@ -97,3 +97,16 @@ category tags on the right. On desktop and phones, the Enjoying list aligns
 dates with titles and tags with creator details in the right column; film detail pages use the same
 stored creator credit. Homepage Notes cards use each post’s existing thumbnail
 (or cover when available).
+
+The desktop nav follows main’s two-layer text treatment: normal labels stay
+in place, and an aria-hidden contrasting copy is clipped to the moving pill.
+The pill and text mask share the same animation start time and easing.
+
+To check navigation contrast, build and serve the site, then run
+`npm --prefix app run test:nav` (defaults to `http://localhost:4321`). This
+browser regression checks intermediate frames, interrupted navigation, history,
+resize, both color schemes, reduced motion, mobile, and the no-JavaScript
+fallback. On machines where browser dependencies are allowed, install Chromium
+with `cd app && npx playwright install chromium`, or set `CHROMIUM_PATH` to an
+existing Chromium executable. Pass a deployed base URL after `--` to check a
+preview. Set `NAV_SCREENSHOTS_DIR` to save the six sampled frames per color scheme.
