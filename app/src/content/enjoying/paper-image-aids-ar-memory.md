@@ -3,6 +3,7 @@ title: "A picture is worth a thousand words? Investigating the Impact of Image A
 kind: "paper"
 creator: "Elizaveta Lukianova, Jae-Yeop Jeong & Jin-Woo Jeong"
 publication: "Proceedings of the 2025 International Conference on Intelligent User Interfaces (IUI ’25)"
+publicationShort: "IUI"
 year: 2025
 date: "2026-02-08"
 cover: "/uploads/enjoying/paper-image-aids-ar-memory.jpg"

@@ -3,6 +3,7 @@ title: "GazeSwipe: Enhancing Mobile Touchscreen Reachability through Seamless Ga
 kind: "paper"
 creator: "Zhuojiang Cai, Jingkai Hong, Zhimin Wang & Feng Lu"
 publication: "Proceedings of the 2025 CHI Conference on Human Factors in Computing Systems (CHI ’25)"
+publicationShort: "CHI"
 year: 2025
 date: "2026-02-01"
 cover: "/uploads/enjoying/paper-gazeswipe.jpg"

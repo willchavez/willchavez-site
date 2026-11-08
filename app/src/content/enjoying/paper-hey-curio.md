@@ -3,6 +3,7 @@ title: "\"Hey Curio, Can You Tell Me More?\": Children’s Information-Seeking a
 kind: "paper"
 creator: "Sunhyo Oh, Chao Zhang, Lauren Girouard-Hallam, Zihao Zhou, Halie March, Srushti Jayaramu & Ying Xu"
 publication: "Proceedings of the 24th ACM Interaction Design and Children Conference (IDC ’25)"
+publicationShort: "IDC"
 year: 2025
 date: "2026-02-15"
 cover: "/uploads/enjoying/paper-hey-curio.jpg"

@@ -19,7 +19,17 @@ const stars = data.rating && (Number.isInteger(data.rating)
       ? <a class="t" href={href} data-enjoying-entry>{data.title}</a>
       : <h3>{data.title}</h3>}
   </div>
-  {metadata && <div class="ent-meta enjoying-meta">{metadata}</div>}
+  {metadata && <div class:list={["ent-meta enjoying-meta", data.kind === "paper" && "paper-metadata"]}>
+    {data.kind === "paper" ? <>
+      {data.creator && <span class="paper-authors" title={data.creator}>{data.creator}</span>}
+      {data.creator && (data.publication || data.year) && <span class="paper-meta-divider"> · </span>}
+      <span class="paper-venue">
+        {data.publication && <span class:list={["paper-publication-name", data.publicationShort && "paper-publication-full"]}>{data.publication}</span>}
+        {data.publicationShort && <abbr class="paper-publication-short" title={data.publication}>{data.publicationShort}</abbr>}
+        {data.year && <span class="paper-year">{data.publication && " · "}{data.year}</span>}
+      </span>
+    </> : metadata}
+  </div>}
   <div class="enjoying-side-meta">
     {showDate && displayDate && <time class="recorded" datetime={displayDate.toISOString()} title={data.date ? undefined : "U.S. public release date"}>{!data.date && "Released "}{fmtDate(displayDate)}</time>}
     <span class="enjoying-tag">{data.kind}</span>

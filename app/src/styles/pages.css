@@ -64,9 +64,7 @@
 .ent-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: .3rem 1rem; }
 .ent-heading > .ent-titleline { grid-column: 1; grid-row: 1; }
 .ent-heading > .enjoying-meta { grid-column: 1; grid-row: 2; margin-top: 0; }
-.enjoying-side-meta { display: contents; }
-.enjoying-side-meta > .recorded { grid-column: 2; grid-row: 1; justify-self: end; }
-.enjoying-side-meta > .enjoying-tag { grid-column: 2; grid-row: 2; justify-self: end; }
+.enjoying-side-meta { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; align-items: flex-end; gap: .35rem; }
 .ent-titleline { min-width: 0; line-height: 1.55; overflow-wrap: anywhere; }
 .enjoying-tag { display: inline-flex; align-items: center; min-height: 1.35rem; padding: 0 .58rem; border-radius: 999px; background: color-mix(in srgb, var(--rust) 14%, var(--paper)); color: color-mix(in srgb, var(--rust) 76%, var(--ink)); font-size: .72rem; line-height: 1; text-transform: capitalize; vertical-align: middle; white-space: nowrap; }
 .ent-meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: .3rem .6rem; margin-top: .3rem; }
@@ -75,6 +73,8 @@
 .ent a.t::before { display: none; }
 .ent a.t:hover, .ent a.t:focus-visible { color: var(--rust); }
 .enjoying-meta { min-width: 0; overflow-wrap: anywhere; color: var(--muted); font-size: .88rem; line-height: 1.55; }
+.paper-metadata { display: block; }
+.paper-publication-short { display: none; text-decoration: none; }
 .route-enjoying a::before { display: none; }
 .route-enjoying a.wrapped { background-image: none; background-size: 0 100%; }
 .route-enjoying a.wrapped:hover, .route-enjoying a.wrapped.pressed { background-size: 0 100%; --fo: 0; }
@@ -188,3 +188,22 @@
 .about-experience { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--hairline); scroll-margin-top: 2rem; }
 .about-experience .work-role { grid-template-columns: 1fr; gap: .7rem; }
 @media (max-width: 640px) { .note-card .s { display: block; font-size: .95rem; } }
+
+/* Paper previews reclaim the thumbnail column on portrait phones. Full credits
+   remain in the source text and on each paper's detail page. */
+@media (max-width: 640px) and (orientation: portrait) {
+  .ent[data-kind="paper"] { grid-template-columns: minmax(0, 1fr); }
+  .ent[data-kind="paper"] > .cover-link,
+  .ent[data-kind="paper"] > .cover-empty { display: none; }
+  .ent[data-kind="paper"] .ent-heading { grid-template-columns: minmax(0, 1fr) auto; }
+  .ent[data-kind="paper"] .enjoying-side-meta { grid-row: 1; }
+  .ent[data-kind="paper"] .paper-metadata { grid-column: 1 / -1; }
+  .ent[data-kind="paper"] .paper-authors { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ent[data-kind="paper"] .paper-meta-divider,
+  .ent[data-kind="paper"] .paper-publication-full { display: none; }
+  .ent[data-kind="paper"] .paper-venue { display: flex; min-width: 0; }
+  .ent[data-kind="paper"] .paper-publication-name,
+  .ent[data-kind="paper"] .paper-publication-short { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ent[data-kind="paper"] .paper-publication-short { display: block; }
+  .ent[data-kind="paper"] .paper-year { flex-shrink: 0; white-space: pre; }
+}

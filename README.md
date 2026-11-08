@@ -93,8 +93,9 @@ Enjoying uses `creator` for artists, authors, and film directors. The film
 credits were checked against the structured director metadata on each entry’s
 linked Letterboxd page. Multiple directors stay together in that field.
 `EnjoyingHeading.astro` keeps titles and creator details on the left, with
-category tags on the right. On desktop and phones, the Enjoying list aligns
-dates with titles and tags with creator details in the right column; film detail pages use the same
+category tags on the right. On desktop and phones, the Enjoying list keeps
+the date and tag together in the right column, with a fixed gap independent
+of title wrapping; film detail pages use the same
 stored creator credit. Homepage Notes cards use each post’s existing thumbnail
 (or cover when available).
 
@@ -116,3 +117,8 @@ preview. Set `NAV_SCREENSHOTS_DIR` to save the six sampled frames per color sche
 while navigating under 4× CPU throttling. It checks rendered pixels for light
 text outside the brown pill and dark text inside it. Pass a base URL after `--`
 to verify a deployed preview. Set `NAV_SCREENSHOTS_DIR` to save failing frames.
+
+On portrait phones, Enjoying paper previews hide their thumbnail and show a
+single ellipsized author line followed by `publicationShort` and the year.
+Desktop/landscape previews and paper detail pages retain the full publication
+and author text.
