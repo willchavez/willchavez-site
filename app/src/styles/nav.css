@@ -46,7 +46,6 @@
   .desktop-nav a:hover { background: color-mix(in srgb, var(--rust) 8%, transparent); }
   .desktop-nav a[aria-current="page"] { color: var(--fill-ink); }
   .desktop-nav:not([data-ready]) a[aria-current="page"] { background: var(--fill); }
-  .desktop-nav a[aria-current="page"]:hover { background: none; }
+  .desktop-nav[data-ready] a[aria-current="page"]:hover { background: none; }
   .nav-selection { position: absolute; top: 0; left: 0; z-index: -1; border-radius: 999px; background: var(--fill); pointer-events: none; }
-  .desktop-nav[data-ready] .nav-selection { transition: transform 360ms cubic-bezier(.22, 1, .36, 1), width 360ms cubic-bezier(.22, 1, .36, 1); }
 }
