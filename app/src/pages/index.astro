@@ -15,32 +15,32 @@ const enjoying = (await getEnjoying()).filter(p => p.body?.trim()).slice(0, 2);
       <p class="home-kicker">Will Chavez · Design technologist</p>
       <h1>I make ideas<br />you can click on.</h1>
       <p class="home-summary">I’m Will. At Microsoft, I build AI interfaces and tools for designers. Outside of work, it’s synths, music, and whatever I’m trying to figure out this week.</p>
-      <div class="home-actions"><a class="home-button" href="#selected-work">See my work <span aria-hidden="true">↓</span></a><a href="mailto:wchavezsalinas@gmail.com">Get in touch <span aria-hidden="true">↗</span></a></div>
+      <div class="home-actions"><a class="home-button" href="#selected-work">See my work</a><a href="mailto:wchavezsalinas@gmail.com">Get in touch</a></div>
     </header>
     <section class="home-section" id="selected-work" aria-labelledby="selected-title">
-      <div class="home-section-head"><h2 id="selected-title">A few things I’ve made</h2><a href="/portfolio">All projects <span aria-hidden="true">↗</span></a></div>
+      <div class="home-section-head"><h2 id="selected-title">A few things I’ve made</h2><a href="/portfolio">All projects</a></div>
       <div class="home-projects">
         {featured.map((p, index) => <a class="home-project" href={`/portfolio/${p.slug}`}>
           <div class:list={["home-project-image", `home-image-${p.slug}`]}><img src={portfolioImg(p.cover, 960)} alt={p.images[0].alt} loading={index === 0 ? "eager" : "lazy"} decoding="async" /></div>
-          <div class="home-project-copy"><span class="home-kicker">{p.category}</span><h3>{p.title} <span aria-hidden="true">↗</span></h3><p>{p.summary}</p></div>
+          <div class="home-project-copy"><span class="home-kicker">{p.category}</span><h3>{p.title}</h3><p>{p.summary}</p></div>
         </a>)}
       </div>
     </section>
     <div class="home-journal">
       <section class="home-section" aria-labelledby="home-notes">
-        <div class="home-section-head"><h2 id="home-notes">Figuring things out</h2><a href="/notes">All notes ↗</a></div>
-        {notes.map(n => <article class="home-note"><time datetime={n.data.date.toISOString()}>{fmtDate(n.data.date)}</time><h3><a href={`/notes/${n.id}`}>{n.data.title}</a></h3><p>{n.data.summary}</p></article>)}
+        <div class="home-section-head"><h2 id="home-notes">Figuring things out</h2><a href="/notes">All notes</a></div>
+        {notes.map(n => <a class="home-note" href={`/notes/${n.id}`}><time datetime={n.data.date.toISOString()}>{fmtDate(n.data.date)}</time><h3>{n.data.title}</h3><p>{n.data.summary}</p></a>)}
       </section>
       <section class="home-section" aria-labelledby="home-enjoying">
-        <div class="home-section-head"><h2 id="home-enjoying">Lately, I’m into…</h2><a href="/enjoying">More ↗</a></div>
-        {enjoying.map(e => <article class="home-enjoying"><span class="home-kicker">{e.data.kind}{e.data.creator && ` · ${e.data.creator}`}</span><h3><a href={`/enjoying/${e.id}`}>{e.data.title}</a></h3><p>{contentExcerpt(e.body)}</p></article>)}
+        <div class="home-section-head"><h2 id="home-enjoying">Lately, I’m into…</h2><a href="/enjoying">More</a></div>
+        {enjoying.map(e => <a class="home-enjoying" href={`/enjoying/${e.id}`}><span class="home-kicker">{e.data.kind}{e.data.creator && ` · ${e.data.creator}`}</span><h3>{e.data.title}</h3><p>{contentExcerpt(e.body)}</p></a>)}
       </section>
     </div>
     <section class="home-history" aria-labelledby="history-title">
       <h2 id="history-title">Where I’ve been</h2>
       <p>Microsoft <span>2020–now</span> <span aria-hidden="true">/</span> IBM <span>2016–2020</span> <span aria-hidden="true">/</span> Lockheed Martin <span>2015–2016</span></p>
-      <a href="/about#experience">The longer version ↗</a>
+      <a href="/about#experience">The longer version</a>
     </section>
-    <div class="home-closing"><p>Have something you want to make?</p><a href="mailto:wchavezsalinas@gmail.com">Let’s talk about it ↗</a></div>
+    <div class="home-closing"><p>Have something you want to make?</p><a href="mailto:wchavezsalinas@gmail.com">Let’s talk about it</a></div>
   </div>
 </Base>
