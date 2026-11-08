@@ -1,4 +1,5 @@
 ---
+import { contentExcerpt } from "../../lib/excerpt";
 import Base from "../../layouts/Base.astro";
 import Empty from "../../components/Empty.astro";
 import SoundCloud from "../../components/SoundCloud.astro";
@@ -56,6 +57,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
                 <span class="m">{[i.data.creator, i.data.publication, i.data.year].filter(Boolean).join(" · ")}</span>
               </div>
               {i.data.rating && <div class="rating" aria-label={`${i.data.rating} out of 5`}>{stars(i.data.rating)}</div>}
+              {contentExcerpt(i.body) && <p class="ent-excerpt">{contentExcerpt(i.body)}</p>}
               <SoundCloud url={i.data.link} title={i.data.title} />
             </div>
           </div>

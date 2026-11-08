@@ -1,7 +1,7 @@
 ---
 title: "Starting again with HCI"
 date: 2026-05-17
-summary: "A semester of HCI, two prototypes, and an unreasonable amount of calendar Tetris."
+summary: "Two prototypes, a lot of learning, and some missed brunches. My first semester back."
 deck: "Heuristics, cognitive load, two prototypes, and a semester that kept reminding me I am a person with plans outside Canvas."
 thumbnail: "/uploads/medium/hci-youtube-subscriptions.png"
 topics:

@@ -388,7 +388,7 @@ export const portfolioProjects = [
     "category": "Community",
     "org": "Volunteer project",
     "summary": "We spent our Sundays building a way to find and support minority-owned businesses nearby.",
-    "cover": "img/portfolio/hire-harlem/hire-harlem_figma.png",
+    "cover": "img/portfolio/hire-harlem/hire-harlem_now.gif",
     "skills": "Community · Full-stack development",
     "about": "A website that helped people find and support minority-owned businesses — starting in Harlem, NY and expanding to Oakland, CA. Pure passion project: a small team of us carved out every Sunday to work on it, driven by the belief that visibility for these businesses actually mattered. Read more on Medium.",
     "contributions": [
