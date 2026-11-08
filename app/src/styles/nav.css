@@ -26,7 +26,7 @@
 .pill[open] > summary::after { transform: rotate(-135deg); margin-top: 0.1em; }
 .pill > summary:focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
 .pill .menu {
-  position: absolute; z-index: 20; top: 58px; left: 0; min-width: 15rem; padding: 0.4rem;
+  position: absolute; z-index: 20; top: 58px; left: 0; display: grid; gap: .4rem; min-width: 15rem; padding: .5rem;
   background: var(--paper); border: 1px solid var(--rust); border-radius: 16px;
   box-shadow: 0 14px 30px color-mix(in srgb, var(--rust) 16%, transparent);
 }

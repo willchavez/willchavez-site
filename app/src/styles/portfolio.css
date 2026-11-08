@@ -25,7 +25,7 @@
 .project-open::before { display: none; }
 .project-image { position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.55; overflow: hidden; padding: 18px; border: 1px solid var(--hairline); border-radius: 14px; background: color-mix(in srgb, var(--paper) 72%, var(--rust) 12%); }
 .portfolio-card.featured .project-image { aspect-ratio: 1.6; padding: 25px; }
-.project-image img { display: block; width: 100%; height: 100%; border-radius: 5px; object-fit: contain; transition: transform 350ms ease; }
+.project-image img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; border-radius: .75rem; object-fit: contain; transition: transform 350ms ease; }
 .project-open:hover .project-image img { transform: scale(1.035); }
 .explore { position: absolute; right: 14px; bottom: 14px; padding: 6px 12px; border: 1px solid var(--hairline); border-radius: 22px; background: var(--paper); color: var(--ink); font-size: .8rem; opacity: 0; transform: translateY(5px); transition: opacity 180ms ease, transform 180ms ease; }
 .project-open:hover .explore, .project-open:focus-visible .explore { opacity: 1; transform: none; }
@@ -86,7 +86,7 @@
   #portfolio-results[data-view="list"] .project-open { display: grid; grid-template-columns: 8.25rem minmax(0, 1fr); align-items: center; gap: 1.3rem; border-radius: 0; }
   #portfolio-results[data-view="list"] .project-image,
   #portfolio-results[data-view="list"] .portfolio-card.featured .project-image { width: 8.25rem; aspect-ratio: 4 / 3; padding: 0; border: 0; border-radius: 1rem; }
-  #portfolio-results[data-view="list"] .project-image img { border-radius: .85rem; object-fit: cover; }
+  #portfolio-results[data-view="list"] .project-image img { width: 100%; height: 100%; border-radius: .85rem; object-fit: cover; }
   #portfolio-results[data-view="list"] .explore { display: none; }
   #portfolio-results[data-view="list"] .project-info { min-width: 0; padding: 0; }
   #portfolio-results[data-view="list"] .portfolio-card.featured .project-info h2,
@@ -107,7 +107,7 @@
   #portfolio-results .project-open { display: grid; grid-template-columns: 5.1rem minmax(0, 1fr); align-items: start; gap: .85rem; }
   #portfolio-results .project-image,
   #portfolio-results .portfolio-card.featured .project-image { width: 5.1rem; aspect-ratio: 4 / 3; padding: 0; border: 0; border-radius: .75rem; }
-  #portfolio-results .project-image img { border-radius: 0; object-fit: cover; }
+  #portfolio-results .project-image img { width: 100%; height: 100%; border-radius: .75rem; object-fit: cover; }
   #portfolio-results .explore { display: none; }
   #portfolio-results .project-info { display: flex; flex-direction: column; min-width: 0; padding: 0; }
   #portfolio-results .portfolio-card.featured .project-info h2,
