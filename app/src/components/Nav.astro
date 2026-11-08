@@ -1,5 +1,5 @@
 ---
-const { current, counts = {} } = Astro.props;
+const { current, counts = {}, alignment = "start" } = Astro.props;
 const items = [
   { id: "work", label: "Home", href: "/" },
   { id: "portfolio", label: "Projects", href: "/portfolio" },
@@ -9,7 +9,7 @@ const items = [
 ];
 const here = items.find((i) => i.id === current) ?? items[0];
 ---
-<div class="topbar" data-current={current} transition:persist="site-navigation" transition:animate="none">
+<div class="topbar" data-current={current} data-alignment={alignment} transition:persist="site-navigation" transition:animate="none">
   <a class="avatar" href="/" aria-label="Will Chavez — home"><img class="portrait" src="/img/will.webp" width="144" height="144" alt="Will Chavez" decoding="async" /></a>
   <nav class="nav" aria-label="Main navigation">
     <details class="pill">
@@ -21,7 +21,7 @@ const here = items.find((i) => i.id === current) ?? items[0];
     <div class="desktop-nav">
       {items.map((i) => <a href={i.href} aria-current={i.id === current ? "page" : undefined}><span class="nav-label">{i.label}</span></a>)}
       <div class="nav-selection nav-ink" aria-hidden="true">
-        {items.map((i) => <span>{i.label}</span>)}
+        {items.map((i) => <span><span class="nav-ink-label">{i.label}</span></span>)}
       </div>
     </div>
   </nav>
@@ -33,21 +33,18 @@ const here = items.find((i) => i.id === current) ?? items[0];
   const menu = topbar.querySelector<HTMLDetailsElement>(".pill")!;
   const ink = desktop.querySelector<HTMLElement>(".nav-ink")!;
   let inkAnimation: Animation | undefined;
+  let positionAnimation: Animation | undefined;
+  let previousLeft: number | undefined;
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   // The background and contrasting labels share one clipping surface. A
   // separate background animation can paint a different frame from the text.
   const syncInk = () => {
     if (!desktop.offsetWidth) return;
     const bounds = ink.getBoundingClientRect();
-    const labels = desktop.querySelectorAll<HTMLElement>(".nav-label");
-    ink.querySelectorAll<HTMLElement>("span").forEach((label, index) => {
-      const rect = labels[index].getBoundingClientRect();
-      label.style.left = `${rect.left - bounds.left}px`;
-      label.style.top = `${rect.top - bounds.top}px`;
-    });
     const active = desktop.querySelector<HTMLElement>('a[aria-current="page"]')!;
     const pill = active.getBoundingClientRect();
-    ink.style.clipPath = `inset(${Math.max(0, pill.top - bounds.top)}px ${Math.max(0, bounds.right - pill.right)}px ${Math.max(0, bounds.bottom - pill.bottom)}px ${Math.max(0, pill.left - bounds.left)}px round 999px)`;
+    const padding = getComputedStyle(desktop);
+    ink.style.clipPath = `inset(${padding.paddingTop} ${Math.max(0, bounds.right - pill.right)}px ${padding.paddingBottom} ${Math.max(0, pill.left - bounds.left)}px round 999px)`;
     desktop.dataset.ready = "";
   };
   let previousClip: string | undefined;
@@ -58,10 +55,17 @@ const here = items.find((i) => i.id === current) ?? items[0];
   reconcile();
   new ResizeObserver(reconcile).observe(desktop);
   void document.fonts.ready.then(reconcile);
-  reducedMotion.addEventListener("change", reconcile);
+  reducedMotion.addEventListener("change", () => {
+    positionAnimation?.cancel();
+    reconcile();
+  });
   document.addEventListener("astro:before-swap", (event: TransitionBeforeSwapEvent) => {
     const incoming = event.newDocument.querySelector<HTMLElement>(".topbar");
     if (!incoming) return;
+    // Capture the painted position, including an interrupted glide. Layout
+    // chooses the destination; animate the persisted bar after the swap.
+    previousLeft = topbar.getBoundingClientRect().left;
+    topbar.dataset.alignment = incoming.dataset.alignment;
     if (topbar.dataset.current !== incoming.dataset.current) {
       previousClip = getComputedStyle(ink).clipPath;
       inkAnimation?.cancel();
@@ -82,6 +86,21 @@ const here = items.find((i) => i.id === current) ?? items[0];
   // Start after Astro has reinserted the persisted navigation. CSS transitions
   // started before the swap are cancelled when the element is moved.
   document.addEventListener("astro:after-swap", () => {
+    positionAnimation?.cancel();
+    const destinationLeft = topbar.getBoundingClientRect().left;
+    if (previousLeft !== undefined && !reducedMotion.matches) {
+      const distance = previousLeft - destinationLeft;
+      const body = document.body.getBoundingClientRect();
+      // A percentage tracks the bar's width while font styles settle.
+      const from = topbar.dataset.alignment === "center"
+        ? `translateX(calc(50% + ${previousLeft - body.left - body.width / 2}px))`
+        : `translateX(${distance}px)`;
+      if (Math.abs(distance) > .5) positionAnimation = topbar.animate([
+        { transform: from },
+        { transform: "translateX(0)" },
+      ], { duration: 420, easing: "cubic-bezier(.22, 1, .36, 1)" });
+    }
+    previousLeft = undefined;
     syncInk();
     if (previousClip && desktop.offsetWidth && !reducedMotion.matches) {
       const options = { duration: 360, easing: "cubic-bezier(.22, 1, .36, 1)" };
@@ -92,6 +111,19 @@ const here = items.find((i) => i.id === current) ?? items[0];
     }
     previousClip = undefined;
   });
+  // Styles can briefly use fallback metrics while Astro swaps stylesheets.
+  // Both text layers lay themselves out identically; refresh the destination
+  // once page styles settle without restarting an in-flight mask animation.
+  const refreshDestination = () => {
+    syncInk();
+    if (inkAnimation && ["running", "paused"].includes(inkAnimation.playState)) {
+      const frames = (inkAnimation.effect as KeyframeEffect).getKeyframes();
+      (inkAnimation.effect as KeyframeEffect).setKeyframes([
+        { clipPath: frames[0].clipPath }, { clipPath: ink.style.clipPath },
+      ]);
+    }
+  };
+  document.addEventListener("astro:page-load", () => requestAnimationFrame(refreshDestination));
   topbar.addEventListener("click", event => {
     const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a") : null;
     if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;

@@ -1,5 +1,6 @@
 /* Keep every section visible on desktop; use a dropdown on phones. */
-.topbar { position: relative; z-index: 30; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 4.5rem; }
+.topbar { align-self: flex-start; max-width: 100%; position: relative; z-index: 30; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 4.5rem; }
+.topbar[data-alignment="center"] { align-self: center; }
 .avatar { display: block; box-shadow: none; border-radius: 50%; line-height: 0; }
 .avatar::before { display: none; }
 .avatar:hover, .avatar:focus-visible { background: none; }
@@ -47,8 +48,8 @@
   .desktop-nav a { color: var(--ink); transition: background 180ms ease; }
   .desktop-nav:not([data-ready]) a[aria-current="page"] { background: var(--fill); color: var(--fill-ink); }
   .nav-label { display: block; }
-  .nav-ink { position: absolute; z-index: 2; inset: 0; pointer-events: none; overflow: hidden; background: var(--fill); }
+  .nav-ink { display: flex; gap: .25rem; padding: .25rem; position: absolute; z-index: 2; inset: 0; pointer-events: none; overflow: hidden; background: var(--fill); }
   .desktop-nav:not([data-ready]) .nav-ink { visibility: hidden; }
-  .nav-ink > span { position: absolute; display: block; color: var(--fill-ink); font: inherit; letter-spacing: inherit; white-space: nowrap; }
+  .nav-ink > span { display: flex; align-items: center; min-height: 44px; padding: 0 1rem; flex: 0 0 auto; color: var(--fill-ink); font: inherit; letter-spacing: inherit; white-space: nowrap; }
   .desktop-nav[data-ready] a[aria-current="page"]:hover { background: none; }
 }

@@ -22,7 +22,7 @@ const placed = new Set([story.leadImage, ...story.sections.flatMap(section => se
 const extras = images.filter(image => !placed.has(image.src));
 const labelFor = (label: string) => label.replace(/<[^>]*>/g, "").replace(/[→↗]/g, "").trim();
 ---
-<Base title={project.title} current="portfolio" showHeading={false} description={project.summary}>
+<Base title={project.title} current="portfolio" navAlignment="center" showHeading={false} description={project.summary}>
   <article class="portfolio-project" data-opening={story.opening}>
     <header class="project-heading">
       <a class="back" data-project-back href="/portfolio"><svg class="icon-arrow-left" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M12.5 8h-9m0 0 4-4m-4 4 4 4" /></svg>Back to Projects</a>

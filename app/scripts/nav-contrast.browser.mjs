@@ -31,7 +31,7 @@ try {
         const [t, r = t, b = t, l = r] = clip;
         const bounds = rect(ink);
         const labels = [...document.querySelectorAll('.nav-label')];
-        const copies = [...ink.children];
+        const copies = [...ink.querySelectorAll(".nav-ink-label")];
         return {
           animations: window.navPair.length,
           sharedSurface: document.querySelector('.nav-selection') === ink,
@@ -62,6 +62,7 @@ try {
     };
     await page.locator('.desktop-nav a').filter({ hasText: 'Notes' }).click();
     await page.waitForURL(`${base}/notes`);
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     for (const time of [0, 40, 90, 180, 270, 360]) {
       await check(time);
       if (process.env.NAV_SCREENSHOTS_DIR) {
@@ -73,12 +74,14 @@ try {
     const interrupted = await check(90);
     await page.locator('.desktop-nav a').filter({ hasText: 'Enjoying' }).click();
     await page.waitForURL(`${base}/enjoying`);
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const resumed = await check(0);
     assert(Math.abs(interrupted.mask.left - resumed.mask.left) < .75, 'interrupted navigation continues from the visible pill');
     await check(150);
     await check(360);
     await page.goBack();
     await page.waitForURL(`${base}/notes`);
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     await check(90);
     await check(360);
     await page.waitForTimeout(300); // Let the separate content view transition finish.
@@ -95,6 +98,7 @@ try {
     await page.locator('.pill summary').click();
     await page.locator('.pill .menu a').filter({ hasText: 'Enjoying' }).click();
     await page.waitForURL(`${base}/enjoying`);
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     assert.equal(await page.locator('.pill summary').innerText(), 'Enjoying');
     assert.deepEqual(errors, []);
     await page.close();
