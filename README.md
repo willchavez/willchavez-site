@@ -77,3 +77,14 @@ local cache is safe and forces regeneration.
 
 Run `node --test app/scripts/images.test.mjs` to check cache invalidation,
 partial-cache recovery, and animation preservation.
+
+The project-led preview is developed on `codex/project-led-preview`; homepage
+refinements are on `codex/preview-refinements`. Publish these only through the
+separate preview repository workflow until production changes are approved.
+
+Microsoft Fluent 3D emoji are bundled in `app/public/emoji` under their MIT
+license. `app/src/middleware.ts` replaces mapped emoji in visible rendered text,
+including Markdown and excerpts, while preserving their Unicode text as image
+alt text. To support another emoji, add the official asset and its entry to
+`app/src/data/fluent-emoji.json`. Other emoji keep their native rendering.
+Run `node --test app/scripts/fluent-emoji.test.mjs` to check the renderer.

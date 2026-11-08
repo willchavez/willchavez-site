@@ -1,5 +1,4 @@
-/* top bar: avatar + navigation. phones get a dropdown pill, desktop gets a
-   segmented switch that rests as just the current page and opens on hover/focus. */
+/* Keep every section visible on desktop; use a dropdown on phones. */
 .topbar { position: relative; z-index: 30; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 4.5rem; }
 .avatar { display: block; box-shadow: none; border-radius: 50%; line-height: 0; }
 .avatar::before { display: none; }
@@ -42,8 +41,12 @@
 .desktop-nav { display: none; }
 @media (min-width: 821px) {
   .pill { display: none; }
-  .desktop-nav { display: flex; gap: .25rem; padding: .25rem; border: 1px solid var(--hairline); border-radius: 999px; }
+  .desktop-nav { position: relative; isolation: isolate; display: flex; gap: .25rem; padding: .25rem; border: 1px solid var(--hairline); border-radius: 999px; }
   .desktop-nav a { display: flex; align-items: center; min-height: 44px; padding: 0 1rem; border-radius: 999px; }
   .desktop-nav a:hover { background: color-mix(in srgb, var(--rust) 8%, transparent); }
-  .desktop-nav a[aria-current="page"] { background: var(--fill); color: var(--fill-ink); }
+  .desktop-nav a[aria-current="page"] { color: var(--fill-ink); }
+  .desktop-nav:not([data-ready]) a[aria-current="page"] { background: var(--fill); }
+  .desktop-nav a[aria-current="page"]:hover { background: none; }
+  .nav-selection { position: absolute; top: 0; left: 0; z-index: -1; border-radius: 999px; background: var(--fill); pointer-events: none; }
+  .desktop-nav[data-ready] .nav-selection { transition: transform 360ms cubic-bezier(.22, 1, .36, 1), width 360ms cubic-bezier(.22, 1, .36, 1); }
 }

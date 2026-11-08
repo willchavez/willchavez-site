@@ -63,3 +63,6 @@ a.wrapped:hover, a.wrapped:focus-visible, a.wrapped.pressed { background-size: 1
   .site-footer .social-links { justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* Inline Microsoft Fluent emoji retain their Unicode text as accessible alt. */
+img.fluent-emoji, .note-reading .prose img.fluent-emoji { display: inline-block; width: 1.25em; height: 1.25em; max-width: none; margin: 0 .03em; vertical-align: -.23em; object-fit: contain; border: 0; border-radius: 0; box-shadow: none; }
