@@ -13,14 +13,16 @@ const stars = data.rating && (Number.isInteger(data.rating)
   ? "★".repeat(data.rating) + "☆".repeat(5 - data.rating)
   : "★".repeat(Math.floor(data.rating)) + "½");
 ---
-<div class="ent-heading">
+<div class:list={["ent-heading", showDate && displayDate && "ent-heading-dated"]}>
   <div class="ent-titleline">
-    <span class="enjoying-tag">{data.kind}</span>{" "}
     {href
       ? <a class="t" href={href} data-enjoying-entry>{data.title}</a>
       : <h3>{data.title}</h3>}
   </div>
-  {showDate && displayDate && <time class="recorded" datetime={displayDate.toISOString()} title={data.date ? undefined : "U.S. public release date"}>{!data.date && "Released "}{fmtDate(displayDate)}</time>}
+  {metadata && <div class="ent-meta enjoying-meta">{metadata}</div>}
+  <div class="enjoying-side-meta">
+    <span class="enjoying-tag">{data.kind}</span>
+    {showDate && displayDate && <time class="recorded" datetime={displayDate.toISOString()} title={data.date ? undefined : "U.S. public release date"}>{!data.date && "Released "}{fmtDate(displayDate)}</time>}
+  </div>
 </div>
-{metadata && <div class="ent-meta enjoying-meta">{metadata}</div>}
 {data.rating && <div class="rating" aria-label={`${data.rating} out of 5`}>{stars}</div>}

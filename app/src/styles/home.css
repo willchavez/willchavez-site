@@ -49,10 +49,12 @@
 .home-note time { font-size: .8rem; color: var(--muted); }
 .home-note, .home-enjoying { display: flex; gap: .85rem; align-items: flex-start; }
 .home-pick-cover { flex: 0 0 3rem; width: 3rem; height: 3rem; border-radius: .5rem; object-fit: cover; }
-.home-pick-copy { min-width: 0; }
-.home-journal .ent-heading { display: block; }
-.home-journal .ent-titleline h3 { display: inline; margin: 0; }
-.home-journal .enjoying-meta { font-size: .82rem; margin-top: .25rem; }
+.home-pick-copy { flex: 1; min-width: 0; }
+.home-journal .ent-heading { gap: .25rem .6rem; }
+.home-journal .enjoying-side-meta { grid-row: 1; }
+.home-journal .ent-heading > .enjoying-meta { grid-column: 1 / -1; }
+.home-journal .ent-titleline h3 { margin: 0; }
+.home-journal .enjoying-meta { font-size: .82rem; }
 .home-journal .rating { font-size: .9rem; margin-top: .2rem; }
 .home-enjoying .home-pick-copy > p { margin-top: .55rem; }
 .home-journal h3 { font-size: 1.1rem; }

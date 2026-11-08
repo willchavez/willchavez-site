@@ -92,7 +92,8 @@ Run `node --test app/scripts/fluent-emoji.test.mjs` to check the renderer.
 Enjoying uses `creator` for artists, authors, and film directors. The film
 credits were checked against the structured director metadata on each entry’s
 linked Letterboxd page. Multiple directors stay together in that field.
-`EnjoyingHeading.astro` keeps the tag, title, creator details, and rating in the
-same order on the homepage and Enjoying list; film detail pages use the same
+`EnjoyingHeading.astro` keeps titles and creator details on the left, with
+category tags on the right. The Enjoying list groups tags above dates on
+desktop and puts both in a row above the title on phones; film detail pages use the same
 stored creator credit. Homepage Notes cards use each post’s existing thumbnail
 (or cover when available).
