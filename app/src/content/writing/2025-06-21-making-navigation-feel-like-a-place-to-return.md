@@ -5,9 +5,9 @@ summary: "I built the prototype while Ankit led product planning, negotiated sco
 deck: "We had four days to turn a navigation direction into something people could try. I focused on development; Ankit PMed the work and helped us decide what fit the time."
 thumbnail: "/uploads/medium/navigation-explorations-controls.png"
 topics:
-  - Design
-  - Work
-  - AI
+  - "Design"
+  - "Code"
+  - "Work"
 draft: false
 ---
 

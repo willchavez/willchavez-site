@@ -7,8 +7,6 @@ source: "https://medium.com/@willchavez/barcelona-spain-831a5c9ba230"
 topics:
   - "Travel"
   - "Music"
-  - "Barcelona"
-  - "Architecture"
 draft: false
 deck: "During the end of May and beginning of June, I went to Spain, then to Copenhagen, then back to Spain. I primarily went to attend a music festival, Primavera Sound in Barcelona, and I decided to make a vacation out of it and take in what both of those cities had to offer."
 ---

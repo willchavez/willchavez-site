@@ -5,9 +5,8 @@ summary: "Sneaker culture is something I’ve participated since I was in high s
 thumbnail: "/uploads/medium/2021-09-15-got-em-snkrs-generator-01.webp"
 source: "https://medium.com/@willchavez/got-em-snkrs-generator-ef799b2db42d"
 topics:
-  - "Sneakers"
-  - "Side project"
-  - "Creative coding"
+  - "Code"
+  - "Design"
 draft: false
 ---
 

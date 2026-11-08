@@ -5,10 +5,8 @@ summary: "I started my career at IBM in Raleigh, NC working on a team that made 
 thumbnail: "/uploads/medium/2020-09-08-ibm-in-raleigh-and-san-francisco-04.webp"
 source: "https://medium.com/@willchavez/ibm-in-raleigh-san-francisco-55774d1f443f"
 topics:
-  - "Career"
-  - "IBM"
-  - "Raleigh"
-  - "San Francisco"
+  - "Work"
+  - "Learning"
 draft: false
 deck: "Today I start my new position on the DSRE team at Microsoft in Redmond, Washington. I took a week to myself before starting my new role to explore neighborhoods in Seattle and began to reflect on my past four years at IBM."
 ---

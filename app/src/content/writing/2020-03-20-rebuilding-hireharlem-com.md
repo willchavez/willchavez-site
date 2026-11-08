@@ -7,8 +7,6 @@ source: "https://medium.com/@willchavez/rebuilding-hireharlem-com-f07773edb7dc"
 topics:
   - "Design"
   - "Code"
-  - "Community"
-  - "Harlem"
 draft: false
 deck: "How Alex Ocampo and I rebuilt hireharlem.com"
 ---

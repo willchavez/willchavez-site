@@ -5,9 +5,8 @@ summary: "A semester of HCI, two prototypes, and an unreasonable amount of calen
 deck: "Heuristics, cognitive load, two prototypes, and a semester that kept reminding me I am a person with plans outside Canvas."
 thumbnail: "/uploads/medium/hci-youtube-subscriptions.png"
 topics:
-  - Learning
-  - Design
-  - Georgia Tech
+  - "Learning"
+  - "Design"
 draft: false
 ---
 

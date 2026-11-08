@@ -7,8 +7,6 @@ source: "https://medium.com/@willchavez/atlanta-tyler-debf041903b0"
 topics:
   - "Travel"
   - "Music"
-  - "Atlanta"
-  - "Tyler, the Creator"
 draft: false
 deck: "Very last minute trip to the ATL to see Tyler."
 ---

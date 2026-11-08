@@ -5,9 +5,9 @@ summary: "A little OP-XY browser companion that started with one question: what 
 deck: "Envelope filters clicked when I imagined an invisible hand moving the cutoff knob while a note plays."
 thumbnail: "/synth-lessons-thumbnail.webp"
 topics:
-  - Music
-  - Creative coding
-  - Web Audio
+  - "Music"
+  - "Code"
+  - "Learning"
 draft: false
 ---
 

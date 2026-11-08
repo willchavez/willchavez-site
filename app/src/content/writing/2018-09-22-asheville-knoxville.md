@@ -7,8 +7,6 @@ source: "https://medium.com/@willchavez/asheville-knoxville-93fd2f53b5f3"
 topics:
   - "Travel"
   - "Music"
-  - "Asheville"
-  - "Knoxville"
 draft: false
 deck: "Small journey through Asheville and Knoxville omw to spend a day at Big Ears Festival 2017."
 ---
