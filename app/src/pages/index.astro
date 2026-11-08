@@ -16,12 +16,12 @@ const enjoying = (await getEnjoying()).filter(p => p.body?.trim()).slice(0, 2);
     <header class="home-intro">
       <div class="home-hello">
         <p class="home-kicker">Will Chavez · Design technologist</p>
-        <h1>I make ideas<br />you can click on.</h1>
+        <h1>Designing and building AI experiences.</h1>
       </div>
       <div class="home-intro-aside">
-        <p class="home-summary">I’m Will. At Microsoft, I build AI interfaces and tools for designers.</p>
+        <p class="home-summary">I’m Will, a design technologist in Microsoft’s Fluent Design Studio. I work across design and engineering to prototype interfaces and build tools for designers.</p>
         <p class="home-personal">Outside of work, it’s synths, music, and whatever I’m trying to figure out this week.</p>
-        <div class="home-actions"><a class="home-button" href="#selected-work">See my work</a><a href="mailto:wchavezsalinas@gmail.com">Get in touch</a></div>
+        <div class="home-actions"><a class="home-button" href="#selected-work">See my work</a><a class="home-text-link" href="mailto:wchavezsalinas@gmail.com">Get in touch</a></div>
       </div>
     </header>
     <section class="home-section" id="selected-work" aria-labelledby="selected-title">
@@ -71,6 +71,6 @@ const enjoying = (await getEnjoying()).filter(p => p.body?.trim()).slice(0, 2);
         {enjoying.map(e => <a class="home-enjoying" href={`/enjoying/${e.id}`}>{e.data.cover && <img class="home-pick-cover" src={img(e.data.cover, 240)} alt="" width="64" height="64" loading="lazy" decoding="async" />}<div class="home-pick-copy"><EnjoyingHeading data={e.data} showDate={false} /><p>{contentExcerpt(e.body)}</p></div></a>)}
       </section>
     </div>
-    <div class="home-closing"><p>Have something you want to make?</p><a href="mailto:wchavezsalinas@gmail.com">Let’s talk about it</a></div>
+    <div class="home-closing"><p>Have something you want to make?</p><a class="home-text-link" href="mailto:wchavezsalinas@gmail.com">Let’s talk about it</a></div>
   </div>
 </Base>

@@ -61,7 +61,7 @@
 .ent[data-kind="paper"] .cover { object-position: top center; }
 .ent .cover-empty { opacity: .45; }
 .ent-copy { min-width: 0; }
-.ent-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: .3rem 1rem; }
+.ent-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: .3rem 1.5rem; }
 .ent-heading > .ent-titleline { grid-column: 1; grid-row: 1; }
 .ent-heading > .enjoying-meta { grid-column: 1; grid-row: 2; margin-top: 0; }
 .enjoying-side-meta { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; align-items: flex-end; gap: .35rem; }

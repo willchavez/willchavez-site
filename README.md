@@ -122,3 +122,12 @@ On portrait phones, Enjoying paper previews hide their thumbnail and show a
 single ellipsized author line followed by `publicationShort` and the year.
 Desktop/landscape previews and paper detail pages retain the full publication
 and author text.
+
+Project detail pages use `app/src/data/project-stories.ts` for role/context,
+opening style, chapter order, captions, and image placement. Every project must
+have a story record; missing context or unknown image references fail the build.
+Use a text opening when the problem needs context, a paired opening for a tool
+best seen beside its introduction, and a compact visual opening when the image
+explains the work immediately. Unplaced source images remain in native “More
+views” disclosures. `ProjectFigure.astro` supplies the shared rounded frame and
+responsive images without fixing every story to the same cover-first layout.

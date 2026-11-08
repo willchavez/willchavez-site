@@ -1,0 +1,20 @@
+.content-shell.route-about main { max-width: none; }
+.route-about .topbar { margin-bottom: 3rem; }
+.route-about .page-head { margin-bottom: 2.25rem; }
+.route-about .about-copy { max-width: none; --about-card: #fffdfa; }
+.about-cards { display: grid; grid-template-columns: 1fr 1.15fr; gap: 1.25rem; align-items: stretch; }
+.route-about .about-copy .about-card { margin: 0; padding: 1.5rem; border: 1px solid var(--hairline); border-radius: 1.25rem; background: var(--about-card); }
+.about-card:has(#about-music) { grid-column: 2; grid-row: 1 / span 2; }
+.route-about .about-experience { margin-top: 3rem; padding: 0; border: 0; }
+.route-about .about-experience .work-section-title { margin-bottom: 1.25rem; color: var(--ink); font-size: 1.3rem; font-weight: 500; }
+.route-about .about-experience .work-role { grid-template-columns: 12rem minmax(0, 1fr); gap: 1.5rem 2rem; margin: 0 0 1.25rem; padding: 1.5rem; border: 1px solid var(--hairline); border-radius: 1.25rem; background: var(--about-card); }
+.about-experience .work-company { display: flex; align-items: center; align-content: start; flex-wrap: wrap; gap: .55rem; }
+.about-experience .work-period { flex-basis: 100%; margin: 0; }
+.about-experience .work-description { min-width: 0; }
+.about-experience .work-description p { max-width: 38rem; }
+@media (max-width: 820px) {
+  .about-cards { grid-template-columns: 1fr; }
+  .about-card:has(#about-music) { grid-column: auto; grid-row: auto; }
+  .route-about .about-experience .work-role { grid-template-columns: 1fr; gap: 1rem; }
+}
+@media (prefers-color-scheme: dark) { .route-about .about-copy { --about-card: #241e19; } }
