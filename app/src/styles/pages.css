@@ -154,6 +154,8 @@
   .ent .t { font-size: 1.08rem; }
   .ent-heading-dated { grid-template-columns: minmax(0, 1fr); gap: .35rem; }
   .ent-heading-dated > .enjoying-side-meta { grid-column: 1; grid-row: 1; flex-direction: row; align-items: center; justify-content: space-between; padding-top: 0; }
+  .ent-heading-dated .enjoying-tag { flex-shrink: 0; }
+  .ent-heading-dated .recorded { min-width: 0; white-space: normal; text-align: right; }
   .ent-heading-dated > .ent-titleline { grid-row: 2; }
   .ent-heading-dated > .enjoying-meta { grid-row: 3; }
   .route-notes main:has(.note-index) { max-width: 44rem; }
