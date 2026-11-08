@@ -27,8 +27,24 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: app/package-lock.json
+      - name: Restore responsive images
+        id: images-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: app/.cache/responsive-images
+          key: responsive-images-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('app/scripts/images.mjs', 'app/package-lock.json') }}-${{ hashFiles('app/public/uploads/**', 'img/portfolio/**') }}
+          restore-keys: |
+            responsive-images-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('app/scripts/images.mjs', 'app/package-lock.json') }}-
       - name: Build site
         run: sh app/build.sh
+      - name: Check image caching
+        run: node --test app/scripts/images.test.mjs
+      - name: Save responsive images
+        if: steps.images-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: app/.cache/responsive-images
+          key: ${{ steps.images-cache.outputs.cache-primary-key }}
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact

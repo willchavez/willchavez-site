@@ -64,3 +64,16 @@ Work-page design studies on this branch share the same experience content:
 `/?direction=rounded`, `/?direction=quiet`, and `/?direction=split` (default).
 These do not add password protection to the legacy portfolio. That content and
 its images remain public until a separate protected hosting/source plan is implemented.
+
+## Production image cache
+
+Production builds cache responsive WebP variants in `app/.cache/responsive-images`.
+The image processor keys each result by source contents, transform implementation,
+and Sharp/encoder versions. Unchanged images are copied into Astro's fresh output;
+edited images are regenerated, and deleted sources are not copied back. GitHub
+Actions restores and saves this cache across production builds. The first build
+(or a transform/dependency change) still does the full conversion. Removing the
+local cache is safe and forces regeneration.
+
+Run `node --test app/scripts/images.test.mjs` to check cache invalidation,
+partial-cache recovery, and animation preservation.

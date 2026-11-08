@@ -6,3 +6,4 @@ app/node_modules
 app/dist
 app/.astro
 app/.soundcloud-preview
+app/.cache
