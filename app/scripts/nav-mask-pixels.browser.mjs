@@ -14,6 +14,7 @@ try {
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(300);
   const nav = await page.locator('.desktop-nav').boundingBox();
+  const initialScroll = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
   const colors = await page.evaluate(() => {
     const rgb = value => value.match(/[\d.]+/g).slice(0, 3).map(Number);
     return { fill: rgb(getComputedStyle(document.querySelector('.nav-ink')).backgroundColor), light: rgb(getComputedStyle(document.querySelector('.nav-ink span')).color), dark: rgb(getComputedStyle(document.querySelector('.nav-label')).color) };
@@ -23,7 +24,7 @@ try {
   const session = await page.context().newCDPSession(page);
   const frames = [];
   session.on('Page.screencastFrame', frame => {
-    frames.push(Buffer.from(frame.data, 'base64'));
+    frames.push({ image: Buffer.from(frame.data, 'base64'), scrollX: frame.metadata.scrollOffsetX, scrollY: frame.metadata.scrollOffsetY });
     void session.send('Page.screencastFrameAck', { sessionId: frame.sessionId });
   });
   await session.send('Emulation.setCPUThrottlingRate', { rate: cpuRate });
@@ -40,9 +41,15 @@ try {
   let violations = 0, textPixels = 0;
   const bad = [];
   for (let i = 0; i < frames.length; i++) {
-    const meta = await sharp(frames[i]).metadata();
+    const meta = await sharp(frames[i].image).metadata();
     const scale = meta.width / 1440;
-    const { data, info } = await sharp(frames[i]).extract({ left: Math.floor(nav.x * scale), top: Math.floor(nav.y * scale), width: Math.floor(nav.width * scale), height: Math.floor(nav.height * scale) }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+    // Astro restores scroll positions during navigation. Screencast frames
+    // carry their own scroll offset; a fixed viewport crop can miss the nav.
+    const leftEdge = Math.max(0, Math.floor((nav.x + initialScroll.x - frames[i].scrollX) * scale));
+    const topEdge = Math.max(0, Math.floor((nav.y + initialScroll.y - frames[i].scrollY) * scale));
+    const bottomEdge = Math.min(meta.height, Math.ceil((nav.y + initialScroll.y - frames[i].scrollY + nav.height) * scale));
+    assert(bottomEdge > topEdge, 'navigation remains visible in captured frame');
+    const { data, info } = await sharp(frames[i].image).extract({ left: leftEdge, top: topEdge, width: Math.floor(nav.width * scale), height: bottomEdge - topEdge }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
     const near = (x, y, color, tolerance) => color.every((c, channel) => Math.abs(data[(y * info.width + x) * info.channels + channel] - c) <= tolerance);
     // Recover the capsule from its painted background across the whole frame.
     // Per-row bounds are unreliable where a white glyph covers a curved edge.
