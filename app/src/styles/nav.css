@@ -47,9 +47,8 @@
   .desktop-nav a { color: var(--ink); transition: background 180ms ease; }
   .desktop-nav:not([data-ready]) a[aria-current="page"] { background: var(--fill); color: var(--fill-ink); }
   .nav-label { display: block; }
-  .nav-ink { position: absolute; z-index: 2; inset: 0; pointer-events: none; overflow: hidden; }
+  .nav-ink { position: absolute; z-index: 2; inset: 0; pointer-events: none; overflow: hidden; background: var(--fill); }
   .desktop-nav:not([data-ready]) .nav-ink { visibility: hidden; }
   .nav-ink > span { position: absolute; display: block; color: var(--fill-ink); font: inherit; letter-spacing: inherit; white-space: nowrap; }
   .desktop-nav[data-ready] a[aria-current="page"]:hover { background: none; }
-  .nav-selection { position: absolute; top: 0; left: 0; z-index: -1; border-radius: 999px; background: var(--fill); pointer-events: none; }
 }

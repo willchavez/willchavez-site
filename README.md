@@ -100,7 +100,8 @@ stored creator credit. Homepage Notes cards use each post’s existing thumbnail
 
 The desktop nav follows main’s two-layer text treatment: normal labels stay
 in place, and an aria-hidden contrasting copy is clipped to the moving pill.
-The pill and text mask share the same animation start time and easing.
+The pill background and contrasting text are painted in one clipped layer,
+so one clip-path animation controls their shared boundary.
 
 To check navigation contrast, build and serve the site, then run
 `npm --prefix app run test:nav` (defaults to `http://localhost:4321`). This
@@ -110,3 +111,8 @@ fallback. On machines where browser dependencies are allowed, install Chromium
 with `cd app && npx playwright install chromium`, or set `CHROMIUM_PATH` to an
 existing Chromium executable. Pass a deployed base URL after `--` to check a
 preview. Set `NAV_SCREENSHOTS_DIR` to save the six sampled frames per color scheme.
+
+`npm --prefix app run test:nav:pixels` captures actual unpaused browser frames
+while navigating under 4× CPU throttling. It checks rendered pixels for light
+text outside the brown pill and dark text inside it. Pass a base URL after `--`
+to verify a deployed preview. Set `NAV_SCREENSHOTS_DIR` to save failing frames.

@@ -19,9 +19,8 @@ const here = items.find((i) => i.id === current) ?? items[0];
       </div>
     </details>
     <div class="desktop-nav">
-      <span class="nav-selection" aria-hidden="true"></span>
       {items.map((i) => <a href={i.href} aria-current={i.id === current ? "page" : undefined}><span class="nav-label">{i.label}</span></a>)}
-      <div class="nav-ink" aria-hidden="true">
+      <div class="nav-selection nav-ink" aria-hidden="true">
         {items.map((i) => <span>{i.label}</span>)}
       </div>
     </div>
@@ -31,19 +30,12 @@ const here = items.find((i) => i.id === current) ?? items[0];
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
   const topbar = document.querySelector<HTMLElement>(".topbar")!;
   const desktop = topbar.querySelector<HTMLElement>(".desktop-nav")!;
-  const selection = desktop.querySelector<HTMLElement>(".nav-selection")!;
   const menu = topbar.querySelector<HTMLDetailsElement>(".pill")!;
   const ink = desktop.querySelector<HTMLElement>(".nav-ink")!;
-  let selectionAnimation: Animation | undefined;
   let inkAnimation: Animation | undefined;
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-  const clipForSelection = () => {
-    const bounds = ink.getBoundingClientRect();
-    const pill = selection.getBoundingClientRect();
-    return `inset(${Math.max(0, pill.top - bounds.top)}px ${Math.max(0, bounds.right - pill.right)}px ${Math.max(0, bounds.bottom - pill.bottom)}px ${Math.max(0, pill.left - bounds.left)}px round 999px)`;
-  };
-  // As on main, duplicate only the visible text and clip the light copy to the
-  // pill. aria-current updates semantics without switching either label color.
+  // The background and contrasting labels share one clipping surface. A
+  // separate background animation can paint a different frame from the text.
   const syncInk = () => {
     if (!desktop.offsetWidth) return;
     const bounds = ink.getBoundingClientRect();
@@ -53,22 +45,14 @@ const here = items.find((i) => i.id === current) ?? items[0];
       label.style.left = `${rect.left - bounds.left}px`;
       label.style.top = `${rect.top - bounds.top}px`;
     });
-    ink.style.clipPath = clipForSelection();
+    const active = desktop.querySelector<HTMLElement>('a[aria-current="page"]')!;
+    const pill = active.getBoundingClientRect();
+    ink.style.clipPath = `inset(${Math.max(0, pill.top - bounds.top)}px ${Math.max(0, bounds.right - pill.right)}px ${Math.max(0, bounds.bottom - pill.bottom)}px ${Math.max(0, pill.left - bounds.left)}px round 999px)`;
     desktop.dataset.ready = "";
   };
-  const positionSelection = () => {
-    const active = desktop.querySelector<HTMLElement>('a[aria-current="page"]');
-    if (!active || !desktop.offsetWidth) return;
-    selection.style.width = `${active.offsetWidth}px`;
-    selection.style.height = `${active.offsetHeight}px`;
-    selection.style.transform = `translate(${active.offsetLeft}px, ${active.offsetTop}px)`;
-  };
-  let previousSelection: { transform: string; width: string } | undefined;
   let previousClip: string | undefined;
   const reconcile = () => {
-    selectionAnimation?.cancel();
     inkAnimation?.cancel();
-    positionSelection();
     syncInk();
   };
   reconcile();
@@ -79,10 +63,7 @@ const here = items.find((i) => i.id === current) ?? items[0];
     const incoming = event.newDocument.querySelector<HTMLElement>(".topbar");
     if (!incoming) return;
     if (topbar.dataset.current !== incoming.dataset.current) {
-      const style = getComputedStyle(selection);
-      previousSelection = { transform: style.transform, width: style.width };
-      previousClip = clipForSelection();
-      selectionAnimation?.cancel();
+      previousClip = getComputedStyle(ink).clipPath;
       inkAnimation?.cancel();
     }
     topbar.dataset.current = incoming.dataset.current;
@@ -97,31 +78,18 @@ const here = items.find((i) => i.id === current) ?? items[0];
     summary.textContent = nextSummary.textContent;
     summary.setAttribute("aria-label", nextSummary.getAttribute("aria-label")!);
     menu.open = false;
-    positionSelection();
   });
   // Start after Astro has reinserted the persisted navigation. CSS transitions
   // started before the swap are cancelled when the element is moved.
   document.addEventListener("astro:after-swap", () => {
-    positionSelection();
     syncInk();
-    if (previousSelection && desktop.offsetWidth && !reducedMotion.matches) {
+    if (previousClip && desktop.offsetWidth && !reducedMotion.matches) {
       const options = { duration: 360, easing: "cubic-bezier(.22, 1, .36, 1)" };
-      selectionAnimation = selection.animate([
-        previousSelection,
-        { transform: selection.style.transform, width: selection.style.width },
-      ], options);
       inkAnimation = ink.animate([
         { clipPath: previousClip! },
         { clipPath: ink.style.clipPath },
       ], options);
-      // Use the same timeline time so the mask never trails the background.
-      const started = document.timeline.currentTime;
-      if (typeof started === "number") {
-        selectionAnimation.startTime = started;
-        inkAnimation.startTime = started;
-      }
     }
-    previousSelection = undefined;
     previousClip = undefined;
   });
   topbar.addEventListener("click", event => {

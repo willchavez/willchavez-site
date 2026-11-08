@@ -18,8 +18,7 @@ try {
     await page.evaluate(() => {
       window.navPair = [];
       document.addEventListener('astro:after-swap', () => {
-        window.navPair = ['.nav-selection', '.nav-ink'].flatMap(s => document.querySelector(s).getAnimations());
-        window.navStartTimes = window.navPair.map(a => a.startTime);
+        window.navPair = document.querySelector('.nav-ink').getAnimations();
         window.navPair.forEach(a => { a.pause(); a.currentTime = 0; });
       });
     });
@@ -35,8 +34,9 @@ try {
         const copies = [...ink.children];
         return {
           animations: window.navPair.length,
-          starts: window.navStartTimes,
-          pill: rect(document.querySelector('.nav-selection')),
+          sharedSurface: document.querySelector('.nav-selection') === ink,
+          background: getComputedStyle(ink).backgroundColor,
+          target: rect(document.querySelector('.desktop-nav a[aria-current]')),
           mask: { left: bounds.left + l, right: bounds.right - r, top: bounds.top + t, bottom: bounds.bottom - b },
           baseInk: getComputedStyle(document.body).color,
           labels: labels.map((e, i) => ({ text: e.textContent, copy: copies[i].textContent, color: getComputedStyle(e).color, inkColor: getComputedStyle(copies[i]).color, rect: rect(e), inkRect: rect(copies[i]) })),
@@ -45,10 +45,11 @@ try {
         };
       }, time);
       if (animated) {
-        assert.equal(state.animations, 2, 'pill and light-text mask both animate');
-        assert.equal(state.starts[0], state.starts[1], 'both layers start on the same timeline frame');
+        assert.equal(state.animations, 1, 'one clip animation controls both paint and text');
       }
-      for (const edge of ['left', 'right', 'top', 'bottom']) assert(Math.abs(state.pill[edge] - state.mask[edge]) < .75, `mask follows pill ${edge} at ${time}ms`);
+      assert(state.sharedSurface, 'background and contrasting labels must share one clipped element');
+      assert.notEqual(state.background, 'rgba(0, 0, 0, 0)');
+      if (time === 360) for (const edge of ['left', 'right', 'top', 'bottom']) assert(Math.abs(state.target[edge] - state.mask[edge]) < .75, `mask reaches selected link ${edge}`);
       for (const label of state.labels) {
         assert.equal(label.text, label.copy);
         assert.equal(label.color, state.baseInk, 'new and previous base labels keep their normal color');
@@ -73,7 +74,7 @@ try {
     await page.locator('.desktop-nav a').filter({ hasText: 'Enjoying' }).click();
     await page.waitForURL(`${base}/enjoying`);
     const resumed = await check(0);
-    assert(Math.abs(interrupted.pill.left - resumed.pill.left) < .75, 'interrupted navigation continues from the visible pill');
+    assert(Math.abs(interrupted.mask.left - resumed.mask.left) < .75, 'interrupted navigation continues from the visible pill');
     await check(150);
     await check(360);
     await page.goBack();
@@ -103,7 +104,7 @@ try {
   const fallback = await page.locator('.desktop-nav [aria-current]').evaluate(e => ({ color: getComputedStyle(e).color, background: getComputedStyle(e).backgroundColor }));
   assert.notEqual(fallback.color, fallback.background);
   assert.notEqual(fallback.background, 'rgba(0, 0, 0, 0)');
-  console.log('Nav contrast: synchronized text/pill at six animation times, interrupted clicks, history, resize, dark mode, reduced motion, mobile, and JavaScript-free fallback passed.');
+  console.log('Nav contrast: single painted mask at six animation times, interrupted clicks, history, resize, dark mode, reduced motion, mobile, and JavaScript-free fallback passed.');
 } finally {
   await browser.close();
 }
