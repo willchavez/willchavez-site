@@ -1,5 +1,29 @@
 export const portfolioProjects = [
   {
+    "slug": "fluent-dataviz",
+    "title": "Fluent data visualization",
+    "category": "Design tooling",
+    "org": "Microsoft · Fluent Design Studio",
+    "summary": "I created a plugin that makes chart guidance usable by designers, engineers, and agents.",
+    "cover": "img/portfolio/dataviz/coffee-crawl.png",
+    "skills": "Design systems · Data visualization · Agent guidance",
+    "about": "I created the flex-dataviz plugin, connecting shared chart principles to practical rules for individual chart types. Interactive galleries and a five-minute walkthrough show those rules in use.",
+    "contributions": [
+      "created the flex-dataviz plugin and organized its core principles and chart-specific guidance",
+      "turned chart decisions such as color, density, typography, axes, legends, and callouts into guidance an agent can navigate",
+      "built interactive galleries and a five-minute walkthrough that put the guidance to work in concrete chart examples"
+    ],
+    "images": [
+      { "src": "img/portfolio/dataviz/coffee-crawl.png", "alt": "Coffee crawl chart examples from the dataviz walkthrough: area, donut, heatmap, and bar" }
+    ],
+    "links": [
+      ["/dataviz/walkthrough.html", "Explore the five-minute walkthrough"],
+      ["/dataviz/gallery.html", "Explore the Fluent Flex chart gallery"],
+      ["/dataviz/gallery-v2.html", "Explore the Bebop chart gallery"],
+      ["/dataviz/presentation.html", "Open the original data visualization presentation"]
+    ]
+  },
+  {
     "slug": "genui-bebop",
     "title": "Generative interfaces",
     "category": "AI experiences",

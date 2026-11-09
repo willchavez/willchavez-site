@@ -136,7 +136,7 @@ responsive images without fixing every story to the same cover-first layout.
 
 Individual project pages now include **Present project**, linking to a separate slide deck at `/portfolio/<slug>/present`. The Projects index and reading layouts remain intact. Decks are curated individually in `app/src/data/project-presentations.ts`; historical collaborator credits, narrative sources, controls, and maintenance guidance are documented in [docs/project-presentations.md](docs/project-presentations.md).
 
-Run `CHROMIUM_PATH=/usr/bin/chromium npm --prefix app run test:presentation -- BASE_URL` against a built preview to verify all eleven decks.
+Run `CHROMIUM_PATH=/usr/bin/chromium npm --prefix app run test:presentation -- BASE_URL` against a built preview to verify all twelve decks.
 
 ### Google Analytics
 

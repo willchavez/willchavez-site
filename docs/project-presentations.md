@@ -6,13 +6,14 @@ Edit `app/src/data/project-presentations.ts` to change a deck's narrative. The o
 
 ## Editorial evidence
 
-All eleven decks were reviewed against `portfolio-projects.ts` and `project-stories.ts`. Original HTML files and their full Git history were also searched for collaborator credits and earlier descriptions. Named people were restored only where an explicit source was found.
+The original eleven decks were reviewed against `portfolio-projects.ts` and `project-stories.ts`. Original HTML files and their full Git history were also searched for collaborator credits and earlier descriptions. Named people were restored only where an explicit source was found. The Fluent data visualization deck draws on the `fluent-design/plugins/dataviz` plugin and the linked HTML artifacts from the `reports` repository.
 
 | Project | Narrative and outcome | Additional evidence |
 | --- | --- | --- |
 | Generative interfaces | Structured responses; compare layouts across summaries, comparisons, timelines, and recaps; working explorations | `portfolio/genui-bebop.html` history |
 | Microsoft 365 Copilot | High-fidelity response and refiner interactions; connect them to the broader workspace and redesign | `portfolio/bebop.html` history |
 | Icon Scaling Tool | Designer workflow, asset preparation, headless execution, bi-weekly release integration | `portfolio/icon-scaling-tool.html` history |
+| Fluent data visualization | Plugin creation, shared chart rules, interactive examples, the coffee-crawl generation flow, evaluation, and Figma generation | `fluent-design/plugins/dataviz`; `reports/2026-06-26 - Fluent Bebop Data Viz Gallery v2`; `reports/2026-07-17 - Fluent Flex Data Visualization Gallery`; `reports/2026-08-13 - Fluent Dataviz Five-Minute Walkthrough` |
 | Visual Diff Analyzer | Visual/numerical comparison, manual browser tool, automated Python release report | `portfolio/visual-diff.html` history |
 | PeerView | Team research, own split-screen concept, inline comments, comparative evaluation with 17 participants | `0c3d8df:portfolio/peer-survey.html` explicitly credits **Aaquib Khwaja, Anna Levenberg, Jackson Lyons** |
 | Rethinking subscriptions | 25-response needfinding, three concepts compared with six participants, folder decision, final 25-participant evaluation | `portfolio/youtube-redesign.html`; individual project status preserved |

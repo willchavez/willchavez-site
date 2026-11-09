@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fluent Flex — Data Visualization Gallery</title>
+<style>
+  /* ============================================================
+     TOKENS — resolved from flex-tokens generics + primitives.
+     Light values on :root, dark values on [data-theme="dark"].
+     Bind semantic roles, never raw hex, in components below.
+     ============================================================ */
+  :root {
+    color-scheme: light;
+    --gnrc-color-fixed-white:#ffffff; --gnrc-color-fixed-black:#000000;
+    --gnrc-color-expression-gray-heavy:#484848; --gnrc-color-expression-gray-loud:#929292; --gnrc-color-expression-gray-soft:#dedede; --gnrc-color-expression-gray-subtle:#f5f5f5;
+    --gnrc-color-expression-navy-heavy:#294482; --gnrc-color-expression-navy-loud:#5c8df8; --gnrc-color-expression-navy-soft:#cedeff; --gnrc-color-expression-navy-subtle:#f0f5ff;
+    --gnrc-color-expression-blue-heavy:#0b497f; --gnrc-color-expression-blue-loud:#2f95f4; --gnrc-color-expression-blue-soft:#c6e1ff; --gnrc-color-expression-blue-subtle:#eef6ff;
+    --gnrc-color-expression-green-heavy:#0c5722; --gnrc-color-expression-green-loud:#32ad52; --gnrc-color-expression-green-soft:#baedc1; --gnrc-color-expression-green-subtle:#e7fce9;
+    --gnrc-color-expression-lime-heavy:#345200; --gnrc-color-expression-lime-loud:#6da603; --gnrc-color-expression-lime-soft:#cbff93; --gnrc-color-expression-lime-subtle:#e6ffcf;
+    --gnrc-color-expression-yellow-heavy:#524800; --gnrc-color-expression-yellow-loud:#fbdf06; --gnrc-color-expression-yellow-soft:#ffed85; --gnrc-color-expression-yellow-subtle:#fff7c4;
+    --gnrc-color-expression-pumpkin-heavy:#762f0e; --gnrc-color-expression-pumpkin-loud:#fb966e; --gnrc-color-expression-pumpkin-soft:#ffd3c2; --gnrc-color-expression-pumpkin-subtle:#fef2ee;
+    --gnrc-color-expression-red-heavy:#772b28; --gnrc-color-expression-red-loud:#e7615b; --gnrc-color-expression-red-soft:#ffd2cd; --gnrc-color-expression-red-subtle:#fff2f0;
+    --gnrc-color-expression-pink-heavy:#6f2b53; --gnrc-color-expression-pink-loud:#d961a6; --gnrc-color-expression-pink-soft:#ffcee6; --gnrc-color-expression-pink-subtle:#fff1f7;
+    --gnrc-color-expression-purple-heavy:#523778; --gnrc-color-expression-purple-loud:#a575e8; --gnrc-color-expression-purple-soft:#e4d6ff; --gnrc-color-expression-purple-subtle:#f7f3ff;
+    --gnrc-color-surface-neutral-farther:#ebebeb; --gnrc-color-surface-neutral-far:#f2f2f2; --gnrc-color-surface-neutral-near:#fcfcfc; --gnrc-color-surface-neutral-nearer:#ffffff;
+    --gnrc-color-background-neutral-heavy:#242424; --gnrc-color-background-neutral-loud:#6f6f6f; --gnrc-color-background-neutral-soft:#00000014; --gnrc-color-background-neutral-subtle:#0000000d;
+    --gnrc-color-stroke-neutral-heavy:#242424; --gnrc-color-stroke-neutral-loud:#6f6f6f; --gnrc-color-stroke-neutral-soft:#0000006d; --gnrc-color-stroke-neutral-subtle:#00000021; --gnrc-color-stroke-neutral-disabled:#00000014;
+    --gnrc-color-stroke-focus-inner:#ffffff; --gnrc-color-stroke-focus-outer:#000000;
+    --gnrc-color-foreground-neutral-primary:#000000db; --gnrc-color-foreground-neutral-secondary:#000000a2; --gnrc-color-foreground-neutral-tertiary:#00000090; --gnrc-color-foreground-neutral-onloud:#ffffffff; --gnrc-color-foreground-neutral-disabled:#0000006d;
+    --gnrc-font-family-functional:'Segoe Sans','Segoe UI','Helvetica Neue','Arial',sans-serif;
+    --dv-radius-page:8px;
+  }
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --gnrc-color-expression-gray-heavy:#f5f5f5; --gnrc-color-expression-gray-loud:#dedede; --gnrc-color-expression-gray-soft:#929292; --gnrc-color-expression-gray-subtle:#484848;
+    --gnrc-color-expression-navy-heavy:#f0f5ff; --gnrc-color-expression-navy-loud:#cedeff; --gnrc-color-expression-navy-soft:#5c8df8; --gnrc-color-expression-navy-subtle:#294482;
+    --gnrc-color-expression-blue-heavy:#eef6ff; --gnrc-color-expression-blue-loud:#c6e1ff; --gnrc-color-expression-blue-soft:#2f95f4; --gnrc-color-expression-blue-subtle:#0b497f;
+    --gnrc-color-expression-green-heavy:#e7fce9; --gnrc-color-expression-green-loud:#baedc1; --gnrc-color-expression-green-soft:#32ad52; --gnrc-color-expression-green-subtle:#0c5722;
+    --gnrc-color-expression-lime-heavy:#e6ffcf; --gnrc-color-expression-lime-loud:#cbff93; --gnrc-color-expression-lime-soft:#6da603; --gnrc-color-expression-lime-subtle:#345200;
+    --gnrc-color-expression-yellow-heavy:#fff7c4; --gnrc-color-expression-yellow-loud:#ffed85; --gnrc-color-expression-yellow-soft:#fbdf06; --gnrc-color-expression-yellow-subtle:#524800;
+    --gnrc-color-expression-pumpkin-heavy:#fef2ee; --gnrc-color-expression-pumpkin-loud:#ffd3c2; --gnrc-color-expression-pumpkin-soft:#fb966e; --gnrc-color-expression-pumpkin-subtle:#762f0e;
+    --gnrc-color-expression-red-heavy:#fff2f0; --gnrc-color-expression-red-loud:#ffd2cd; --gnrc-color-expression-red-soft:#e7615b; --gnrc-color-expression-red-subtle:#772b28;
+    --gnrc-color-expression-pink-heavy:#fff1f7; --gnrc-color-expression-pink-loud:#ffcee6; --gnrc-color-expression-pink-soft:#d961a6; --gnrc-color-expression-pink-subtle:#6f2b53;
+    --gnrc-color-expression-purple-heavy:#f7f3ff; --gnrc-color-expression-purple-loud:#e4d6ff; --gnrc-color-expression-purple-soft:#a575e8; --gnrc-color-expression-purple-subtle:#523778;
+    --gnrc-color-surface-neutral-farther:#1b1b1b; --gnrc-color-surface-neutral-far:#1f1f1f; --gnrc-color-surface-neutral-near:#242424; --gnrc-color-surface-neutral-nearer:#292929;
+    --gnrc-color-background-neutral-heavy:#ffffff; --gnrc-color-background-neutral-loud:#929292; --gnrc-color-background-neutral-soft:#ffffff1a; --gnrc-color-background-neutral-subtle:#ffffff1f;
+    --gnrc-color-stroke-neutral-heavy:#dedede; --gnrc-color-stroke-neutral-loud:#929292; --gnrc-color-stroke-neutral-soft:#ffffff61; --gnrc-color-stroke-neutral-subtle:#ffffff48; --gnrc-color-stroke-neutral-disabled:#ffffff24;
+    --gnrc-color-stroke-focus-inner:#000000; --gnrc-color-stroke-focus-outer:#ffffff;
+    --gnrc-color-foreground-neutral-primary:#ffffffde; --gnrc-color-foreground-neutral-secondary:#ffffffa1; --gnrc-color-foreground-neutral-tertiary:#ffffff80; --gnrc-color-foreground-neutral-onloud:#000000db; --gnrc-color-foreground-neutral-disabled:#ffffff61;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin:0; font-family:var(--gnrc-font-family-functional);
+    background:var(--gnrc-color-surface-neutral-far);
+    color:var(--gnrc-color-foreground-neutral-primary);
+    -webkit-font-smoothing:antialiased;
+  }
+  .t-axis-title { font-size:10px; font-weight:700; }
+  .t-axis-tick  { font-size:10px; font-weight:400; }
+  .t-callout    { font-size:12px; font-weight:600; }
+  .t-dv-title   { font-size:12px; font-weight:400; }
+  .t-hero       { font-size:32px; font-weight:600; line-height:1.2; }
+
+  header.masthead {
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    padding:14px 24px;
+    background:var(--gnrc-color-surface-neutral-nearer);
+    border-bottom:1px solid var(--gnrc-color-stroke-neutral-subtle);
+  }
+  .masthead h1 { font-size:16px; margin:0; font-weight:600; }
+  .masthead .sub { font-size:12px; color:var(--gnrc-color-foreground-neutral-secondary); }
+  .masthead .spacer { flex:1; }
+  .toggle-btn {
+    font:inherit; font-size:12px; cursor:pointer;
+    background:var(--gnrc-color-surface-neutral-nearer);
+    color:var(--gnrc-color-foreground-neutral-primary);
+    border:1px solid var(--gnrc-color-stroke-neutral-soft);
+    border-radius:6px; padding:6px 12px; transition:background .1s ease;
+  }
+  .toggle-btn:hover { background:var(--gnrc-color-surface-neutral-far); }
+
+  nav.toc {
+    display:flex; flex-wrap:wrap; gap:6px; padding:12px 24px;
+    border-bottom:1px solid var(--gnrc-color-stroke-neutral-subtle);
+    background:var(--gnrc-color-surface-neutral-near);
+  }
+  nav.toc a {
+    font-size:11px; text-decoration:none; padding:3px 9px; border-radius:999px;
+    color:var(--gnrc-color-foreground-neutral-secondary);
+    background:var(--gnrc-color-background-neutral-subtle);
+  }
+  nav.toc a:hover { color:var(--gnrc-color-foreground-neutral-primary); }
+
+  main { max-width:1160px; margin:0 auto; padding:24px; }
+  section.band { margin:0 0 40px; }
+  section.band > h2 {
+    font-size:20px; margin:36px 0 4px; padding-top:8px;
+    border-top:2px solid var(--gnrc-color-stroke-neutral-subtle);
+  }
+  section.band > p.lede { font-size:13px; color:var(--gnrc-color-foreground-neutral-secondary); margin:2px 0 18px; max-width:74ch; line-height:1.5; }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:18px; }
+  .card {
+    background:var(--gnrc-color-surface-neutral-near);
+    border:1px solid var(--gnrc-color-stroke-neutral-subtle);
+    border-radius:var(--dv-radius-page);
+    padding:16px; overflow:hidden;
+  }
+  .card h3 { font-size:13px; margin:0 0 2px; font-weight:600; }
+  .card .meta { font-size:11px; color:var(--gnrc-color-foreground-neutral-secondary); margin:0 0 14px; line-height:1.45; }
+  .card.wide { grid-column:1/-1; }
+  .card.span2 { grid-column:span 2; }
+  @media (max-width:720px){ .card.span2{ grid-column:1/-1; } }
+
+  [data-inspect]:focus-visible, .legend-item:focus-visible, .cab.clickable:focus-visible, .tab-btn:focus-visible {
+    outline:none;
+    box-shadow:0 0 0 1px var(--gnrc-color-stroke-focus-inner), 0 0 0 3px var(--gnrc-color-stroke-focus-outer);
+    border-radius:3px;
+  }
+  svg [data-inspect]:focus-visible {
+    outline:2px solid var(--gnrc-color-stroke-focus-outer); outline-offset:1px;
+  }
+  [data-inspect] { cursor:default; }
+  .dv-dim { opacity:.12 !important; transition:opacity .12s ease; }
+  .dv-mark { transition:opacity .12s ease; }
+  @media (prefers-reduced-motion: reduce){ *, .dv-dim, .dv-mark { transition:none !important; animation:none !important; } }
+
+  #callout {
+    position:fixed; z-index:100; pointer-events:none;
+    min-width:120px; max-width:240px;
+    background:var(--gnrc-color-surface-neutral-nearer);
+    border:1px solid var(--gnrc-color-stroke-neutral-subtle);
+    border-radius:8px; padding:8px 10px;
+    box-shadow:0 8px 24px rgba(0,0,0,.18), 0 1px 2px rgba(0,0,0,.12);
+    opacity:0; transform:translateY(2px); transition:opacity .1s ease, transform .1s ease;
+    font-size:12px;
+  }
+  #callout.show { opacity:1; transform:translateY(0); }
+  #callout .co-head { font-size:12px; font-weight:400; color:var(--gnrc-color-foreground-neutral-secondary); margin-bottom:4px; }
+  #callout .co-row { display:flex; align-items:center; gap:8px; margin:3px 0; }
+  #callout .co-name { flex:1; color:var(--gnrc-color-foreground-neutral-primary); }
+  #callout .co-val { font-weight:700; color:var(--gnrc-color-foreground-neutral-primary); }
+  #callout .co-ratio { font-size:11px; color:var(--gnrc-color-foreground-neutral-tertiary); margin:-1px 0 3px 20px; }
+  #callout hr { border:none; border-top:1px solid var(--gnrc-color-stroke-neutral-subtle); margin:6px 0; }
+
+  .legend { display:flex; flex-wrap:wrap; gap:6px 10px; margin-top:12px; }
+  .legend-item {
+    display:inline-flex; align-items:center; gap:6px; cursor:pointer;
+    font-size:12px; padding:2px 8px 2px 4px; border-radius:999px;
+    background:var(--gnrc-color-background-neutral-subtle);
+    color:var(--gnrc-color-foreground-neutral-primary);
+    border:1px solid transparent; user-select:none; transition:background .1s ease;
+  }
+  .legend-item:hover { background:var(--gnrc-color-background-neutral-soft); }
+  .legend-item[aria-pressed="true"] { border-color:var(--gnrc-color-stroke-neutral-loud); }
+  .legend-item.off { opacity:.4; }
+  .legend-note { font-size:11px; color:var(--gnrc-color-foreground-neutral-tertiary); margin-top:6px; }
+
+  .tokrow { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .tok { font-size:10px; font-family:ui-monospace,Menlo,Consolas,monospace; padding:2px 6px; border-radius:4px;
+    background:var(--gnrc-color-background-neutral-subtle); color:var(--gnrc-color-foreground-neutral-secondary); }
+  .swatchbar { display:flex; gap:0; border-radius:6px; overflow:hidden; margin-top:6px; }
+  .swatchbar > div { height:34px; flex:1; }
+  .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+  .tabs { display:flex; gap:4px; margin-bottom:12px; flex-wrap:wrap; }
+  .tab-btn {
+    font:inherit; font-size:11px; cursor:pointer; padding:4px 10px; border-radius:6px;
+    border:1px solid var(--gnrc-color-stroke-neutral-subtle);
+    background:var(--gnrc-color-surface-neutral-nearer); color:var(--gnrc-color-foreground-neutral-secondary);
+  }
+  .tab-btn[aria-selected="true"]{ background:var(--gnrc-color-background-neutral-heavy); color:var(--gnrc-color-foreground-neutral-onloud); border-color:transparent; }
+
+  .kpi-tile { width:170px; padding:8px 16px; border-radius:2px; display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-end;
+    border:1px solid var(--gnrc-color-stroke-neutral-subtle); background:var(--gnrc-color-surface-neutral-nearer); }
+  .kpi-tile .k-title { font-size:12px; font-weight:400; }
+  .kpi-tile .k-large { font-size:40px; font-weight:600; line-height:1.2; padding-top:6px; display:flex; align-items:flex-end; gap:6px; }
+  .kpi-tile .k-large .k-trend { font-size:20px; padding-bottom:8px; }
+  .kpi-tile .k-sec { font-size:32px; font-weight:600; line-height:1.2; }
+  .kpi-tile .k-small { font-size:24px; font-weight:600; line-height:1.2; }
+
+  .cab-row { display:flex; flex-wrap:wrap; gap:8px; }
+  .cab { display:flex; align-items:stretch; gap:8px; padding:8px 16px; border-radius:6px;
+    background:var(--gnrc-color-surface-neutral-nearer); border:1px solid var(--gnrc-color-stroke-neutral-subtle); }
+  .cab.clickable { cursor:pointer; }
+  .cab .cab-bar { width:4px; border-radius:4px; flex:none; }
+  .cab .cab-txt { display:flex; flex-direction:column; justify-content:center; }
+  .cab .cab-title { font-size:12px; font-weight:400; }
+  .cab .cab-sub { font-size:10px; color:var(--gnrc-color-foreground-neutral-secondary); }
+  .cab .cab-num { font-weight:600; align-self:center; margin-left:6px; }
+  .cab .cab-num .den { color:var(--gnrc-color-foreground-neutral-tertiary); font-size:.72em; }
+
+  .hbar-row { margin-bottom:12px; }
+  .hbar-label { display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; }
+  .hbar-label .sec { color:var(--gnrc-color-foreground-neutral-tertiary); }
+  .hbar-track { height:16px; border-radius:2px; background:var(--gnrc-color-background-neutral-subtle); position:relative; overflow:hidden; }
+  .hbar-fill { height:16px; border-radius:2px; position:relative; }
+  .hbar-mini { display:inline-flex; align-items:center; gap:4px; }
+  .hbar-mini .mtrack { width:60px; height:12px; border-radius:2px; background:var(--gnrc-color-background-neutral-subtle); overflow:hidden; }
+  .hbar-mini .mfill { height:12px; border-radius:2px; }
+
+  table.spark { width:100%; border-collapse:collapse; font-size:12px; }
+  table.spark th { text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.04em; color:var(--gnrc-color-foreground-neutral-tertiary); padding:4px 6px; border-bottom:1px solid var(--gnrc-color-stroke-neutral-subtle); }
+  table.spark td { padding:6px; border-bottom:1px solid var(--gnrc-color-stroke-neutral-subtle); }
+  table.spark td.num { text-align:right; font-weight:600; }
+
+  .note { font-size:11px; color:var(--gnrc-color-foreground-neutral-tertiary); margin-top:10px; line-height:1.45; }
+  .a11y-legend { font-size:11px; color:var(--gnrc-color-foreground-neutral-secondary); background:var(--gnrc-color-background-neutral-subtle); border-radius:6px; padding:10px 12px; margin-top:14px; line-height:1.5; }
+  .a11y-legend b { color:var(--gnrc-color-foreground-neutral-primary); }
+  kbd { font-family:ui-monospace,monospace; font-size:10px; background:var(--gnrc-color-surface-neutral-nearer); border:1px solid var(--gnrc-color-stroke-neutral-soft); border-bottom-width:2px; border-radius:4px; padding:1px 5px; }
+  .lg-swatch { flex:none; }
+</style>
+</head>
+<body>
+<div class="sr-only" id="sr-live" aria-live="polite"></div>
+
+<header class="masthead">
+  <div>
+    <h1>Fluent Flex · Data Visualization Gallery</h1>
+    <div class="sub">Core principles · Axis / Legend / Callout · every chart type — with live hover + keyboard-focus interaction</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="toggle-btn" id="motionState" tabindex="-1" title="Reflects your OS reduced-motion preference" style="cursor:default">Motion: —</button>
+  <button class="toggle-btn" id="themeToggle" aria-pressed="false">◐ Theme: Light</button>
+</header>
+
+<nav class="toc" aria-label="Sections">
+  <a href="#core">Core</a><a href="#axis">Axis</a><a href="#legend">Legend</a><a href="#callout">Callout</a>
+  <a href="#bar">Bar</a><a href="#area">Area/Line</a><a href="#scatter">Scatter</a><a href="#spark">Sparkline</a>
+  <a href="#donut">Donut</a><a href="#gauge">Gauge</a><a href="#kpi">KPI</a><a href="#cab">CAB</a>
+  <a href="#heatmap">Heatmap</a><a href="#sankey">Sankey</a><a href="#funnel">Funnel</a><a href="#tree">Tree</a>
+</nav>
+
+<main>
+
+<!-- CORE -->
+<section class="band" id="core">
+  <h2>Core principles</h2>
+  <p class="lede">Four cross-cutting rules govern every chart: corner-radius scales with data-point width, role-based Segoe typography with K/M/B abbreviation, three density tiers, and the expression-family palettes paired with accessibility patterns.</p>
+  <div class="grid">
+    <div class="card">
+      <h3>1 · Corner radius</h3>
+      <p class="meta">Radius follows data-point width (hardcoded px, not theme tokens). Round only the free edge; the axis-meeting edge stays square.</p>
+      <div id="radiusDemo" style="display:flex; align-items:flex-end; gap:12px; height:120px;"></div>
+      <div class="tokrow"><span class="tok">4–10px→2</span><span class="tok">10–20→4</span><span class="tok">20–30→8</span><span class="tok">30–50→12</span><span class="tok">50+→16</span></div>
+    </div>
+    <div class="card">
+      <h3>2 · Typography roles</h3>
+      <p class="meta">All dataviz text uses the functional (Segoe) set. Numbers abbreviate K/M/B (uppercase, no space); commas at 4+ digits.</p>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div><span class="t-hero">1.2M</span> <span style="font-size:11px;color:var(--gnrc-color-foreground-neutral-tertiary)"> Large title — hero / donut center</span></div>
+        <div><span class="t-dv-title">Monthly revenue</span> <span style="font-size:11px;color:var(--gnrc-color-foreground-neutral-tertiary)"> Body small — chart title</span></div>
+        <div><span class="t-callout">8,210</span> <span style="font-size:11px;color:var(--gnrc-color-foreground-neutral-tertiary)"> Body small strong — callout value</span></div>
+        <div><span class="t-axis-title">REVENUE</span> <span style="font-size:11px;color:var(--gnrc-color-foreground-neutral-tertiary)"> Caption strong — axis title</span></div>
+        <div><span class="t-axis-tick">240K</span> <span style="font-size:11px;color:var(--gnrc-color-foreground-neutral-tertiary)"> Caption — axis tick</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>3 · Density</h3>
+      <p class="meta">Compact / regular / spacious tiers in 4px steps. Bars: 8px min width, 32px default, gap ≥ 1:1 with bar width.</p>
+      <div id="densityDemo"></div>
+      <div class="tokrow"><span class="tok">min 8px</span><span class="tok">default 32px</span><span class="tok">gap 1:1→2:1</span><span class="tok">side pad ≥8px</span></div>
+    </div>
+    <div class="card span2">
+      <h3>4 · Color + patterns</h3>
+      <p class="meta">Qualitative default order (loud weight, alternating heavy/soft hues): blue · yellow · purple · green · pink · lime · navy · pumpkin. Patterns always accompany multi-series for high-contrast / color-blind users.</p>
+      <div style="font-size:11px;font-weight:600;margin:4px 0">Qualitative (colour + pattern)</div>
+      <div id="qualStrip" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+      <div style="font-size:11px;font-weight:600;margin:12px 0 4px">Sequential (blue heavy→subtle) · Diverging (blue↔gray↔red) · Threat (green→yellow→red)</div>
+      <div class="swatchbar" id="seqStrip"></div>
+      <div class="swatchbar" id="divStrip" style="margin-top:6px"></div>
+      <div class="swatchbar" id="threatStrip" style="margin-top:6px"></div>
+      <p class="note">On-mark labels flip light/dark per fill (measured contrast), never one fixed colour across a multi-weight ramp.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AXIS -->
+<section class="band" id="axis">
+  <h2>Axis <span class="sub-lbl">— foundational (cartesian)</span></h2>
+  <p class="lede">The X/Y cartesian chrome shared by bar, line, area, scatter and heatmap. Three independent line variants. Y starts at 0, ≥3 ticks (default 6), right-aligned numeric labels, a 1px zero baseline heavier than the grid, no top/right spines. The axis sheds its own hover triggers so exploration lives in the data callout.</p>
+  <div class="card wide">
+    <div class="tabs" role="tablist" aria-label="Axis line variants" data-tabs="axisVar">
+      <button class="tab-btn" role="tab" aria-selected="true" data-tab="horiz">Horizontal lines</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="vert">Vertical lines</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="none">No lines</button>
+    </div>
+    <div id="axisPlot"></div>
+    <p class="note">Grid lines &amp; the 6×1px tick marks share one stroke token (<span class="tok">--gnrc-color-stroke-neutral-subtle</span>); the zero baseline uses the next-heavier <span class="tok">--gnrc-color-stroke-neutral-soft</span>. Overflow cascade: drop → rotate 45° → truncate + tooltip.</p>
+  </div>
+</section>
+
+<!-- LEGEND -->
+<section class="band" id="legend">
+  <h2>Legend <span class="sub-lbl">— foundational (interaction)</span></h2>
+  <p class="lede">A key <em>and</em> a control, always below the chart. Hover / focus a series to spotlight it (transient de-emphasis of the rest); click to filter (sticky, reversible). Swatches carry colour <em>and</em> shape so the encoding survives color-blindness. Arrow keys move between items, <kbd>Enter</kbd>/<kbd>Space</kbd> toggles, each announces "item N of M".</p>
+  <div class="card wide">
+    <h3>Interactive legend on a grouped bar chart</h3>
+    <p class="meta">Hover a bar or a legend chip → sibling series dim with the one shared de-emphasis treatment. Click a chip to latch a filter (this demo is multi-select).</p>
+    <div id="legendDemoPlot"></div>
+    <div class="legend" id="legendDemoLegend" role="group" aria-label="Series — hover to highlight, click to filter"></div>
+    <div class="legend-note">Multi-select filter (union). Click again to clear. Hover is a transient preview and never commits.</div>
+  </div>
+</section>
+
+<!-- CALLOUT -->
+<section class="band" id="callout-sec">
+  <h2 id="callout">Callout <span class="sub-lbl">— foundational (interaction)</span></h2>
+  <p class="lede">The shared floating card that surfaces a data point's identity + value. <b>Hover and keyboard focus are equal triggers and show identical content (parity).</b> Every inspectable mark carries an accessible label restating its value, a visible focus ring, and is reachable in tab / arrow order — so the value never hides behind an interaction that isn't there.</p>
+  <div class="card wide">
+    <h3>Parity demo — try both a mouse and the keyboard</h3>
+    <p class="meta">Tab into the bars below, then use <kbd>←</kbd> <kbd>→</kbd> to walk them. The same card opens on focus as on hover; siblings recede. A screen-reader label ("{category}. {series}, {value}.") is announced for each.</p>
+    <div id="calloutDemoPlot"></div>
+    <div class="a11y-legend"><b>Accessible-label contract:</b> point on line/area → "{x}. {series}, {value}." · bar → "{category}. {series}, {value}." · cell → "{row}, {column}. {series}, {value}." The visible card and the label are two renderings of the same data — kept in sync.</div>
+  </div>
+</section>
+
+<!-- BAR -->
+<section class="band" id="bar">
+  <h2>Bar chart</h2>
+  <p class="lede">Value tied to a category, encoded by length. Vertical variants sit on the cartesian axis; horizontal variants are axis-less row stacks. Bars always start at 0. Multi-series get colour + pattern and an interactive legend. Below 8px width → switch to area/line.</p>
+  <div class="grid">
+    <div class="card"><h3>Vertical · basic</h3><p class="meta">Single series → one neutral fill, no legend. Rounded top only; square base on the axis.</p><div id="barBasic"></div></div>
+    <div class="card"><h3>Vertical · stacked</h3><p class="meta">Composition within each category. Every segment is a rounded pill separated by a 1px gap.</p><div id="barStacked"></div><div class="legend" id="barStackedLegend" role="group" aria-label="Channels"></div></div>
+    <div class="card"><h3>Vertical · grouped</h3><p class="meta">Two cuts side-by-side; X tick marks omitted (bar position anchors the label).</p><div id="barGrouped"></div><div class="legend" id="barGroupedLegend" role="group" aria-label="Quarters"></div></div>
+    <div class="card"><h3>Horizontal · basic ("of total")</h3><p class="meta">Long labels; no axis, no grid. Track conveys budget-of-total; trailing value is the precise label.</p><div id="barHoriz"></div></div>
+    <div class="card"><h3>Horizontal · mini (inline)</h3><p class="meta">Axis-less glyphs embedded in a table; surrounding context supplies the label.</p><table class="spark" id="barMiniTable"><thead><tr><th>Service</th><th>Uptime</th></tr></thead><tbody></tbody></table></div>
+  </div>
+</section>
+
+<!-- AREA / LINE -->
+<section class="band" id="area">
+  <h2>Area / line chart</h2>
+  <p class="lede">Continuous trends. Interaction is built around the horizontal (time) position: a crosshair snaps to the nearest X and one <b>shared per-X callout</b> lists every series at that moment. Pinpoints reveal on interaction, not at rest. X axis is point-anchored and must be labelled.</p>
+  <div class="grid">
+    <div class="card span2">
+      <div class="tabs" role="tablist" aria-label="Area variants" data-tabs="areaVar">
+        <button class="tab-btn" role="tab" aria-selected="true" data-tab="basic">Basic</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="overlap">Overlapping (2 max)</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="stacked">Stacked</button>
+      </div>
+      <div id="areaPlot"></div>
+      <div class="legend" id="areaLegend" role="group" aria-label="Series"></div>
+      <p class="note">Move the pointer across the plot (or tab in and use <kbd>←</kbd>/<kbd>→</kbd>): a vertical guide line snaps to the nearest position and the shared card compares all series at that moment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCATTER -->
+<section class="band" id="scatter">
+  <h2>Scatter / bubble <span class="sub-lbl">— provisional visuals</span></h2>
+  <p class="lede">Two continuous measures as discrete points — correlation, clusters, outliers. Bubble encodes a third dimension by marker area; multi-series encode a category by colour <em>and shape</em> (never colour alone). Per-point inspect callout; markers grow when active, siblings dim.</p>
+  <div class="grid">
+    <div class="card span2"><h3>Multi-series bubble scatter</h3><p class="meta">Each series = a distinct expression family + a distinct marker shape. Bubble radius = deal size. Legend swatch mirrors the shape.</p><div id="scatterPlot"></div><div class="legend" id="scatterLegend" role="group" aria-label="Segments"></div></div>
+  </div>
+</section>
+
+<!-- SPARKLINE -->
+<section class="band" id="spark">
+  <h2>Sparkline</h2>
+  <p class="lede">A 24×126px trend glyph — silhouette first, no axes. For high-cardinality tables and KPI tiles. Trend arrow + value are redundant text cues; a dense table exposes trend + value through the row, not one focus stop per glyph.</p>
+  <div class="grid">
+    <div class="card span2"><h3>Per-host CPU trend (table)</h3><p class="meta">Colour the line <em>or</em> the value, not both. Values right-aligned so digits line up. Each row carries a text alternative.</p><table class="spark" id="sparkTable"><thead><tr><th>Host</th><th>7-day CPU</th><th style="text-align:right">Now</th></tr></thead><tbody></tbody></table></div>
+  </div>
+</section>
+
+<!-- DONUT -->
+<section class="band" id="donut">
+  <h2>Donut chart</h2>
+  <p class="lede">Proportion / part-of-whole where change-over-time doesn't matter. Center value = the whole (stays put on hover). Slices descend clockwise from 12 o'clock; sub-2% slices roll into "Others" (its card lists the nested breakdown). Per-slice labels sit outside the ring on the neutral surface to keep contrast. Legend below, interactive.</p>
+  <div class="grid">
+    <div class="card span2"><h3>Revenue by product line</h3><p class="meta">Each slice is a focusable data point — hover / focus singles it out and opens its card while the rest dim. 2px accessibility-stroke allowance preserved.</p>
+      <div style="display:flex; gap:24px; flex-wrap:wrap; align-items:center;"><div id="donutPlot"></div><div class="legend" id="donutLegend" role="group" aria-label="Product lines" style="flex-direction:column; align-items:flex-start;"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- GAUGE -->
+<section class="band" id="gauge">
+  <h2>Gauge chart</h2>
+  <p class="lede">A value against a fixed min/max scale. Exactly 180°; the needle stops at the value with no overshoot. Sizes unlock chrome progressively: Small = arc + number; Medium adds min/max; Large adds threat-diverging threshold zones + needle + status label — and must be paired with an action.</p>
+  <div class="grid">
+    <div class="card"><h3>Small</h3><p class="meta">Arc + number only.</p><div id="gaugeS"></div></div>
+    <div class="card"><h3>Medium</h3><p class="meta">Adds min / max labels.</p><div id="gaugeM"></div></div>
+    <div class="card"><h3>Large + threshold</h3><p class="meta">Threat zones (green/yellow/red expression), needle, status label.</p><div id="gaugeL"></div>
+      <button class="toggle-btn" style="margin-top:10px" id="gaugeAction">Take action: review capacity</button>
+      <p class="note">Threat-diverging must ship with actionable content — hence the adjacent control.</p>
+    </div>
+  </div>
+</section>
+
+<!-- KPI -->
+<section class="band" id="kpi">
+  <h2>KPI tile</h2>
+  <p class="lede">A label + hero number. Trend is carried by an icon (never by colouring the number). Static tile — interaction belongs to the parent card. Numbers abbreviate K/M/B. Fixed 170px width; abbreviate rather than resize.</p>
+  <div class="grid" id="kpiGrid"></div>
+</section>
+
+<!-- CAB -->
+<section class="band" id="cab">
+  <h2>Count Annotation Bar</h2>
+  <p class="lede">Compact category overview that doubles as a list filter. A 4px colour bar anchors the category; title + count. Clickable CABs toggle Filled ↔ Outline; multi-select is additive (OR). State is announced, not colour-only.</p>
+  <div class="grid">
+    <div class="card wide"><h3>Incident filters (clickable, multi-select)</h3><p class="meta">Click to toggle a filter. Small / Large / Fraction number styles shown.</p>
+      <div class="cab-row" id="cabRow" role="group" aria-label="Incident filters"></div>
+      <div class="legend-note" id="cabStatus" aria-live="polite">No filters active.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HEATMAP -->
+<section class="band" id="heatmap">
+  <h2>Heatmap</h2>
+  <p class="lede">Two dimensions × magnitude → colour, on the axis "No lines" variant. 1px structural cell gap, 60×28px cell floor (bin, don't shrink). In-cell value labels flip light/dark by a measured contrast test against each cell's own fill. Cells form a 2D grid for arrow-key navigation.</p>
+  <div class="grid">
+    <div class="card span2"><h3>Requests per hour × weekday (sequential)</h3><p class="meta">Sequential blue ramp (heavy = high). Hover / focus a cell to inspect; the rest dim. Missing data renders as a diagonal hatch (a third state), never white.</p>
+      <div id="heatmapPlot" style="overflow:auto"></div>
+      <div class="swatchbar" id="heatLegend" style="max-width:220px;margin-top:12px"></div>
+      <div class="legend-note">Gradient colorbar: low → high.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SANKEY -->
+<section class="band" id="sankey">
+  <h2>Sankey chart</h2>
+  <p class="lede">Flow between column groups; stream width = value transferred. Streams tinted by source category (trace one colour through); boxes stay neutral. Hover / focus a node or stream highlights its connected path and dims the rest. Stream callout carries the target, value, and a part-to-whole share.</p>
+  <div class="grid">
+    <div class="card wide"><h3>Traffic source → landing → outcome</h3><p class="meta">Hover / focus a stream to light its source→target chain. Conservation of flow: each column's totals balance.</p><div id="sankeyPlot" style="overflow:auto"></div></div>
+  </div>
+</section>
+
+<!-- FUNNEL -->
+<section class="band" id="funnel">
+  <h2>Funnel chart <span class="sub-lbl">— provisional visuals</span></h2>
+  <p class="lede">Sequential stages that monotonically narrow — conversion / drop-off. Band width = value relative to the first stage; the narrowing <em>is</em> the drop-off. Always surface the conversion ratio, not just the raw value. Stage labels live in a clear lane, never on a band.</p>
+  <div class="grid">
+    <div class="card"><h3>Basic funnel</h3><p class="meta">One value per stage; neutral fill; no legend. Callout shows value + % of first stage.</p><div id="funnelBasic"></div></div>
+    <div class="card"><h3>Stacked funnel (by region)</h3><p class="meta">Same categories run through every stage, each holding its colour + pattern.</p><div id="funnelStacked"></div><div class="legend" id="funnelLegend" role="group" aria-label="Regions"></div></div>
+  </div>
+</section>
+
+<!-- TREE -->
+<section class="band" id="tree">
+  <h2>Tree chart</h2>
+  <p class="lede">Hierarchy / org chart — structural, not quantitative. Parent → branches → children. Nodes never overlap; branch lines never cross node boxes. Parent title (14px) is larger than child title (12px).</p>
+  <div class="grid">
+    <div class="card wide"><h3>Org structure</h3><p class="meta">Text-only hierarchy; no metrics required. Outlined nodes with 1px heavy stroke.</p><div id="treePlot" style="overflow:auto"></div></div>
+  </div>
+</section>
+
+</main>
+
+<div id="callout" role="status" aria-hidden="true"></div>
+
+<style>.sub-lbl{font-size:12px;font-weight:400;color:var(--gnrc-color-foreground-neutral-tertiary)}</style>
+<script>
+/* ============================================================
+   Fluent Flex — Data Visualization Gallery
+   Shared interaction framework + per-chart renderers.
+   Honors: callout hover/focus parity, shared de-emphasis,
+   interactive keyboard legends, dual-outline focus ring,
+   qualitative colour+pattern, reduced-motion.
+   ============================================================ */
+(function(){
+"use strict";
+
+/* ---------- shared primitives ---------- */
+const QUAL = ["blue","yellow","purple","green","pink","lime","navy","pumpkin"];
+const SVGNS = "http://www.w3.org/2000/svg";
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const expr = (hue,weight="loud") => `var(--gnrc-color-expression-${hue}-${weight})`;
+const live = document.getElementById("sr-live");
+function announce(msg){ if(live){ live.textContent=""; setTimeout(()=>live.textContent=msg,30); } }
+const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* number formatting — K/M/B uppercase, no space; commas at 4+ digits */
+function commas(n){ return n.toLocaleString("en-US"); }
+function abbr(n){
+  const a=Math.abs(n);
+  if(a>=1e9) return trim(n/1e9)+"B";
+  if(a>=1e6) return trim(n/1e6)+"M";
+  if(a>=1e4) return trim(n/1e3)+"K";           // avoid decimals-with-K: only ≥10K abbreviates
+  return commas(n);
+}
+function trim(x){ return (Math.round(x*10)/10).toString().replace(/\.0$/,""); }
+
+/* SVG element helper */
+function el(tag,attrs={},parent){
+  const e=document.createElementNS(SVGNS,tag);
+  for(const k in attrs){ if(attrs[k]!==null&&attrs[k]!==undefined) e.setAttribute(k,attrs[k]); }
+  if(parent) parent.appendChild(e); return e;
+}
+function svg(w,h,parent){
+  const s=el("svg",{viewBox:`0 0 ${w} ${h}`,width:"100%",style:`max-width:${w}px;height:auto;display:block;overflow:visible`},parent);
+  return s;
+}
+
+/* ---------- accessibility patterns (colour is never the only channel) ---------- */
+const PATTERN_IDS = {};
+function ensurePatterns(svgEl){
+  const defs = el("defs",{},svgEl);
+  const motifs = {
+    dots:  '<circle cx="2" cy="2" r="1.1" fill="#fff"/>',
+    diag:  '<path d="M0,6 L6,0" stroke="#fff" stroke-width="1.3"/>',
+    grid:  '<path d="M0,0 H6 M0,0 V6" stroke="#fff" stroke-width="1"/>',
+    vert:  '<path d="M2,0 V6" stroke="#fff" stroke-width="1.4"/>',
+    horiz: '<path d="M0,3 H6" stroke="#fff" stroke-width="1.4"/>',
+    cross: '<path d="M0,3 H6 M3,0 V6" stroke="#fff" stroke-width="1"/>',
+    zig:   '<path d="M0,5 L3,1 L6,5" stroke="#fff" stroke-width="1.1" fill="none"/>',
+    ring:  '<circle cx="3" cy="3" r="1.7" stroke="#fff" stroke-width="0.9" fill="none"/>'
+  };
+  QUAL.forEach((hue,i)=>{
+    const name = Object.keys(motifs)[i];
+    const id = `pat-${hue}`;
+    PATTERN_IDS[hue] = id;
+    const p = el("pattern",{id,width:6,height:6,patternUnits:"userSpaceOnUse",patternTransform:"rotate(0)"},defs);
+    const bg = el("rect",{width:6,height:6,fill:expr(hue)},p);
+    const g = document.createElementNS(SVGNS,"g");
+    g.setAttribute("opacity","0.55");
+    g.innerHTML = motifs[name];
+    p.appendChild(g);
+  });
+}
+
+/* legend swatch: colour + shape mark (survives colour-blindness) */
+const SHAPES = ["circle","square","triangle","diamond","cross","star","wye","hex"];
+function shapeMark(hue, shape, size=12){
+  const s = document.createElementNS(SVGNS,"svg");
+  s.setAttribute("viewBox","0 0 12 12"); s.setAttribute("width",size); s.setAttribute("height",size);
+  s.setAttribute("class","lg-swatch");
+  const c = expr(hue);
+  let node;
+  switch(shape){
+    case "square": node=`<rect x="1.5" y="1.5" width="9" height="9" rx="1.5" fill="${c}"/>`; break;
+    case "triangle": node=`<path d="M6,1 L11,11 L1,11 Z" fill="${c}"/>`; break;
+    case "diamond": node=`<path d="M6,1 L11,6 L6,11 L1,6 Z" fill="${c}"/>`; break;
+    case "cross": node=`<path d="M4.5,1 h3 v3 h3 v3 h-3 v3 h-3 v-3 h-3 v-3 h3 Z" fill="${c}"/>`; break;
+    case "star": node=`<path d="M6,1 L7.3,4.4 L11,4.6 L8.1,6.9 L9.1,10.5 L6,8.5 L2.9,10.5 L3.9,6.9 L1,4.6 L4.7,4.4 Z" fill="${c}"/>`; break;
+    case "wye": node=`<path d="M6,6 L6,1 M6,6 L1.7,9 M6,6 L10.3,9" stroke="${c}" stroke-width="2.2" fill="none"/>`; break;
+    case "hex": node=`<path d="M6,1 L10.3,3.5 L10.3,8.5 L6,11 L1.7,8.5 L1.7,3.5 Z" fill="${c}"/>`; break;
+    default: node=`<circle cx="6" cy="6" r="5" fill="${c}"/>`;
+  }
+  s.innerHTML = node; return s;
+}
+
+/* ---------- callout (the shared exploration surface) ---------- */
+const callout = document.getElementById("callout");
+function buildCalloutHTML(data){
+  // data = { head, rows:[{hue,shape,name,value,ratio,desc}], suppressSwatch }
+  let h = `<div class="co-head">${escapeHtml(data.head)}</div>`;
+  data.rows.forEach(r=>{
+    const sw = (r.hue && !data.suppressSwatch) ? shapeMark(r.hue, r.shape||"square",12).outerHTML : "";
+    h += `<div class="co-row">${sw}<span class="co-name">${escapeHtml(r.name||"")}</span><span class="co-val">${escapeHtml(r.value)}</span></div>`;
+    if(r.ratio) h += `<div class="co-ratio">${escapeHtml(r.ratio)}</div>`;
+    if(r.desc)  h += `<div class="co-ratio">${escapeHtml(r.desc)}</div>`;
+  });
+  return h;
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function positionCallout(x,y){
+  const pad=12, w=callout.offsetWidth, h=callout.offsetHeight;
+  let left=x+14, top=y+14;
+  if(left+w+pad>innerWidth) left=x-w-14;
+  if(top+h+pad>innerHeight) top=y-h-14;
+  left=Math.max(pad,left); top=Math.max(pad,top);
+  callout.style.left=left+"px"; callout.style.top=top+"px";
+}
+let calloutOwner=null;
+function showCallout(data, x, y, owner){
+  callout.innerHTML = buildCalloutHTML(data);
+  callout.classList.add("show"); callout.setAttribute("aria-hidden","false");
+  positionCallout(x,y);
+  calloutOwner=owner||null;
+  // shared de-emphasis: dim siblings within the same data-group
+  if(owner){
+    const group = owner.closest("[data-group]");
+    if(group){
+      group.querySelectorAll("[data-inspect]").forEach(m=>{ if(m!==owner) m.classList.add("dv-dim"); });
+    }
+  }
+}
+function hideCallout(){
+  callout.classList.remove("show"); callout.setAttribute("aria-hidden","true");
+  document.querySelectorAll(".dv-dim").forEach(m=>m.classList.remove("dv-dim"));
+  calloutOwner=null;
+}
+
+/* wire an element as inspectable — hover AND focus parity, plus a11y label */
+function makeInspect(node, dataFn, ariaLabel){
+  node.setAttribute("data-inspect","");
+  node.setAttribute("tabindex","-1");            // roving; container manages the active stop
+  node.setAttribute("role","img");
+  if(ariaLabel) node.setAttribute("aria-label",ariaLabel);
+  const rectXY = ()=>{ const r=node.getBoundingClientRect(); return [r.left+r.width/2, r.top+r.height/2]; };
+  node.addEventListener("mouseenter",e=>showCallout(dataFn(),e.clientX,e.clientY,node));
+  node.addEventListener("mousemove",e=>{ if(calloutOwner===node) positionCallout(e.clientX,e.clientY); });
+  node.addEventListener("mouseleave",hideCallout);
+  node.addEventListener("focus",()=>{ const[x,y]=rectXY(); showCallout(dataFn(),x,y,node); });
+  node.addEventListener("blur",hideCallout);
+}
+
+/* roving tabindex over a set of inspectable marks (keyboard reachability) */
+function enableRoving(container, selector="[data-inspect]"){
+  const items = ()=>Array.from(container.querySelectorAll(selector));
+  const list=items(); if(!list.length) return;
+  list.forEach((it,i)=>it.setAttribute("tabindex", i===0?"0":"-1"));
+  container.addEventListener("keydown",e=>{
+    const list=items();
+    let idx=list.findIndex(x=>x===document.activeElement);
+    if(idx<0) return;
+    let next=null;
+    if(["ArrowRight","ArrowDown"].includes(e.key)) next=Math.min(list.length-1,idx+1);
+    else if(["ArrowLeft","ArrowUp"].includes(e.key)) next=Math.max(0,idx-1);
+    else if(e.key==="Home") next=0;
+    else if(e.key==="End") next=list.length-1;
+    if(next!==null){
+      e.preventDefault();
+      list[idx].setAttribute("tabindex","-1");
+      list[next].setAttribute("tabindex","0"); list[next].focus();
+    }
+  });
+}
+
+/* interactive legend factory (hover-highlight transient, click-filter sticky) */
+function buildLegend(container, series, onChange){
+  // series = [{key,label,hue,shape}]
+  container.innerHTML="";
+  const state = new Set();   // filtered-OUT keys? we use IN-set semantics: empty = all on
+  const items=[];
+  series.forEach((s,i)=>{
+    const chip=document.createElement("div");
+    chip.className="legend-item"; chip.setAttribute("role","button");
+    chip.setAttribute("tabindex", i===0?"0":"-1");
+    chip.setAttribute("aria-pressed","false");
+    chip.setAttribute("aria-label",`${s.label}, item ${i+1} of ${series.length}`);
+    chip.appendChild(shapeMark(s.hue, s.shape||"square",12));
+    const lbl=document.createElement("span"); lbl.textContent=s.label; chip.appendChild(lbl);
+    chip.addEventListener("mouseenter",()=>onChange({type:"hover",key:s.key}));
+    chip.addEventListener("mouseleave",()=>onChange({type:"hover",key:null}));
+    chip.addEventListener("focus",()=>onChange({type:"hover",key:s.key}));
+    chip.addEventListener("blur",()=>onChange({type:"hover",key:null}));
+    const toggle=()=>{
+      const on = chip.getAttribute("aria-pressed")==="true";
+      chip.setAttribute("aria-pressed", on?"false":"true");
+      chip.classList.toggle("off", !on ? false : false);
+      if(on){ state.delete(s.key); } else { state.add(s.key); }
+      chip.classList.toggle("off", state.size>0 && !state.has(s.key));
+      // recompute .off across chips
+      items.forEach(({chip:c,key})=>c.classList.toggle("off", state.size>0 && !state.has(key)));
+      onChange({type:"filter",active:new Set(state)});
+      announce(state.size===0 ? "Filter cleared, all series shown" : `${s.label} ${state.has(s.key)?"added to":"removed from"} filter`);
+    };
+    chip.addEventListener("click",toggle);
+    chip.addEventListener("keydown",e=>{
+      if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); }
+      else if(["ArrowRight","ArrowDown","ArrowLeft","ArrowUp"].includes(e.key)){
+        e.preventDefault();
+        let idx=items.findIndex(it=>it.chip===document.activeElement);
+        let nx = ["ArrowRight","ArrowDown"].includes(e.key)?Math.min(items.length-1,idx+1):Math.max(0,idx-1);
+        items[idx].chip.setAttribute("tabindex","-1");
+        items[nx].chip.setAttribute("tabindex","0"); items[nx].chip.focus();
+      }
+    });
+    container.appendChild(chip);
+    items.push({chip,key:s.key});
+  });
+  return { state };
+}
+
+/* ---------- axis chrome (shared cartesian) ---------- */
+function drawAxis(root, opts){
+  // opts: {w,h,pad,data:[{label,value}],max,variant,ticks,seriesColor}
+  const {w,h}=opts, pad=opts.pad||{l:40,r:12,t:12,b:28};
+  const plotW=w-pad.l-pad.r, plotH=h-pad.t-pad.b;
+  const max=opts.max, ticks=opts.ticks||6;
+  const stroke=cssv("--gnrc-color-stroke-neutral-subtle");
+  const strokeBase=cssv("--gnrc-color-stroke-neutral-soft");
+  const fg=cssv("--gnrc-color-foreground-neutral-tertiary");
+  const s=svg(w,h,root);
+  // Y grid + ticks + labels
+  for(let i=0;i<=ticks;i++){
+    const val=max*i/ticks;
+    const y=pad.t+plotH-(plotH*i/ticks);
+    if(opts.variant==="horiz"){
+      el("line",{x1:pad.l,y1:y,x2:pad.l+plotW,y2:y,stroke:i===0?strokeBase:stroke,"stroke-width":1},s);
+    }
+    // 1px tick mark
+    el("line",{x1:pad.l-4,y1:y,x2:pad.l,y2:y,stroke,"stroke-width":1},s);
+    const t=el("text",{x:pad.l-7,y:y+3,"text-anchor":"end",fill:fg,class:"t-axis-tick"},s);
+    t.textContent=abbr(Math.round(val));
+  }
+  // X labels + optional vertical grid
+  const n=opts.data.length, step=plotW/n;
+  opts.data.forEach((d,i)=>{
+    const cx=pad.l+step*i+step/2;
+    if(opts.variant==="vert"){
+      el("line",{x1:cx,y1:pad.t,x2:cx,y2:pad.t+plotH,stroke,"stroke-width":1},s);
+    }
+    const t=el("text",{x:cx,y:pad.t+plotH+16,"text-anchor":"middle",fill:fg,class:"t-axis-tick"},s);
+    t.textContent=d.label;
+  });
+  return {s,pad,plotW,plotH,step,scaleY:v=>pad.t+plotH-(plotH*v/max)};
+}
+
+/* ============================================================
+   CORE demos
+   ============================================================ */
+function renderRadius(){
+  const host=document.getElementById("radiusDemo");
+  const specs=[{w:6,r:2},{w:16,r:4},{w:26,r:8},{w:40,r:12},{w:58,r:16}];
+  const hmax=110;
+  specs.forEach((sp,i)=>{
+    const wrap=document.createElement("div");
+    wrap.style.cssText="display:flex;flex-direction:column;align-items:center;gap:4px";
+    const bh=40+i*16;
+    const bar=document.createElement("div");
+    bar.style.cssText=`width:${sp.w}px;height:${bh}px;background:${expr(QUAL[i])};border-radius:${sp.r}px ${sp.r}px 0 0`;
+    const lab=document.createElement("div"); lab.style.cssText="font-size:9px;color:var(--gnrc-color-foreground-neutral-tertiary)";
+    lab.textContent=`${sp.w}px→${sp.r}`;
+    wrap.appendChild(bar); wrap.appendChild(lab); host.appendChild(wrap);
+  });
+}
+function renderDensity(){
+  const host=document.getElementById("densityDemo");
+  const tiers=[["Compact",8,8],["Regular",24,24],["Spacious",40,40]];
+  tiers.forEach(([name,bw,gap])=>{
+    const row=document.createElement("div");
+    row.style.cssText="margin:8px 0";
+    const lab=document.createElement("div"); lab.style.cssText="font-size:10px;color:var(--gnrc-color-foreground-neutral-tertiary);margin-bottom:3px"; lab.textContent=name;
+    const bars=document.createElement("div"); bars.style.cssText=`display:flex;gap:${gap}px;align-items:flex-end;height:44px`;
+    [0.7,1,0.5,0.85].forEach((f,i)=>{
+      const b=document.createElement("div");
+      b.style.cssText=`width:${bw}px;height:${44*f}px;background:${expr("blue")};border-radius:2px 2px 0 0`;
+      bars.appendChild(b);
+    });
+    row.appendChild(lab); row.appendChild(bars); host.appendChild(row);
+  });
+}
+function renderQual(){
+  const host=document.getElementById("qualStrip");
+  const s=svg(1,1); ensurePatterns(s);   // seed pattern ids
+  QUAL.forEach((hue,i)=>{
+    const chip=document.createElement("div");
+    chip.style.cssText="display:flex;flex-direction:column;align-items:center;gap:4px";
+    const box=svg(44,44); box.style.maxWidth="44px";
+    ensurePatterns(box);
+    el("rect",{x:0,y:0,width:44,height:44,rx:4,fill:expr(hue)},box);
+    el("rect",{x:0,y:0,width:44,height:44,rx:4,fill:`url(#${PATTERN_IDS[hue]})`},box);
+    const lab=document.createElement("div"); lab.style.cssText="font-size:9px;color:var(--gnrc-color-foreground-neutral-tertiary)"; lab.textContent=`${i+1}·${hue}`;
+    chip.appendChild(box); chip.appendChild(lab); host.appendChild(chip);
+  });
+}
+function renderRamps(){
+  const seq=["blue-heavy","blue-loud","blue-soft","blue-subtle"];
+  const div=["blue-loud","blue-soft","gray-subtle","red-soft","red-loud"];
+  const threat=["green-loud","lime-loud","yellow-loud","pumpkin-loud","red-loud"];
+  const put=(id,arr)=>{ const h=document.getElementById(id); arr.forEach(t=>{ const d=document.createElement("div"); d.style.background=`var(--gnrc-color-expression-${t})`; h.appendChild(d); }); };
+  put("seqStrip",seq); put("divStrip",div); put("threatStrip",threat);
+}
+
+/* ============================================================
+   AXIS — 3 variants via tabs
+   ============================================================ */
+const AXIS_DATA=[{label:"Jan",value:180000},{label:"Feb",value:240000},{label:"Mar",value:210000},{label:"Apr",value:300000},{label:"May",value:280000},{label:"Jun",value:340000}];
+function renderAxis(variant){
+  const host=document.getElementById("axisPlot"); host.innerHTML="";
+  host.setAttribute("data-group","axis");
+  const max=360000;
+  const {s,pad,step,scaleY}=drawAxis(host,{w:560,h:240,data:AXIS_DATA,max,variant,ticks:6});
+  // simple line on top so the axis has content
+  let dpath="";
+  AXIS_DATA.forEach((d,i)=>{ const cx=pad.l+step*i+step/2, cy=scaleY(d.value); dpath+=(i?"L":"M")+cx+","+cy+" "; });
+  el("path",{d:dpath,fill:"none",stroke:expr("blue"),"stroke-width":2},s);
+  AXIS_DATA.forEach((d,i)=>{
+    const cx=pad.l+step*i+step/2, cy=scaleY(d.value);
+    const c=el("circle",{cx,cy,r:4,fill:expr("blue")},s);
+    makeInspect(c,()=>({head:d.label,rows:[{hue:"blue",name:"Revenue",value:abbr(d.value)}]}),`${d.label}. Revenue, ${abbr(d.value)}.`);
+  });
+  enableRoving(host);
+}
+
+/* ============================================================
+   LEGEND demo — grouped bar with interactive legend
+   ============================================================ */
+const LEG_CATS=["North","South","East","West"];
+const LEG_SERIES=[{key:"q1",label:"Q1",hue:"blue",shape:"circle"},{key:"q2",label:"Q2",hue:"yellow",shape:"square"},{key:"q3",label:"Q3",hue:"purple",shape:"triangle"}];
+const LEG_VALUES={q1:[42,55,38,60],q2:[50,48,52,44],q3:[61,58,49,66]};
+function renderLegendDemo(){
+  const host=document.getElementById("legendDemoPlot"); host.innerHTML=""; host.setAttribute("data-group","legdemo");
+  const w=560,h=240,pad={l:40,r:12,t:12,b:28}, max=80;
+  const {s,step,scaleY,plotH}=drawAxis(host,{w,h,data:LEG_CATS.map(l=>({label:l})),max,variant:"horiz",ticks:4,pad});
+  ensurePatterns(s);
+  const grpW=step*0.7, bw=grpW/LEG_SERIES.length;
+  const barRefs=[];
+  LEG_CATS.forEach((cat,ci)=>{
+    LEG_SERIES.forEach((se,si)=>{
+      const val=LEG_VALUES[se.key][ci];
+      const x=pad.l+step*ci+step/2-grpW/2+bw*si;
+      const y=scaleY(val), bh=pad.t+plotH-y;
+      const r=el("rect",{x:x+1,y,width:bw-2,height:bh,rx:2,fill:expr(se.hue),class:"dv-mark","data-series":se.key},s);
+      el("rect",{x:x+1,y,width:bw-2,height:bh,rx:2,fill:`url(#${PATTERN_IDS[se.hue]})`,"pointer-events":"none",class:"dv-mark","data-series":se.key},s);
+      makeInspect(r,()=>({head:cat,rows:[{hue:se.hue,shape:se.shape,name:se.label,value:val}]}),`${cat}. ${se.label}, ${val}.`);
+      barRefs.push({node:r,series:se.key});
+    });
+  });
+  enableRoving(host);
+  const applyDim=(filterSet,hoverKey)=>{
+    barRefs.forEach(({node,series})=>{
+      let dim=false;
+      if(filterSet && filterSet.size>0 && !filterSet.has(series)) dim=true;
+      if(hoverKey && series!==hoverKey) dim=true;
+      node.classList.toggle("dv-dim",dim);
+    });
+    s.querySelectorAll('rect[fill^="url"]').forEach(p=>{
+      const series=p.getAttribute("data-series");
+      let dim=false;
+      if(filterSet && filterSet.size>0 && !filterSet.has(series)) dim=true;
+      if(hoverKey && series!==hoverKey) dim=true;
+      p.classList.toggle("dv-dim",dim);
+    });
+  };
+  let currentFilter=new Set();
+  const lg=buildLegend(document.getElementById("legendDemoLegend"),LEG_SERIES,(ev)=>{
+    if(ev.type==="hover") applyDim(currentFilter,ev.key);
+    else { currentFilter=ev.active; applyDim(currentFilter,null); }
+  });
+}
+
+/* ============================================================
+   CALLOUT parity demo
+   ============================================================ */
+const CO_DATA=[{label:"Mon",value:8210},{label:"Tue",value:9120},{label:"Wed",value:7460},{label:"Thu",value:10230},{label:"Fri",value:11890},{label:"Sat",value:6340},{label:"Sun",value:5210}];
+function renderCalloutDemo(){
+  const host=document.getElementById("calloutDemoPlot"); host.innerHTML=""; host.setAttribute("data-group","codemo");
+  const w=560,h=220,pad={l:44,r:12,t:12,b:28}, max=12000;
+  const {s,step,scaleY,plotH}=drawAxis(host,{w,h,data:CO_DATA,max,variant:"horiz",ticks:6,pad});
+  const bw=Math.min(32,step*0.6);
+  CO_DATA.forEach((d,i)=>{
+    const x=pad.l+step*i+step/2-bw/2, y=scaleY(d.value), bh=pad.t+plotH-y;
+    const r=el("rect",{x,y,width:bw,height:bh,rx:4,fill:expr("blue"),class:"dv-mark"},s);
+    makeInspect(r,()=>({head:d.label,rows:[{hue:"blue",name:"Orders",value:commas(d.value)}]}),`${d.label}. Orders, ${commas(d.value)}.`);
+  });
+  enableRoving(host);
+}
+
+/* ============================================================
+   BAR family
+   ============================================================ */
+function renderBarBasic(){
+  const host=document.getElementById("barBasic"); host.innerHTML=""; host.setAttribute("data-group","barBasic");
+  const data=[{label:"A",value:120},{label:"B",value:200},{label:"C",value:150},{label:"D",value:80},{label:"E",value:170}];
+  const w=300,h=180,pad={l:34,r:8,t:10,b:26},max=220;
+  const {s,step,scaleY,plotH}=drawAxis(host,{w,h,data,max,variant:"horiz",ticks:4,pad});
+  const bw=Math.min(32,step*0.6);
+  data.forEach((d,i)=>{
+    const x=pad.l+step*i+step/2-bw/2,y=scaleY(d.value),bh=pad.t+plotH-y;
+    const r=el("rect",{x,y,width:bw,height:bh,rx:4,fill:cssv("--gnrc-color-background-neutral-loud"),class:"dv-mark"},s);
+    makeInspect(r,()=>({head:d.label,rows:[{name:"Value",value:commas(d.value)}],suppressSwatch:true}),`${d.label}. Value, ${commas(d.value)}.`);
+  });
+  enableRoving(host);
+}
+const STACK_CATS=["Q1","Q2","Q3","Q4"];
+const STACK_SERIES=[{key:"web",label:"Web",hue:"blue",shape:"circle"},{key:"retail",label:"Retail",hue:"yellow",shape:"square"},{key:"partner",label:"Partner",hue:"purple",shape:"triangle"}];
+const STACK_VALS={web:[40,55,50,62],retail:[30,28,35,40],partner:[18,22,20,25]};
+function renderBarStacked(){
+  const host=document.getElementById("barStacked"); host.innerHTML=""; host.setAttribute("data-group","barStacked");
+  const w=300,h=200,pad={l:34,r:8,t:10,b:26},max=130;
+  const {s,step,scaleY,plotH}=drawAxis(host,{w,h,data:STACK_CATS.map(l=>({label:l})),max,variant:"horiz",ticks:4,pad});
+  ensurePatterns(s);
+  const bw=Math.min(34,step*0.55);
+  const refs=[];
+  STACK_CATS.forEach((cat,ci)=>{
+    let acc=0; const total=STACK_SERIES.reduce((t,se)=>t+STACK_VALS[se.key][ci],0);
+    STACK_SERIES.forEach(se=>{
+      const val=STACK_VALS[se.key][ci];
+      const yTop=scaleY(acc+val), yBot=scaleY(acc), segH=yBot-yTop-1;
+      const x=pad.l+step*ci+step/2-bw/2;
+      const r=el("rect",{x,y:yTop,width:bw,height:Math.max(1,segH),rx:2,fill:expr(se.hue),class:"dv-mark","data-series":se.key},s);
+      el("rect",{x,y:yTop,width:bw,height:Math.max(1,segH),rx:2,fill:`url(#${PATTERN_IDS[se.hue]})`,"pointer-events":"none","data-series":se.key},s);
+      makeInspect(r,()=>({head:`${cat}`,rows:[{hue:se.hue,shape:se.shape,name:se.label,value:val,ratio:`${Math.round(val/total*100)}% of ${total}`}]}),`${cat}. ${se.label}, ${val}, ${Math.round(val/total*100)} percent of ${total}.`);
+      refs.push({node:r,series:se.key}); acc+=val;
+    });
+  });
+  enableRoving(host);
+  let filter=new Set();
+  const dim=(fs,hv)=>{ refs.forEach(({node,series})=>{ let d=false; if(fs&&fs.size>0&&!fs.has(series))d=true; if(hv&&series!==hv)d=true; node.classList.toggle("dv-dim",d); }); };
+  buildLegend(document.getElementById("barStackedLegend"),STACK_SERIES,ev=>{ if(ev.type==="hover")dim(filter,ev.key); else {filter=ev.active; dim(filter,null);} });
+}
+const GRP_CATS=["Mon","Tue","Wed","Thu"];
+const GRP_SERIES=[{key:"y23",label:"2023",hue:"blue",shape:"circle"},{key:"y24",label:"2024",hue:"green",shape:"diamond"}];
+const GRP_VALS={y23:[30,45,38,50],y24:[42,40,55,48]};
+function renderBarGrouped(){
+  const host=document.getElementById("barGrouped"); host.innerHTML=""; host.setAttribute("data-group","barGrouped");
+  const w=300,h=200,pad={l:34,r:8,t:10,b:26},max=70;
+  const {s,step,scaleY,plotH}=drawAxis(host,{w,h,data:GRP_CATS.map(l=>({label:l})),max,variant:"horiz",ticks:4,pad});
+  ensurePatterns(s);
+  const grpW=step*0.62, bw=grpW/GRP_SERIES.length;
+  const refs=[];
+  GRP_CATS.forEach((cat,ci)=>{
+    GRP_SERIES.forEach((se,si)=>{
+      const val=GRP_VALS[se.key][ci];
+      const x=pad.l+step*ci+step/2-grpW/2+bw*si, y=scaleY(val), bh=pad.t+plotH-y;
+      const r=el("rect",{x:x+1,y,width:bw-2,height:bh,rx:2,fill:expr(se.hue),class:"dv-mark","data-series":se.key},s);
+      el("rect",{x:x+1,y,width:bw-2,height:bh,rx:2,fill:`url(#${PATTERN_IDS[se.hue]})`,"pointer-events":"none","data-series":se.key},s);
+      makeInspect(r,()=>({head:cat,rows:[{hue:se.hue,shape:se.shape,name:se.label,value:val}]}),`${cat}. ${se.label}, ${val}.`);
+      refs.push({node:r,series:se.key});
+    });
+  });
+  enableRoving(host);
+  let filter=new Set();
+  const dim=(fs,hv)=>{ refs.forEach(({node,series})=>{ let d=false; if(fs&&fs.size>0&&!fs.has(series))d=true; if(hv&&series!==hv)d=true; node.classList.toggle("dv-dim",d); }); };
+  buildLegend(document.getElementById("barGroupedLegend"),GRP_SERIES,ev=>{ if(ev.type==="hover")dim(filter,ev.key); else {filter=ev.active; dim(filter,null);} });
+}
+function renderBarHoriz(){
+  const host=document.getElementById("barHoriz"); host.innerHTML=""; host.setAttribute("data-group","barHoriz");
+  const data=[{label:"Engineering",value:820000},{label:"Marketing",value:410000},{label:"Operations",value:305000},{label:"Support",value:180000}];
+  const total=data.reduce((t,d)=>t+d.value,0);
+  data.forEach(d=>{
+    const row=document.createElement("div"); row.className="hbar-row";
+    row.innerHTML=`<div class="hbar-label"><span>${d.label}</span><span class="sec">${abbr(d.value)} · ${Math.round(d.value/total*100)}%</span></div>`;
+    const track=document.createElement("div"); track.className="hbar-track";
+    const fill=document.createElement("div"); fill.className="hbar-fill";
+    fill.style.width=(d.value/data[0].value*100)+"%"; fill.style.background=cssv("--gnrc-color-background-neutral-loud");
+    track.appendChild(fill); row.appendChild(track);
+    makeInspect(fill,()=>({head:d.label,rows:[{name:"Budget",value:abbr(d.value),ratio:`${Math.round(d.value/total*100)}% of total`}],suppressSwatch:true}),`${d.label}. Budget, ${abbr(d.value)}, ${Math.round(d.value/total*100)} percent of total.`);
+    host.appendChild(row);
+  });
+  enableRoving(host);
+}
+function renderBarMini(){
+  const tb=document.querySelector("#barMiniTable tbody");
+  const rows=[["api-gateway",99.98],["auth-svc",99.90],["billing",99.72],["search",98.40],["notifications",99.95]];
+  rows.forEach(([name,up])=>{
+    const tr=document.createElement("tr");
+    const pct=(up-98)/2*100;
+    tr.innerHTML=`<td>${name}</td><td><span class="hbar-mini"><span class="mtrack"><span class="mfill" style="width:${Math.max(4,pct)}%;background:${up<99?expr('pumpkin'):expr('green')}"></span></span> <span style="font-size:11px">${up}%</span></span></td>`;
+    tb.appendChild(tr);
+  });
+}
+
+/* ============================================================
+   AREA / LINE — crosshair + shared per-X callout
+   ============================================================ */
+const AREA_X=["W1","W2","W3","W4","W5","W6","W7","W8"];
+const AREA_SERIES=[
+  {key:"prod",label:"Production",hue:"blue",shape:"circle",vals:[120,138,150,142,168,180,175,195]},
+  {key:"stage",label:"Staging",hue:"yellow",shape:"square",vals:[60,72,68,80,90,86,102,110]}
+];
+function renderArea(variant){
+  const host=document.getElementById("areaPlot"); host.innerHTML=""; host.setAttribute("data-group","area");
+  const w=720,h=280,pad={l:44,r:14,t:14,b:28};
+  const series = variant==="basic" ? [AREA_SERIES[0]] : AREA_SERIES;
+  let max=0;
+  if(variant==="stacked"){ AREA_X.forEach((_,i)=>{ let s=0; series.forEach(se=>s+=se.vals[i]); max=Math.max(max,s); }); }
+  else series.forEach(se=>se.vals.forEach(v=>max=Math.max(max,v)));
+  max=Math.ceil(max/50)*50;
+  const {s,step,scaleY,plotH}=drawAxis(host,{w,h,data:AREA_X.map(l=>({label:l})),max,variant:"horiz",ticks:5,pad});
+  ensurePatterns(s);
+  const xAt=i=>pad.l+step*i+step/2;
+  // build areas/lines
+  const stackAcc=AREA_X.map(()=>0);
+  series.forEach((se,si)=>{
+    let linePts=[], areaPts=[];
+    AREA_X.forEach((_,i)=>{
+      let yv = variant==="stacked" ? stackAcc[i]+se.vals[i] : se.vals[i];
+      const x=xAt(i), y=scaleY(yv);
+      linePts.push([x,y]);
+    });
+    // area fill (basic + stacked + overlap)
+    let baseY = variant==="stacked" ? AREA_X.map((_,i)=>scaleY(stackAcc[i])) : AREA_X.map(()=>pad.t+plotH);
+    let ap = linePts.map(p=>p.join(",")).join(" L ");
+    let apBack = linePts.map((p,i)=>[p[0],baseY[i]]).reverse().map(p=>p.join(",")).join(" L ");
+    const fillOpacity = variant==="overlap"?0.45:0.9;
+    el("path",{d:`M ${ap} L ${apBack} Z`,fill:expr(se.hue,"soft"),opacity:fillOpacity,"pointer-events":"none"},s);
+    el("path",{d:`M ${linePts.map(p=>p.join(",")).join(" L ")}`,fill:"none",stroke:expr(se.hue),"stroke-width":2,"pointer-events":"none"},s);
+    if(variant==="stacked") AREA_X.forEach((_,i)=>stackAcc[i]+=se.vals[i]);
+  });
+  // crosshair + per-X hit columns (shared callout lists all series at that X)
+  const guide=el("line",{x1:0,y1:pad.t,x2:0,y2:pad.t+plotH,stroke:cssv("--gnrc-color-stroke-neutral-loud"),"stroke-width":1,opacity:0,"pointer-events":"none"},s);
+  const dots=series.map(se=>el("circle",{r:4,fill:expr(se.hue),opacity:0,"pointer-events":"none"},s));
+  const cols=[];
+  AREA_X.forEach((xl,i)=>{
+    const hit=el("rect",{x:pad.l+step*i,y:pad.t,width:step,height:plotH,fill:"transparent",class:"dv-mark"},s);
+    const acc2=[]; let run=0;
+    const rows=series.map(se=>{ if(variant==="stacked"){run+=se.vals[i];} return {hue:se.hue,shape:se.shape,name:se.label,value:se.vals[i]}; });
+    const label = series.map(se=>`${se.label}, ${se.vals[i]}`).join("; ");
+    const showGuide=()=>{
+      guide.setAttribute("x1",xAt(i)); guide.setAttribute("x2",xAt(i)); guide.setAttribute("opacity","1");
+      let racc=0;
+      dots.forEach((dt,di)=>{
+        let yv=variant==="stacked"?(racc+=series[di].vals[i]):series[di].vals[i];
+        dt.setAttribute("cx",xAt(i)); dt.setAttribute("cy",scaleY(yv)); dt.setAttribute("opacity","1");
+      });
+    };
+    hit.addEventListener("mouseenter",e=>{ showGuide(); showCallout({head:xl,rows},e.clientX,e.clientY,hit); });
+    hit.addEventListener("mousemove",e=>{ if(calloutOwner===hit) positionCallout(e.clientX,e.clientY); });
+    hit.addEventListener("mouseleave",()=>{ guide.setAttribute("opacity","0"); dots.forEach(d=>d.setAttribute("opacity","0")); hideCallout(); });
+    makeInspect(hit,()=>({head:xl,rows}),`${xl}. ${label}.`);
+    hit.addEventListener("focus",showGuide);
+    hit.addEventListener("blur",()=>{ guide.setAttribute("opacity","0"); dots.forEach(d=>d.setAttribute("opacity","0")); });
+    cols.push(hit);
+  });
+  enableRoving(host);
+  buildLegend(document.getElementById("areaLegend"),series,()=>{});
+}
+
+/* ============================================================
+   SCATTER / bubble
+   ============================================================ */
+const SCAT_SERIES=[
+  {key:"smb",label:"SMB",hue:"blue",shape:"circle",pts:[[12,20,8],[22,35,14],[30,28,10],[18,50,20],[40,42,12],[26,60,26]]},
+  {key:"ent",label:"Enterprise",hue:"purple",shape:"triangle",pts:[[55,70,30],[62,85,44],[70,60,22],[48,92,50],[80,78,36],[66,100,60]]},
+  {key:"gov",label:"Public sector",hue:"green",shape:"diamond",pts:[[35,15,10],[50,30,18],[60,22,12],[44,40,24],[72,34,20]]}
+];
+function renderScatter(){
+  const host=document.getElementById("scatterPlot"); host.innerHTML=""; host.setAttribute("data-group","scatter");
+  const w=720,h=320,pad={l:44,r:16,t:14,b:30},maxX=90,maxY=110;
+  const {s,scaleY,plotH,plotW}=drawAxis(host,{w,h,data:[{label:"0"},{label:"25"},{label:"50"},{label:"75"},{label:"90"}],max:maxY,variant:"none",ticks:5,pad});
+  ensurePatterns(s);
+  const sx=v=>pad.l+(v/maxX)*plotW;
+  const refs=[];
+  SCAT_SERIES.forEach(se=>{
+    se.pts.forEach(([x,y,size])=>{
+      const cx=sx(x),cy=scaleY(y),r=4+size/6;
+      let mark;
+      if(se.shape==="triangle") mark=el("path",{d:`M${cx},${cy-r} L${cx+r},${cy+r} L${cx-r},${cy+r} Z`,fill:expr(se.hue),opacity:.8,class:"dv-mark","data-series":se.key},s);
+      else if(se.shape==="diamond") mark=el("path",{d:`M${cx},${cy-r} L${cx+r},${cy} L${cx},${cy+r} L${cx-r},${cy} Z`,fill:expr(se.hue),opacity:.8,class:"dv-mark","data-series":se.key},s);
+      else mark=el("circle",{cx,cy,r,fill:expr(se.hue),opacity:.8,class:"dv-mark","data-series":se.key},s);
+      makeInspect(mark,()=>({head:se.label,rows:[{hue:se.hue,shape:se.shape,name:"Accounts / spend",value:`${x} / ${y}`,desc:`Deal size ${size}`}]}),`${se.label}. ${x} accounts, ${y} spend, deal size ${size}.`);
+      refs.push({node:mark,series:se.key});
+    });
+  });
+  enableRoving(host);
+  let filter=new Set();
+  const dim=(fs,hv)=>{ refs.forEach(({node,series})=>{ let d=false; if(fs&&fs.size>0&&!fs.has(series))d=true; if(hv&&series!==hv)d=true; node.classList.toggle("dv-dim",d); }); };
+  buildLegend(document.getElementById("scatterLegend"),SCAT_SERIES,ev=>{ if(ev.type==="hover")dim(filter,ev.key); else {filter=ev.active; dim(filter,null);} });
+}
+
+/* ============================================================
+   SPARKLINE table
+   ============================================================ */
+function sparkPath(vals,w,h){
+  const max=Math.max(...vals),min=Math.min(...vals),rng=max-min||1;
+  return vals.map((v,i)=>`${(i/(vals.length-1)*w).toFixed(1)},${(h-((v-min)/rng)*h).toFixed(1)}`).join(" ");
+}
+function renderSpark(){
+  const tb=document.querySelector("#sparkTable tbody");
+  const rows=[
+    ["web-01",[40,42,45,44,48,52,58],58,"up"],
+    ["web-02",[70,66,60,58,55,50,44],44,"down"],
+    ["db-01",[30,32,31,33,32,34,33],33,"flat"],
+    ["cache-01",[55,60,52,64,58,66,70],70,"up"],
+    ["queue-01",[80,78,82,79,85,88,84],84,"up"]
+  ];
+  rows.forEach(([host,vals,now,trend])=>{
+    const tr=document.createElement("tr");
+    const arrow=trend==="up"?"▲":trend==="down"?"▼":"▬";
+    const col=trend==="up"?expr("green"):trend==="down"?expr("pumpkin"):cssv("--gnrc-color-foreground-neutral-tertiary");
+    tr.innerHTML=`<td>${host}</td>
+      <td><svg viewBox="0 0 126 24" width="126" height="24" style="display:block"><polyline points="${sparkPath(vals,126,20).replace(/,/g," ").replace(/\s+/g,(m,o)=> o%2? " ":",")}" fill="none" stroke="${col}" stroke-width="1.5"/></svg></td>
+      <td class="num"><span style="color:${col}">${arrow}</span> ${now}%</td>`;
+    // fix polyline points formatting
+    const poly=tr.querySelector("polyline"); poly.setAttribute("points",sparkPath(vals,126,20));
+    tr.setAttribute("aria-label",`${host}. Trend ${trend}. Now ${now} percent.`);
+    tb.appendChild(tr);
+  });
+}
+
+/* ============================================================
+   DONUT (+ Others rollup) + interactive legend
+   ============================================================ */
+const DONUT=[
+  {key:"cloud",label:"Cloud",hue:"blue",shape:"circle",value:520000},
+  {key:"lic",label:"Licenses",hue:"yellow",shape:"square",value:310000},
+  {key:"svc",label:"Services",hue:"purple",shape:"triangle",value:180000},
+  {key:"hw",label:"Hardware",hue:"green",shape:"diamond",value:90000},
+  {key:"train",label:"Training",hue:"pink",shape:"star",value:14000},
+  {key:"misc",label:"Misc",hue:"lime",shape:"hex",value:9000}
+];
+function renderDonut(){
+  const host=document.getElementById("donutPlot"); host.innerHTML=""; host.setAttribute("data-group","donut");
+  const total=DONUT.reduce((t,d)=>t+d.value,0);
+  // roll sub-2% into Others
+  const big=[],small=[];
+  DONUT.forEach(d=>{ (d.value/total<0.02?small:big).push(d); });
+  let slices=big.slice();
+  if(small.length){ slices.push({key:"others",label:"Others",hue:"gray",shape:"cross",value:small.reduce((t,d)=>t+d.value,0),nested:small}); }
+  const w=240,cx=120,cy=120,rO=100,rI=62;
+  const s=svg(w,w,host); ensurePatterns(s);
+  let ang=-90; // 12 o'clock
+  const refs=[];
+  slices.forEach(sl=>{
+    const frac=sl.value/total, sweep=frac*360;
+    const a0=ang*Math.PI/180, a1=(ang+sweep)*Math.PI/180;
+    const large=sweep>180?1:0;
+    const p=(r,a)=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];
+    const [x0,y0]=p(rO,a0),[x1,y1]=p(rO,a1),[x2,y2]=p(rI,a1),[x3,y3]=p(rI,a0);
+    const d=`M${x0},${y0} A${rO},${rO} 0 ${large} 1 ${x1},${y1} L${x2},${y2} A${rI},${rI} 0 ${large} 0 ${x3},${y3} Z`;
+    const path=el("path",{d,fill:expr(sl.hue),class:"dv-mark","data-series":sl.key},s);
+    el("path",{d,fill:`url(#${PATTERN_IDS[sl.hue]||PATTERN_IDS.blue})`,"pointer-events":"none","data-series":sl.key,class:"dv-mark"},s);
+    const rows = sl.nested
+      ? [{hue:sl.hue,shape:sl.shape,name:sl.label,value:abbr(sl.value),ratio:`${Math.round(frac*100)}% of total`}].concat(sl.nested.map(n=>({hue:n.hue,shape:n.shape,name:n.label,value:abbr(n.value)})))
+      : [{hue:sl.hue,shape:sl.shape,name:sl.label,value:abbr(sl.value),ratio:`${Math.round(frac*100)}% of total`}];
+    makeInspect(path,()=>({head:sl.label,rows}),`${sl.label}. ${abbr(sl.value)}, ${Math.round(frac*100)} percent of total.`);
+    refs.push({node:path,series:sl.key});
+    ang+=sweep;
+  });
+  // center whole
+  const ct=el("text",{x:cx,y:cy-2,"text-anchor":"middle",fill:cssv("--gnrc-color-foreground-neutral-primary"),style:"font-size:28px;font-weight:600"},s); ct.textContent=abbr(total);
+  const cl=el("text",{x:cx,y:cy+16,"text-anchor":"middle",fill:cssv("--gnrc-color-foreground-neutral-tertiary"),style:"font-size:11px"},s); cl.textContent="Total spend";
+  enableRoving(host);
+  let filter=new Set();
+  const dim=(fs,hv)=>{ refs.forEach(({node,series})=>{ let d=false; if(fs&&fs.size>0&&!fs.has(series))d=true; if(hv&&series!==hv)d=true; node.classList.toggle("dv-dim",d); }); };
+  buildLegend(document.getElementById("donutLegend"),slices.map(s=>({key:s.key,label:s.label,hue:s.hue,shape:s.shape})),ev=>{ if(ev.type==="hover")dim(filter,ev.key); else {filter=ev.active; dim(filter,null);} });
+}
+
+/* ============================================================
+   GAUGE — S/M/L, 180°, needle no overshoot
+   ============================================================ */
+function gaugeArc(cx,cy,r,a0,a1){
+  const p=a=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];
+  const [x0,y0]=p(a0),[x1,y1]=p(a1);
+  const large=(a1-a0)>Math.PI?1:0;
+  return `M${x0},${y0} A${r},${r} 0 ${large} 1 ${x1},${y1}`;
+}
+function renderGauge(hostId,size,value,max){
+  const host=document.getElementById(hostId); host.innerHTML=""; host.setAttribute("data-group",hostId);
+  const w=220,h=140,cx=110,cy=118,r=88;
+  const s=svg(w,h,host);
+  const A0=Math.PI, A1=2*Math.PI; // 180° left→right (top half)
+  const track=cssv("--gnrc-color-background-neutral-subtle");
+  if(size==="large"){
+    // threat zones green/yellow/red
+    const zones=[[0,.6,"green"],[.6,.8,"yellow"],[.8,1,"red"]];
+    zones.forEach(([f0,f1,hue])=>{
+      el("path",{d:gaugeArc(cx,cy,r,A0+(A1-A0)*f0,A0+(A1-A0)*f1),fill:"none",stroke:expr(hue),"stroke-width":16,"stroke-linecap":"butt"},s);
+    });
+  } else {
+    el("path",{d:gaugeArc(cx,cy,r,A0,A1),fill:"none",stroke:track,"stroke-width":16},s);
+    const f=value/max;
+    el("path",{d:gaugeArc(cx,cy,r,A0,A0+(A1-A0)*f),fill:"none",stroke:expr("blue"),"stroke-width":16,"stroke-linecap":"round"},s);
+  }
+  // needle (large) — stops exactly at value, no overshoot
+  if(size==="large"){
+    const f=Math.min(1,value/max), a=A0+(A1-A0)*f;
+    const nx=cx+ (r-6)*Math.cos(a), ny=cy+(r-6)*Math.sin(a);
+    el("line",{x1:cx,y1:cy,x2:nx,y2:ny,stroke:cssv("--gnrc-color-foreground-neutral-primary"),"stroke-width":3,"stroke-linecap":"round"},s);
+    el("circle",{cx,cy,r:5,fill:cssv("--gnrc-color-foreground-neutral-primary")},s);
+  }
+  // value number
+  const vt=el("text",{x:cx,y:cy-14,"text-anchor":"middle",fill:cssv("--gnrc-color-foreground-neutral-primary"),style:"font-size:26px;font-weight:600"},s);
+  vt.textContent=Math.round(value/max*100)+"%";
+  if(size!=="small"){
+    const mn=el("text",{x:cx-r,y:cy+20,"text-anchor":"middle",fill:cssv("--gnrc-color-foreground-neutral-tertiary"),class:"t-axis-tick"},s); mn.textContent="0";
+    const mx=el("text",{x:cx+r,y:cy+20,"text-anchor":"middle",fill:cssv("--gnrc-color-foreground-neutral-tertiary"),class:"t-axis-tick"},s); mx.textContent=abbr(max);
+  }
+  if(size==="large"){
+    const status = value/max<.6?"Healthy":value/max<.8?"Warning":"Critical";
+    const stC = value/max<.6?"green":value/max<.8?"yellow":"red";
+    const st=el("text",{x:cx,y:cy+8,"text-anchor":"middle",fill:expr(stC,"heavy"),style:"font-size:12px;font-weight:600"},s);
+    st.textContent=status;
+    // make the arc inspectable
+    const hit=el("rect",{x:cx-r-8,y:cy-r-8,width:(r+8)*2,height:r+16,fill:"transparent",class:"dv-mark"},s);
+    makeInspect(hit,()=>({head:"Capacity",rows:[{name:"Utilization",value:Math.round(value/max*100)+"%",desc:status}],suppressSwatch:true}),`Capacity utilization ${Math.round(value/max*100)} percent. ${status}.`);
+    hit.setAttribute("tabindex","0");
+  }
+}
+
+/* ============================================================
+   KPI tiles
+   ============================================================ */
+function renderKPI(){
+  const host=document.getElementById("kpiGrid");
+  const tiles=[
+    {title:"Active users",large:"1.2M",trend:"▲",tc:"green",style:"large"},
+    {title:"Revenue (MTD)",large:"842K",trend:"▲",tc:"green",style:"large"},
+    {title:"Churn",sec:"2.4%",trend:"▼",tc:"green",style:"sec"},
+    {title:"Open incidents",small:"17",trend:"▲",tc:"pumpkin",style:"small"},
+    {title:"NPS",sec:"62",trend:"▬",tc:"gray",style:"sec"},
+    {title:"Avg. latency",small:"128ms",trend:"▼",tc:"green",style:"small"}
+  ];
+  tiles.forEach(t=>{
+    const card=document.createElement("div"); card.className="card"; card.style.cssText="display:flex;justify-content:center";
+    const tile=document.createElement("div"); tile.className="kpi-tile";
+    let num;
+    if(t.style==="large") num=`<div class="k-large">${t.large}<span class="k-trend" style="color:${t.tc==='gray'?'var(--gnrc-color-foreground-neutral-tertiary)':expr(t.tc,'heavy')}">${t.trend}</span></div>`;
+    else if(t.style==="sec") num=`<div class="k-sec">${t.sec} <span style="font-size:16px;color:${t.tc==='gray'?'var(--gnrc-color-foreground-neutral-tertiary)':expr(t.tc,'heavy')}">${t.trend}</span></div>`;
+    else num=`<div class="k-small">${t.small} <span style="font-size:14px;color:${t.tc==='gray'?'var(--gnrc-color-foreground-neutral-tertiary)':expr(t.tc,'heavy')}">${t.trend}</span></div>`;
+    tile.innerHTML=`<div class="k-title">${t.title}</div>${num}`;
+    tile.setAttribute("aria-label",`${t.title}: ${t.large||t.sec||t.small}, trend ${t.trend==='▲'?'up':t.trend==='▼'?'down':'flat'}`);
+    card.appendChild(tile); host.appendChild(card);
+  });
+}
+
+/* ============================================================
+   CAB — clickable multi-select
+   ============================================================ */
+const CAB_DATA=[
+  {key:"crit",label:"Critical",hue:"red",count:8,style:"small"},
+  {key:"high",label:"High",hue:"pumpkin",count:23,style:"small"},
+  {key:"med",label:"Medium",hue:"yellow",count:142,style:"large"},
+  {key:"low",label:"Low",hue:"blue",count:56,style:"large"},
+  {key:"resolved",label:"Resolved",hue:"green",num:311,den:540,style:"fraction"}
+];
+function renderCAB(){
+  const host=document.getElementById("cabRow"); const status=document.getElementById("cabStatus");
+  const active=new Set();
+  CAB_DATA.forEach(c=>{
+    const cab=document.createElement("div"); cab.className="cab clickable";
+    cab.setAttribute("role","button"); cab.setAttribute("tabindex","0"); cab.setAttribute("aria-pressed","false");
+    let numHtml;
+    if(c.style==="fraction") numHtml=`<span class="cab-num">${commas(c.num)}<span class="den"> / ${commas(c.den)}</span></span>`;
+    else if(c.style==="large") numHtml=`<span class="cab-num" style="font-size:24px">${commas(c.count)}</span>`;
+    else numHtml=`<span class="cab-num" style="font-size:16px">${commas(c.count)}</span>`;
+    cab.innerHTML=`<div class="cab-bar" style="background:${expr(c.hue)}"></div><div class="cab-txt"><span class="cab-title">${c.label}</span><span class="cab-sub">incidents</span></div>${numHtml}`;
+    const upd=()=>{
+      status.textContent = active.size? `Filtering: ${[...active].map(k=>CAB_DATA.find(d=>d.key===k).label).join(", ")}` : "No filters active.";
+    };
+    const toggle=()=>{
+      const on=cab.getAttribute("aria-pressed")==="true";
+      cab.setAttribute("aria-pressed",on?"false":"true");
+      cab.style.background = on? "var(--gnrc-color-surface-neutral-nearer)" : expr(c.hue,"subtle");
+      cab.style.borderColor = on? "var(--gnrc-color-stroke-neutral-subtle)" : expr(c.hue);
+      if(on) active.delete(c.key); else active.add(c.key);
+      upd(); announce(`${c.label} ${on?"removed from":"added to"} filter`);
+    };
+    cab.addEventListener("click",toggle);
+    cab.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); } });
+    host.appendChild(cab);
+  });
+}
+
+/* ============================================================
+   HEATMAP — sequential, contrast-flip labels, 2D roving
+   ============================================================ */
+function renderHeatmap(){
+  const host=document.getElementById("heatmapPlot"); host.innerHTML=""; host.setAttribute("data-group","heatmap");
+  const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const hours=["00","04","08","12","16","20"];
+  // fake matrix
+  const cw=64,ch=30,gap=1,labW=42,labH=20;
+  const rows=hours.length, cols=days.length;
+  const w=labW+cols*(cw+gap), h=labH+rows*(ch+gap)+4;
+  const s=svg(w,h,host); ensurePatterns(s);
+  const data=[];
+  for(let r=0;r<rows;r++){ data[r]=[]; for(let c=0;c<cols;c++){
+    let base = (r>=2&&r<=4 && c<5) ? 700 : 120; // busy midday weekdays
+    let v = Math.round(base*(0.5+Math.random())); if(c>=5) v=Math.round(v*0.4);
+    if(r===0&&c===6) v=null; // a no-data cell
+    data[r][c]=v;
+  }}
+  let max=0; data.forEach(row=>row.forEach(v=>{ if(v!=null)max=Math.max(max,v); }));
+  // column labels
+  days.forEach((d,c)=>{ const t=el("text",{x:labW+c*(cw+gap)+cw/2,y:14,"text-anchor":"middle",fill:cssv("--gnrc-color-foreground-neutral-tertiary"),class:"t-axis-tick"},s); t.textContent=d; });
+  hours.forEach((hh,r)=>{ const t=el("text",{x:labW-6,y:labH+r*(ch+gap)+ch/2+3,"text-anchor":"end",fill:cssv("--gnrc-color-foreground-neutral-tertiary"),class:"t-axis-tick"},s); t.textContent=hh; });
+  const ramp=["blue-subtle","blue-soft","blue-loud","blue-heavy"];
+  const cell=(v)=>{ const f=v/max; const idx=Math.min(3,Math.floor(f*4)); return `var(--gnrc-color-expression-${ramp[idx]})`; };
+  const cellsWrap=el("g",{},s);
+  for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){
+    const x=labW+c*(cw+gap), y=labH+r*(ch+gap), v=data[r][c];
+    if(v==null){
+      // no-data diagonal hatch
+      el("rect",{x,y,width:cw,height:ch,fill:"none",stroke:cssv("--gnrc-color-stroke-neutral-subtle")},s);
+      for(let k=-ch;k<cw;k+=5) el("line",{x1:x+k,y1:y+ch,x2:x+k+ch,y2:y,stroke:cssv("--gnrc-color-stroke-neutral-subtle"),"stroke-width":1},s);
+      continue;
+    }
+    const f=v/max;
+    const rect=el("rect",{x,y,width:cw,height:ch,fill:cell(v),class:"dv-mark"},cellsWrap);
+    // contrast-flip label
+    const dark = f>0.55;
+    const t=el("text",{x:x+cw/2,y:y+ch/2+3,"text-anchor":"middle",fill:dark?"#fff":cssv("--gnrc-color-foreground-neutral-primary"),style:"font-size:10px","pointer-events":"none"},cellsWrap);
+    t.textContent=abbr(v);
+    makeInspect(rect,()=>({head:`${hours[r]}:00 · ${days[c]}`,rows:[{name:"Requests",value:commas(v)}],suppressSwatch:true}),`${hours[r]} hundred hours, ${days[c]}. Requests, ${commas(v)}.`);
+  }
+  enableRoving(host);
+  // colorbar
+  const cb=document.getElementById("heatLegend"); cb.innerHTML=""; ramp.forEach(t=>{ const d=document.createElement("div"); d.style.background=`var(--gnrc-color-expression-${t})`; cb.appendChild(d); });
+}
+
+/* ============================================================
+   SANKEY — neutral boxes, source-tinted streams, path highlight
+   ============================================================ */
+function renderSankey(){
+  const host=document.getElementById("sankeyPlot"); host.innerHTML=""; host.setAttribute("data-group","sankey");
+  const w=760,h=340; const s=svg(w,h,host); ensurePatterns(s);
+  // columns of nodes
+  const cols=[
+    [{id:"organic",label:"Organic",hue:"blue"},{id:"paid",label:"Paid",hue:"yellow"},{id:"social",label:"Social",hue:"purple"}],
+    [{id:"home",label:"Home"},{id:"pricing",label:"Pricing"}],
+    [{id:"signup",label:"Signup"},{id:"bounce",label:"Bounce"}]
+  ];
+  const links=[
+    {s:"organic",t:"home",v:400},{s:"organic",t:"pricing",v:180},
+    {s:"paid",t:"home",v:120},{s:"paid",t:"pricing",v:260},
+    {s:"social",t:"home",v:220},{s:"social",t:"pricing",v:90},
+    {s:"home",t:"signup",v:300},{s:"home",t:"bounce",v:440},
+    {s:"pricing",t:"signup",v:380},{s:"pricing",t:"bounce",v:150}
+  ];
+  const colX=[40,360,680], nodeW=18, gap=16;
+  // compute node totals & positions
+  const nodes={};
+  cols.forEach((col,ci)=>{
+    let totals=col.map(n=>Math.max(
+      links.filter(l=>l.s===n.id).reduce((t,l)=>t+l.v,0),
+      links.filter(l=>l.t===n.id).reduce((t,l)=>t+l.v,0)
+    ));
+    const sum=totals.reduce((a,b)=>a+b,0);
+    const scale=(h-40-gap*(col.length-1))/sum;
+    let y=20;
+    col.forEach((n,i)=>{
+      const nh=totals[i]*scale;
+      nodes[n.id]={x:colX[ci],y,h:nh,label:n.label,hue:n.hue||null,ci};
+      y+=nh+gap;
+    });
+  });
+  // draw links (source-tinted)
+  const linkEls=[];
+  const outAcc={}, inAcc={};
+  links.forEach(l=>{
+    const S=nodes[l.s],T=nodes[l.t];
+    const scaleS=S.h/ (links.filter(x=>x.s===l.s).reduce((t,x)=>t+x.v,0) || l.v);
+    const totIn=links.filter(x=>x.t===l.t).reduce((t,x)=>t+x.v,0);
+    const scaleT=T.h/ totIn;
+    const sw=l.v*scaleS;
+    const sy=(outAcc[l.s]=(outAcc[l.s]||0)); const ty=(inAcc[l.t]=(inAcc[l.t]||0));
+    const y0=S.y+sy+sw/2, y1=T.y+ty+ (l.v*scaleT)/2;
+    outAcc[l.s]+=sw; inAcc[l.t]+=l.v*scaleT;
+    const x0=S.x+nodeW, x1=T.x;
+    const mx=(x0+x1)/2;
+    const srcHue = S.hue || Object.values(nodes).find(n=>n.ci===0)?.hue || "blue";
+    const hue = S.hue || traceHue(l.s);
+    const path=el("path",{d:`M${x0},${y0} C${mx},${y0} ${mx},${y1} ${x1},${y1}`,fill:"none",stroke:expr(hue,"soft"),"stroke-width":Math.max(1,sw),opacity:.55,class:"dv-mark","data-link":`${l.s}-${l.t}`},s);
+    makeInspect(path,()=>({head:`${S.label} → ${T.label}`,rows:[{hue,name:"Flow",value:commas(l.v),ratio:`${Math.round(l.v/totIn*100)}% of ${T.label} inflow`}]}),`${S.label} to ${T.label}. Flow ${commas(l.v)}, ${Math.round(l.v/totIn*100)} percent of ${T.label} inflow.`);
+    linkEls.push({path,s:l.s,t:l.t});
+  });
+  function traceHue(id){ // walk back to a coloured source
+    if(nodes[id]&&nodes[id].hue) return nodes[id].hue;
+    const up=links.find(l=>l.t===id); return up?traceHue(up.s):"blue";
+  }
+  // draw nodes (neutral boxes)
+  Object.entries(nodes).forEach(([id,n])=>{
+    const rect=el("rect",{x:n.x,y:n.y,width:nodeW,height:n.h,rx:2,fill:cssv("--gnrc-color-background-neutral-loud"),class:"dv-mark","data-node":id},s);
+    const t=el("text",{x:n.ci===2?n.x-6:n.x+nodeW+6,y:n.y+n.h/2+3,"text-anchor":n.ci===2?"end":"start",fill:cssv("--gnrc-color-foreground-neutral-secondary"),style:"font-size:11px"},s);
+    t.textContent=n.label;
+    rect.setAttribute("tabindex","-1"); rect.setAttribute("data-inspect","");
+    const connected=()=>linkEls.filter(le=>le.s===id||le.t===id);
+    const hl=()=>{ linkEls.forEach(le=>{ const on=le.s===id||le.t===id; le.path.classList.toggle("dv-dim",!on); }); };
+    const clr=()=>linkEls.forEach(le=>le.path.classList.remove("dv-dim"));
+    rect.addEventListener("mouseenter",e=>{ hl(); showCallout({head:n.label,rows:[{name:"Throughput",value:commas(Math.round(n.h/ (h-60) * 1000))}],suppressSwatch:true},e.clientX,e.clientY,rect); });
+    rect.addEventListener("mouseleave",()=>{ clr(); hideCallout(); });
+    rect.addEventListener("focus",()=>{ hl(); const r=rect.getBoundingClientRect(); showCallout({head:n.label,rows:[{name:"Node",value:n.label}],suppressSwatch:true},r.left+r.width,r.top,rect); });
+    rect.addEventListener("blur",()=>{ clr(); hideCallout(); });
+    rect.setAttribute("aria-label",`${n.label} node.`);
+  });
+  enableRoving(host);
+}
+
+/* ============================================================
+   FUNNEL — basic + stacked, always show conversion ratio
+   ============================================================ */
+const FUNNEL=[{label:"Visited",value:12000},{label:"Signed up",value:5400},{label:"Activated",value:3100},{label:"Subscribed",value:1450},{label:"Renewed",value:920}];
+function renderFunnelBasic(){
+  const host=document.getElementById("funnelBasic"); host.innerHTML=""; host.setAttribute("data-group","funnelBasic");
+  const w=320,rowH=42,gap=6,h=FUNNEL.length*(rowH+gap);
+  const s=svg(w,h,host);
+  const max=FUNNEL[0].value;
+  FUNNEL.forEach((st,i)=>{
+    const bw=st.value/max*(w-8), x=(w-bw)/2, y=i*(rowH+gap);
+    const r=el("rect",{x,y,width:bw,height:rowH,rx:4,fill:expr("blue"),class:"dv-mark"},s);
+    const pct=Math.round(st.value/max*100);
+    const t=el("text",{x:w/2,y:y+rowH/2+4,"text-anchor":"middle",fill:"#fff",style:"font-size:11px;font-weight:600","pointer-events":"none"},s);
+    t.textContent=`${st.label} · ${commas(st.value)}`;
+    makeInspect(r,()=>({head:st.label,rows:[{name:"Reached",value:commas(st.value),ratio:`${pct}% of ${FUNNEL[0].label}`+(i?` · ${Math.round(st.value/FUNNEL[i-1].value*100)}% step`:"")}],suppressSwatch:true}),`${st.label}. ${commas(st.value)}, ${pct} percent of first stage.`);
+  });
+  enableRoving(host);
+}
+const FSTACK_SERIES=[{key:"amer",label:"Americas",hue:"blue",shape:"circle"},{key:"emea",label:"EMEA",hue:"yellow",shape:"square"},{key:"apac",label:"APAC",hue:"purple",shape:"triangle"}];
+const FSTACK=[
+  {label:"Visited",vals:{amer:6000,emea:4000,apac:2000}},
+  {label:"Signed up",vals:{amer:2600,emea:1800,apac:1000}},
+  {label:"Activated",vals:{amer:1500,emea:1000,apac:600}},
+  {label:"Subscribed",vals:{amer:700,emea:480,apac:270}}
+];
+function renderFunnelStacked(){
+  const host=document.getElementById("funnelStacked"); host.innerHTML=""; host.setAttribute("data-group","funnelStacked");
+  const w=320,rowH=44; const h=FSTACK.length*(rowH+6);
+  const s=svg(w,h,host); ensurePatterns(s);
+  const totals=FSTACK.map(st=>FSTACK_SERIES.reduce((t,se)=>t+st.vals[se.key],0));
+  const max=totals[0];
+  const refs=[];
+  FSTACK.forEach((st,i)=>{
+    const total=totals[i]; const bw=total/max*(w-8); let x=(w-bw)/2; const y=i*(rowH+6);
+    FSTACK_SERIES.forEach(se=>{
+      const segW=st.vals[se.key]/total*bw;
+      const r=el("rect",{x,y,width:Math.max(1,segW-1),height:rowH,rx:2,fill:expr(se.hue),class:"dv-mark","data-series":se.key},s);
+      el("rect",{x,y,width:Math.max(1,segW-1),height:rowH,rx:2,fill:`url(#${PATTERN_IDS[se.hue]})`,"pointer-events":"none","data-series":se.key},s);
+      makeInspect(r,()=>({head:`${st.label} · ${se.label}`,rows:[{hue:se.hue,shape:se.shape,name:se.label,value:commas(st.vals[se.key]),ratio:`${Math.round(st.vals[se.key]/total*100)}% of stage · ${Math.round(total/max*100)}% of start`}]}),`${st.label}, ${se.label}. ${commas(st.vals[se.key])}.`);
+      refs.push({node:r,series:se.key}); x+=segW;
+    });
+    const lt=el("text",{x:w/2,y:y-2>0?y-2:y+rowH+ (i? 0:0),"text-anchor":"middle"},s);
+  });
+  enableRoving(host);
+  let filter=new Set();
+  const dim=(fs,hv)=>{ refs.forEach(({node,series})=>{ let d=false; if(fs&&fs.size>0&&!fs.has(series))d=true; if(hv&&series!==hv)d=true; node.classList.toggle("dv-dim",d); }); };
+  buildLegend(document.getElementById("funnelLegend"),FSTACK_SERIES,ev=>{ if(ev.type==="hover")dim(filter,ev.key); else {filter=ev.active; dim(filter,null);} });
+}
+
+/* ============================================================
+   TREE — hierarchy, no overlaps, parent 14 > child 12
+   ============================================================ */
+function renderTree(){
+  const host=document.getElementById("treePlot"); host.innerHTML="";
+  const w=760,h=280; const s=svg(w,h,host);
+  const nodes=[
+    {id:"ceo",label:"CEO",x:340,y:20,w:120,h:40,root:true},
+    {id:"eng",label:"Engineering",x:120,y:110,w:130,h:38},
+    {id:"sales",label:"Sales",x:320,y:110,w:130,h:38},
+    {id:"ops",label:"Operations",x:520,y:110,w:130,h:38},
+    {id:"fe",label:"Frontend",x:40,y:200,w:110,h:34},
+    {id:"be",label:"Backend",x:170,y:200,w:110,h:34},
+    {id:"field",label:"Field",x:320,y:200,w:110,h:34},
+    {id:"it",label:"IT",x:520,y:200,w:110,h:34}
+  ];
+  const edges=[["ceo","eng"],["ceo","sales"],["ceo","ops"],["eng","fe"],["eng","be"],["sales","field"],["ops","it"]];
+  const byId=Object.fromEntries(nodes.map(n=>[n.id,n]));
+  edges.forEach(([a,b])=>{
+    const A=byId[a],B=byId[b];
+    const x0=A.x+A.w/2,y0=A.y+A.h,x1=B.x+B.w/2,y1=B.y;
+    const my=(y0+y1)/2;
+    el("path",{d:`M${x0},${y0} C${x0},${my} ${x1},${my} ${x1},${y1}`,fill:"none",stroke:cssv("--gnrc-color-stroke-neutral-loud"),"stroke-width":1.5},s);
+  });
+  nodes.forEach(n=>{
+    el("rect",{x:n.x,y:n.y,width:n.w,height:n.h,rx:6,fill:cssv("--gnrc-color-surface-neutral-nearer"),stroke:cssv("--gnrc-color-stroke-neutral-heavy"),"stroke-width":1},s);
+    const t=el("text",{x:n.x+n.w/2,y:n.y+n.h/2+ (n.root?5:4),"text-anchor":"middle",fill:cssv("--gnrc-color-foreground-neutral-primary"),style:`font-size:${n.root?14:12}px;font-weight:${n.root?600:400}`},s);
+    t.textContent=n.label;
+  });
+}
+
+/* ============================================================
+   Tabs, theme toggle, motion state
+   ============================================================ */
+function wireTabs(){
+  document.querySelectorAll("[data-tabs]").forEach(group=>{
+    const kind=group.getAttribute("data-tabs");
+    group.querySelectorAll(".tab-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        group.querySelectorAll(".tab-btn").forEach(b=>b.setAttribute("aria-selected","false"));
+        btn.setAttribute("aria-selected","true");
+        const tab=btn.getAttribute("data-tab");
+        if(kind==="axisVar") renderAxis(tab);
+        else if(kind==="areaVar") renderArea(tab);
+      });
+    });
+  });
+}
+function wireTheme(){
+  const btn=document.getElementById("themeToggle");
+  btn.addEventListener("click",()=>{
+    const dark=document.documentElement.getAttribute("data-theme")==="dark";
+    document.documentElement.setAttribute("data-theme",dark?"light":"dark");
+    btn.setAttribute("aria-pressed",dark?"false":"true");
+    btn.textContent=dark?"◐ Theme: Light":"◑ Theme: Dark";
+    renderAll(); // re-resolve token-derived SVG fills
+  });
+}
+function updateMotion(){
+  const m=document.getElementById("motionState");
+  m.textContent="Motion: "+(reduceMotion()?"Reduced (transitions off)":"Full");
+}
+
+/* ============================================================
+   init
+   ============================================================ */
+function currentTab(kind,fallback){
+  const g=document.querySelector(`[data-tabs="${kind}"]`);
+  if(!g) return fallback;
+  const sel=g.querySelector('.tab-btn[aria-selected="true"]');
+  return sel?sel.getAttribute("data-tab"):fallback;
+}
+function renderAll(){
+  // clear one-shot containers that we re-render on theme change
+  ["radiusDemo","densityDemo","qualStrip","seqStrip","divStrip","threatStrip","kpiGrid","cabRow","sparkTable"].forEach(id=>{ const e=document.getElementById(id); if(e&&["seqStrip","divStrip","threatStrip"].includes(id)) e.innerHTML=""; });
+  document.getElementById("radiusDemo").innerHTML=""; renderRadius();
+  document.getElementById("densityDemo").innerHTML=""; renderDensity();
+  document.getElementById("qualStrip").innerHTML=""; renderQual();
+  renderRamps();
+  renderAxis(currentTab("axisVar","horiz"));
+  renderLegendDemo();
+  renderCalloutDemo();
+  renderBarBasic(); renderBarStacked(); renderBarGrouped(); renderBarHoriz();
+  document.querySelector("#barMiniTable tbody").innerHTML=""; renderBarMini();
+  renderArea(currentTab("areaVar","basic"));
+  renderScatter();
+  document.querySelector("#sparkTable tbody").innerHTML=""; renderSpark();
+  renderDonut();
+  renderGauge("gaugeS","small",68,100);
+  renderGauge("gaugeM","medium",7400,10000);
+  renderGauge("gaugeL","large",86,100);
+  document.getElementById("kpiGrid").innerHTML=""; renderKPI();
+  document.getElementById("cabRow").innerHTML=""; renderCAB();
+  renderHeatmap();
+  renderSankey();
+  renderFunnelBasic(); renderFunnelStacked();
+  renderTree();
+}
+document.addEventListener("DOMContentLoaded",()=>{
+  wireTabs(); wireTheme(); updateMotion();
+  window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change",updateMotion);
+  renderAll();
+});
+})();
+
+</script>
+</body>
+</html>
