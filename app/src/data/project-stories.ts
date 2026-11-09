@@ -21,7 +21,7 @@ export const projectStories: Record<string, ProjectStory> = {
       },
       {
         "title": "Principles that travel across chart types",
-        "body": "The plugin starts with shared rules for corner radius, typography, density, and color with patterns. It connects those rules to chart-specific guidance, from bars and lines to heatmaps, Sankey diagrams, axes, legends, and callouts. These bar and area examples come from the HTML galleries.",
+        "body": "The plugin starts with shared rules for corner radius, typography, density, and color with patterns. It connects those rules to chart-specific guidance, from bars and lines to heatmaps, Sankey diagrams, axes, legends, and callouts. These Sankey, donut, and heatmap examples come from the Bebop gallery.",
         "media": ["img/portfolio/dataviz/gallery-examples.png"]
       },
       {
@@ -31,7 +31,7 @@ export const projectStories: Record<string, ProjectStory> = {
     ],
     "captions": {
       "img/portfolio/dataviz/coffee-crawl.png": "The walkthrough's Seattle coffee crawl brings area, donut, heatmap, and bar charts together.",
-      "img/portfolio/dataviz/gallery-examples.png": "Bar and area examples use chart values from the interactive HTML galleries."
+      "img/portfolio/dataviz/gallery-examples.png": "Flow, proportion, and two-dimensional patterns from the Bebop data visualization gallery."
     }
   },
   "genui-bebop": {

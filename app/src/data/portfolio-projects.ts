@@ -15,7 +15,7 @@ export const portfolioProjects = [
     ],
     "images": [
       { "src": "img/portfolio/dataviz/coffee-crawl.png", "alt": "Coffee crawl chart examples from the dataviz walkthrough: area, donut, heatmap, and bar" },
-      { "src": "img/portfolio/dataviz/gallery-examples.png", "alt": "Bar and area chart examples based on the Fluent data visualization gallery" }
+      { "src": "img/portfolio/dataviz/gallery-examples.png", "alt": "Sankey, donut, and heatmap examples from the Fluent Bebop data visualization gallery" }
     ],
     "links": [
       ["/dataviz/walkthrough.html", "Explore the five-minute walkthrough"],
