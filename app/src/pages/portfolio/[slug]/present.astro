@@ -50,8 +50,10 @@ const imageFor = (src: string) => {
           <p class="slide-section">{slide.section}</p>
           {index === 0 ? <h1 id={`slide-heading-${index + 1}`}>{slide.title}</h1> : <h2 id={`slide-heading-${index + 1}`}>{slide.title}</h2>}
           {slide.body && <p class="slide-body">{slide.body}</p>}
+          {slide.details && <dl class="slide-details">{slide.details.map(item => <div><dt>{item.label}</dt><dd>{item.body}</dd></div>)}</dl>}
+          {slide.links && <div class="slide-links">{slide.links.map(link => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>)}</div>}
           {slide.points && <ul class="slide-points">{slide.points.map(point => <li>{point}</li>)}</ul>}
-          {index === 0 && <div class="slide-intro-meta"><p>Will Chavez <span>· {story.role}</span></p><p>{project.org} <span>· {story.status}</span></p><p class="slide-collaborators">Collaboration: {deck.collaborators}</p></div>}
+          {index === 0 && <div class="slide-intro-meta"><p>Will Chavez <span>· {story.role}</span></p><p>{project.org}</p></div>}
         </div>
         {slide.media?.length && <div class="slide-media">{slide.media.map(src => {
           const image = imageFor(src);
