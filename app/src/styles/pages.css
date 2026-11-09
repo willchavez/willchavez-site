@@ -68,7 +68,7 @@
 .ent-titleline { min-width: 0; line-height: 1.55; overflow-wrap: anywhere; }
 .enjoying-tag { display: inline-flex; align-items: center; min-height: 1.35rem; padding: 0 .58rem; border-radius: 999px; background: color-mix(in srgb, var(--rust) 14%, var(--paper)); color: color-mix(in srgb, var(--rust) 76%, var(--ink)); font-size: .72rem; line-height: 1; text-transform: capitalize; vertical-align: middle; white-space: nowrap; }
 /* Keep each media kind recognizable across Home, Enjoying, and detail pages. */
-.enjoying-tag[data-kind], .metadata-kind[data-kind] { border: 1px solid color-mix(in srgb, var(--media-tag-ink, var(--rust)) 75%, var(--media-tag-bg, var(--paper))); background: var(--media-tag-bg, color-mix(in srgb, var(--rust) 14%, var(--paper))); color: var(--media-tag-ink, color-mix(in srgb, var(--rust) 76%, var(--ink))); }
+.enjoying-tag[data-kind], .metadata-kind[data-kind] { border: .5px solid color-mix(in srgb, var(--media-tag-ink, var(--rust)) 75%, var(--media-tag-bg, var(--paper))); background: var(--media-tag-bg, color-mix(in srgb, var(--rust) 14%, var(--paper))); color: var(--media-tag-ink, color-mix(in srgb, var(--rust) 76%, var(--ink))); }
 button.enjoying-tag { font-family: inherit; font-weight: inherit; cursor: pointer; }
 button.enjoying-tag:disabled { cursor: default; opacity: 1; }
 button.enjoying-tag:not(:disabled):hover { border-color: currentColor; box-shadow: 0 0 0 1px currentColor; }
