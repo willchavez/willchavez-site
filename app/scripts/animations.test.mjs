@@ -16,8 +16,8 @@ test('animation videos preserve timing and frames, reuse cache, and invalidate c
   await fs.mkdir(directory, { recursive: true });
   const source = path.join(directory, 'demo.gif');
   const create = async (delay) => {
-    const pixels = Buffer.from([...Array(12).fill([255, 0, 0]).flat(), ...Array(12).fill([0, 0, 255]).flat()]);
-    await sharp(pixels, { raw: { width: 4, height: 6, channels: 3, pageHeight: 3 } }).gif({ delay, loop: 0 }).toFile(source);
+    const pixels = Buffer.from(delay.flatMap((_, i) => Array(12).fill(i % 2 ? [0, 0, 255] : [255, 0, 0]).flat()));
+    await sharp(pixels, { raw: { width: 4, height: 3 * delay.length, channels: 3, pageHeight: 3 } }).gif({ delay, loop: 0 }).toFile(source);
   };
   await create([100, 300]);
   await sharp({ create: { width: 4, height: 4, channels: 3, background: 'red' } }).png().toFile(path.join(directory, 'still.png'));
@@ -43,6 +43,10 @@ test('animation videos preserve timing and frames, reuse cache, and invalidate c
   assert.notEqual(changedUrl, url);
   const { stdout: fast } = await exec('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'json', path.join(root, 'dist', changedUrl)]);
   assert(Math.abs(Number(JSON.parse(fast).format.duration) - .08) < .015, 'short GIF frames retain millisecond timing');
+  await create([60, 60, 60, 60, 60, 540]);
+  const longUrl = (await buildAnimations(root))['/img/portfolio/demo.gif'];
+  const { stdout: long } = await exec('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'json', path.join(root, 'dist', longUrl)]);
+  assert(Math.abs(Number(JSON.parse(long).format.duration) - .84) < .015, 'a long final hold is included in the browser playback duration');
   await fs.unlink(source);
   await fs.rm(path.join(root, 'dist'), { recursive: true });
   assert.deepEqual(await buildAnimations(root), {});

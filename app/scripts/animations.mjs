@@ -45,7 +45,7 @@ export async function buildAnimations(root = process.cwd()) {
         concat.push(`file '${String(meta.pages - 1).padStart(5, '0')}.png'\noption framerate 100`);
         await fs.writeFile(path.join(temp, 'frames.txt'), concat.join('\n'));
         await exec('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', path.join(temp, 'frames.txt'),
-          '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2:color=white', '-fps_mode', 'vfr', '-c:v', 'libx264', '-level:v', '5.1', '-crf', '18', '-preset', 'fast', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', path.join(temp, 'video.mp4')]);
+          '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2:color=white', '-fps_mode', 'vfr', '-c:v', 'libx264', '-bf', '0', '-level:v', '5.1', '-crf', '18', '-preset', 'fast', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', path.join(temp, 'video.mp4')]);
         await fs.rename(path.join(temp, 'video.mp4'), cached);
       } finally { await fs.rm(temp, { recursive: true, force: true }); }
     }
