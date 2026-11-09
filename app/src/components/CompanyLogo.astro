@@ -9,9 +9,9 @@ const { company } = Astro.props;
 <span class:list={["work-logo", `work-logo-${company}`]} aria-hidden="true" set:html={marks[company]} />
 
 <style>
-  /* Use Lockheed’s reversed mark on dark cards; the multicolor marks stay intact. */
+  /* Preserve the system fallback and honor the visitor's explicit theme. */
   @media (prefers-color-scheme: dark) {
-    .work-logo-ibm {
+    :global(:root:not([data-theme="light"])) .work-logo-ibm {
       --ibm-blue: #0f62fe;
       --ibm-iris: #a9472e;
       --ibm-brow: #e2231a;
@@ -19,6 +19,15 @@ const { company } = Astro.props;
       --ibm-wings: #6b8d3a;
       --ibm-gold: #ffb52e;
     }
-    .work-logo-lockheed-martin :global(svg) { fill: #fff; }
+    :global(:root:not([data-theme="light"])) .work-logo-lockheed-martin :global(svg) { fill: #fff; }
   }
+  :global(:root[data-theme="dark"]) .work-logo-ibm {
+    --ibm-blue: #0f62fe;
+    --ibm-iris: #a9472e;
+    --ibm-brow: #e2231a;
+    --ibm-eyes: #f4adca;
+    --ibm-wings: #6b8d3a;
+    --ibm-gold: #ffb52e;
+  }
+  :global(:root[data-theme="dark"]) .work-logo-lockheed-martin :global(svg) { fill: #fff; }
 </style>

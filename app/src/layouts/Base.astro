@@ -1,4 +1,5 @@
 ---
+import ThemeHead from "../components/ThemeHead.astro";
 import "../styles/base.css";
 import "../styles/nav.css";
 import "../styles/pages.css";
@@ -45,6 +46,7 @@ const jsonLd = {
 <!doctype html>
 <html lang="en" transition:animate="none">
   <head>
+    <ThemeHead />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
