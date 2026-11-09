@@ -117,3 +117,8 @@ html[data-presentation] .deck-controls { position: relative; display: flex; alig
   .slide-gallery .slide-copy { display: block; }
   .slide-print-number { display: block; position: absolute; bottom: 0; right: 0; font-size: 9pt; color: var(--muted); }
 }
+
+/* Avoid flashing the deck while a mobile direct link returns to the article. */
+@media (max-width: 800px), (pointer: coarse) and (max-height: 500px) {
+  .deck, .deck-tools, .deck-project-name, html[data-presentation] .deck-controls { display: none; }
+}

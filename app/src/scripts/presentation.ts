@@ -50,6 +50,16 @@ export function initPresentation() {
       }
     } catch { /* Retain the safe article URL. */ }
   }
+  // Match the mobile presentation-link breakpoint, including phones in landscape.
+  const mobile = matchMedia('(max-width: 800px), (pointer: coarse) and (max-height: 500px)');
+  const returnOnMobile = () => {
+    if (mobile.matches) location.replace(exit.href);
+  };
+  if (mobile.matches) {
+    returnOnMobile();
+    return;
+  }
+  mobile.addEventListener('change', returnOnMobile);
   previous.addEventListener('click', () => show(index - 1));
   next.addEventListener('click', () => show(index + 1));
   outline.addEventListener('click', event => {

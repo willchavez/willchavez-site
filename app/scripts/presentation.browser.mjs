@@ -52,6 +52,13 @@ try {
   for (const [width, height] of [[320, 850], [375, 850], [768, 1000], [1280, 720]]) {
     await page.setViewportSize({ width, height });
     for (const project of portfolioProjects) {
+      if (width <= 800) {
+        await page.goto(`${base}/portfolio/${project.slug}`);
+        assert(!await page.locator('[data-project-present]').isVisible(), 'mobile presentation link is hidden');
+        await page.goto(`${base}/portfolio/${project.slug}/present`);
+        await page.waitForURL(`${base}/portfolio/${project.slug}`);
+        continue;
+      }
       await page.goto(`${base}/portfolio/${project.slug}/present`);
       for (let index = 0; index <= projectPresentations[project.slug].slides.length; index++) {
         assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), `${project.slug} at ${width}`);
@@ -59,6 +66,7 @@ try {
         if (index < projectPresentations[project.slug].slides.length) await page.locator('[data-next]').click();
       }
     }
+    if (width <= 800) continue;
     await page.locator('.deck-outline summary').click();
     const menu = await page.locator('.deck-outline nav').boundingBox();
     assert(menu.x >= 0 && menu.x + menu.width <= width, 'outline remains in viewport');

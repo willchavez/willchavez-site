@@ -26,6 +26,8 @@ Research figures are labeled as prototype evaluation. Exploration decks do not c
 
 ## Presenting
 
+Presentation mode is available above 800px, excluding touch phones in landscape (up to 500px high). On mobile the entry link is hidden and direct deck URLs return to the project article, preserving its return context.
+
 Use Previous/Next, arrow keys, Space, Page Up/Down, Home/End, or the slide outline. Escape closes the outline first, then returns to the article. URLs retain `#slide-N` for sharing. Article return context is preserved only for the same project's URL. Browser printing includes every slide, one per landscape page. With JavaScript unavailable, the deck remains a readable sequence.
 
 Build and serve the app, then run `CHROMIUM_PATH=/usr/bin/chromium npm --prefix app run test:presentation -- BASE_URL` for browser checks.
