@@ -71,7 +71,7 @@ const jsonLd = {
     <div class="page-content" transition:name="page-content">
     {showHeading && <div class:list={["page-head", !showPageTitle && "page-head-minimal"]}>
       <div>
-        {subKind && <div class="entry-kind"><span class="metadata-kind">{subKind}</span></div>}
+        {subKind && <div class="entry-kind"><span class="metadata-kind" data-kind={subKind}>{subKind}</span></div>}
         <h1 class:list={[!showPageTitle && "sr-only", compactTitle && "page-title-compact"]}>{heading}</h1>
         <div class:list={["pronouns", subKind && "pronouns-metadata", subAfter && "pronouns-metadata-split"]}>
           {sub && <span class={subAfter ? "metadata-authors" : undefined}>{sub}</span>}

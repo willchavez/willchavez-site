@@ -32,7 +32,7 @@ const stars = data.rating && (Number.isInteger(data.rating)
   </div>}
   <div class="enjoying-side-meta">
     {showDate && displayDate && <time class="recorded" datetime={displayDate.toISOString()} title={data.date ? undefined : "U.S. public release date"}>{!data.date && "Released "}{fmtDate(displayDate)}</time>}
-    <span class="enjoying-tag">{data.kind}</span>
+    <span class="enjoying-tag" data-kind={data.kind}>{data.kind}</span>
   </div>
 </div>
 {data.rating && <div class="rating" aria-label={`${data.rating} out of 5`}>{stars}</div>}
