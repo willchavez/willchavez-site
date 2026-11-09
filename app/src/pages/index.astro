@@ -16,7 +16,7 @@ const enjoying = (await getEnjoying()).filter(p => p.body?.trim()).slice(0, 2);
     <header class="home-intro">
       <div class="home-hello">
         <p class="home-kicker">Will Chavez · Design technologist</p>
-        <h1>Designing and building thoughtful digital experiences.</h1>
+        <h1>Designing and building thoughtful digital experiences</h1>
       </div>
       <div class="home-intro-aside">
         <p class="home-summary">I’m Will, a design technologist in Microsoft’s Fluent Design Studio. I work across design and engineering to prototype interfaces and build tools for designers.</p>
@@ -25,7 +25,7 @@ const enjoying = (await getEnjoying()).filter(p => p.body?.trim()).slice(0, 2);
       </div>
     </header>
     <section class="home-section" id="selected-work" aria-labelledby="selected-title">
-      <div class="home-section-head"><h2 id="selected-title">A few things I’ve made</h2><a href="/portfolio">All projects</a></div>
+      <div class="home-section-head"><h2 id="selected-title">A few things I’ve helped make</h2><a href="/portfolio">All projects</a></div>
       <div class="home-projects">
         {featured.map((p, index) => <a class="home-project" href={`/portfolio/${p.slug}`}>
           <div class:list={["home-project-image", `home-image-${p.slug}`]}><img src={portfolioImg(p.slug === "bebop" ? "img/portfolio/bebop/zoomedout.gif" : p.cover, 960)} alt={p.slug === "bebop" ? "Copilot prototype with a canvas of project notes" : p.images[0].alt} loading={index === 0 ? "eager" : "lazy"} decoding="async" /></div>
