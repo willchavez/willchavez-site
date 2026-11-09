@@ -5,7 +5,7 @@ export const portfolioProjects = [
     "category": "Design tooling",
     "org": "Microsoft · Fluent Design Studio",
     "summary": "Thousands of assets, plenty of variants. I built a way to browse them, find the right one, and put it to work.",
-    "cover": "img/portfolio/fluent-asset-library/asset-families.png",
+    "cover": "img/portfolio/fluent-asset-library/asset-library-details.png",
     "skills": "Interaction design · React & TypeScript · Asset systems",
     "about": "An asset browser for the upcoming Fluent Flex design site, built with guidance and design critiques from Jason Custer. It brings system icons, emoji, and illustrations together with search, variant selection, and file actions.",
     "contributions": [
@@ -16,16 +16,20 @@ export const portfolioProjects = [
     ],
     "images": [
       {
-        "src": "img/portfolio/fluent-asset-library/asset-families.png",
-        "alt": "Diagram: asset families and variant controls"
+        "src": "img/portfolio/fluent-asset-library/asset-library-details.png",
+        "alt": "Accessibility icon details with 32px regular variant selected"
       },
       {
-        "src": "img/portfolio/fluent-asset-library/asset-delivery.png",
-        "alt": "Diagram: from CDN variant records to the selected file"
+        "src": "img/portfolio/fluent-asset-library/asset-library-original.png",
+        "alt": "System icon overview in the Fluent asset library"
       },
       {
-        "src": "img/portfolio/fluent-asset-library/iteration-notes.png",
-        "alt": "Commit notes: July 29–August 13, 2026"
+        "src": "img/portfolio/fluent-asset-library/asset-library-browsing.gif",
+        "alt": "Browsing icons, emoji, and illustrations in the running product"
+      },
+      {
+        "src": "img/portfolio/fluent-asset-library/asset-library-search-variants.gif",
+        "alt": "Searching icons and changing size, style, and carousel variants"
       }
     ],
     "links": [
