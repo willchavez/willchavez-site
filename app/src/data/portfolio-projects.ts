@@ -55,7 +55,7 @@ export const portfolioProjects = [
 
   {
     "slug": "fluent-dataviz",
-    "title": "Fluent data visualization",
+    "title": "Fluent-flex data visualization",
     "category": "Design tooling",
     "org": "Microsoft · Fluent Design Studio",
     "summary": "I created a plugin that makes chart guidance usable by designers, engineers, and agents.",
@@ -198,7 +198,7 @@ export const portfolioProjects = [
         "alt": "Bebop refiner details"
       }
     ],
-    "links": []
+    "links": [["https://www.microsoft.com/en-us/copilot/blog/2026/05/28/introducing-a-new-design-for-microsoft-365-copilot/", "Read the Copilot redesign launch story"]]
   },
   {
     "slug": "visual-diff",

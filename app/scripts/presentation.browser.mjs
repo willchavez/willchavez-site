@@ -23,6 +23,11 @@ try {
     for (let index = 0; index < count; index++) {
       assert.equal(await page.locator('[data-slide]:visible').count(), 1);
       assert.equal(await page.locator('[data-slide]:visible').getAttribute('data-slide'), String(index));
+      const details = index > 0 && projectPresentations[project.slug].slides[index - 1].details;
+      if (details) {
+        assert.equal(await page.locator('[data-slide]:visible .slide-details dt').count(), details.length);
+        assert.equal(await page.locator('[data-slide]:visible .slide-points').count(), 0, 'structured facts use a grid rather than bullets');
+      }
       const failures = await page.locator('[data-slide]:visible img').evaluateAll(async images => {
         const results = await Promise.all(images.map(async image => {
           try { await image.decode(); return null; } catch { return image.src; }
@@ -63,6 +68,7 @@ try {
     }
   }
   for (const [width, height] of [[320, 850], [375, 850], [768, 1000], [1280, 720]]) {
+    await page.goto(base + '/portfolio');
     await page.setViewportSize({ width, height });
     for (const project of portfolioProjects) {
       if (width <= 800) {
@@ -101,5 +107,5 @@ try {
   const fallback = await browser.newPage({ javaScriptEnabled: false });
   await fallback.goto(`${base}/portfolio/genui-bebop/present`);
   assert.equal(await fallback.locator('[data-slide]:visible').count(), 7);
-  console.log('All 11 presentations: every slide/image, desktop/portrait layouts, article round trips, keyboard, outline, deep links, historical credits, print, reduced motion, dark mode, and no-JS fallback passed.');
+  console.log('All project presentations: every slide/image, desktop/portrait layouts, article round trips, keyboard, outline, deep links, historical credits, print, reduced motion, dark mode, and no-JS fallback passed.');
 } finally { await browser.close(); }

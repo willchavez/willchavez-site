@@ -119,7 +119,7 @@ export const projectStories: Record<string, ProjectStory> = {
       },
       {
         "title": "Something we could react to",
-        "body": "These were explorations, built to make the ideas concrete in conversations with design and engineering. My work focused on the layout, hierarchy, and interaction patterns. The screens here are prototypes used to explore those directions.",
+        "body": "These explorations made layout, hierarchy, and interaction patterns concrete for design and engineering. We presented the work to Jon Friedman, our Chief Design Officer, and worked with Microsoft AI (MAI) to help build a card framework for generative UI/UX. The screens here show the prototypes behind that work.",
         "media": [
           "img/portfolio/genui/4.png",
           "img/portfolio/genui/5.png"
@@ -215,7 +215,7 @@ export const projectStories: Record<string, ProjectStory> = {
     "sections": [
       {
         "title": "Working through the small interactions",
-        "body": "My work on the Microsoft 365 Copilot redesign focused on how the interface responds as someone uses it. I built high-fidelity prototypes to work through response composition, interaction patterns, and the details that are difficult to judge in a static screen. The refiner below is one example of those controls taking shape.",
+        "body": "The project came to our team from Ryan Roslansky, then CEO of LinkedIn. My work on the Microsoft 365 Copilot redesign focused on how the interface responds as someone uses it. I built high-fidelity prototypes to work through response composition, interaction patterns, and the details that are difficult to judge in a static screen. The refiner below is one example of those controls taking shape.",
         "media": [
           "img/portfolio/bebop/refiner.png"
         ]
@@ -228,8 +228,12 @@ export const projectStories: Record<string, ProjectStory> = {
         ]
       },
       {
+        "title": "Every control has to earn its place",
+        "body": "We used progressive disclosure to help people learn as they went: start with a focused interface, then reveal more options when they become useful. Simplicity meant keeping the main task clear. Each item had to earn its place by helping someone understand, decide, or act."
+      },
+      {
         "title": "Looking at the whole workspace",
-        "body": "The explorations also considered how information is organized beyond a single response. These views show the broader workspace and refinement controls alongside the interaction work. The project was part of the Copilot redesign described in Microsoft’s “Introducing a new design for Microsoft 365 Copilot” article.",
+        "body": "The explorations also considered how information is organized beyond a single response. These views show the broader workspace and refinement controls alongside the interaction work. The redesign shipped in Microsoft 365 Copilot. My interaction design and prototyping work helped shape that experience. Jon Friedman’s launch article below shows the redesign in the product.",
         "media": [
           "img/portfolio/bebop/zoomedout.gif",
           "img/portfolio/bebop/refiners1.gif"
