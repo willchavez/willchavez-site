@@ -40,7 +40,7 @@ try {
     assert.equal(await page.locator('html').evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(23, 20, 17)' : 'rgb(247, 245, 242)');
     await page.goto(base + '/enjoying');
     const tag = page.locator('.ent[data-kind="film"] .enjoying-tag').first();
-    assert.equal(await tag.evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(67, 45, 35)' : 'rgb(241, 223, 213)');
+    assert.equal(await tag.evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(38, 56, 72)' : 'rgb(223, 232, 241)');
     for (let i = 0; i < 5; i++) await toggle.click();
     assert.equal(await page.locator('html').getAttribute('data-theme'), system);
     assert.equal(errors.length, 0, errors.join('\n'));
