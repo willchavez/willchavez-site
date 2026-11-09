@@ -5,8 +5,9 @@ interface Props {
   data: CollectionEntry<"enjoying">["data"];
   href?: string;
   showDate?: boolean;
+  filterable?: boolean;
 }
-const { data, href, showDate = true } = Astro.props;
+const { data, href, showDate = true, filterable = false } = Astro.props;
 const displayDate = data.date ?? data.releaseDate;
 const metadata = [data.creator, data.publication, data.year].filter(Boolean).join(" · ");
 const stars = data.rating && (Number.isInteger(data.rating)
@@ -32,7 +33,9 @@ const stars = data.rating && (Number.isInteger(data.rating)
   </div>}
   <div class="enjoying-side-meta">
     {showDate && displayDate && <time class="recorded" datetime={displayDate.toISOString()} title={data.date ? undefined : "U.S. public release date"}>{!data.date && "Released "}{fmtDate(displayDate)}</time>}
-    <span class="enjoying-tag" data-kind={data.kind}>{data.kind}</span>
+    {filterable
+      ? <button type="button" class="enjoying-tag" data-kind={data.kind} data-kind-filter aria-label={`Filter by ${data.kind}`}>{data.kind}</button>
+      : <span class="enjoying-tag" data-kind={data.kind}>{data.kind}</span>}
   </div>
 </div>
 {data.rating && <div class="rating" aria-label={`${data.rating} out of 5`}>{stars}</div>}
