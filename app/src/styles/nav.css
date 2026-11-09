@@ -7,7 +7,11 @@
 .topbar .portrait { width: 48px; height: 48px; display: block; }
 
 :root { --fill: #9c4b2e; --fill-ink: #fbf9f6; }
-@media (prefers-color-scheme: dark) { :root { --fill: #df7955; --fill-ink: #171411; } }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --fill: #df7955; --fill-ink: #171411; }
+}
+:root[data-theme="dark"] { --fill: #df7955; --fill-ink: #171411; }
+
 
 .nav a { box-shadow: none; }
 .nav a::before { display: none; }

@@ -1,4 +1,5 @@
 ---
+import ThemeHead from "../../../components/ThemeHead.astro";
 import Analytics from '../../../components/Analytics.astro';
 import { portfolioProjects } from '../../../data/portfolio-projects';
 import { projectStories } from '../../../data/project-stories';
@@ -24,6 +25,7 @@ const imageFor = (src: string) => {
 <!doctype html>
 <html lang="en">
   <head>
+    <ThemeHead />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{project.title} · Presentation — Will Chavez</title>

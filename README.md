@@ -143,3 +143,11 @@ Run `CHROMIUM_PATH=/usr/bin/chromium npm --prefix app run test:presentation -- B
 The shared Analytics component initializes `G-RPXX4TMRSH` once on `willchavez.com` and `www.willchavez.com`, across both Base pages and standalone project presentations. It stays disabled on preview and local hostnames. The existing GA4 data stream has Enhanced Measurement page views and browser-history tracking enabled; those settings cover Astro navigation and browser Back/Forward. Keep that history option enabled. Do not add manual `page_view` calls on `astro:page-load`, which would duplicate the automatic events. Google may batch transmission, so a short network observation can miss queued route events.
 
 Verify a local production build with `CHROMIUM_PATH=/usr/bin/chromium npm --prefix app run test:analytics -- BASE_URL`. The test fetches the current Google tag, uses production hostnames mapped to the local build, and intercepts all collection requests before they leave the browser. It checks initial/navigation/history requests, titles and measurement ID, one initialization, standalone presentations, no slide-change duplicates, and excluded preview/local hosts. It does not generate test traffic in GA reports or verify account-side report ingestion.
+
+### Avatar theme toggle
+
+The header avatar toggles light/dark mode. It follows the OS until the visitor chooses a theme, then saves that choice in `will-theme`. `ThemeHead.astro` resolves the theme before paint and applies it to the standalone presentations as well. The persisted navigation retains the avatar’s rotation across Astro page swaps.
+
+`ThemeAvatar.astro` layers the generated transparent portrait over hills, sky, stars, and a shared sun/moon orbit. The visible celestial body rises on a full page load; each toggle advances the orbit half a turn. Reduced-motion visitors get an immediate change. With JavaScript disabled, the original home-link portrait and OS theme remain available.
+
+Run `CHROMIUM_PATH=/usr/bin/chromium npm --prefix app run test:theme -- BASE_URL` against a built site to check animation, saved/system themes, keyboard/mobile use, page persistence, presentations, tags/logos, blocked storage, and the no-JavaScript fallback. Production Analytics requests are intercepted by the test.

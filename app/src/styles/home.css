@@ -81,7 +81,11 @@
   .home-companies { grid-template-columns: 1fr; gap: .8rem; }
   .home-closing { align-items: flex-start; flex-direction: column; gap: .7rem; }
 }
-@media (prefers-color-scheme: dark) { .home-page { --home-card: #241e19; } }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .home-page { --home-card: #241e19; }
+}
+:root[data-theme="dark"] .home-page { --home-card: #241e19; }
+
 @media (prefers-reduced-motion: reduce) {
   .home-project-image img { transition: none; }
   .home-project:hover img { transform: none; }

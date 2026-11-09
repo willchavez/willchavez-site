@@ -10,7 +10,8 @@
     "test:presentation": "node scripts/presentation.browser.mjs",
     "test:nav:position": "node scripts/nav-position.browser.mjs",
     "test:nav": "node scripts/nav-contrast.browser.mjs",
-    "test:nav:pixels": "node scripts/nav-mask-pixels.browser.mjs"
+    "test:nav:pixels": "node scripts/nav-mask-pixels.browser.mjs",
+    "test:theme": "node scripts/theme.browser.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.0",
