@@ -1,6 +1,7 @@
 ---
 title: "It"
 kind: "film"
+creator: "Tommy Lee Wallace"
 year: 1990
 date: "2026-10-31"
 cover: "/uploads/enjoying/letterboxd-film-it-1990.webp"

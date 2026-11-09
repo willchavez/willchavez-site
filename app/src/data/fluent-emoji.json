@@ -1,0 +1,54 @@
+{
+  "🚀": {
+    "src": "/emoji/rocket_3d.png",
+    "label": "rocket"
+  },
+  "🥲": {
+    "src": "/emoji/smiling_face_with_tear_3d.png",
+    "label": "smiling face with tear"
+  },
+  "😭": {
+    "src": "/emoji/loudly_crying_face_3d.png",
+    "label": "loudly crying face"
+  },
+  "🥰": {
+    "src": "/emoji/smiling_face_with_hearts_3d.png",
+    "label": "smiling face with hearts"
+  },
+  "😂": {
+    "src": "/emoji/face_with_tears_of_joy_3d.png",
+    "label": "face with tears of joy"
+  },
+  "💙": {
+    "src": "/emoji/blue_heart_3d.png",
+    "label": "blue heart"
+  },
+  "🌊": {
+    "src": "/emoji/water_wave_3d.png",
+    "label": "water wave"
+  },
+  "😜": {
+    "src": "/emoji/winking_face_with_tongue_3d.png",
+    "label": "winking face with tongue"
+  },
+  "😑": {
+    "src": "/emoji/expressionless_face_3d.png",
+    "label": "expressionless face"
+  },
+  "🙌🏽": {
+    "src": "/emoji/raising_hands_3d_medium.png",
+    "label": "raising hands (medium skin tone)"
+  },
+  "👨🏽‍💻": {
+    "src": "/emoji/man_technologist_3d_medium.png",
+    "label": "man technologist (medium skin tone)"
+  },
+  "😅": {
+    "src": "/emoji/grinning_face_with_sweat_3d.png",
+    "label": "grinning face with sweat"
+  },
+  "❤": {
+    "src": "/emoji/red_heart_3d.png",
+    "label": "red heart"
+  }
+}

@@ -1,7 +1,7 @@
 ---
 title: "When the filter knob moves on its own"
 date: 2026-10-16
-summary: "A little OP-XY browser companion that started with one question: what if I could see the filter knob move?"
+summary: "I made a little browser companion to see what my synth’s filter was actually doing."
 deck: "Envelope filters clicked when I imagined an invisible hand moving the cutoff knob while a note plays."
 thumbnail: "/synth-lessons-thumbnail.webp"
 topics:

@@ -1,6 +1,7 @@
 ---
 title: "Barbarian"
 kind: "film"
+creator: "Zach Cregger"
 year: 2022
 date: "2025-11-04"
 cover: "/uploads/enjoying/letterboxd-film-barbarian.jpg"

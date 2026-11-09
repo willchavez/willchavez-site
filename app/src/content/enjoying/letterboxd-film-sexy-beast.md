@@ -1,6 +1,7 @@
 ---
 title: "Sexy Beast"
 kind: "film"
+creator: "Jonathan Glazer"
 year: 2000
 date: "2024-03-15"
 cover: "/uploads/enjoying/letterboxd-film-sexy-beast.jpg"

@@ -1,75 +1,76 @@
 ---
-import Base from "../layouts/Base.astro";
-import "../styles/work.css";
+import { contentExcerpt } from "../lib/excerpt";
+import EnjoyingHeading from "../components/EnjoyingHeading.astro";
 import CompanyLogo from "../components/CompanyLogo.astro";
+import Base from "../layouts/Base.astro";
+import "../styles/home.css";
+import { portfolioProjects } from "../data/portfolio-projects";
+import { getWriting, getEnjoying, portfolioImg, img, fmtDate } from "../lib/content";
+const featured = ["genui-bebop", "bebop", "hireharlem"].map(slug => portfolioProjects.find(p => p.slug === slug)!);
+const notes = (await getWriting()).slice(0, 2);
+const enjoying = (await getEnjoying()).filter(p => p.body?.trim()).slice(0, 2);
+
 ---
-<Base title="Will Chavez is a design engineer." titleExact current="work" showHeading={false} description="Will Chavez is a design technologist at Microsoft, working on generative AI interfaces, design systems, and tools for designers.">
-  <div class="work-page" data-direction="split">
-    <header class="work-intro">
-      <span class="work-eyebrow"><span class="work-dot" aria-hidden="true"></span> <span class="work-title-slot"><span class="work-title-measure" aria-hidden="true">User Experience Engineer</span><span class="work-title-current">Design Technologist</span></span> <span class="work-pronouns">· He/him</span></span>
-      <h1>Will Chavez</h1>
-      <p class="work-lead">AI interfaces and thoughtful tools for designers are at the center of my work.</p>
-      <p class="work-summary">I’m a Design Technologist in Microsoft’s Fluent Design Studio, working on AI experiences and design systems.</p>
-      <a class="work-contact" href="mailto:wchavezsalinas@gmail.com">Get in touch <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 12 12 4M5 4h7v7" /></svg></a>
+<Base title="Will Chavez is a design engineer." titleExact current="work" showHeading={false} description="Will Chavez builds AI interfaces, tools for designers, and small projects that start with a question.">
+  <div class="home-page">
+    <header class="home-intro">
+      <div class="home-hello">
+        <p class="home-kicker">Will Chavez · Design technologist</p>
+        <h1>Designing and building thoughtful digital experiences</h1>
+      </div>
+      <div class="home-intro-aside">
+        <p class="home-summary">I’m Will, a design technologist in Microsoft’s Fluent Design Studio. I work across design and engineering to prototype interfaces and build tools for designers.</p>
+        <p class="home-personal">Outside of work, it’s synths, music, and whatever I’m trying to figure out this week.</p>
+        <div class="home-actions"><a class="home-button" href="/portfolio">See my work</a><a class="home-text-link" href="mailto:wchavezsalinas@gmail.com">Get in touch</a></div>
+      </div>
     </header>
-
-    <section class="work-experience" aria-labelledby="experience-title">
-      <h2 class="work-section-title" id="experience-title">My experience</h2>
-      <article class="work-role">
-        <div class="work-company"><CompanyLogo company="microsoft" /><h3>Microsoft</h3><span class="work-period">Current</span></div>
-        <div class="work-description">
-          <section class="work-team-section" aria-labelledby="team-fluent">
-            <h4 class="work-team" id="team-fluent">Fluent Design Studio</h4>
-            <p class="work-role-meta">2021–Present · Senior UX Engineer since 2023</p>
-            <p>At Fluent, I work with design, product, and engineering teams to prototype AI-powered interfaces and interaction patterns.</p>
-            <p>That work also includes tools and automated workflows for Fluent icons and emoji, from Figma exports to asset comparisons and release reporting.</p>
-          </section>
-          <section class="work-team-section" aria-labelledby="team-security">
-            <h4 class="work-team" id="team-security">Secure Admin Services</h4>
-            <p class="work-role-meta">Software Engineer II · 2020–2021</p>
-            <p>On the SASWEB team, I helped modernize internal security tools through front-end experiences.</p>
-          </section>
-        </div>
-      </article>
-      <article class="work-role">
-        <div class="work-company"><CompanyLogo company="ibm" /><h3>IBM</h3></div>
-        <div class="work-description">
-          <section class="work-team-section" aria-labelledby="team-garage">
-            <h4 class="work-team" id="team-garage">Cloud Garage</h4>
-            <p class="work-role-meta">Software Engineer II · 2018–2020</p>
-            <p>At the Garage, I led software projects with startups and teams across design and engineering, grounding the work in the IBM Garage Method and design thinking.</p>
-          </section>
-          <section class="work-team-section" aria-labelledby="team-watson">
-            <h4 class="work-team" id="team-watson">Watson</h4>
-            <p class="work-role-meta">Software Engineer · 2016–2018</p>
-            <p>The work included full-stack experiences for Watson Company Profiler and Watson Assistant, plus integrations with Slack and Facebook Messenger.</p>
-          </section>
-        </div>
-      </article>
-      <article class="work-role">
-        <div class="work-company"><CompanyLogo company="lockheed-martin" /><h3>Lockheed Martin</h3></div>
-        <div class="work-description">
-          <section class="work-team-section" aria-labelledby="team-research">
-            <h4 class="work-team" id="team-research">Research &amp; Development</h4>
-            <p class="work-role-meta">Software Engineer · 2015–2016</p>
-            <p>The work included pilot logistics systems, with my first chance to test mobile apps alongside real users at Air Force bases.</p>
-          </section>
-        </div>
-      </article>
+    <section class="home-section" id="selected-work" aria-labelledby="selected-title">
+      <div class="home-section-head"><h2 id="selected-title">A few things I’ve helped make</h2><a href="/portfolio">All projects</a></div>
+      <div class="home-projects">
+        {featured.map((p, index) => <a class="home-project" href={`/portfolio/${p.slug}`}>
+          <div class:list={["home-project-image", `home-image-${p.slug}`]}><img src={portfolioImg(p.slug === "bebop" ? "img/portfolio/bebop/zoomedout.gif" : p.cover, 960)} alt={p.slug === "bebop" ? "Copilot prototype with a canvas of project notes" : p.images[0].alt} loading={index === 0 ? "eager" : "lazy"} decoding="async" /></div>
+          <div class="home-project-copy"><span class="home-kicker">{p.category}</span><h3>{p.title}</h3><p>{p.summary}</p></div>
+        </a>)}
+      </div>
     </section>
-
-    <footer class="work-footer">
-      <p>For selected project work, <a href="mailto:wchavezsalinas@gmail.com?subject=Portfolio%20request">email me</a>.</p>
-      <p>Outside of work, I make music, take photos, and keep learning. <a href="/about">More about me</a>.</p>
-    </footer>
+    <section class="home-history" aria-labelledby="history-title">
+      <div class="home-section-head"><h2 id="history-title">Where I’ve been</h2><a href="/about#experience">My full experience</a></div>
+      <div class="home-companies">
+        <article class="home-company">
+          <div class="home-company-heading"><CompanyLogo company="microsoft" /><h3>Microsoft</h3></div>
+          <p class="home-company-dates">2020–now · Current</p>
+          <p class="home-company-role">Senior UX Engineer</p>
+          <p>Prototyping AI experiences and building tools for designers in Fluent Design Studio.</p>
+        </article>
+        <article class="home-company">
+          <div class="home-company-heading"><CompanyLogo company="ibm" /><h3>IBM</h3></div>
+          <p class="home-company-dates">2016–2020</p>
+          <p class="home-company-role">Software Engineer II</p>
+          <p>Working with startups at Cloud Garage and building conversational experiences with Watson.</p>
+        </article>
+        <article class="home-company">
+          <div class="home-company-heading"><CompanyLogo company="lockheed-martin" /><h3>Lockheed Martin</h3></div>
+          <p class="home-company-dates">2015–2016</p>
+          <p class="home-company-role">Software Engineer</p>
+          <p>Building pilot logistics systems and testing mobile apps with the people using them.</p>
+        </article>
+      </div>
+    </section>
+    <div class="home-journal">
+      <section class="home-section home-notes-section" aria-labelledby="home-notes">
+        <div class="home-section-head"><h2 id="home-notes">Notes</h2><a href="/notes">All notes</a></div>
+        <p class="home-section-description">Things I’m making, learning, and figuring out.</p>
+        {notes.map(n => <a class="home-note" href={`/notes/${n.id}`}>
+          {(n.data.thumbnail || n.data.cover) && <img class="home-pick-cover" src={img(n.data.thumbnail || n.data.cover, 240)} alt="" width="64" height="64" loading="lazy" decoding="async" />}
+          <div class="home-pick-copy"><time datetime={n.data.date.toISOString()}>{fmtDate(n.data.date)}</time><h3>{n.data.title}</h3><p>{n.data.summary}</p></div>
+        </a>)}
+      </section>
+      <section class="home-section home-enjoying-section" aria-labelledby="home-enjoying">
+        <div class="home-section-head"><h2 id="home-enjoying">Enjoying</h2><a href="/enjoying">All picks</a></div>
+        <p class="home-section-description">Music, films, and books I’ve spent time with.</p>
+        {enjoying.map(e => <a class="home-enjoying" href={`/enjoying/${e.id}`}>{e.data.cover && <img class="home-pick-cover" src={img(e.data.cover, 240)} alt="" width="64" height="64" loading="lazy" decoding="async" />}<div class="home-pick-copy"><EnjoyingHeading data={e.data} showDate={false} /><p>{contentExcerpt(e.body)}</p></div></a>)}
+      </section>
+    </div>
+    <div class="home-closing"><p>Have something you want to make?</p><a class="home-text-link" href="mailto:wchavezsalinas@gmail.com">Let’s talk about it</a></div>
   </div>
 </Base>
-<script is:inline data-astro-rerun>
-{
-  // Temporary branch previews: same content, three visual directions.
-  const direction = new URLSearchParams(location.search).get("direction");
-  if (["rounded", "quiet", "split"].includes(direction)) {
-    document.querySelector(".work-page").dataset.direction = direction;
-  }
-}
-</script>

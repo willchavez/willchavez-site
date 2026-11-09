@@ -1,6 +1,7 @@
 ---
 title: "Babygirl"
 kind: "film"
+creator: "Halina Reijn"
 year: 2024
 releaseDate: "2024-12-25"
 releaseDateSource: "https://a24films.com/films/babygirl"

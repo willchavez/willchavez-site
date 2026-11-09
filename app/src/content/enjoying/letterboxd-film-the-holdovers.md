@@ -1,6 +1,7 @@
 ---
 title: "The Holdovers"
 kind: "film"
+creator: "Alexander Payne"
 year: 2023
 date: "2024-02-08"
 cover: "/uploads/enjoying/letterboxd-film-the-holdovers.jpg"

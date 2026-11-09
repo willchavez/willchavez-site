@@ -1,6 +1,7 @@
 ---
 title: "Sideways"
 kind: "film"
+creator: "Alexander Payne"
 year: 2004
 date: "2024-06-28"
 cover: "/uploads/enjoying/letterboxd-film-sideways.jpg"

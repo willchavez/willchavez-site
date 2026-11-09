@@ -1,6 +1,7 @@
 ---
 title: "Tetris"
 kind: "film"
+creator: "Jon S. Baird"
 year: 2023
 date: "2024-01-23"
 cover: "/uploads/enjoying/letterboxd-film-tetris.jpg"

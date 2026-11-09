@@ -77,3 +77,69 @@ local cache is safe and forces regeneration.
 
 Run `node --test app/scripts/images.test.mjs` to check cache invalidation,
 partial-cache recovery, and animation preservation.
+
+The project-led preview is developed on `codex/project-led-preview`; homepage
+refinements are on `codex/preview-refinements`. Publish these only through the
+separate preview repository workflow until production changes are approved.
+
+Microsoft Fluent 3D emoji are bundled in `app/public/emoji` under their MIT
+license. `app/src/middleware.ts` replaces mapped emoji in visible rendered text,
+including Markdown and excerpts, while preserving their Unicode text as image
+alt text. To support another emoji, add the official asset and its entry to
+`app/src/data/fluent-emoji.json`. Other emoji keep their native rendering.
+Run `node --test app/scripts/fluent-emoji.test.mjs` to check the renderer.
+
+Enjoying uses `creator` for artists, authors, and film directors. The film
+credits were checked against the structured director metadata on each entry’s
+linked Letterboxd page. Multiple directors stay together in that field.
+`EnjoyingHeading.astro` keeps titles and creator details on the left, with
+category tags on the right. On desktop and phones, the Enjoying list keeps
+the date and tag together in the right column, with a fixed gap independent
+of title wrapping; film detail pages use the same
+stored creator credit. Homepage Notes cards use each post’s existing thumbnail
+(or cover when available).
+
+The desktop nav follows main’s two-layer text treatment: normal labels stay
+in place, and an aria-hidden contrasting copy is clipped to the moving pill.
+The pill background and contrasting text are painted in one clipped layer,
+so one clip-path animation controls their shared boundary.
+
+To check navigation contrast, build and serve the site, then run
+`npm --prefix app run test:nav` (defaults to `http://localhost:4321`). This
+browser regression checks intermediate frames, interrupted navigation, history,
+resize, both color schemes, reduced motion, mobile, and the no-JavaScript
+fallback. On machines where browser dependencies are allowed, install Chromium
+with `cd app && npx playwright install chromium`, or set `CHROMIUM_PATH` to an
+existing Chromium executable. Pass a deployed base URL after `--` to check a
+preview. Set `NAV_SCREENSHOTS_DIR` to save the six sampled frames per color scheme.
+
+`npm --prefix app run test:nav:pixels` captures actual unpaused browser frames
+while navigating under 4× CPU throttling. It checks rendered pixels for light
+text outside the brown pill and dark text inside it. Pass a base URL after `--`
+to verify a deployed preview. Set `NAV_SCREENSHOTS_DIR` to save failing frames.
+
+On portrait phones, Enjoying paper previews hide their thumbnail and show a
+single ellipsized author line followed by `publicationShort` and the year.
+Desktop/landscape previews and paper detail pages retain the full publication
+and author text.
+
+Project detail pages use `app/src/data/project-stories.ts` for role/context,
+opening style, chapter order, captions, and image placement. Every project must
+have a story record; missing context or unknown image references fail the build.
+Use a text opening when the problem needs context, a paired opening for a tool
+best seen beside its introduction, and a compact visual opening when the image
+explains the work immediately. Unplaced source images remain in native “More
+views” disclosures. `ProjectFigure.astro` supplies the shared rounded frame and
+responsive images without fixing every story to the same cover-first layout.
+
+### Presentation view
+
+Individual project pages now include **Present project**, linking to a separate slide deck at `/portfolio/<slug>/present`. The Projects index and reading layouts remain intact. Decks are curated individually in `app/src/data/project-presentations.ts`; historical collaborator credits, narrative sources, controls, and maintenance guidance are documented in [docs/project-presentations.md](docs/project-presentations.md).
+
+Run `CHROMIUM_PATH=/usr/bin/chromium npm --prefix app run test:presentation -- BASE_URL` against a built preview to verify all eleven decks.
+
+### Google Analytics
+
+The shared Analytics component initializes `G-RPXX4TMRSH` once on `willchavez.com` and `www.willchavez.com`, across both Base pages and standalone project presentations. It stays disabled on preview and local hostnames. The existing GA4 data stream has Enhanced Measurement page views and browser-history tracking enabled; those settings cover Astro navigation and browser Back/Forward. Keep that history option enabled. Do not add manual `page_view` calls on `astro:page-load`, which would duplicate the automatic events. Google may batch transmission, so a short network observation can miss queued route events.
+
+Verify a local production build with `CHROMIUM_PATH=/usr/bin/chromium npm --prefix app run test:analytics -- BASE_URL`. The test fetches the current Google tag, uses production hostnames mapped to the local build, and intercepts all collection requests before they leave the browser. It checks initial/navigation/history requests, titles and measurement ID, one initialization, standalone presentations, no slide-change duplicates, and excluded preview/local hosts. It does not generate test traffic in GA reports or verify account-side report ingestion.

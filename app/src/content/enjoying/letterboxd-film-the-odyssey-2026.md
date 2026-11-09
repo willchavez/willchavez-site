@@ -1,6 +1,7 @@
 ---
 title: "The Odyssey"
 kind: "film"
+creator: "Christopher Nolan"
 year: 2026
 date: "2026-07-22"
 cover: "/uploads/enjoying/letterboxd-film-the-odyssey-2026.webp"

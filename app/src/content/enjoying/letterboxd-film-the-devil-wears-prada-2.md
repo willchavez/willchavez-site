@@ -1,6 +1,7 @@
 ---
 title: "The Devil Wears Prada 2"
 kind: "film"
+creator: "David Frankel"
 year: 2026
 date: "2026-05-21"
 cover: "/uploads/enjoying/letterboxd-film-the-devil-wears-prada-2.jpg"

@@ -1,6 +1,7 @@
 ---
 title: "The Substance"
 kind: "film"
+creator: "Coralie Fargeat"
 year: 2024
 releaseDate: "2024-09-20"
 releaseDateSource: "https://www.rottentomatoes.com/m/the_substance"

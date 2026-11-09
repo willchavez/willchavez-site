@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { fmtDate } from "../lib/content";
+interface Props {
+  data: CollectionEntry<"enjoying">["data"];
+  href?: string;
+  showDate?: boolean;
+  filterable?: boolean;
+}
+const { data, href, showDate = true, filterable = false } = Astro.props;
+const displayDate = data.date ?? data.releaseDate;
+const metadata = [data.creator, data.publication, data.year].filter(Boolean).join(" · ");
+const stars = data.rating && (Number.isInteger(data.rating)
+  ? "★".repeat(data.rating) + "☆".repeat(5 - data.rating)
+  : "★".repeat(Math.floor(data.rating)) + "½");
+---
+<div class:list={["ent-heading", showDate && displayDate && "ent-heading-dated"]}>
+  <div class="ent-titleline">
+    {href
+      ? <a class="t" href={href} data-enjoying-entry>{data.title}</a>
+      : <h3>{data.title}</h3>}
+  </div>
+  {metadata && <div class:list={["ent-meta enjoying-meta", data.kind === "paper" && "paper-metadata"]}>
+    {data.kind === "paper" ? <>
+      {data.creator && <span class="paper-authors" title={data.creator}>{data.creator}</span>}
+      {data.creator && (data.publication || data.year) && <span class="paper-meta-divider"> · </span>}
+      <span class="paper-venue">
+        {data.publication && <span class:list={["paper-publication-name", data.publicationShort && "paper-publication-full"]}>{data.publication}</span>}
+        {data.publicationShort && <abbr class="paper-publication-short" title={data.publication}>{data.publicationShort}</abbr>}
+        {data.year && <span class="paper-year">{data.publication && " · "}{data.year}</span>}
+      </span>
+    </> : metadata}
+  </div>}
+  <div class="enjoying-side-meta">
+    {showDate && displayDate && <time class="recorded" datetime={displayDate.toISOString()} title={data.date ? undefined : "U.S. public release date"}>{!data.date && "Released "}{fmtDate(displayDate)}</time>}
+    {filterable
+      ? <button type="button" class="enjoying-tag" data-kind={data.kind} data-kind-filter aria-label={`Filter by ${data.kind}`}>{data.kind}</button>
+      : <span class="enjoying-tag" data-kind={data.kind}>{data.kind}</span>}
+  </div>
+</div>
+{data.rating && <div class="rating" aria-label={`${data.rating} out of 5`}>{stars}</div>}

@@ -1,216 +1,143 @@
 ---
-const { current, counts = {} } = Astro.props;
+const { current, counts = {}, alignment = "start" } = Astro.props;
 const items = [
-  { id: "work", label: "Work", href: "/" },
-  { id: "portfolio", label: "Portfolio", href: "/portfolio" },
+  { id: "work", label: "Home", href: "/" },
+  { id: "portfolio", label: "Projects", href: "/portfolio" },
   { id: "notes", label: "Notes", href: "/notes" },
   { id: "enjoying", label: "Enjoying", href: "/enjoying" },
   { id: "about", label: "About", href: "/about" },
 ];
 const here = items.find((i) => i.id === current) ?? items[0];
 ---
-<div class="topbar" data-current={current} transition:persist="site-navigation" transition:animate="none">
-  <a class="avatar" href="/" aria-label="work"><img class="portrait" src="/img/will.webp" width="144" height="144" alt="Will Chavez" decoding="async" /></a>
-  <nav class="nav" aria-label="sections">
+<div class="topbar" data-current={current} data-alignment={alignment} transition:persist="site-navigation" transition:animate="none">
+  <a class="avatar" href="/" aria-label="Will Chavez — home"><img class="portrait" src="/img/will.webp" width="144" height="144" alt="Will Chavez" decoding="async" /></a>
+  <nav class="nav" aria-label="Main navigation">
     <details class="pill">
-      <summary aria-label={`menu, you are on ${here.label}`}>{here.label}</summary>
+      <summary aria-label={`Open navigation, currently ${here.label}`}>{here.label}</summary>
       <div class="menu">
-        {items.map((i) => (
-          <a href={i.href} data-count={counts[i.id] || ""} aria-current={i.id === current ? "page" : undefined}><span>{i.label}</span></a>
-        ))}
+        {items.map((i) => <a href={i.href} data-count={counts[i.id] || ""} aria-current={i.id === current ? "page" : undefined}>{i.label}</a>)}
       </div>
     </details>
-    <div class="seg">
-      {items.map((i) => (
-        <a href={i.href} data-id={i.id} aria-current={i.id === current ? "page" : undefined}>
-          {i.id === current && <span class="seg-indicator" aria-hidden="true"></span>}
-          <span class="seg-label">{i.label}</span>
-        </a>
-      ))}
-      <div class="seg-ink" aria-hidden="true">
-        {items.map((i) => <span data-id={i.id} data-current={i.id === current ? "true" : undefined}>{i.label}</span>)}
+    <div class="desktop-nav">
+      {items.map((i) => <a href={i.href} aria-current={i.id === current ? "page" : undefined}><span class="nav-label">{i.label}</span></a>)}
+      <div class="nav-selection nav-ink" aria-hidden="true">
+        {items.map((i) => <span><span class="nav-ink-label">{i.label}</span></span>)}
       </div>
     </div>
   </nav>
 </div>
 <script>
-  import { createHoverNav } from "../lib/hover-nav.mjs";
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
   const topbar = document.querySelector<HTMLElement>(".topbar")!;
-  topbar.addEventListener("click", (event) => {
-    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
-    if (!link || link.target || link.hasAttribute("download")) return;
-    const destination = new URL(link.href, location.href);
-    const current = new URL(location.href);
-    const normalizePath = (path: string) => path.replace(/\/+$/, "") || "/";
-    if (
-      destination.origin === current.origin &&
-      normalizePath(destination.pathname) === normalizePath(current.pathname) &&
-      destination.search === current.search &&
-      destination.hash === current.hash
-    ) {
-      event.preventDefault();
-      if (link === document.activeElement && !link.matches(":focus-visible")) link.blur();
-    }
+  const desktop = topbar.querySelector<HTMLElement>(".desktop-nav")!;
+  const menu = topbar.querySelector<HTMLDetailsElement>(".pill")!;
+  const ink = desktop.querySelector<HTMLElement>(".nav-ink")!;
+  let inkAnimation: Animation | undefined;
+  let positionAnimation: Animation | undefined;
+  let previousLeft: number | undefined;
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  // The background and contrasting labels share one clipping surface. A
+  // separate background animation can paint a different frame from the text.
+  const syncInk = () => {
+    if (!desktop.offsetWidth) return;
+    const bounds = ink.getBoundingClientRect();
+    const active = desktop.querySelector<HTMLElement>('a[aria-current="page"]')!;
+    const pill = active.getBoundingClientRect();
+    const padding = getComputedStyle(desktop);
+    ink.style.clipPath = `inset(${padding.paddingTop} ${Math.max(0, bounds.right - pill.right)}px ${padding.paddingBottom} ${Math.max(0, pill.left - bounds.left)}px round 999px)`;
+    desktop.dataset.ready = "";
+  };
+  let previousClip: string | undefined;
+  const reconcile = () => {
+    inkAnimation?.cancel();
+    syncInk();
+  };
+  reconcile();
+  new ResizeObserver(reconcile).observe(desktop);
+  void document.fonts.ready.then(reconcile);
+  reducedMotion.addEventListener("change", () => {
+    positionAnimation?.cancel();
+    reconcile();
   });
-  const switcher = document.querySelector<HTMLElement>(".seg");
-  const ink = switcher?.querySelector<HTMLElement>(".seg-ink");
-  let indicatorAnimation: Animation | undefined;
-  let inkFrame = 0;
-  let syncInkClip = () => {};
-  let trackInkToIndicator = (_duration?: number) => {};
-  let reconcileHover = () => {};
-  if (switcher) {
-    syncInkClip = () => {
-      if (!switcher || !ink) return;
-      const indicator = switcher.querySelector<HTMLElement>(".seg-indicator");
-      if (!indicator) return;
-      const clip = ink.getBoundingClientRect();
-      if (!clip.width || !clip.height) return;
-      const pill = indicator.getBoundingClientRect();
-      const labels = switcher.querySelectorAll<HTMLElement>(".seg-label");
-      const inkLabels = ink.querySelectorAll<HTMLElement>("[data-id]");
-      labels.forEach((label, index) => {
-        const overlayLabel = inkLabels[index];
-        if (!overlayLabel) return;
-        const rect = label.getBoundingClientRect();
-        overlayLabel.style.left = `${rect.left - clip.left}px`;
-        overlayLabel.style.top = `${rect.top - clip.top}px`;
-      });
-      const top = Math.max(0, pill.top - clip.top);
-      const right = Math.max(0, clip.right - pill.right);
-      const bottom = Math.max(0, clip.bottom - pill.bottom);
-      const left = Math.max(0, pill.left - clip.left);
-      ink.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px round 999px)`;
-      ink.dataset.ready = "";
-    };
-    trackInkToIndicator = (duration = 380) => {
-      cancelAnimationFrame(inkFrame);
-      const started = performance.now();
-      const tick = (now: number) => {
-        syncInkClip();
-        if (now - started < duration) inkFrame = requestAnimationFrame(tick);
-      };
-      inkFrame = requestAnimationFrame(tick);
-    };
-    let inkSyncFrame = 0;
-    const scheduleInkSync = () => {
-      cancelAnimationFrame(inkSyncFrame);
-      inkSyncFrame = requestAnimationFrame(() => {
-        inkSyncFrame = 0;
-        syncInkClip();
-      });
-    };
-    syncInkClip();
-    window.addEventListener("resize", scheduleInkSync, { passive: true });
-    window.addEventListener("orientationchange", scheduleInkSync, { passive: true });
-    if (document.fonts) void document.fonts.ready.then(scheduleInkSync);
-    const navResizeObserver = new ResizeObserver(scheduleInkSync);
-    navResizeObserver.observe(switcher);
-    const hoverDesktop = matchMedia("(min-width: 821px) and (hover: hover)");
-    switcher.setAttribute("data-hover-intent", "");
-    const hoverIntent = createHoverNav((expanded) => {
-      switcher.toggleAttribute("data-expanded", expanded);
-      trackInkToIndicator(760);
-    });
-    switcher.addEventListener("pointerenter", () => { if (hoverDesktop.matches) hoverIntent.enter(); trackInkToIndicator(); });
-    switcher.addEventListener("pointerleave", () => { hoverIntent.leave(); trackInkToIndicator(760); });
-    switcher.addEventListener("pointercancel", () => hoverIntent.leave());
-    switcher.addEventListener("focusin", () => { if (hoverDesktop.matches) hoverIntent.focus(); trackInkToIndicator(); });
-    switcher.addEventListener("focusout", (event) => {
-      if (!switcher.contains(event.relatedTarget as Node)) { hoverIntent.blur(); trackInkToIndicator(); }
-    });
-    hoverDesktop.addEventListener("change", () => hoverIntent.reset());
-    window.addEventListener("blur", () => hoverIntent.reset());
-    reconcileHover = () => {
-      // Pointer clicks must not leave the picker pinned open by link focus.
-      const active = document.activeElement as HTMLElement;
-      if (switcher.contains(active) && !active.matches(":focus-visible")) active.blur();
-      if (hoverDesktop.matches && switcher.matches(":hover")) hoverIntent.enter();
-      else hoverIntent.leave();
-    };
-  }
-  // close the phone menu on Escape or when tapping elsewhere
-  const pill = document.querySelector<HTMLDetailsElement>(".pill");
-  if (pill) {
-    pill.addEventListener("click", (e) => {
-      const link = e.target instanceof Element ? e.target.closest<HTMLAnchorElement>(".menu a") : null;
-      if (!link) return;
-      if (e.detail > 0) link.blur();
-      pill.open = false;
-    });
-    addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && pill.open) { pill.open = false; pill.querySelector("summary")?.focus(); }
-    });
-    addEventListener("click", (e) => { if (pill.open && !pill.contains(e.target as Node)) pill.open = false; });
-  }
-  // Keep the actual navigation element and its hover timers across page changes.
-  // Only copy page-specific labels and selection from the incoming HTML.
   document.addEventListener("astro:before-swap", (event: TransitionBeforeSwapEvent) => {
     const incoming = event.newDocument.querySelector<HTMLElement>(".topbar");
     if (!incoming) return;
-    const sectionChanged = topbar.dataset.current !== incoming.dataset.current;
-    const indicator = switcher?.querySelector<HTMLElement>(".seg-indicator");
-    // A rapid second navigation can interrupt the previous FLIP animation.
-    // Cancel it before measuring so its temporary scale never becomes the
-    // starting geometry for the next route.
-    if (sectionChanged && indicatorAnimation) indicatorAnimation.cancel();
-    const previousRect = sectionChanged ? indicator?.getBoundingClientRect() : undefined;
+    // Capture the painted position, including an interrupted glide. Layout
+    // chooses the destination; animate the persisted bar after the swap.
+    previousLeft = topbar.getBoundingClientRect().left;
+    topbar.dataset.alignment = incoming.dataset.alignment;
+    if (topbar.dataset.current !== incoming.dataset.current) {
+      previousClip = getComputedStyle(ink).clipPath;
+      inkAnimation?.cancel();
+    }
     topbar.dataset.current = incoming.dataset.current;
-    topbar.querySelectorAll<HTMLAnchorElement>(".nav a").forEach((link) => {
-      const next = [...incoming.querySelectorAll<HTMLAnchorElement>(".nav a")].find((a) =>
-        a.getAttribute("href") === link.getAttribute("href") && a.parentElement?.className === link.parentElement?.className);
+    topbar.querySelectorAll<HTMLAnchorElement>(".nav a").forEach(link => {
+      const next = [...incoming.querySelectorAll<HTMLAnchorElement>(".nav a")].find(a => a.getAttribute("href") === link.getAttribute("href"));
       if (next?.hasAttribute("aria-current")) link.setAttribute("aria-current", "page");
       else link.removeAttribute("aria-current");
       if (next?.hasAttribute("data-count")) link.dataset.count = next.dataset.count;
     });
-    const selectedId = switcher?.querySelector<HTMLAnchorElement>('a[aria-current="page"]')?.dataset.id;
-    ink?.querySelectorAll<HTMLElement>("[data-id]").forEach((label) => {
-      label.toggleAttribute("data-current", label.dataset.id === selectedId);
-    });
-    const summary = pill?.querySelector("summary");
-    const nextSummary = incoming.querySelector("summary");
-    if (summary && nextSummary) {
-      summary.textContent = nextSummary.textContent;
-      summary.setAttribute("aria-label", nextSummary.getAttribute("aria-label")!);
+    const summary = menu.querySelector("summary")!;
+    const nextSummary = incoming.querySelector("summary")!;
+    summary.textContent = nextSummary.textContent;
+    summary.setAttribute("aria-label", nextSummary.getAttribute("aria-label")!);
+    menu.open = false;
+  });
+  // Start after Astro has reinserted the persisted navigation. CSS transitions
+  // started before the swap are cancelled when the element is moved.
+  document.addEventListener("astro:after-swap", () => {
+    positionAnimation?.cancel();
+    const destinationLeft = topbar.getBoundingClientRect().left;
+    if (previousLeft !== undefined && !reducedMotion.matches) {
+      const distance = previousLeft - destinationLeft;
+      const body = document.body.getBoundingClientRect();
+      // A percentage tracks the bar's width while font styles settle.
+      const from = topbar.dataset.alignment === "center"
+        ? `translateX(calc(50% + ${previousLeft - body.left - body.width / 2}px))`
+        : `translateX(${distance}px)`;
+      if (Math.abs(distance) > .5) positionAnimation = topbar.animate([
+        { transform: from },
+        { transform: "translateX(0)" },
+      ], { duration: 420, easing: "cubic-bezier(.22, 1, .36, 1)" });
     }
-    if (pill) pill.open = false;
-    if (sectionChanged && switcher && indicator) {
-      const nextActive = switcher.querySelector<HTMLElement>('a[aria-current="page"]');
-      if (nextActive) {
-        nextActive.prepend(indicator);
-        const nextRect = nextActive.getBoundingClientRect();
-        if (previousRect && previousRect.width > 0 && previousRect.height > 0 && nextRect.width > 0 && nextRect.height > 0 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-          const x = previousRect.left - nextRect.left;
-          const y = previousRect.top - nextRect.top;
-          const scaleX = previousRect.width / nextRect.width;
-          const scaleY = previousRect.height / nextRect.height;
-          // Only scale between plausible pill sizes. If a link is mid-collapse
-          // during hover, skip the morph rather than stretching across the nav.
-          if (scaleX >= 0.5 && scaleX <= 2 && scaleY >= 0.75 && scaleY <= 1.33) {
-            switcher.dataset.indicatorMoving = "";
-            const animation = indicator.animate(
-              [
-                { transform: `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY})` },
-                { transform: "translate(0, 0) scale(1, 1)" },
-              ],
-              { duration: 320, easing: "cubic-bezier(.22, 1, .36, 1)" },
-            );
-            indicatorAnimation = animation;
-            trackInkToIndicator(340);
-            const clearIndicatorMoving = () => {
-              if (indicatorAnimation !== animation) return;
-              indicatorAnimation = undefined;
-              switcher.removeAttribute("data-indicator-moving");
-              syncInkClip();
-            };
-            animation.onfinish = clearIndicatorMoving;
-            animation.oncancel = clearIndicatorMoving;
-          } else syncInkClip();
-        } else syncInkClip();
-      }
+    previousLeft = undefined;
+    syncInk();
+    if (previousClip && desktop.offsetWidth && !reducedMotion.matches) {
+      const options = { duration: 360, easing: "cubic-bezier(.22, 1, .36, 1)" };
+      inkAnimation = ink.animate([
+        { clipPath: previousClip! },
+        { clipPath: ink.style.clipPath },
+      ], options);
+    }
+    previousClip = undefined;
+  });
+  // Styles can briefly use fallback metrics while Astro swaps stylesheets.
+  // Both text layers lay themselves out identically; refresh the destination
+  // once page styles settle without restarting an in-flight mask animation.
+  const refreshDestination = () => {
+    syncInk();
+    if (inkAnimation && ["running", "paused"].includes(inkAnimation.playState)) {
+      const frames = (inkAnimation.effect as KeyframeEffect).getKeyframes();
+      (inkAnimation.effect as KeyframeEffect).setKeyframes([
+        { clipPath: frames[0].clipPath }, { clipPath: ink.style.clipPath },
+      ]);
+    }
+  };
+  document.addEventListener("astro:page-load", () => requestAnimationFrame(refreshDestination));
+  topbar.addEventListener("click", event => {
+    const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a") : null;
+    if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+    if (link.getAttribute("aria-current") === "page" && new URL(link.href).pathname.replace(/\/+$/, "") === location.pathname.replace(/\/+$/, "")) event.preventDefault();
+    if (event.detail > 0) link.blur();
+    menu.open = false;
+  });
+  document.addEventListener("click", event => {
+    if (menu.open && !menu.contains(event.target as Node)) menu.open = false;
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && menu.open) {
+      menu.open = false;
+      menu.querySelector("summary")?.focus();
     }
   });
-  document.addEventListener("astro:page-load", reconcileHover);
 </script>

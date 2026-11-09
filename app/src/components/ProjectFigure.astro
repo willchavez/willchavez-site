@@ -1,0 +1,9 @@
+---
+import { portfolioImg } from "../lib/content";
+interface Props { image: { src: string; alt: string }; caption?: string; compact?: boolean; priority?: boolean }
+const { image, caption = image.alt, compact = false, priority = false } = Astro.props;
+---
+<figure class="project-figure">
+  <div class="project-figure-frame"><img src={portfolioImg(image.src, 960)} srcset={`${portfolioImg(image.src, 480)} 480w, ${portfolioImg(image.src, 960)} 960w, ${portfolioImg(image.src, 1600)} 1600w`} sizes={compact ? "(max-width: 820px) calc(100vw - 3rem), 440px" : "(max-width: 820px) calc(100vw - 3rem), 918px"} alt={caption} loading={priority ? "eager" : "lazy"} fetchpriority={priority ? "high" : undefined} decoding="async" /></div>
+  <figcaption>{caption}</figcaption>
+</figure>

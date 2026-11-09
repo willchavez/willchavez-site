@@ -1,6 +1,6 @@
-/* top bar: avatar + navigation. phones get a dropdown pill, desktop gets a
-   segmented switch that rests as just the current page and opens on hover/focus. */
-.topbar { position: relative; z-index: 30; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 4.5rem; }
+/* Keep every section visible on desktop; use a dropdown on phones. */
+.topbar { align-self: flex-start; max-width: 100%; position: relative; z-index: 30; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 4.5rem; }
+.topbar[data-alignment="center"] { align-self: center; }
 .avatar { display: block; box-shadow: none; border-radius: 50%; line-height: 0; }
 .avatar::before { display: none; }
 .avatar:hover, .avatar:focus-visible { background: none; }
@@ -27,10 +27,12 @@
 .pill[open] > summary::after { transform: rotate(-135deg); margin-top: 0.1em; }
 .pill > summary:focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
 .pill .menu {
-  position: absolute; z-index: 20; top: 58px; left: 0; min-width: 15rem; padding: 0.4rem;
+  position: absolute; z-index: 20; top: 58px; left: 0; display: grid; gap: .4rem; min-width: 15rem; padding: .5rem;
   background: var(--paper); border: 1px solid var(--rust); border-radius: 16px;
   box-shadow: 0 14px 30px color-mix(in srgb, var(--rust) 16%, transparent);
 }
+.topbar[data-alignment="center"] .pill { position: static; }
+.topbar[data-alignment="center"] .pill .menu { left: 50%; transform: translateX(-50%); }
 .pill .menu a { display: flex; align-items: center; justify-content: space-between; min-height: 46px; padding: 0 0.8rem; border-radius: 10px; letter-spacing: -0.02em; -webkit-tap-highlight-color: transparent; }
 .pill .menu a::after { content: attr(data-count); color: var(--muted); font-size: 0.78rem; }
 .pill .menu a[aria-current="page"] { background: color-mix(in srgb, var(--rust) 14%, transparent); }
@@ -39,47 +41,17 @@
   .pill .menu a:hover:not([aria-current="page"]) { background: transparent; }
 }
 
-/* segmented switch (desktop) */
-.seg { display: none; }
+.desktop-nav { display: none; }
 @media (min-width: 821px) {
   .pill { display: none; }
-  .seg { position: relative; isolation: isolate; display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--rust); border-radius: 999px; }
-  .seg-indicator {
-    position: absolute; z-index: -1; inset: 0;
-    border-radius: inherit; background: var(--fill); pointer-events: none;
-    transform-origin: top left;
-  }
-  .seg a {
-    position: relative; z-index: 1; display: flex; align-items: center; min-width: 0; min-height: 44px; padding: 0 1.1rem; border-radius: 999px;
-    white-space: nowrap; overflow: hidden; letter-spacing: -0.02em; font-size: 0.98rem;
-    transition: background 180ms ease, color 180ms ease, max-width 320ms cubic-bezier(.22, 1, .36, 1), padding 320ms cubic-bezier(.22, 1, .36, 1), opacity 180ms ease;
-  }
-  .seg-label { position: relative; z-index: 1; }
-  .seg-ink {
-    position: absolute; z-index: 2; inset: 1px; pointer-events: none; overflow: hidden; clip-path: inset(0 round 999px);
-  }
-  .seg-ink:not([data-ready]) { visibility: hidden; }
-  .seg-ink > span {
-    position: absolute; display: block; min-width: 0; padding: 0; color: var(--fill-ink);
-    white-space: nowrap; line-height: inherit; font-family: inherit; font-size: 0.98rem;
-    font-weight: inherit; letter-spacing: -0.02em;
-  }
-  .seg[data-indicator-moving] a[aria-current="page"] { overflow: visible; }
-  .seg a:hover, .seg a:focus-visible { background: color-mix(in srgb, var(--rust) 12%, transparent); }
-  .seg a[aria-current="page"] { background: transparent; color: inherit; }
+  .desktop-nav { position: relative; isolation: isolate; display: flex; gap: .25rem; padding: .25rem; border: 1px solid var(--hairline); border-radius: 999px; }
+  .desktop-nav a { display: flex; align-items: center; min-height: 44px; padding: 0 1rem; border-radius: 999px; }
+  .desktop-nav a:hover { background: color-mix(in srgb, var(--rust) 8%, transparent); }
+  .desktop-nav a { color: var(--ink); transition: background 180ms ease; }
+  .desktop-nav:not([data-ready]) a[aria-current="page"] { background: var(--fill); color: var(--fill-ink); }
+  .nav-label { display: block; }
+  .nav-ink { display: flex; gap: .25rem; padding: .25rem; position: absolute; z-index: 2; inset: 0; pointer-events: none; overflow: hidden; background: var(--fill); }
+  .desktop-nav:not([data-ready]) .nav-ink { visibility: hidden; }
+  .nav-ink > span { display: flex; align-items: center; min-height: 44px; padding: 0 1rem; flex: 0 0 auto; color: var(--fill-ink); font: inherit; letter-spacing: inherit; white-space: nowrap; }
+  .desktop-nav[data-ready] a[aria-current="page"]:hover { background: none; }
 }
-/* rest as just the current page, but only where hover exists. touch laptops keep the full switch. */
-@media (min-width: 821px) and (hover: hover) {
-  .seg a { max-width: 11rem; }
-  .seg[data-hover-intent]:not([data-expanded]):not(:focus-within),
-  .seg:not([data-hover-intent]):not(:hover):not(:focus-within) { gap: 0; }
-  .seg[data-hover-intent]:not([data-expanded]):not(:focus-within) a:not([aria-current="page"]),
-  .seg:not([data-hover-intent]):not(:hover):not(:focus-within) a:not([aria-current="page"]) {
-    max-width: 0; padding-left: 0; padding-right: 0; opacity: 0;
-  }
-  .seg[data-hover-intent]:not([data-expanded]):not(:focus-within) .seg-ink > span:not([data-current]),
-  .seg:not([data-hover-intent]):not(:hover):not(:focus-within) .seg-ink > span:not([data-current]) {
-    visibility: hidden;
-  }
-}
-@media (max-width: 640px) { .topbar { margin-bottom: 3.5rem; } }

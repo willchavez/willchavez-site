@@ -1,6 +1,7 @@
 ---
 title: "Dìdi (弟弟)"
 kind: "film"
+creator: "Sean Wang"
 year: 2024
 releaseDate: "2024-07-26"
 releaseDateSource: "https://www.rottentomatoes.com/m/didi_2024"

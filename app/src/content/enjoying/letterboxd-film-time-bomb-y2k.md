@@ -1,6 +1,7 @@
 ---
 title: "Time Bomb Y2K"
 kind: "film"
+creator: "Brian Becker, Marley McDonald"
 year: 2023
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-time-bomb-y2k.jpg"

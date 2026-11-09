@@ -1,6 +1,7 @@
 ---
 title: "Weapons"
 kind: "film"
+creator: "Zach Cregger"
 year: 2025
 releaseDate: "2025-08-08"
 releaseDateSource: "https://www.rottentomatoes.com/m/weapons"

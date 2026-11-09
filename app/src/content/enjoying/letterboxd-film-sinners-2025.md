@@ -1,6 +1,7 @@
 ---
 title: "Sinners"
 kind: "film"
+creator: "Ryan Coogler"
 year: 2025
 releaseDate: "2025-04-18"
 releaseDateSource: "https://www.rottentomatoes.com/m/sinners_2025"

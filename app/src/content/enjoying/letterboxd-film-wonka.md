@@ -1,6 +1,7 @@
 ---
 title: "Wonka"
 kind: "film"
+creator: "Paul King"
 year: 2023
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-wonka.jpg"

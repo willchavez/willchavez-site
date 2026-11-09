@@ -49,6 +49,7 @@ const enjoying = defineCollection({
     kind: z.enum(KINDS),
     creator: z.string().optional(),
     publication: z.string().optional(),
+    publicationShort: z.string().optional(),
     year: z.number().optional(),
     date: z.coerce.date().optional(),
     releaseDate: z.coerce.date().optional(),

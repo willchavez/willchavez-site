@@ -1,32 +1,77 @@
 ---
+import { projectStories } from "../../data/project-stories";
 import Base from "../../layouts/Base.astro";
+import ProjectFigure from "../../components/ProjectFigure.astro";
 import "../../styles/portfolio.css";
 import { portfolioProjects } from "../../data/portfolio-projects";
-import { portfolioImg } from "../../lib/content";
 
 export function getStaticPaths() {
   return portfolioProjects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
 }
 const { project } = Astro.props;
+const story = projectStories[project.slug];
+if (!story) throw new Error(`Add editorial context for project: ${project.slug}`);
+const images = [...project.images];
+if (!images.some(image => image.src === project.cover)) images.push({ src: project.cover, alt: project.title });
+const imageFor = (src: string) => {
+  const image = images.find(image => image.src === src);
+  if (!image) throw new Error(`Unknown project image: ${src}`);
+  return image;
+};
+const placed = new Set([story.leadImage, ...story.sections.flatMap(section => section.media ?? [])]);
+const extras = images.filter(image => !placed.has(image.src));
 const labelFor = (label: string) => label.replace(/<[^>]*>/g, "").replace(/[→↗]/g, "").trim();
 ---
-<Base title={project.title} current="portfolio" heading={project.title} sub={project.org} compactTitle description={project.summary}>
-  <a class="back" href="/portfolio"><svg class="icon-arrow-left" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M12.5 8h-9m0 0 4-4m-4 4 4 4" /></svg>Back to Portfolio</a>
-  <article class="portfolio-project">
-    <div class="portfolio-project-category">{project.category}</div>
-    <p class="portfolio-project-summary">{project.summary}</p>
-    <figure class="portfolio-cover"><img src={portfolioImg(project.cover, 960)} srcset={`${portfolioImg(project.cover, 480)} 480w, ${portfolioImg(project.cover, 960)} 960w, ${portfolioImg(project.cover, 1600)} 1600w`} sizes="(max-width: 900px) 100vw, 75vw" alt={project.images[0]?.alt ?? project.title} fetchpriority="high" decoding="async" /></figure>
-    <section class="portfolio-project-copy" aria-label="Project details">
-      <p>{project.about}</p>
-      <h2>My contribution</h2>
+<Base title={project.title} current="portfolio" navAlignment="center" showHeading={false} description={project.summary}>
+  <article class="portfolio-project" data-opening={story.opening}>
+    <header class="project-heading">
+      <div class="project-actions"><a class="back" data-project-back href="/portfolio"><svg class="icon-arrow-left" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M12.5 8h-9m0 0 4-4m-4 4 4 4" /></svg>Back to Projects</a><a class="project-present" data-project-present data-astro-reload href={`/portfolio/${project.slug}/present`}>Present project <span aria-hidden="true">↗</span></a></div>
+      <p class="portfolio-project-category">{project.category}</p>
+      <h1>{project.title}</h1>
+      <p class="project-organization">{project.org}</p>
+      <p class="portfolio-project-summary">{project.summary}</p>
+      <dl class="portfolio-context"><div><dt>My role</dt><dd>{story.role}</dd></div><div><dt>Project context</dt><dd>{story.status}</dd></div></dl>
+    </header>
+    {story.leadImage && <div class="project-opening-visual"><ProjectFigure image={imageFor(story.leadImage)} caption={story.captions[story.leadImage]} priority /></div>}
+    <div class="project-chapters">
+      {story.sections.map((section, index) => <section class:list={["project-chapter", index === 0 && story.opening === "paired" && "project-chapter-paired"]}>
+        <div class="project-chapter-copy"><h2>{section.title}</h2><p>{section.body}</p></div>
+        {section.media?.length && <div class="project-chapter-media" data-arrangement={section.arrangement ?? "sequence"}>
+          {section.media.map(src => <ProjectFigure image={imageFor(src)} caption={story.captions[src]} compact={section.arrangement === "pair" || (index === 0 && story.opening === "paired")} priority={index === 0 && story.opening === "paired"} />)}
+        </div>}
+      </section>)}
+    </div>
+    <section class="portfolio-project-copy" aria-labelledby="contribution-title">
+      <h2 id="contribution-title">My contribution</h2>
       <ul>{project.contributions.map((contribution) => <li>{contribution}</li>)}</ul>
       <div class="portfolio-project-skills" aria-label="Project tags">{project.skills.split(" · ").map((skill) => <span class="skill-tag">{skill}</span>)}</div>
-      {project.links.length > 0 && <div class="portfolio-project-links">
-        {project.links.map(([url, label]) => <p><a href={url} target="_blank" rel="noreferrer">{labelFor(label)} ↗</a></p>)}
-      </div>}
+      {project.links.length > 0 && <div class="portfolio-project-links">{project.links.map(([url, label]) => <p><a href={url} target="_blank" rel="noreferrer">{labelFor(label)} ↗</a></p>)}</div>}
+      {story.related && <p class="portfolio-related"><a href={story.related.href}>{story.related.label} ↗</a></p>}
     </section>
-    <section class="portfolio-gallery" aria-label="Project images">
-      {project.images.map((image) => <figure><img src={portfolioImg(image.src, 960)} srcset={`${portfolioImg(image.src, 480)} 480w, ${portfolioImg(image.src, 960)} 960w, ${portfolioImg(image.src, 1600)} 1600w`} sizes="(max-width: 900px) 100vw, 75vw" alt={image.alt} loading="lazy" decoding="async" /><figcaption>{image.alt}</figcaption></figure>)}
-    </section>
+    {extras.length > 0 && <details class="project-more-media"><summary>More views <span>({extras.length})</span></summary><div class="project-chapter-media" data-arrangement="pair">{extras.map(image => <ProjectFigure image={image} caption={story.captions[image.src]} compact />)}</div></details>}
   </article>
 </Base>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const present = document.querySelector<HTMLAnchorElement>("[data-project-present]");
+    if (present) {
+      const destination = new URL(present.href);
+      destination.searchParams.set("article", location.pathname + location.search);
+      present.href = destination.href;
+    }
+    const back = document.querySelector<HTMLAnchorElement>("[data-project-back]");
+    if (!back) return;
+    const from = new URLSearchParams(location.search).get("from");
+    if (!from) return;
+    try {
+      const target = new URL(from, location.origin);
+      const expected = new URL(back.href);
+      if (target.origin !== location.origin || target.pathname !== expected.pathname) return;
+      back.href = target.href;
+      back.addEventListener("click", () => {
+        try { sessionStorage.setItem("portfolio-restore", "true"); } catch {}
+      }, { once: true });
+    } catch {}
+  });
+</script>

@@ -1,6 +1,7 @@
 ---
 title: "You Can See Everything"
 kind: "film"
+creator: "Nathan Fielder, Lance Oppenheim"
 year: 2026
 date: "2026-10-18"
 cover: "/uploads/enjoying/letterboxd-film-you-can-see-everything.webp"

@@ -1,6 +1,7 @@
 ---
 title: "No Other Choice"
 kind: "film"
+creator: "Park Chan-wook"
 year: 2025
 date: "2026-02-17"
 cover: "/uploads/enjoying/letterboxd-film-no-other-choice-2025.webp"

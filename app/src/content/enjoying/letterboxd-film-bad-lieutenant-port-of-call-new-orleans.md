@@ -1,6 +1,7 @@
 ---
 title: "Bad Lieutenant: Port of Call – New Orleans"
 kind: "film"
+creator: "Werner Herzog"
 year: 2009
 date: "2024-07-10"
 cover: "/uploads/enjoying/letterboxd-film-bad-lieutenant-port-of-call-new-orleans.jpg"

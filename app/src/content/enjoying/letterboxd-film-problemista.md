@@ -1,6 +1,7 @@
 ---
 title: "Problemista"
 kind: "film"
+creator: "Julio Torres"
 year: 2023
 date: "2024-04-04"
 cover: "/uploads/enjoying/letterboxd-film-problemista.jpg"

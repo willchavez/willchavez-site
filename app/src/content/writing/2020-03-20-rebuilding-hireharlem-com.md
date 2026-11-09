@@ -1,7 +1,7 @@
 ---
 title: "Rebuilding hireharlem.com"
 date: 2020-03-20
-summary: "Hi! My name is Will! I’m a Software Engineer at IBM and I moved to San Francisco in September, 2018 for a new position at the IBM Garage. Before moving to SF, I was living in Raleigh, NC and…"
+summary: "How a few new friends and a shared belief in local businesses became a website rebuild."
 thumbnail: "/uploads/medium/2020-03-20-rebuilding-hireharlem-com-02.webp"
 source: "https://medium.com/@willchavez/rebuilding-hireharlem-com-f07773edb7dc"
 topics:

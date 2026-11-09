@@ -1,6 +1,7 @@
 ---
 title: "Nightbitch"
 kind: "film"
+creator: "Marielle Heller"
 year: 2024
 releaseDate: "2024-12-06"
 releaseDateSource: "https://www.rottentomatoes.com/m/nightbitch"

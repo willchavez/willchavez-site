@@ -1,6 +1,7 @@
 ---
 title: "Saltburn"
 kind: "film"
+creator: "Emerald Fennell"
 year: 2023
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-saltburn.jpg"

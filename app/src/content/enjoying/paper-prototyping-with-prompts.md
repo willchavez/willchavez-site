@@ -3,6 +3,7 @@ title: "Prototyping with Prompts: Emerging Approaches and Challenges in Generati
 kind: "paper"
 creator: "Hari Subramonyam, Divy Thakkar, Andrew Ku, Jürgen Dieber & Anoop K. Sinha"
 publication: "Proceedings of the 2025 CHI Conference on Human Factors in Computing Systems (CHI ’25)"
+publicationShort: "CHI"
 year: 2025
 date: "2026-01-25"
 cover: "/uploads/enjoying/paper-prototyping-with-prompts.jpg"

@@ -1,6 +1,7 @@
 ---
 title: "Red, White and Blue"
 kind: "film"
+creator: "Nazrin Choudhury"
 year: 2023
 releaseDate: "2024-02-16"
 releaseDateSource: "https://www.imdb.com/title/tt27759823/releaseinfo/"

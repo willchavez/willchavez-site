@@ -1,6 +1,7 @@
 ---
 title: "The Room Next Door"
 kind: "film"
+creator: "Pedro Almodóvar"
 year: 2024
 releaseDate: "2024-12-20"
 releaseDateSource: "https://www.sonypictures.com/corp/press_releases/2024/0820"

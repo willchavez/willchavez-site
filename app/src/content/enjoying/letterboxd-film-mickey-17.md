@@ -1,6 +1,7 @@
 ---
 title: "Mickey 17"
 kind: "film"
+creator: "Bong Joon Ho"
 year: 2025
 releaseDate: "2025-03-07"
 releaseDateSource: "https://www.rottentomatoes.com/m/mickey_17"

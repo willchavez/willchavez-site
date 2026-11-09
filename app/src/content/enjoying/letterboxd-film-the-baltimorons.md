@@ -1,6 +1,7 @@
 ---
 title: "The Baltimorons"
 kind: "film"
+creator: "Jay Duplass"
 year: 2025
 releaseDate: "2025-09-05"
 releaseDateSource: "https://www.rottentomatoes.com/m/the_baltimorons"

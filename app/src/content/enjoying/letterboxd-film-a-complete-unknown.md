@@ -1,6 +1,7 @@
 ---
 title: "A Complete Unknown"
 kind: "film"
+creator: "James Mangold"
 year: 2024
 releaseDate: "2024-12-25"
 releaseDateSource: "https://www.rottentomatoes.com/m/a_complete_unknown"

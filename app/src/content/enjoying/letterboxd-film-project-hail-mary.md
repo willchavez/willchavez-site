@@ -1,6 +1,7 @@
 ---
 title: "Project Hail Mary"
 kind: "film"
+creator: "Phil Lord, Christopher Miller"
 year: 2026
 date: "2026-09-16"
 cover: "/uploads/enjoying/letterboxd-film-project-hail-mary.webp"

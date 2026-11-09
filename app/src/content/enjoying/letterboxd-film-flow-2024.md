@@ -1,6 +1,7 @@
 ---
 title: "Flow"
 kind: "film"
+creator: "Gints Zilbalodis"
 year: 2024
 releaseDate: "2024-11-22"
 releaseDateSource: "https://www.rottentomatoes.com/m/flow_2024"

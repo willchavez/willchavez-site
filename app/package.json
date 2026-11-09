@@ -5,11 +5,20 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && node scripts/images.mjs",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test:analytics": "node scripts/analytics.browser.mjs",
+    "test:presentation": "node scripts/presentation.browser.mjs",
+    "test:nav:position": "node scripts/nav-position.browser.mjs",
+    "test:nav": "node scripts/nav-contrast.browser.mjs",
+    "test:nav:pixels": "node scripts/nav-mask-pixels.browser.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.0",
     "astro": "^5.0.0",
+    "parse5": "^7.3.0",
     "sharp": "^0.34.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.65.0"
   }
 }

@@ -1,6 +1,7 @@
 ---
 title: "Sentimental Value"
 kind: "film"
+creator: "Joachim Trier"
 year: 2025
 releaseDate: "2025-11-07"
 releaseDateSource: "https://www.rottentomatoes.com/m/sentimental_value"

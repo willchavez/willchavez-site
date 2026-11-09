@@ -1,6 +1,7 @@
 ---
 title: "Deadpool & Wolverine"
 kind: "film"
+creator: "Shawn Levy"
 year: 2024
 date: "2024-08-23"
 cover: "/uploads/enjoying/letterboxd-film-deadpool-and-wolverine.jpg"

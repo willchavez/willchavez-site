@@ -1,6 +1,7 @@
 ---
 title: "Materialists"
 kind: "film"
+creator: "Celine Song"
 year: 2025
 date: "2025-12-30"
 cover: "/uploads/enjoying/letterboxd-film-materialists.webp"

@@ -1,6 +1,7 @@
 ---
 title: "Train Dreams"
 kind: "film"
+creator: "Clint Bentley"
 year: 2025
 releaseDate: "2025-11-07"
 releaseDateSource: "https://www.rottentomatoes.com/m/train_dreams"

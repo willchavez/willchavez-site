@@ -1,6 +1,7 @@
 ---
 title: "Wallace & Gromit: Vengeance Most Fowl"
 kind: "film"
+creator: "Nick Park, Merlin Crossingham"
 year: 2024
 releaseDate: "2024-12-18"
 releaseDateSource: "https://www.rottentomatoes.com/m/wallace_and_gromit_vengeance_most_fowl"

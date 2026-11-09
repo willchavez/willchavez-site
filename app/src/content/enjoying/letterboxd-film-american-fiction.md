@@ -1,6 +1,7 @@
 ---
 title: "American Fiction"
 kind: "film"
+creator: "Cord Jefferson"
 year: 2023
 date: "2024-01-17"
 cover: "/uploads/enjoying/letterboxd-film-american-fiction.jpg"
