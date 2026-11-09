@@ -181,3 +181,9 @@
   .project-heading .portfolio-context { grid-template-columns: 1fr; }
   .project-heading .portfolio-project-summary { font-size: 1.05rem; }
 }
+
+.project-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .75rem; margin-bottom: 1.75rem; }
+.project-actions .back { margin: 0; }
+.project-present { display: inline-flex; align-items: center; gap: .5rem; min-height: 40px; padding: .35rem .8rem; border: 1px solid var(--hairline); border-radius: 999px; background: color-mix(in srgb, var(--rust) 7%, var(--paper)); font-size: .85rem; box-shadow: none; }
+.project-present::before { display: none; }
+.project-present:hover { border-color: var(--rust); }
