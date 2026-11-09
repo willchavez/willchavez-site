@@ -1,5 +1,50 @@
 export const portfolioProjects = [
   {
+    "slug": "fluent-asset-library",
+    "title": "Fluent asset library",
+    "category": "Design tooling",
+    "org": "Microsoft · Fluent Design Studio",
+    "summary": "Thousands of assets, plenty of variants. I built a way to browse them, find the right one, and put it to work.",
+    "cover": "img/portfolio/fluent-asset-library/asset-families.png",
+    "skills": "Interaction design · React & TypeScript · Asset systems",
+    "about": "An asset browser for the upcoming Fluent Flex design site, built with guidance and design critiques from Jason Custer. It brings system icons, emoji, and illustrations together with search, variant selection, and file actions.",
+    "contributions": [
+      "designed and built the browsing experience with guidance, feedback, and critiques from Jason Custer",
+      "implemented category loading, fuzzy search, and a virtualized grid with scroll-position restoration",
+      "connected asset-specific controls, previews, and carousel selection to copy-URL and download actions",
+      "worked through SVG rendering, loading states, keyboard and focus behavior, and high-contrast styling"
+    ],
+    "images": [
+      {
+        "src": "img/portfolio/fluent-asset-library/asset-families.png",
+        "alt": "Diagram: asset families and variant controls"
+      },
+      {
+        "src": "img/portfolio/fluent-asset-library/asset-delivery.png",
+        "alt": "Diagram: from CDN variant records to the selected file"
+      },
+      {
+        "src": "img/portfolio/fluent-asset-library/iteration-notes.png",
+        "alt": "Commit notes: July 29–August 13, 2026"
+      }
+    ],
+    "links": [
+      [
+        "https://fluentflex.microsoft.design/library/visual-elements/asset-library",
+        "Open the asset library (Microsoft access)"
+      ],
+      [
+        "https://msft.ghe.com/x3-design/fluent-design/pull/1096",
+        "View the merged PR (Microsoft access)"
+      ],
+      [
+        "https://dribbble.com/jdelamancha",
+        "Jason Custer’s design and illustration work"
+      ]
+    ]
+  },
+
+  {
     "slug": "fluent-dataviz",
     "title": "Fluent data visualization",
     "category": "Design tooling",
