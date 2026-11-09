@@ -1,16 +1,29 @@
 ---
 import microsoft from "../assets/brands/microsoft.svg?raw";
 import ibm from "../assets/brands/ibm.svg?raw";
+import ibmMonochrome from "../assets/brands/ibm-monochrome.svg?raw";
 import lockheed from "../assets/brands/lockheed-martin.svg?raw";
 const marks = { microsoft, ibm, "lockheed-martin": lockheed };
 interface Props { company: keyof typeof marks }
 const { company } = Astro.props;
 ---
-<span class:list={["work-logo", `work-logo-${company}`]} aria-hidden="true" set:html={marks[company]} />
+<span class:list={["work-logo", `work-logo-${company}`]} aria-hidden="true">
+  {company === "ibm" ? <>
+    <span class="ibm-single-color" set:html={ibmMonochrome} />
+    <span class="ibm-classic" set:html={ibm} />
+  </> : <Fragment set:html={marks[company]} />}
+</span>
 
 <style>
+  .ibm-single-color, .ibm-classic { width: 100%; height: 100%; align-items: center; justify-content: center; }
+  .ibm-single-color { display: inline-flex; }
+  .ibm-classic { display: none; }
+  :global(:root[data-theme="dark"]) .ibm-single-color { display: none; }
+  :global(:root[data-theme="dark"]) .ibm-classic { display: inline-flex; }
   /* Preserve the system fallback and honor the visitor's explicit theme. */
   @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .ibm-single-color { display: none; }
+    :global(:root:not([data-theme="light"])) .ibm-classic { display: inline-flex; }
     :global(:root:not([data-theme="light"])) .work-logo-ibm {
       --ibm-blue: #0f62fe;
       --ibm-iris: #a9472e;
