@@ -11,6 +11,14 @@ const { company } = Astro.props;
 <style>
   /* Use Lockheed’s reversed mark on dark cards; the multicolor marks stay intact. */
   @media (prefers-color-scheme: dark) {
+    .work-logo-ibm {
+      --ibm-blue: #0f62fe;
+      --ibm-iris: #a9472e;
+      --ibm-brow: #e2231a;
+      --ibm-eyes: #f4adca;
+      --ibm-wings: #6b8d3a;
+      --ibm-gold: #ffb52e;
+    }
     .work-logo-lockheed-martin :global(svg) { fill: #fff; }
   }
 </style>
