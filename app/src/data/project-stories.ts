@@ -19,9 +19,8 @@ export const projectStories: Record<string, ProjectStory> = {
         "title": "The brief sounded simple: show the icons",
         "body": "The starting point was to demonstrate the icons using the actual CDN images and technical assets. Working with Jason Custer, Principal Product Design Manager, designer, and illustrator, I built the asset browser for the upcoming Fluent Flex design site. The work became about more than displaying images: how do you browse a large collection, compare variants, and get the right file without losing your place?",
         "media": [
-          "img/portfolio/fluent-asset-library/asset-library-original.png"
-        ],
-        "arrangement": "inset"
+          "img/portfolio/fluent-asset-library/asset-library-emoji-scroll.gif"
+        ]
       },
       {
         "title": "Room to help shape the experience",
@@ -54,7 +53,7 @@ export const projectStories: Record<string, ProjectStory> = {
         "title": "Displaying the actual assets meant handling the actual files",
         "body": "The SVGs needed care as well as the interface around them. I namespaced IDs and preserved root presentation attributes when processing SVG content, including inherited attributes that affect how an image renders. The history records fixes for dropped SVG attributes and browser compositing artifacts. Working with the real CDN files made these rendering details part of the browsing experience.",
         "media": [
-          "img/portfolio/fluent-asset-library/asset-library-details.png"
+          "img/portfolio/fluent-asset-library/asset-library-original.png"
         ]
       },
       {
@@ -63,6 +62,7 @@ export const projectStories: Record<string, ProjectStory> = {
       },
       {
         "title": "From showing assets to choosing the right file",
+        "media": ["img/portfolio/fluent-asset-library/asset-library-bug-viewer.gif"],
         "body": "PR #1096, “feat(site): improve expression asset browsing,” merged on August 13, 2026, after commits spanning July 29–August 13. The result of that change is a React and TypeScript browser connecting discovery, variant selection, and file actions across the three asset families. The library and PR links below require Microsoft access."
       }
     ],
@@ -70,7 +70,8 @@ export const projectStories: Record<string, ProjectStory> = {
       "img/portfolio/fluent-asset-library/asset-library-original.png": "Browsing system icons, with emoji and illustrations one tab away.",
       "img/portfolio/fluent-asset-library/asset-library-browsing.gif": "Switching asset families and searching illustrations.",
       "img/portfolio/fluent-asset-library/asset-library-search-variants.gif": "Searching, selecting size and style, navigating variants, and copying the active URL.",
-      "img/portfolio/fluent-asset-library/asset-library-details.png": "The 32px regular variant, its preview, file details, and actions."
+      "img/portfolio/fluent-asset-library/asset-library-emoji-scroll.gif": "A scroll through the Emoji tab in the running asset library.",
+      "img/portfolio/fluent-asset-library/asset-library-bug-viewer.gif": "A closer look at Bug: choosing Animated PNG, then cycling through Color, Flat, and High contrast."
     }
   },
 

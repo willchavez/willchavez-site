@@ -24,7 +24,7 @@ export const projectPresentations: Record<string, ProjectPresentation> = {
         "title": "The brief was to show the icons",
         "body": "Use the actual CDN images and technical assets to demonstrate the collection on the upcoming Fluent Flex design site.",
         "media": [
-          "img/portfolio/fluent-asset-library/asset-library-original.png"
+          "img/portfolio/fluent-asset-library/asset-library-emoji-scroll.gif"
         ]
       },
       {
@@ -59,6 +59,7 @@ export const projectPresentations: Record<string, ProjectPresentation> = {
       {
         "section": "Implementation",
         "title": "Group once. Load what’s needed.",
+        "media": ["img/portfolio/fluent-asset-library/asset-library-original.png"],
         "body": "Build category indexes from CDN variant records, cache each category on demand, and render visible grid rows plus a buffer."
       },
       {
@@ -76,7 +77,7 @@ export const projectPresentations: Record<string, ProjectPresentation> = {
           "Handle keyboard focus, loading, live announcements, reduced motion, and forced colors."
         ],
         "media": [
-          "img/portfolio/fluent-asset-library/asset-library-details.png"
+          "img/portfolio/fluent-asset-library/asset-library-bug-viewer.gif"
         ]
       },
       {
