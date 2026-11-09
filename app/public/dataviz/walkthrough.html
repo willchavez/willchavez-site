@@ -2088,7 +2088,8 @@
       }
     }
 
-    .portfolio-embed body { height:auto; min-height:0; overflow:auto; }
+    .portfolio-embed, .portfolio-embed body { overflow:hidden; }
+    .portfolio-embed body { height:auto; min-height:0; }
     .portfolio-embed .topbar, .portfolio-embed .progress, .portfolio-embed .noise, .portfolio-embed .dots, .portfolio-embed .hint, .portfolio-embed .controls { display:none; }
     .portfolio-embed main { display:block; width:100%; height:auto; transform:none !important; transition:none; }
     .portfolio-embed .scene { display:none; }
@@ -3206,7 +3207,17 @@ default = ["github:x3-design/fluent-design:plugins/system", "github:x3-design/fl
     syncSlideColumnHeights();
     startSceneCountdown(current);
     setupOrbitPhysics();
-    if (portfolioEmbed) generationScene.classList.add("is-active", "is-intro-ready");
+    if (portfolioEmbed) {
+      generationScene.classList.add("is-active", "is-intro-ready");
+      const fitFrame = () => {
+        try {
+          if (window.frameElement) window.frameElement.style.height = `${Math.ceil(generationScene.getBoundingClientRect().bottom + 12)}px`;
+        } catch {}
+      };
+      new ResizeObserver(fitFrame).observe(generationScene);
+      document.fonts?.ready.then(fitFrame);
+      requestAnimationFrame(fitFrame);
+    }
   </script>
 </body>
 </html>

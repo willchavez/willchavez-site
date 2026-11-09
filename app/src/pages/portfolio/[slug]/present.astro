@@ -42,7 +42,7 @@ const imageFor = (src: string) => {
       </div>
     </header>
     <main class="deck" aria-label={`${project.title} presentation`}>
-      {slides.map((slide, index) => <section id={`slide-${index + 1}`} class:list={['slide', index === 0 && 'slide-title', slide.media?.length && 'slide-with-media', slide.media?.length === 2 && 'slide-gallery', slide.embed && 'slide-with-embed']} aria-labelledby={`slide-heading-${index + 1}`} data-slide={index} tabindex="-1">
+      {slides.map((slide, index) => <section id={`slide-${index + 1}`} class:list={['slide', index === 0 && 'slide-title', (slide.media?.length || slide.embed) && 'slide-with-media', slide.media?.length === 2 && 'slide-gallery', slide.embed && 'slide-with-embed']} aria-labelledby={`slide-heading-${index + 1}`} data-slide={index} tabindex="-1">
         <div class="slide-copy">
           <p class="slide-section">{slide.section}</p>
           {index === 0 ? <h1 id={`slide-heading-${index + 1}`}>{slide.title}</h1> : <h2 id={`slide-heading-${index + 1}`}>{slide.title}</h2>}
