@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fluent Flex · Data Visualization</title>
+<style>
+  :root{
+    --fg-1:#000000db; --fg-2:#000000a2; --fg-3:#00000090;
+    --stroke-subtle:#00000021; --stroke-soft:#0000006d;
+    --surface:#fcfcfc; --surface-far:#f4eee4; --canvas:#ffffff;
+    --radius:12px;
+    --sans:'Segoe UI','Segoe UI Web',system-ui,-apple-system,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;font-family:var(--sans);color:var(--fg-1);
+    background:
+      radial-gradient(circle at 7% 5%, #cfe4ff 0, rgba(207,228,255,0) 26%),
+      radial-gradient(circle at 93% 9%, #ffd6e7 0, rgba(255,214,231,0) 24%),
+      radial-gradient(circle at 84% 60%, #fff0bd 0, rgba(255,240,189,0) 22%),
+      radial-gradient(circle at 10% 55%, #e6d8ff 0, rgba(230,216,255,0) 22%),
+      radial-gradient(circle at 78% 96%, #d7f5df 0, rgba(215,245,223,0) 24%),
+      #fdf9f1;
+    background-attachment:fixed;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px 120px}
+
+  /* ---- Tarng-style marbled noise backdrop ---- */
+  .noise{
+    position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;
+    pointer-events:none;opacity:.42;mix-blend-mode:soft-light;
+  }
+  @media(prefers-reduced-motion:reduce){.noise animate{display:none}}
+
+  /* ---- section dividers ---- */
+  section{padding:56px 0 8px;border-top:1px solid var(--stroke-subtle)}
+  section:first-of-type{border-top:none}
+  .eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-3);margin:0 0 6px}
+  h1{font-size:44px;line-height:1.1;font-weight:700;margin:0 0 12px;letter-spacing:-.02em}
+  h2{font-size:30px;font-weight:700;margin:2px 0 8px;letter-spacing:-.01em}
+  h3{font-size:19px;font-weight:600;margin:0 0 4px}
+  .lead{font-size:18px;color:var(--fg-2);max-width:760px;margin:0 0 8px}
+  p{max-width:760px;color:var(--fg-2)}
+  .sub{color:var(--fg-3);font-size:14px}
+  a{color:#2f95f4;text-decoration:none}
+  code{background:var(--surface-far);border:1px solid var(--stroke-subtle);border-radius:5px;padding:1px 6px;font-size:13px;font-family:'Cascadia Code',ui-monospace,Menlo,Consolas,monospace}
+
+  /* ---- hero ---- */
+  .hero{padding:88px 0 40px}
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+  .toc a{display:inline-flex;align-items:center;gap:7px;background:var(--canvas);border:1px solid var(--stroke-subtle);
+    border-radius:999px;padding:7px 14px;font-size:13px;font-weight:500;color:var(--fg-1)}
+  .toc a:hover{border-color:var(--stroke-soft)}
+  .dot{width:9px;height:9px;border-radius:50%}
+
+  /* ---- principle / concept cards ---- */
+  .grid{display:grid;gap:18px;margin-top:24px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:620px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .panel{background:var(--canvas);border:1px solid var(--stroke-subtle);border-radius:14px;padding:20px;
+    box-shadow:0 1px 2px #0000000a,0 10px 26px #00000008}
+  .panel h3{margin-bottom:6px}
+  .panel p{font-size:14px;margin:0}
+  .kicker{font-size:12px;font-weight:600;color:#2f95f4;letter-spacing:.06em;text-transform:uppercase}
+
+  /* ---- chart cards ---- */
+  .charts{display:grid;gap:18px;margin-top:22px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  .card{background:var(--canvas);border:1px solid var(--stroke-subtle);border-radius:14px;
+    padding:16px;display:flex;flex-direction:column;gap:2px;
+    box-shadow:0 1px 2px #0000000a,0 10px 26px #00000008}
+  .card .ct{font-size:14px;font-weight:600;color:var(--fg-1)}
+  .card .cc{font-size:12px;color:var(--fg-3);margin-bottom:8px}
+  .card svg{display:block;width:100%;height:auto;overflow:visible}
+  .plotwrap{position:relative}
+
+  /* legend */
+  .legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:12px}
+  .legend button{display:inline-flex;align-items:center;gap:7px;background:none;border:0;padding:2px 2px;
+    font:inherit;font-size:12px;color:var(--fg-2);cursor:pointer;border-radius:6px}
+  .legend button:focus-visible{outline:2px solid #2f95f4;outline-offset:2px}
+  .legend .sw{width:12px;height:12px;border-radius:3px;flex:0 0 auto}
+  .legend button[aria-pressed="false"]{opacity:.4}
+  .legend button.dimmed{opacity:.35}
+
+  /* color-blind pattern toggle */
+  .cbbar{display:flex;align-items:center;gap:14px;margin-top:22px;background:var(--canvas);
+    border:1px solid var(--stroke-subtle);border-radius:10px;padding:12px 16px;flex-wrap:wrap}
+  .cbtoggle{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--stroke-soft);
+    background:var(--surface-far);border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;
+    font-weight:600;color:var(--fg-1);cursor:pointer;flex:0 0 auto}
+  .cbtoggle:focus-visible{outline:2px solid #2f95f4;outline-offset:2px}
+  .cbtoggle[aria-pressed="true"]{background:#eef6ff;border-color:#2f95f4;color:#0b497f}
+  .cbtoggle .pip{width:11px;height:11px;border-radius:50%;background:var(--stroke-soft);transition:background .12s}
+  .cbtoggle[aria-pressed="true"] .pip{background:#2f95f4}
+  .cbbar .hint{font-size:12.5px;color:var(--fg-3);flex:1 1 320px}
+
+  /* data marks */
+  .mark{cursor:pointer;transition:opacity .12s ease}
+  .mark:focus-visible{outline:none}
+  .mark.faded{opacity:.16}
+  .focusring{fill:none;stroke:#2f95f4;stroke-width:2;opacity:0;pointer-events:none}
+  .mark:focus-visible + .focusring, .mark.kbfocus + .focusring{opacity:1}
+
+  /* callout */
+  #callout{position:fixed;z-index:50;pointer-events:none;opacity:0;transform:translateY(4px);
+    transition:opacity .1s ease;background:var(--canvas);border:1px solid var(--stroke-subtle);
+    border-radius:8px;box-shadow:0 8px 24px #00000026,0 0 2px #00000014;padding:8px 11px;font-size:12px;max-width:240px}
+  #callout.on{opacity:1;transform:translateY(0)}
+  #callout .co-h{font-weight:600;color:var(--fg-1);margin-bottom:3px}
+  #callout .co-r{display:flex;align-items:center;gap:7px;color:var(--fg-2)}
+  #callout .co-sw{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+  #callout .co-v{margin-left:auto;font-weight:600;color:var(--fg-1)}
+  #callout .co-d{color:var(--fg-3);margin-top:3px}
+
+  .note{display:flex;gap:8px;margin-top:12px;font-size:12px;color:var(--fg-3)}
+  .note b{color:var(--fg-2);font-weight:600}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .tag{font-size:11px;font-weight:600;color:var(--fg-2);background:var(--surface-far);
+    border:1px solid var(--stroke-subtle);border-radius:999px;padding:3px 9px}
+  .split{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start}
+  @media(max-width:820px){.split{grid-template-columns:1fr}}
+  ul.clean{padding-left:18px;color:var(--fg-2)}
+  ul.clean li{margin:6px 0}
+  .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}
+  @media(max-width:820px){.flow{grid-template-columns:1fr 1fr}}
+  .flow .step{background:var(--canvas);border:1px solid var(--stroke-subtle);border-radius:10px;padding:16px}
+  .flow .n{width:26px;height:26px;border-radius:50%;background:#eef6ff;color:#0b497f;font-weight:700;
+    display:flex;align-items:center;justify-content:center;font-size:13px;margin-bottom:10px}
+  .flow .step h4{margin:0 0 4px;font-size:14px}
+  .flow .step p{font-size:12.5px;margin:0}
+</style>
+</head>
+<body>
+<!-- Julius-Tarng-style marbled turbulence layer: colorful SVG noise that drifts slowly
+     and blends softly over the pastel gradient. Purely decorative, behind all content. -->
+<svg class="noise" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="none">
+  <filter id="marbled" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.0055 0.007" numOctaves="2" seed="24">
+      <animate attributeName="baseFrequency"
+        dur="46s" repeatCount="indefinite"
+        values="0.0055 0.007; 0.008 0.005; 0.0045 0.0085; 0.0055 0.007"/>
+    </feTurbulence>
+    <feColorMatrix type="saturate" values="3"/>
+  </filter>
+  <rect x="0" y="0" width="100%" height="100%" filter="url(#marbled)"/>
+</svg>
+<div id="callout" role="status" aria-live="polite"></div>
+<div class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <p class="eyebrow">Fluent Flex · Design System</p>
+    <h1>Data Visualization</h1>
+    <p class="lead">A top-down tour of how we describe charts as a shared skill — the principles every chart inherits, the interaction primitives they all reuse, the chart library itself, and the new AI&nbsp;→&nbsp;Figma pipeline that draws them for us.</p>
+    <div class="toc">
+      <a href="#compose"><span class="dot" style="background:#2f95f4"></span>How it's composed</a>
+      <a href="#core"><span class="dot" style="background:#a575e8"></span>Core principles</a>
+      <a href="#primitives"><span class="dot" style="background:#32ad52"></span>Primitives</a>
+      <a href="#charts"><span class="dot" style="background:#fb966e"></span>The chart library</a>
+      <a href="#figma"><span class="dot" style="background:#d961a6"></span>AI → Figma</a>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT'S COMPOSED ============ -->
+  <section id="compose">
+    <p class="eyebrow">Section 1</p>
+    <h2>Dataviz is a skill, not a folder of components</h2>
+    <p class="lead">Instead of one giant spec, the guidance is split into small, composable pieces. Each chart <em>inherits</em> from shared layers rather than re-describing everything. Read from the top down:</p>
+    <div class="grid g4">
+      <div class="panel"><span class="kicker">Layer 1</span><h3>Core principles</h3><p>Four cross-cutting rules — radius, type, density, color — that apply to <b>every</b> chart.</p></div>
+      <div class="panel"><span class="kicker">Layer 2</span><h3>Primitives</h3><p>Shared building blocks — the axis, the legend, the callout — reused across chart families.</p></div>
+      <div class="panel"><span class="kicker">Layer 3</span><h3>Chart types</h3><p>Bar, line, donut, gauge… each only describes what's <b>unique</b> to it and defers the rest.</p></div>
+      <div class="panel"><span class="kicker">Layer 4</span><h3>Build skills</h3><p>Technology translations — e.g. turning a chart spec into a real Figma drawing.</p></div>
+    </div>
+    <p class="sub" style="margin-top:16px">The rule that makes it work: <b>when a chart is silent on something, it defers to the layer above it.</b> A bar never re-defines corner radius — it inherits it. That keeps the whole system consistent and lets one change ripple everywhere.</p>
+  </section>
+
+  <!-- ============ CORE PRINCIPLES ============ -->
+  <section id="core">
+    <p class="eyebrow">Section 2 · Layer 1</p>
+    <h2>The four core principles</h2>
+    <p class="lead">Every chart inherits these before it draws a single mark.</p>
+    <div class="grid g2">
+      <div class="panel">
+        <span class="kicker">01 · Corner radius</span>
+        <h3>Rounding scales with width</h3>
+        <p>Wider marks get a larger radius (a 32&nbsp;px bar → 12&nbsp;px radius). Round the <b>top</b> of a bar, never the edge that meets the axis — values feel objectified, not glued down.</p>
+        <svg viewBox="0 0 300 70" style="margin-top:14px;height:70px" aria-hidden="true">
+          <rect x="20" y="14" width="18" height="40" rx="2" fill="#c6e1ff"/><text x="29" y="66" font-size="9" fill="#00000090" text-anchor="middle">2</text>
+          <rect x="70" y="14" width="30" height="40" rx="8" fill="#7db9f7"/><text x="85" y="66" font-size="9" fill="#00000090" text-anchor="middle">8</text>
+          <rect x="130" y="14" width="40" height="40" rx="12" fill="#2f95f4"/><text x="150" y="66" font-size="9" fill="#00000090" text-anchor="middle">12</text>
+          <rect x="200" y="14" width="60" height="40" rx="16" fill="#0b497f"/><text x="230" y="66" font-size="9" fill="#00000090" text-anchor="middle">16</text>
+        </svg>
+      </div>
+      <div class="panel">
+        <span class="kicker">02 · Typography</span>
+        <h3>Role-based text styles</h3>
+        <p>One type role per element — axis titles are Caption-strong, ticks are Caption, hero numbers are Large title. Big numbers abbreviate as <b>K / M / B</b> and use commas past four digits.</p>
+        <svg viewBox="0 0 300 60" style="margin-top:14px;height:60px" aria-hidden="true">
+          <text x="20" y="34" font-size="30" font-weight="700" fill="#000000db">1.2M</text>
+          <text x="150" y="26" font-size="12" font-weight="600" fill="#000000db">Revenue</text>
+          <text x="150" y="44" font-size="11" fill="#00000090">Caption tick · 8,210</text>
+        </svg>
+      </div>
+      <div class="panel">
+        <span class="kicker">03 · Density</span>
+        <h3>Three padding tiers</h3>
+        <p>Spacing steps in 4&nbsp;px increments off compact / regular / spacious intents. Bars: 8&nbsp;px minimum width, 32&nbsp;px default, gaps at least 1:1 with the bar.</p>
+        <svg viewBox="0 0 300 60" style="margin-top:14px;height:60px" aria-hidden="true">
+          <rect x="20" y="16" width="16" height="38" rx="4" fill="#a575e8"/>
+          <rect x="52" y="16" width="16" height="38" rx="4" fill="#a575e8"/>
+          <rect x="84" y="16" width="16" height="38" rx="4" fill="#a575e8"/>
+          <text x="150" y="30" font-size="11" fill="#00000090">gap = bar width</text>
+          <text x="150" y="46" font-size="11" fill="#00000090">(1:1 minimum)</text>
+        </svg>
+      </div>
+      <div class="panel">
+        <span class="kicker">04 · Color + patterns</span>
+        <h3>Palettes carry meaning</h3>
+        <p>Color comes from the fixed <b>expression families</b> — reserved for data, never status. Qualitative for categories, sequential for one metric, diverging for a spectrum. Patterns are the accessible fallback for color-blind &amp; high-contrast.</p>
+        <svg viewBox="0 0 300 60" style="margin-top:14px;height:60px" aria-hidden="true">
+          <rect x="20" y="20" width="26" height="26" rx="4" fill="#2f95f4"/>
+          <rect x="52" y="20" width="26" height="26" rx="4" fill="#fbdf06"/>
+          <rect x="84" y="20" width="26" height="26" rx="4" fill="#e7615b"/>
+          <rect x="116" y="20" width="26" height="26" rx="4" fill="#32ad52"/>
+          <rect x="148" y="20" width="26" height="26" rx="4" fill="#a575e8"/>
+          <text x="190" y="37" font-size="11" fill="#00000090">qualitative · loud</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRIMITIVES ============ -->
+  <section id="primitives">
+    <p class="eyebrow">Section 3 · Layer 2</p>
+    <h2>Interaction primitives</h2>
+    <p class="lead">Three shared parts do the heavy lifting for almost every chart. A chart skill just says <em>"I have one of these"</em> — the behavior lives here, once.</p>
+    <div class="charts" id="primitiveCharts"></div>
+    <div class="grid g3" style="margin-top:6px">
+      <div class="panel"><span class="kicker">Axis</span><h3>Comprehension</h3><p>X/Y system with three line variants. Always starts at 0, min 3 markers, and reflows gracefully — drop → rotate → truncate — as space shrinks.</p></div>
+      <div class="panel"><span class="kicker">Callout</span><h3>Exploration</h3><p>The floating card that reveals one value on demand. <b>Hover and keyboard focus are equal triggers</b> and must show identical content — try tabbing into any chart below.</p></div>
+      <div class="panel"><span class="kicker">Legend</span><h3>Key + control</h3><p>Maps color to series <em>and</em> filters. Hover to spotlight a series; click to filter it out. Sits below the chart, collapses to “+N” when tight.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ CHARTS ============ -->
+  <section id="charts">
+    <p class="eyebrow">Section 4 · Layer 3</p>
+    <h2>The chart library</h2>
+    <p class="lead">Each chart type below shows a few live examples with real Fluent expression colors. Every mark is keyboard-focusable and opens the shared callout; multi-series charts have interactive legends.</p>
+    <div class="cbbar">
+      <button id="cbToggle" class="cbtoggle" type="button" aria-pressed="false">
+        <span class="pip"></span> Color-blind patterns: <span class="st">Off</span>
+      </button>
+      <span class="hint">Overlays a distinct <b>texture per series</b> on top of color — the accessible fallback for color-blind &amp; high-contrast viewers, keyed into the legend too. Applies only where color encodes a category or series (not KPI, sparkline, single-series, or gradient heatmaps).</span>
+    </div>
+  </section>
+
+  <div id="chartSections"></div>
+
+  <!-- ============ AI → FIGMA ============ -->
+  <section id="figma">
+    <p class="eyebrow">Section 5</p>
+    <h2>AI → Figma: drawing charts automatically</h2>
+    <p class="lead">The newest work teaches an AI assistant to <b>draw these charts directly in Figma</b> from the same skills you just saw — no manual pushing of rectangles.</p>
+
+    <div class="split" style="margin-top:22px">
+      <div>
+        <h3>The idea, simply</h3>
+        <p>The dataviz skills describe <em>what a chart is</em>. A new companion skill — <code>dataviz-build</code> — describes <em>how to render that in Figma</em>: where the card goes, how to leave breathing room, how to draw a line, an arc, a flow ribbon.</p>
+        <p>Ask for “5 gauge charts with random data,” and the assistant reads the gauge spec, reads the drawing recipe, and produces a real, on-brand Figma frame you can inspect and tweak.</p>
+        <p class="sub"><b>Why keep them separate?</b> The chart specs stay technology-agnostic — they don't know about Figma, or React, or anything. Only the build skill knows Figma. Swap in a different tool later and the chart knowledge is untouched.</p>
+      </div>
+      <div class="panel">
+        <span class="kicker">Current branch · <code>williamch/figma-dataviz</code></span>
+        <h3 style="margin-top:6px">What's landed</h3>
+        <ul class="clean" style="font-size:14px">
+          <li><b>A card + plot scaffold</b> so every chart has consistent padding and nothing crowds the edges.</li>
+          <li><b>Geometry recipes</b> for lines, areas, arcs, heatmap ramps, and Sankey ribbons.</li>
+          <li><b>Color mapping</b> straight to the expression tokens — the charts are on-palette by construction.</li>
+          <li><b>Hard-won fixes</b> from real test runs, captured as guidance so they never regress.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top:34px">How a request becomes a drawing</h3>
+    <div class="flow">
+      <div class="step"><div class="n">1</div><h4>Read the chart spec</h4><p>Anatomy, sizing, and color intent from the technology-agnostic dataviz skill.</p></div>
+      <div class="step"><div class="n">2</div><h4>Read the build recipe</h4><p>How to translate that into Figma frames, vectors, and arcs.</p></div>
+      <div class="step"><div class="n">3</div><h4>Draw it</h4><p>Generate the card, plot, and geometry with real expression-token colors.</p></div>
+      <div class="step"><div class="n">4</div><h4>Review &amp; refine</h4><p>Screenshot, compare to intent, and fold every fix back into the guidance.</p></div>
+    </div>
+
+    <h3 style="margin-top:34px">What the testing loop taught us</h3>
+    <p>Most of the progress is <em>learning</em> captured as durable guidance. A few examples that were found, fixed, and written down so they stay fixed:</p>
+    <div class="grid g3">
+      <div class="panel"><span class="kicker">Area charts</span><h3>See-through fills</h3><p>The area under a line must be translucent, and the line should span the full width — edge to edge.</p></div>
+      <div class="panel"><span class="kicker">Gauge</span><h3>Marker orientation</h3><p>A small triangle riding the band's inner edge, apex pointing outward toward the rim — a fixed orientation that never flips.</p></div>
+      <div class="panel"><span class="kicker">Sankey</span><h3>Seamless ribbons</h3><p>Smooth, borderless flow streams — colored by source, distinct from the node boxes, no stray corners.</p></div>
+    </div>
+    <div class="note" style="margin-top:20px"><span>✳</span><div><b>The takeaway:</b> the Figma output is throwaway — the <b>durable deliverable is the improved guidance.</b> Every generated gallery is really a test that hardens the skills the whole team relies on.</div></div>
+  </section>
+
+  <p class="sub" style="margin-top:60px;text-align:center">Fluent Flex · Data Visualization — interactive presentation. Hover or tab through any chart to see the shared callout.</p>
+</div>
+
+<script>
+/* ============================================================
+   Fluent Flex expression palette (light mode, resolved hex)
+   ============================================================ */
+const EX={
+  blue:{heavy:'#0b497f',loud:'#2f95f4',soft:'#c6e1ff',subtle:'#eef6ff'},
+  green:{heavy:'#0c5722',loud:'#32ad52',soft:'#baedc1',subtle:'#e7fce9'},
+  lime:{heavy:'#345200',loud:'#6da603',soft:'#cbff93',subtle:'#e6ffcf'},
+  yellow:{heavy:'#524800',loud:'#fbdf06',soft:'#ffed85',subtle:'#fff7c4'},
+  pumpkin:{heavy:'#762f0e',loud:'#fb966e',soft:'#ffd3c2',subtle:'#fef2ee'},
+  red:{heavy:'#772b28',loud:'#e7615b',soft:'#ffd2cd',subtle:'#fff2f0'},
+  pink:{heavy:'#6f2b53',loud:'#d961a6',soft:'#ffcee6',subtle:'#fff1f7'},
+  purple:{heavy:'#523778',loud:'#a575e8',soft:'#e4d6ff',subtle:'#f3ecff'},
+  navy:{heavy:'#294482',loud:'#5c8df8',soft:'#cedeff',subtle:'#f0f5ff'},
+  gray:{heavy:'#484848',loud:'#929292',soft:'#dedede',subtle:'#f5f5f5'},
+  teal:{heavy:'#0a5551',loud:'#2ba39c',soft:'#b6ece8',subtle:'#e6f7f5'},
+  magenta:{heavy:'#6d2650',loud:'#c95ba4',soft:'#f4cfe6',subtle:'#f9e8f2'}
+};
+const FG1='#000000db',FG2='#000000a2',FG3='#00000090';
+const STROKE='#00000021',STROKE_SOFT='#0000006d',GRID='#00000014';
+const NS='http://www.w3.org/2000/svg';
+
+/* ---- helpers ---- */
+function E(t,a={},kids=[]){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);(kids||[]).forEach(c=>c&&e.appendChild(c));return e;}
+function T(x,y,s,o={}){return E('text',Object.assign({x,y,'font-size':o.size||11,'font-weight':o.w||400,fill:o.fill||FG3,'text-anchor':o.anchor||'start','font-family':'inherit'},o.extra||{}),[document.createTextNode(s)]);}
+/* contrast: pick black or white text for a given fill */
+function ink(hex){const c=hex.replace('#','');const r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);const L=(0.299*r+0.587*g+0.114*b);return L>150?FG1:'#ffffff';}
+function rnd(a,b){return Math.round(a+Math.random()*(b-a));}
+
+/* ---- shared callout ---- */
+const co=document.getElementById('callout');
+function showCallout(x,y,info){
+  co.innerHTML='';
+  const h=document.createElement('div');h.className='co-h';h.textContent=info.header;co.appendChild(h);
+  const r=document.createElement('div');r.className='co-r';
+  const sw=document.createElement('span');sw.className='co-sw';sw.style.background=info.color;r.appendChild(sw);
+  const lbl=document.createElement('span');lbl.textContent=info.series||info.header;r.appendChild(lbl);
+  const v=document.createElement('span');v.className='co-v';v.textContent=info.value;r.appendChild(v);
+  co.appendChild(r);
+  if(info.desc){const d=document.createElement('div');d.className='co-d';d.textContent=info.desc;co.appendChild(d);}
+  co.classList.add('on');
+  const pad=14;let px=x+pad,py=y+pad;
+  const w=co.offsetWidth,ht=co.offsetHeight;
+  if(px+w>window.innerWidth-8)px=x-w-pad;
+  if(py+ht>window.innerHeight-8)py=y-ht-pad;
+  co.style.left=px+'px';co.style.top=py+'px';
+}
+function hideCallout(){co.classList.remove('on');}
+
+/* attach hover+focus parity + accessible label to a data mark */
+function markable(el,info){
+  el.classList.add('mark');
+  el.setAttribute('tabindex','0');
+  el.setAttribute('role','img');
+  el.setAttribute('aria-label',(info.series?info.series+', ':'')+info.header+', '+info.value+(info.desc?', '+info.desc:''));
+  if(info.series)el.dataset.series=info.series;
+  const on=(cx,cy)=>showCallout(cx,cy,info);
+  el.addEventListener('mouseenter',e=>on(e.clientX,e.clientY));
+  el.addEventListener('mousemove',e=>on(e.clientX,e.clientY));
+  el.addEventListener('mouseleave',hideCallout);
+  el.addEventListener('focus',()=>{const b=el.getBoundingClientRect();on(b.left+b.width/2,b.top+b.height/2);});
+  el.addEventListener('blur',hideCallout);
+  return el;
+}
+
+/* ---- card + legend scaffold ---- */
+function card(title,cap,svg,legendCfg,note){
+  const c=document.createElement('div');c.className='card';
+  const t=document.createElement('div');t.className='ct';t.textContent=title;c.appendChild(t);
+  const cc=document.createElement('div');cc.className='cc';cc.textContent=cap;c.appendChild(cc);
+  const pw=document.createElement('div');pw.className='plotwrap';pw.appendChild(svg);c.appendChild(pw);
+  if(legendCfg&&legendCfg.length){
+    const lg=document.createElement('div');lg.className='legend';lg.setAttribute('role','group');lg.setAttribute('aria-label','Series legend');
+    const state={};
+    legendCfg.forEach(s=>{
+      state[s.name]=true;
+      const b=document.createElement('button');b.type='button';b.setAttribute('aria-pressed','true');b.dataset.series=s.name;
+      const sw=document.createElement('span');sw.className='sw';sw.style.background=s.color;
+      sw.dataset.pcolor=s.color;sw.dataset.pidx=String(legendCfg.indexOf(s));
+      if(s.shape==='circle')sw.style.borderRadius='50%';
+      b.appendChild(sw);b.appendChild(document.createTextNode(s.name));
+      // hover-to-highlight
+      b.addEventListener('mouseenter',()=>svg.querySelectorAll('.mark').forEach(m=>{if(m.dataset.series&&m.dataset.series!==s.name)m.classList.add('faded');}));
+      b.addEventListener('mouseleave',()=>svg.querySelectorAll('.mark').forEach(m=>{if(state[m.dataset.series]!==false)m.classList.remove('faded');}));
+      // click-to-filter
+      b.addEventListener('click',()=>{
+        state[s.name]=!state[s.name];b.setAttribute('aria-pressed',String(state[s.name]));
+        svg.querySelectorAll('.mark').forEach(m=>{if(m.dataset.series===s.name)m.style.display=state[s.name]?'':'none';});
+      });
+      lg.appendChild(b);
+    });
+    c.appendChild(lg);
+  }
+  if(note){const n=document.createElement('div');n.className='note';n.innerHTML='<span>↹</span><div>'+note+'</div>';c.appendChild(n);}
+  return c;
+}
+function svgEl(w,h){const s=E('svg',{viewBox:`0 0 ${w} ${h}`,role:'group'});s.style.height=h+'px';return s;}
+
+/* focus ring companion (rect) after a mark */
+function withRing(g,mark,ringAttrs){g.appendChild(mark);const r=E('rect',Object.assign({class:'focusring'},ringAttrs));g.appendChild(r);}
+
+/* ============================================================
+   AXIS scaffold used by cartesian charts
+   ============================================================ */
+function axis(s,x0,y0,w,h,ymax,xlabels,opt={}){
+  const lines=opt.lines||5;
+  for(let i=0;i<=lines;i++){
+    const y=y0+h-(h*i/lines);
+    s.appendChild(E('line',{x1:x0,y1:y,x2:x0+w,y2:y,stroke:GRID,'stroke-width':1}));
+    if(opt.yticks!==false)s.appendChild(T(x0-6,y+3,String(Math.round(ymax*i/lines)),{anchor:'end',fill:FG3,size:9}));
+  }
+  // x labels centered per slot
+  const n=xlabels.length,slot=w/n;
+  xlabels.forEach((l,i)=>s.appendChild(T(x0+slot*i+slot/2,y0+h+13,l,{anchor:'middle',fill:FG3,size:9})));
+  return {x0,y0,w,h,ymax,slot:w/xlabels.length};
+}
+
+/* ============================================================
+   PRIMITIVES section (axis / callout / legend demo)
+   ============================================================ */
+function primitiveAxis(){
+  const s=svgEl(300,150);
+  const A=axis(s,34,10,236,104,100,['Mon','Tue','Wed','Thu','Fri']);
+  s.appendChild(T(6,62,'Value',{extra:{transform:'rotate(-90 6 62)'},anchor:'middle',size:9,fill:FG3,w:600}));
+  const vals=[42,68,55,80,61];
+  vals.forEach((v,i)=>{
+    const bw=26,x=A.x0+A.slot*i+A.slot/2-bw/2,bh=A.h*v/100,y=A.y0+A.h-bh;
+    const g=E('g');const m=markable(E('rect',{x,y,width:bw,height:bh,rx:8,fill:EX.blue.loud}),{header:['Mon','Tue','Wed','Thu','Fri'][i],value:v+'%',color:EX.blue.loud});
+    withRing(g,m,{x:x-2,y:y-2,width:bw+4,height:bh+4,rx:10});s.appendChild(g);
+  });
+  return card('Axis','Comprehension chrome · starts at 0, 5 gridlines',s,null,'<b>Try it:</b> hover or tab to a bar.');
+}
+function primitiveCallout(){
+  const s=svgEl(300,150);
+  const A=axis(s,30,10,240,104,100,['Q1','Q2','Q3','Q4','Q5','Q6']);
+  const vals=[30,44,40,62,58,78];
+  let d='';vals.forEach((v,i)=>{const x=A.x0+A.slot*i+A.slot/2,y=A.y0+A.h-A.h*v/100;d+=(i?'L':'M')+x+' '+y+' ';});
+  s.appendChild(E('path',{d,fill:'none',stroke:EX.purple.loud,'stroke-width':2.5,'stroke-linejoin':'round','stroke-linecap':'round'}));
+  vals.forEach((v,i)=>{
+    const x=A.x0+A.slot*i+A.slot/2,y=A.y0+A.h-A.h*v/100;
+    const g=E('g');const m=markable(E('circle',{cx:x,cy:y,r:5,fill:EX.purple.loud,stroke:'#fff','stroke-width':1.5}),{header:'Q'+(i+1),value:'$'+v+'K',series:'Pipeline',color:EX.purple.loud,desc:'Nearest-point snapping'});
+    withRing(g,m,{x:x-8,y:y-8,width:16,height:16,rx:8});s.appendChild(g);
+  });
+  return card('Callout','Exploration card · hover + focus parity',s,null,'<b>Try it:</b> the same card opens on hover <em>and</em> keyboard focus.');
+}
+function primitiveLegend(){
+  const s=svgEl(300,150);
+  const A=axis(s,30,10,240,104,100,['Jan','Feb','Mar','Apr','May']);
+  const series=[{name:'Actual',color:EX.blue.loud},{name:'Target',color:EX.pink.loud}];
+  const data={Actual:[40,55,48,70,64],Target:[50,52,60,58,72]};
+  series.forEach(se=>{
+    let d='';data[se.name].forEach((v,i)=>{const x=A.x0+A.slot*i+A.slot/2,y=A.y0+A.h-A.h*v/100;d+=(i?'L':'M')+x+' '+y+' ';});
+    const p=markable(E('path',{d,fill:'none',stroke:se.color,'stroke-width':2.5,'stroke-linejoin':'round','stroke-dasharray':se.name==='Target'?'5 4':'none'}),{header:se.name,value:'series',series:se.name,color:se.color});
+    p.style.transition='opacity .12s';s.appendChild(p);
+    data[se.name].forEach((v,i)=>{const x=A.x0+A.slot*i+A.slot/2,y=A.y0+A.h-A.h*v/100;
+      const m=markable(E('circle',{cx:x,cy:y,r:4,fill:se.color,stroke:'#fff','stroke-width':1.4}),{header:['Jan','Feb','Mar','Apr','May'][i],value:v,series:se.name,color:se.color});s.appendChild(m);});
+  });
+  return card('Legend','Key + interactive filter',s,series,'<b>Try it:</b> hover a legend chip to spotlight, click to filter.');
+}
+document.getElementById('primitiveCharts').append(primitiveAxis(),primitiveCallout(),primitiveLegend());
+
+/* ============================================================
+   CHART LIBRARY
+   ============================================================ */
+const sectionsHost=document.getElementById('chartSections');
+function chartSection(name,intent,cards){
+  const sec=document.createElement('section');
+  sec.innerHTML='<h3 style="font-size:24px;margin:0 0 4px">'+name+'</h3><p style="margin:0 0 4px">'+intent+'</p>';
+  const wrap=document.createElement('div');wrap.className='charts';
+  cards.forEach(c=>wrap.appendChild(c));sec.appendChild(wrap);
+  sec.style.borderTop='1px solid '+STROKE;sec.style.paddingTop='40px';
+  sectionsHost.appendChild(sec);
+}
+
+/* ---------- BAR ---------- */
+function barVertical(){
+  const s=svgEl(300,160);const A=axis(s,30,10,240,110,100,['A','B','C','D','E','F']);
+  const vals=[62,88,45,73,54,91];
+  vals.forEach((v,i)=>{const bw=24,x=A.x0+A.slot*i+A.slot/2-bw/2,bh=A.h*v/100,y=A.y0+A.h-bh;
+    const g=E('g');const m=markable(E('rect',{x,y,width:bw,height:bh,rx:8,fill:EX.teal.loud}),{header:'Item '+['A','B','C','D','E','F'][i],value:v,color:EX.teal.loud});
+    withRing(g,m,{x:x-2,y:y-2,width:bw+4,height:bh+4,rx:10});s.appendChild(g);});
+  return card('Vertical · basic','Single series, sequential read',s,null,'Rounded top edge only — never at the axis.');
+}
+function barGrouped(){
+  const s=svgEl(300,160);const A=axis(s,30,10,240,110,100,['Q1','Q2','Q3','Q4']);
+  const series=[{name:'2023',color:EX.blue.loud},{name:'2024',color:EX.purple.loud}];
+  const data={'2023':[54,66,48,72],'2024':[61,58,80,69]};
+  series.forEach((se,si)=>data[se.name].forEach((v,i)=>{
+    const bw=14,gap=3,x=A.x0+A.slot*i+A.slot/2-(bw+gap/2)+si*(bw+gap),bh=A.h*v/100,y=A.y0+A.h-bh;
+    const m=markable(E('rect',{x,y,width:bw,height:bh,rx:4,fill:se.color}),{header:['Q1','Q2','Q3','Q4'][i],value:v,series:se.name,color:se.color});s.appendChild(m);}));
+  return card('Vertical · grouped','Two series compared',s,series,'Legend spotlights &amp; filters each year.');
+}
+function barHorizontal(){
+  const s=svgEl(300,160);const labels=['North','South','East','West','Central'];const vals=[78,54,90,42,66];const max=100;
+  const x0=64,w=200,rowH=24,y0=8;
+  labels.forEach((l,i)=>{const y=y0+i*rowH;s.appendChild(T(60,y+15,l,{anchor:'end',fill:FG2,size:10}));
+    const bw=w*vals[i]/max;const m=markable(E('rect',{x:x0,y:y+4,width:bw,height:16,rx:4,fill:EX.pumpkin.loud}),{header:l,value:vals[i],color:EX.pumpkin.loud});s.appendChild(m);
+    s.appendChild(T(x0+bw+6,y+16,String(vals[i]),{fill:FG3,size:10}));});
+  return card('Horizontal · basic','Long category labels',s,null,'Labels sit outside the plot lane.');
+}
+
+/* ---------- AREA / LINE ---------- */
+function areaBasic(){
+  const s=svgEl(300,160);const A=axis(s,30,10,240,110,100,['Jan','Mar','May','Jul','Sep','Nov']);
+  const vals=[28,46,40,66,58,84];const pts=vals.map((v,i)=>[A.x0+ (i/(vals.length-1))*A.w, A.y0+A.h-A.h*v/100]);
+  let ld=pts.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' ');
+  const ad=ld+` L ${pts[pts.length-1][0]} ${A.y0+A.h} L ${pts[0][0]} ${A.y0+A.h} Z`;
+  s.appendChild(E('path',{d:ad,fill:EX.blue.loud,'fill-opacity':0.18}));
+  s.appendChild(E('path',{d:ld,fill:'none',stroke:EX.blue.loud,'stroke-width':2.5,'stroke-linejoin':'round','stroke-linecap':'round'}));
+  pts.forEach((p,i)=>{const m=markable(E('circle',{cx:p[0],cy:p[1],r:4,fill:EX.blue.loud,stroke:'#fff','stroke-width':1.4}),{header:['Jan','Mar','May','Jul','Sep','Nov'][i],value:vals[i]+'K',series:'Users',color:EX.blue.loud});s.appendChild(m);});
+  return card('Area · basic','Trend over time',s,null,'Fill is translucent; the line spans edge to edge.');
+}
+function areaOverlap(){
+  const s=svgEl(300,160);const A=axis(s,30,10,240,110,100,['W1','W2','W3','W4','W5']);
+  const series=[{name:'Desktop',color:EX.green.loud},{name:'Mobile',color:EX.magenta.loud}];
+  const data={Desktop:[38,52,44,70,62],Mobile:[60,48,66,54,80]};
+  series.forEach(se=>{const vs=data[se.name];const pts=vs.map((v,i)=>[A.x0+(i/(vs.length-1))*A.w,A.y0+A.h-A.h*v/100]);
+    let ld=pts.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' ');
+    s.appendChild(E('path',{d:ld+` L ${pts[pts.length-1][0]} ${A.y0+A.h} L ${pts[0][0]} ${A.y0+A.h} Z`,fill:se.color,'fill-opacity':0.14,class:'mark','data-series':se.name}));
+    s.appendChild(markable(E('path',{d:ld,fill:'none',stroke:se.color,'stroke-width':2.5}),{header:se.name,value:'series',series:se.name,color:se.color}));
+    pts.forEach((p,i)=>s.appendChild(markable(E('circle',{cx:p[0],cy:p[1],r:3.6,fill:se.color,stroke:'#fff','stroke-width':1.3}),{header:['W1','W2','W3','W4','W5'][i],value:vs[i]+'%',series:se.name,color:se.color})));});
+  return card('Area · overlapping','≤ 2 series, translucent so both read',s,series,'Legend filters a layer in/out.');
+}
+
+/* ---------- SCATTER ---------- */
+function scatterBasic(){
+  const s=svgEl(300,160);const A=axis(s,30,10,240,110,100,['0','25','50','75','100'],{lines:4});
+  for(let i=0;i<16;i++){const gx=rnd(8,96),gy=rnd(8,96);const x=A.x0+A.w*gx/100,y=A.y0+A.h-A.h*gy/100;
+    s.appendChild(markable(E('circle',{cx:x,cy:y,r:5,fill:EX.blue.loud,'fill-opacity':0.75,stroke:EX.blue.heavy,'stroke-width':1}),{header:'Point',value:gx+', '+gy,series:'Samples',color:EX.blue.loud}));}
+  return card('Scatter · basic','Correlation between two measures',s,null,'Each point is focusable.');
+}
+function scatterBubble(){
+  const s=svgEl(300,160);const A=axis(s,30,10,240,110,100,['0','25','50','75','100'],{lines:4});
+  const series=[{name:'Team A',color:EX.pumpkin.loud,shape:'circle'},{name:'Team B',color:EX.navy.loud,shape:'circle'}];
+  series.forEach(se=>{for(let i=0;i<7;i++){const gx=rnd(6,96),gy=rnd(6,96),r=rnd(4,11);const x=A.x0+A.w*gx/100,y=A.y0+A.h-A.h*gy/100;
+    s.appendChild(markable(E('circle',{cx:x,cy:y,r,fill:se.color,'fill-opacity':0.55,stroke:se.color,'stroke-width':1.2}),{header:se.name,value:gx+', '+gy,series:se.name,color:se.color,desc:'size = volume'}));}});
+  return card('Scatter · bubble','Third measure via size + color',s,series,'Color encodes series, size encodes volume.');
+}
+
+/* ---------- SPARKLINE ---------- */
+function sparkRow(label,vals,color,up){
+  const g=document.createElement('div');g.style.cssText='display:flex;align-items:center;gap:12px;padding:8px 2px;border-bottom:1px solid '+STROKE;
+  const n=document.createElement('div');n.textContent=label;n.style.cssText='font-size:13px;color:'+FG2+';width:78px;flex:0 0 auto';g.appendChild(n);
+  const s=svgEl(120,28);s.style.height='28px';s.style.width='120px';s.style.flex='0 0 auto';
+  const mn=Math.min(...vals),mx=Math.max(...vals);const pts=vals.map((v,i)=>[6+i/(vals.length-1)*108,24-((v-mn)/(mx-mn||1))*20]);
+  s.appendChild(E('path',{d:pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' '),fill:'none',stroke:color,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
+  s.appendChild(E('circle',{cx:pts[pts.length-1][0],cy:pts[pts.length-1][1],r:2.6,fill:color}));
+  g.appendChild(s);
+  const tv=document.createElement('div');tv.style.cssText='font-size:12px;font-weight:600;margin-left:auto;color:'+(up?EX.green.heavy:EX.red.heavy);
+  tv.textContent=(up?'▲ ':'▼ ')+vals[vals.length-1];g.appendChild(tv);
+  return g;
+}
+function sparklineCard(){
+  const s=document.createElement('div');
+  s.appendChild(sparkRow('Sessions',[12,18,15,22,19,28,34],EX.blue.loud,true));
+  s.appendChild(sparkRow('Errors',[9,7,11,6,8,5,3],EX.red.loud,false));
+  s.appendChild(sparkRow('Latency',[40,42,38,44,41,39,36],EX.purple.loud,false));
+  s.appendChild(sparkRow('Revenue',[22,24,23,28,30,29,35],EX.green.loud,true));
+  const c=document.createElement('div');c.className='card';
+  c.innerHTML='<div class="ct">Sparklines</div><div class="cc">Inline trend + direction arrow</div>';
+  c.appendChild(s);
+  const n=document.createElement('div');n.className='note';n.innerHTML='<span>↹</span><div>For dense dashboards &amp; table rows — the glyph, arrow, and value read at a glance.</div>';c.appendChild(n);
+  return c;
+}
+
+/* ---------- DONUT ---------- */
+function donut(title,cap,data,note){
+  const s=svgEl(300,170);const cx=150,cy=88,r=62,rin=40;let a0=-Math.PI/2;
+  const total=data.reduce((s,d)=>s+d.v,0);
+  data.forEach(d=>{const a1=a0+2*Math.PI*d.v/total;
+    const x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);
+    const xi0=cx+rin*Math.cos(a0),yi0=cy+rin*Math.sin(a0),xi1=cx+rin*Math.cos(a1),yi1=cy+rin*Math.sin(a1);
+    const large=(a1-a0)>Math.PI?1:0;
+    const path=`M ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1} L ${xi1} ${yi1} A ${rin} ${rin} 0 ${large} 0 ${xi0} ${yi0} Z`;
+    s.appendChild(markable(E('path',{d:path,fill:d.c,stroke:'#fff','stroke-width':2}),{header:d.n,value:Math.round(d.v/total*100)+'%',series:d.n,color:d.c,desc:d.v+' of '+total}));a0=a1;});
+  s.appendChild(T(cx,cy-6,String(total),{anchor:'middle',size:24,w:700,fill:FG1,extra:{'dominant-baseline':'central'}}));
+  s.appendChild(T(cx,cy+15,'total',{anchor:'middle',size:10,fill:FG3,extra:{'dominant-baseline':'central'}}));
+  return card(title,cap,s,data.map(d=>({name:d.n,color:d.c})),note);
+}
+
+/* ---------- GAUGE (marker: inner edge, apex OUTWARD toward rim — fixed) ---------- */
+function gauge(title,value){
+  const s=svgEl(300,150);const cx=150,cy=118,R=82,inner=0.62,rin=inner*R;
+  const zones=[{to:0.6,c:EX.green.loud},{to:0.85,c:EX.yellow.loud},{to:1,c:EX.red.loud}];
+  let from=0;const PI=Math.PI;
+  zones.forEach(z=>{const a0=PI+from*PI,a1=PI+z.to*PI;
+    const xo0=cx+R*Math.cos(a0),yo0=cy+R*Math.sin(a0),xo1=cx+R*Math.cos(a1),yo1=cy+R*Math.sin(a1);
+    const xi0=cx+rin*Math.cos(a0),yi0=cy+rin*Math.sin(a0),xi1=cx+rin*Math.cos(a1),yi1=cy+rin*Math.sin(a1);
+    s.appendChild(E('path',{d:`M ${xo0} ${yo0} A ${R} ${R} 0 0 1 ${xo1} ${yo1} L ${xi1} ${yi1} A ${rin} ${rin} 0 0 0 ${xi0} ${yi0} Z`,fill:z.c}));from=z.to;});
+  // marker: base at inner edge, apex OUTWARD toward rim
+  const f=value/100,a=PI+f*PI;const u={x:Math.cos(a),y:Math.sin(a)},p={x:-Math.sin(a),y:Math.cos(a)};const hw=7;
+  const Q=(rr,dp)=>`${cx+u.x*rr+p.x*dp} ${cy+u.y*rr+p.y*dp}`;
+  const d=`M ${Q(rin+11,0)} L ${Q(rin-6,hw)} L ${Q(rin-6,-hw)} Z`;
+  const mk=markable(E('path',{d,fill:FG1,stroke:'#fff','stroke-width':1.5}),{header:title,value:value+'%',color:zones.find(z=>f<=z.to).c,desc:'marker points outward to the rim'});
+  s.appendChild(mk);
+  s.appendChild(T(cx,cy-8,value+'%',{anchor:'middle',size:28,w:700,fill:FG1}));
+  s.appendChild(T(cx,cy+8,f<0.6?'On track':f<0.85?'Watch':'Critical',{anchor:'middle',size:10,fill:FG3}));
+  s.appendChild(T(cx-R,cy+22,'0',{anchor:'middle',size:9,fill:FG3}));
+  s.appendChild(T(cx+R,cy+22,'100',{anchor:'middle',size:9,fill:FG3}));
+  return card(title,'Value against a fixed scale',s,null,'Marker rides the inner edge, apex outward — fixed orientation.');
+}
+
+/* ---------- KPI ---------- */
+function kpiTile(label,value,delta,up,color){
+  const d=document.createElement('div');d.className='card';d.style.gap='2px';
+  d.innerHTML='<div class="cc" style="margin-bottom:2px">'+label+'</div>';
+  const row=document.createElement('div');row.style.cssText='display:flex;align-items:baseline;gap:10px';
+  const v=document.createElement('div');v.style.cssText='font-size:40px;font-weight:700;letter-spacing:-.02em;color:'+FG1;v.textContent=value;
+  const dl=document.createElement('div');dl.style.cssText='font-size:14px;font-weight:600;color:'+(up?EX.green.heavy:EX.red.heavy);dl.textContent=(up?'▲ ':'▼ ')+delta;
+  row.append(v,dl);d.appendChild(row);
+  const bar=svgEl(240,30);bar.style.height='30px';
+  const vals=Array.from({length:9},()=>rnd(20,90));const mn=Math.min(...vals),mx=Math.max(...vals);
+  const pts=vals.map((val,i)=>[4+i/8*232,26-((val-mn)/(mx-mn||1))*20]);
+  bar.appendChild(E('path',{d:pts.map((pp,i)=>(i?'L':'M')+pp[0].toFixed(1)+' '+pp[1].toFixed(1)).join(' '),fill:'none',stroke:color,'stroke-width':2,'stroke-linecap':'round','stroke-linejoin':'round'}));
+  d.appendChild(bar);
+  return d;
+}
+
+/* ---------- COUNT ANNOTATION BAR ---------- */
+function cabCard(){
+  const rows=[{n:'Open',v:'1,284',c:EX.blue.loud},{n:'In progress',v:'642',c:EX.pumpkin.loud},{n:'Resolved',v:'3,915',c:EX.green.loud},{n:'Blocked',v:'87',c:EX.red.loud}];
+  const c=document.createElement('div');c.className='card';
+  c.innerHTML='<div class="ct">Count annotation bar</div><div class="cc">Overview filter chips</div>';
+  const wrap=document.createElement('div');wrap.style.cssText='display:flex;flex-direction:column;gap:8px;margin-top:6px';
+  rows.forEach(r=>{const b=document.createElement('button');b.type='button';
+    b.style.cssText='display:flex;align-items:center;gap:12px;background:'+EX.gray.subtle+';border:1px solid '+STROKE+';border-radius:8px;padding:10px 12px;cursor:pointer;text-align:left;font:inherit;width:100%';
+    b.setAttribute('aria-pressed','false');
+    b.innerHTML='<span style="width:4px;height:30px;border-radius:2px;background:'+r.c+';flex:0 0 auto"></span>'+
+      '<span style="font-size:13px;color:'+FG2+'">'+r.n+'</span>'+
+      '<span style="margin-left:auto;font-size:20px;font-weight:700;color:'+FG1+'">'+r.v+'</span>';
+    b.addEventListener('click',()=>{const p=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-pressed',String(!p));b.style.background=p?EX.gray.subtle:EX.blue.subtle;b.style.borderColor=p?STROKE:EX.blue.loud;});
+    wrap.appendChild(b);});
+  c.appendChild(wrap);
+  const n=document.createElement('div');n.className='note';n.innerHTML='<span>↹</span><div>Each chip is a togglable list filter — colored bar keys the category.</div>';c.appendChild(n);
+  return c;
+}
+
+/* ---------- HEATMAP ---------- */
+function heatmap(title,cap,family,diverging,note){
+  const cols=['Mon','Tue','Wed','Thu','Fri'],rows=['AM','Mid','PM','Eve'];
+  const cw=42,ch=24,gap=3,x0=36,y0=10;
+  const s=svgEl(300,y0+rows.length*(ch+gap)+18);
+  rows.forEach((rl,ri)=>{s.appendChild(T(30,y0+ri*(ch+gap)+ch/2+3,rl,{anchor:'end',size:9,fill:FG3}));
+    cols.forEach((cl,ci)=>{const v=rnd(0,100);let fill;
+      if(diverging){fill=v<50?blend(EX.blue.subtle,EX.blue.loud,(50-v)/50):blend(EX.red.subtle,EX.red.loud,(v-50)/50);}
+      else{fill=blend(family.subtle,family.heavy,v/100);}
+      const x=x0+ci*(cw+gap),y=y0+ri*(ch+gap);
+      s.appendChild(markable(E('rect',{x,y,width:cw,height:ch,rx:2,fill}),{header:cl+' · '+rl,value:v,series:'Load',color:fill}));
+      s.appendChild(T(x+cw/2,y+ch/2+3,String(v),{anchor:'middle',size:9,w:600,fill:ink(fill)}));});});
+  cols.forEach((cl,ci)=>s.appendChild(T(x0+ci*(cw+gap)+cw/2,y0+rows.length*(ch+gap)+11,cl,{anchor:'middle',size:9,fill:FG3})));
+  return card(title,cap,s,null,note);
+}
+function blend(a,b,t){const pa=hx(a),pb=hx(b);const r=Math.round(pa[0]+(pb[0]-pa[0])*t),g=Math.round(pa[1]+(pb[1]-pa[1])*t),bl=Math.round(pa[2]+(pb[2]-pa[2])*t);return '#'+[r,g,bl].map(n=>n.toString(16).padStart(2,'0')).join('');}
+function hx(h){h=h.replace('#','');return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)];}
+
+/* ---------- SANKEY (seamless, borderless ribbons colored by source) ---------- */
+function sankeyCard(){
+  const s=svgEl(300,180);
+  const srcs=[{n:'Search',v:50,c:EX.blue.loud},{n:'Social',v:30,c:EX.purple.loud},{n:'Direct',v:20,c:EX.teal.loud}];
+  const dsts=[{n:'Signup',v:45},{n:'Browse',v:35},{n:'Exit',v:20}];
+  const x1=20,x2=248,boxW=32,H=150,y0=14;const total=100;
+  // node y positions
+  let sy=y0;srcs.forEach(o=>{o.y=sy;o.h=H*o.v/total;sy+=o.h+8;});
+  let dy=y0;dsts.forEach(o=>{o.y=dy;o.h=H*o.v/total;dy+=o.h+8;});
+  // flows: distribute each source across dsts proportionally
+  const flows=[[22,18,10],[16,10,4],[7,7,6]];
+  const dCursor=dsts.map(d=>d.y);
+  srcs.forEach((sc,i)=>{let sc_y=sc.y;flows[i].forEach((val,j)=>{
+    const th=H*val/total;const sy0=sc_y,sy1=sc_y+th;const ty0=dCursor[j],ty1=dCursor[j]+th;sc_y+=th;dCursor[j]+=th;
+    const xa=x1+boxW,xb=x2,cxm=(xa+xb)/2;
+    const d=`M ${xa} ${sy0} C ${cxm} ${sy0} ${cxm} ${ty0} ${xb} ${ty0} L ${xb} ${ty1} C ${cxm} ${ty1} ${cxm} ${sy1} ${xa} ${sy1} Z`;
+    s.appendChild(markable(E('path',{d,fill:sc.c,'fill-opacity':0.42}),{header:sc.n+' → '+dsts[j].n,value:val+'%',series:sc.n,color:sc.c}));});});
+  // boxes
+  srcs.forEach(o=>{s.appendChild(E('rect',{x:x1,y:o.y,width:boxW,height:o.h,rx:3,fill:o.c}));s.appendChild(T(x1+boxW/2,o.y+o.h/2+3,o.n,{anchor:'middle',size:8,w:600,fill:ink(o.c)}));});
+  dsts.forEach(o=>{s.appendChild(E('rect',{x:x2,y:o.y,width:boxW,height:o.h,rx:3,fill:EX.gray.heavy}));s.appendChild(T(x2+boxW/2,o.y+o.h/2+3,o.n,{anchor:'middle',size:8,w:600,fill:'#fff'}));});
+  return card('Sankey','Flow between two sets',s,null,'Ribbons are borderless &amp; colored by source — seamless into the boxes.');
+}
+
+/* ---------- FUNNEL ---------- */
+function funnelCard(){
+  const s=svgEl(300,170);const stages=[{n:'Visited',v:100,c:EX.blue.loud},{n:'Signed up',v:64,c:EX.navy.loud},{n:'Activated',v:41,c:EX.purple.loud},{n:'Paid',v:23,c:EX.magenta.loud}];
+  const x0=20,w=260,rowH=36,cy=85;
+  stages.forEach((st,i)=>{const y=12+i*rowH;const bw=w*st.v/100;const x=x0+(w-bw)/2;
+    s.appendChild(markable(E('rect',{x,y,width:bw,height:28,rx:4,fill:st.c}),{header:st.n,value:st.v+'%',series:st.n,color:st.c,desc:i?(Math.round(st.v/stages[i-1].v*100)+'% of previous'):'top of funnel'}));
+    s.appendChild(T(x0+w/2,y+18,st.n+' · '+st.v+'%',{anchor:'middle',size:11,w:600,fill:ink(st.c)}));});
+  return card('Funnel','Conversion across stages',s,null,'Monotonically narrows — each stage ≤ the last.');
+}
+
+/* ---------- TREE ---------- */
+function treeCard(){
+  const s=svgEl(560,232);
+  const node=(x,y,w,label,fill)=>{s.appendChild(markable(E('rect',{x,y,width:w,height:34,rx:7,fill,stroke:STROKE,'stroke-width':1}),{header:label,value:'node',color:fill}));s.appendChild(T(x+w/2,y+22,label,{anchor:'middle',size:12,w:600,fill:ink(fill)}));};
+  const link=(x1,y1,x2,y2)=>s.appendChild(E('path',{d:`M ${x1} ${y1} C ${x1} ${(y1+y2)/2} ${x2} ${(y1+y2)/2} ${x2} ${y2}`,fill:'none',stroke:STROKE_SOFT,'stroke-width':1.5}));
+  node(240,14,80,'CEO',EX.blue.soft);
+  link(280,48,120,94);link(280,48,320,94);link(280,48,470,94);
+  node(70,94,100,'Design',EX.purple.soft);node(270,94,100,'Eng',EX.green.soft);node(420,94,100,'Sales',EX.pumpkin.soft);
+  link(120,128,80,174);link(120,128,180,174);
+  node(50,174,60,'UX',EX.gray.subtle);node(150,174,70,'Brand',EX.gray.subtle);
+  link(320,128,320,174);node(290,174,60,'Web',EX.gray.subtle);
+  const c=card('Tree','Hierarchy / org chart',s,null,'Nodes + branches; text-only, no metrics needed.');
+  c.style.gridColumn='1 / -1';
+  return c;
+}
+
+/* ---------- render all chart sections ---------- */
+chartSection('Bar chart','Compare values across categories. Round the top edge, never the axis edge.',[barVertical(),barGrouped(),barHorizontal()]);
+chartSection('Area / line chart','Trend over time. Fills are translucent so overlapping series stay readable.',[areaBasic(),areaOverlap()]);
+chartSection('Scatter chart','Correlation and distribution between two measures. Size adds a third dimension.',[scatterBasic(),scatterBubble()]);
+chartSection('Sparkline','Micro-trends for dense dashboards and table rows — glyph, arrow, value.',[sparklineCard(),(function(){const c=document.createElement('div');c.className='card';c.innerHTML='<div class="ct">When to reach for it</div><div class="cc">High-cardinality overviews</div><ul class="clean" style="font-size:13px;margin:8px 0 0">'+
+  '<li>Row-level trend inside a table</li><li>A trend chip on a KPI tile</li><li>Any place a full axis would be overkill</li></ul>';return c;})()]);
+chartSection('Donut chart','Show “part of a whole.” Hover a slice to inspect it; roll up the long tail into “Others.”',[
+  donut('Segment · 4','Qualitative categories',[{n:'Product',v:44,c:EX.blue.loud},{n:'Services',v:28,c:EX.purple.loud},{n:'Support',v:18,c:EX.teal.loud},{n:'Other',v:10,c:EX.gray.loud}],'Center holds the total.'),
+  donut('Segment · with rollup','Long tail → “Others”',[{n:'Chrome',v:52,c:EX.pumpkin.loud},{n:'Safari',v:24,c:EX.pink.loud},{n:'Edge',v:14,c:EX.navy.loud},{n:'Others',v:10,c:EX.gray.loud}],'Legend spotlights &amp; filters slices.')
+]);
+chartSection('Gauge chart','A single value against a fixed scale with threshold zones and a status label.',[gauge('Capacity',48),gauge('SLA',72),gauge('Risk',91)]);
+chartSection('KPI','A hero metric tile with a trend delta and an optional sparkline.',[kpiTile('Monthly revenue','$1.2M','12.4%',true,EX.green.loud),kpiTile('Churn rate','3.1%','0.6%',false,EX.red.loud),kpiTile('Active users','48.9K','8.2%',true,EX.blue.loud)]);
+chartSection('Count annotation bar','Category counts that double as overview filters.',[cabCard(),(function(){const c=document.createElement('div');c.className='card';c.innerHTML='<div class="ct">Static or interactive</div><div class="cc">Read-only, or a list filter</div><ul class="clean" style="font-size:13px;margin:8px 0 0"><li>Vertical color bar keys the category</li><li>Number styles: small, large, or fraction</li><li>Click to filter a linked list/table</li></ul>';return c;})()]);
+chartSection('Heatmap','Two-dimensional patterns as color. Always uses the “No lines” axis; labels flip for contrast.',[
+  heatmap('Sequential','One direction, light → dark',EX.purple,false,'Cell labels auto-flip dark/light for contrast.'),
+  heatmap('Divergent','Around a neutral middle',null,true,'Blue ↔ red across a neutral center.')
+]);
+chartSection('Sankey chart','Flow between sets — attribution, investigation. Streams are drawn by hand.',[sankeyCard(),(function(){const c=document.createElement('div');c.className='card';c.innerHTML='<div class="ct">Anatomy</div><div class="cc">Columns + streams</div><ul class="clean" style="font-size:13px;margin:8px 0 0"><li>Node boxes hold the labels</li><li>Ribbon thickness = volume</li><li>Ribbons colored by <b>source</b>, borderless, seamless into boxes</li></ul>';return c;})()]);
+chartSection('Funnel chart','Sequential stages that narrow — conversion and drop-off.',[funnelCard(),(function(){const c=document.createElement('div');c.className='card';c.innerHTML='<div class="ct">Reading a funnel</div><div class="cc">Stage → stage drop-off</div><ul class="clean" style="font-size:13px;margin:8px 0 0"><li>Each stage is ≤ the one before it</li><li>Hover a stage for “% of previous”</li><li>Not a cartesian chart — no axis</li></ul>';return c;})()]);
+chartSection('Tree chart','Hierarchy and org charts. Composes nodes, branches, and children.',[treeCard(),(function(){const c=document.createElement('div');c.className='card';c.innerHTML='<div class="ct">Composition</div><div class="cc">Node + branches + children</div><ul class="clean" style="font-size:13px;margin:8px 0 0"><li>Text-only — metrics optional</li><li>Curved branches connect parent → child</li><li>Depth shown by indentation level</li></ul>';return c;})()]);
+
+/* ============================================================
+   Color-blind pattern option (texture per series)
+   Applies only where color encodes a category/series (≥2 series).
+   ============================================================ */
+function darken(hex,t){return blend(hex,'#000000',t);}
+let patSeq=0;
+function ensureDefs(svg){let d=svg.querySelector('defs');if(!d){d=E('defs');svg.insertBefore(d,svg.firstChild);}return d;}
+function patternFor(svg,color,idx){
+  const defs=ensureDefs(svg),id='pt'+(patSeq++),ink=darken(color,0.5),sz=6,m=idx%6;
+  const p=E('pattern',{id,patternUnits:'userSpaceOnUse',width:sz,height:sz});
+  p.appendChild(E('rect',{width:sz,height:sz,fill:color}));
+  if(m===0)p.appendChild(E('path',{d:'M0 6 L6 0',stroke:ink,'stroke-width':1.4}));
+  else if(m===1)p.appendChild(E('circle',{cx:3,cy:3,r:1.3,fill:ink}));
+  else if(m===2)p.appendChild(E('path',{d:'M0 0 L6 6',stroke:ink,'stroke-width':1.4}));
+  else if(m===3)p.appendChild(E('path',{d:'M3 0 L3 6',stroke:ink,'stroke-width':1.4}));
+  else if(m===4)p.appendChild(E('path',{d:'M0 3 L6 3',stroke:ink,'stroke-width':1.4}));
+  else p.appendChild(E('path',{d:'M3 0 L3 6 M0 3 L6 3',stroke:ink,'stroke-width':1.1}));
+  defs.appendChild(p);return 'url(#'+id+')';
+}
+function swatchStyle(color,idx){
+  const ink=darken(color,0.5);
+  switch(idx%6){
+    case 0:return{image:`repeating-linear-gradient(45deg, ${ink} 0 1.4px, transparent 1.4px 5px)`,size:'auto'};
+    case 1:return{image:`radial-gradient(${ink} 1.1px, transparent 1.3px)`,size:'5px 5px'};
+    case 2:return{image:`repeating-linear-gradient(-45deg, ${ink} 0 1.4px, transparent 1.4px 5px)`,size:'auto'};
+    case 3:return{image:`repeating-linear-gradient(90deg, ${ink} 0 1.4px, transparent 1.4px 5px)`,size:'auto'};
+    case 4:return{image:`repeating-linear-gradient(0deg, ${ink} 0 1.4px, transparent 1.4px 5px)`,size:'auto'};
+    default:return{image:`repeating-linear-gradient(0deg, ${ink} 0 1.1px, transparent 1.1px 6px), repeating-linear-gradient(90deg, ${ink} 0 1.1px, transparent 1.1px 6px)`,size:'auto'};
+  }
+}
+function applyPatterns(card){
+  const svg=card.querySelector('svg');if(!svg)return;
+  const btns=[...card.querySelectorAll('.legend button')];
+  let order=[];
+  if(btns.length)order=btns.map(b=>b.dataset.series);
+  else svg.querySelectorAll('.mark').forEach(m=>{const s=m.dataset.series,f=m.getAttribute('fill')||'';if(s&&f.startsWith('#')&&!order.includes(s))order.push(s);});
+  if(order.length<2)return;
+  const idxOf={};order.forEach((s,i)=>idxOf[s]=i);
+  svg.querySelectorAll('.mark').forEach(m=>{
+    const s=m.dataset.series,f=m.getAttribute('fill')||'';
+    if(s!=null&&idxOf[s]!=null&&f.startsWith('#')){m.dataset.basefill=f;m.dataset.pat=patternFor(svg,f,idxOf[s]);}
+  });
+  btns.forEach(b=>{const sw=b.querySelector('.sw');if(sw&&sw.dataset.pcolor){sw.dataset.hasPat='1';sw.dataset.pidx=String(idxOf[b.dataset.series]);}});
+}
+function setCB(on){
+  document.querySelectorAll('.mark[data-pat]').forEach(m=>m.setAttribute('fill',on?m.dataset.pat:m.dataset.basefill));
+  document.querySelectorAll('.legend .sw[data-has-pat]').forEach(sw=>{
+    if(on){const st=swatchStyle(sw.dataset.pcolor,+sw.dataset.pidx);sw.style.backgroundImage=st.image;sw.style.backgroundSize=st.size;}
+    else{sw.style.backgroundImage='';sw.style.backgroundSize='';}
+    sw.style.backgroundColor=sw.dataset.pcolor;
+  });
+  const b=document.getElementById('cbToggle');b.setAttribute('aria-pressed',String(on));b.querySelector('.st').textContent=on?'On':'Off';
+}
+document.querySelectorAll('#primitiveCharts .card, #chartSections .card').forEach(applyPatterns);
+(function(){const b=document.getElementById('cbToggle');let on=false;b.addEventListener('click',()=>{on=!on;setCB(on);});})();
+
+/* keyboard focus ring toggle for marks that use adjacent ring rects */
+document.addEventListener('keydown',e=>{if(e.key==='Tab')document.body.classList.add('kb');});
+</script>
+</body>
+</html>

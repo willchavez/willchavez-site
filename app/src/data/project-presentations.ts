@@ -13,6 +13,16 @@ export interface ProjectPresentation {
   slides: PresentationSlide[];
 }
 export const projectPresentations: Record<string, ProjectPresentation> = {
+  'fluent-dataviz': {
+    collaborators: 'Fluent Design Studio and the Fluent Flex design system team',
+    slides: [
+      { section: 'Context', title: 'Charts carry many small decisions', body: 'A chart needs consistent choices for labels, spacing, color, and interaction as well as the right form.' },
+      { section: 'My role & collaboration', title: 'Make the guidance easier to use', points: ['My role: data visualization guidance and examples.', 'Collaboration: Fluent Design Studio and the Fluent Flex design system team.', 'Contribution: work on the flex-dataviz plugin and interactive material that demonstrates it.'] },
+      { section: 'System', title: 'Start with principles, then choose a chart', body: 'Shared rules cover radius, typography, density, and color with patterns. Chart-specific skills build on those rules.', media: ['img/portfolio/dataviz/overview.png'] },
+      { section: 'Details', title: 'Connect visual and interaction guidance', body: 'Axes, legends, and callouts support reading and exploring charts across the library.', media: ['img/portfolio/dataviz/color-patterns.png'] },
+      { section: 'Examples', title: 'See the guidance in action', body: 'The linked HTML gallery brings the chart types together in an interactive browser view. A separate presentation explains the system and its structure.' },
+    ],
+  },
   'genui-bebop': {
     collaborators: 'Design and engineering in Fluent Design Studio',
     slides: [

@@ -1,5 +1,28 @@
 export const portfolioProjects = [
   {
+    "slug": "fluent-dataviz",
+    "title": "Fluent data visualization",
+    "category": "Design tooling",
+    "org": "Microsoft · Fluent Design Studio",
+    "summary": "Making chart guidance usable by designers, engineers, and agents.",
+    "cover": "img/portfolio/dataviz/overview.png",
+    "skills": "Design systems · Data visualization · Agent guidance",
+    "about": "I worked on Fluent Flex's data visualization guidance: a plugin that connects shared chart principles to practical rules for individual chart types. The accompanying gallery and presentation make the system easier to explore and discuss.",
+    "contributions": [
+      "worked on the flex-dataviz plugin's guidance for core principles and chart-specific patterns",
+      "helped turn chart decisions such as color, density, typography, axes, legends, and callouts into guidance an agent can navigate",
+      "created interactive HTML material that shows the chart guidance in context"
+    ],
+    "images": [
+      { "src": "img/portfolio/dataviz/overview.png", "alt": "Fluent data visualization overview with a pie chart, trend line, and bars" },
+      { "src": "img/portfolio/dataviz/color-patterns.png", "alt": "Fluent data visualization color and pattern examples" }
+    ],
+    "links": [
+      ["/dataviz/gallery.html", "Explore the interactive chart gallery"],
+      ["/dataviz/presentation.html", "Open the data visualization presentation"]
+    ]
+  },
+  {
     "slug": "genui-bebop",
     "title": "Generative interfaces",
     "category": "AI experiences",

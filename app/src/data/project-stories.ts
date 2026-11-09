@@ -9,6 +9,31 @@ export interface ProjectStory {
   related?: { href: string; label: string };
 }
 export const projectStories: Record<string, ProjectStory> = {
+  "fluent-dataviz": {
+    "role": "Data visualization guidance and examples",
+    "status": "Fluent Flex design system work",
+    "opening": "paired",
+    "sections": [
+      {
+        "title": "A chart needs more than a visual style",
+        "body": "Choosing a chart is only the beginning. Labels, density, color, and interaction all affect whether someone can understand and explore the data. I worked on guidance that puts those decisions in one navigable system.",
+        "media": ["img/portfolio/dataviz/overview.png"]
+      },
+      {
+        "title": "Principles that travel across chart types",
+        "body": "The flex-dataviz plugin starts with shared rules for corner radius, typography, density, and color with patterns. It then connects those rules to chart-specific guidance, from bars and lines to heatmaps, Sankey diagrams, axes, legends, and callouts.",
+        "media": ["img/portfolio/dataviz/color-patterns.png"]
+      },
+      {
+        "title": "Explore the system in the browser",
+        "body": "I made an interactive HTML gallery and a presentation to show the guidance in context. The gallery brings the chart types and their behaviors together, so you can move from a written rule to a concrete example. Both are linked below."
+      }
+    ],
+    "captions": {
+      "img/portfolio/dataviz/overview.png": "Fluent's data visualization overview brings several chart forms into one expression.",
+      "img/portfolio/dataviz/color-patterns.png": "Color and pattern guidance helps distinguish data series and preserve meaning."
+    }
+  },
   "genui-bebop": {
     "role": "Interaction design & prototyping",
     "status": "Exploratory prototypes",
