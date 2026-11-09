@@ -199,3 +199,7 @@
 @media (max-width: 800px), (pointer: coarse) and (max-height: 500px) {
   .project-present { display: none; }
 }
+
+/* Keep tall asset-viewer recordings readable without a wide empty frame. */
+.project-figure-portrait { width: min(100%, 24rem); margin-inline: auto; }
+.project-figure-portrait img { max-height: none; }
