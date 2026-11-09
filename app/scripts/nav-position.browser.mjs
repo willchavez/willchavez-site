@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
 const base = (process.argv[2] || 'http://localhost:4321').replace(/\/$/, '');
 const browser = await chromium.launch({ ...(process.env.CHROMIUM_PATH && { executablePath: process.env.CHROMIUM_PATH }), args: ['--no-sandbox'] });
 try {
-  for (const width of [375, 900, 1440]) {
+  for (const width of [320, 375, 900, 1440]) {
     const page = await browser.newPage({ viewport: { width, height: 1000 } });
     const errors = [];
     page.on('pageerror', error => errors.push(String(error)));
@@ -28,6 +28,12 @@ try {
     assert(await page.evaluate(() => window.originalBar === document.querySelector('.topbar')), 'navigation persists');
     assert(await page.evaluate(() => window.barMoves.at(-1)?.length === 2), 'entry animates');
     assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), 'no mobile overflow');
+    if (width <= 820) {
+      await page.locator('.pill > summary').click();
+      const menu = await page.locator('.pill .menu').boundingBox();
+      assert(menu.x >= 0 && menu.x + menu.width <= width, 'centered dropdown stays in the viewport');
+      await page.keyboard.press('Escape');
+    }
     await page.locator('[data-project-back]').click();
     await page.waitForURL(`${base}/portfolio`);
     await page.waitForFunction(() => document.querySelector('.topbar').getAnimations().every(a => a.playState === 'finished'));
