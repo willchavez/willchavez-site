@@ -1,9 +1,16 @@
-<!-- Resolve before paint so a saved choice never flashes the system theme. -->
+<!-- Resolve before paint. Manual choices last for this visit, not forever. -->
 <script is:inline>
   (() => {
     let preference = window.willThemePreference;
     if (preference === undefined) {
-      try { preference = localStorage.getItem('will-theme'); } catch {}
+      try {
+        const navigation = performance.getEntriesByType('navigation')[0];
+        const internalReferrer = document.referrer && new URL(document.referrer).origin === location.origin;
+        // Reloads and full internal navigation continue the visit. A fresh
+        // entry from outside the site starts with the device preference.
+        if (navigation?.type === 'navigate' && !internalReferrer) sessionStorage.removeItem('will-theme');
+        preference = sessionStorage.getItem('will-theme');
+      } catch {}
     }
     window.willThemePreference = preference === 'light' || preference === 'dark' ? preference : null;
     document.documentElement.dataset.theme = window.willThemePreference || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');

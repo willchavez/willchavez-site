@@ -1,6 +1,6 @@
 # Enlarged animation playback
 
-The shared image viewer offers Pause animation / Resume animation for GIFs and animated WebP/PNG files. The control changes the playback state of an H.264 video copy, so resuming continues at the paused frame. Space toggles playback; Escape closes the viewer, stops playback, and restores focus. Enlarged animations start paused when reduced motion is preferred. Inline images and thumbnail behavior are unchanged.
+The shared image viewer offers Pause animation / Resume animation for GIFs and animated WebP/PNG files. The control sits beneath the caption, next to the enlarged media. It changes the playback state of an H.264 video copy, so resuming continues at the paused frame. Space toggles playback; Escape closes the viewer, stops playback, and restores focus. Enlarged animations start paused when reduced motion is preferred. Inline images and thumbnail behavior are unchanged.
 
 `app/scripts/animations.mjs` runs after the responsive image build. It detects multiple frames using Sharp, decodes the original frames with their timing, and encodes a muted, looping MP4 with FFmpeg. Odd dimensions are padded to even dimensions; transparent pixels use a white background. The largest edge is constrained by a 1600px width, without enlargement. GIF originals remain available.
 

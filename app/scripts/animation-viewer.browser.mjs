@@ -40,6 +40,10 @@ try {
       assert(await video.evaluate(v => v.paused), 'Space pauses');
       await page.keyboard.press('Space');
       await page.waitForFunction(() => !document.querySelector('dialog video').paused);
+      const controlBox = await page.locator('.image-viewer-playback').boundingBox();
+      const captionBox = await page.locator('dialog figcaption').boundingBox();
+      assert(controlBox.y >= captionBox.y + captionBox.height, 'playback control sits below the caption');
+      assert(controlBox.y + controlBox.height <= 900, 'playback control remains in the viewport');
       const box = await video.boundingBox();
       assert(box.width <= width && box.height < 900);
       await page.keyboard.press('Escape');
