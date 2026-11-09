@@ -19,8 +19,9 @@ export const projectStories: Record<string, ProjectStory> = {
         "title": "The brief sounded simple: show the icons",
         "body": "The starting point was to demonstrate the icons using the actual CDN images and technical assets. Working with Jason Custer, Principal Product Design Manager, designer, and illustrator, I built the asset browser for the upcoming Fluent Flex design site. The work became about more than displaying images: how do you browse a large collection, compare variants, and get the right file without losing your place?",
         "media": [
-          "img/portfolio/fluent-asset-library/asset-families.png"
-        ]
+          "img/portfolio/fluent-asset-library/asset-library-original.png"
+        ],
+        "arrangement": "inset"
       },
       {
         "title": "Room to help shape the experience",
@@ -28,7 +29,10 @@ export const projectStories: Record<string, ProjectStory> = {
       },
       {
         "title": "Different assets need different choices",
-        "body": "The library spans system icons, emoji, and illustrations. Each family needs its own controls: size and style for icons, skin tone and format for emoji, and size and theme for illustrations. I connected those choices to the active variant so the preview, carousel, Copy URL, and Download actions stay in sync. Controls disappear when the asset has no corresponding metadata, rather than offering choices that don’t exist."
+        "body": "The library spans system icons, emoji, and illustrations. Each family needs its own controls: size and style for icons, skin tone and format for emoji, and size and theme for illustrations. I connected those choices to the active variant so the preview, carousel, Copy URL, and Download actions stay in sync. Controls disappear when the asset has no corresponding metadata, rather than offering choices that don’t exist.",
+        "media": [
+          "img/portfolio/fluent-asset-library/asset-library-browsing.gif"
+        ]
       },
       {
         "title": "Do the grouping before the page loads",
@@ -36,7 +40,10 @@ export const projectStories: Record<string, ProjectStory> = {
       },
       {
         "title": "Keep your place while you browse",
-        "body": "A big collection still needs to feel like one place. I used a virtualized grid that renders visible rows plus a buffer, with fuzzy search on a 120 ms debounce. Switching categories restores the category’s scroll position. Resizing keeps the selected item anchored as the column count changes. Keyboard navigation and focus restoration help connect the grid to the asset details instead of leaving focus behind when the visible rows change."
+        "body": "A big collection still needs to feel like one place. I used a virtualized grid that renders visible rows plus a buffer, with fuzzy search on a 120 ms debounce. Switching categories restores the category’s scroll position. Resizing keeps the selected item anchored as the column count changes. Keyboard navigation and focus restoration help connect the grid to the asset details instead of leaving focus behind when the visible rows change.",
+        "media": [
+          "img/portfolio/fluent-asset-library/asset-library-search-variants.gif"
+        ]
       },
       {
         "title": "The work lived in the details",
@@ -45,7 +52,10 @@ export const projectStories: Record<string, ProjectStory> = {
       },
       {
         "title": "Displaying the actual assets meant handling the actual files",
-        "body": "The SVGs needed care as well as the interface around them. I namespaced IDs and preserved root presentation attributes when processing SVG content, including inherited attributes that affect how an image renders. The history records fixes for dropped SVG attributes and browser compositing artifacts. Working with the real CDN files made these rendering details part of the browsing experience."
+        "body": "The SVGs needed care as well as the interface around them. I namespaced IDs and preserved root presentation attributes when processing SVG content, including inherited attributes that affect how an image renders. The history records fixes for dropped SVG attributes and browser compositing artifacts. Working with the real CDN files made these rendering details part of the browsing experience.",
+        "media": [
+          "img/portfolio/fluent-asset-library/asset-library-details.png"
+        ]
       },
       {
         "title": "Make the less visible paths work, too",
@@ -57,7 +67,10 @@ export const projectStories: Record<string, ProjectStory> = {
       }
     ],
     "captions": {
-      "img/portfolio/fluent-asset-library/asset-families.png": "Explanatory diagram: asset families and variant controls."
+      "img/portfolio/fluent-asset-library/asset-library-original.png": "Browsing system icons, with emoji and illustrations one tab away.",
+      "img/portfolio/fluent-asset-library/asset-library-browsing.gif": "Switching asset families and searching illustrations.",
+      "img/portfolio/fluent-asset-library/asset-library-search-variants.gif": "Searching, selecting size and style, navigating variants, and copying the active URL.",
+      "img/portfolio/fluent-asset-library/asset-library-details.png": "The 32px regular variant, its preview, file details, and actions."
     }
   },
 

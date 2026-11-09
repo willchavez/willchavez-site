@@ -22,7 +22,10 @@ export const projectPresentations: Record<string, ProjectPresentation> = {
       {
         "section": "Context",
         "title": "The brief was to show the icons",
-        "body": "Use the actual CDN images and technical assets to demonstrate the collection on the upcoming Fluent Flex design site."
+        "body": "Use the actual CDN images and technical assets to demonstrate the collection on the upcoming Fluent Flex design site.",
+        "media": [
+          "img/portfolio/fluent-asset-library/asset-library-original.png"
+        ]
       },
       {
         "section": "My role & collaboration",
@@ -38,7 +41,7 @@ export const projectPresentations: Record<string, ProjectPresentation> = {
         "title": "Three asset families, different choices",
         "body": "Icons need size and style; emoji need skin tone and format; illustrations need size and theme. The controls need to match the asset.",
         "media": [
-          "img/portfolio/fluent-asset-library/asset-families.png"
+          "img/portfolio/fluent-asset-library/asset-library-browsing.gif"
         ]
       },
       {
@@ -48,6 +51,9 @@ export const projectPresentations: Record<string, ProjectPresentation> = {
           "Variant controls and carousel selection stay synchronized with the preview.",
           "Copy URL and Download use the active variant.",
           "Hide controls when the asset has no corresponding metadata."
+        ],
+        "media": [
+          "img/portfolio/fluent-asset-library/asset-library-search-variants.gif"
         ]
       },
       {
@@ -68,6 +74,9 @@ export const projectPresentations: Record<string, ProjectPresentation> = {
           "Restore category scroll position and anchor the selected item on resize.",
           "Preserve SVG presentation attributes and namespace IDs.",
           "Handle keyboard focus, loading, live announcements, reduced motion, and forced colors."
+        ],
+        "media": [
+          "img/portfolio/fluent-asset-library/asset-library-details.png"
         ]
       },
       {

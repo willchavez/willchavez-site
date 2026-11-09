@@ -41,10 +41,17 @@ These facts do not establish measured performance improvements, accessibility ce
 
 `217f327` says “Removed Option 2.” The export does not identify that option or explain why it was removed. It is not mapped to one of the three early presentations in the article or slides. No intermediate screenshots, user-study findings, or decision rationales have been invented.
 
-## Visuals
+## Product media and capture provenance
 
-Use screenshots and recordings from the actual running asset library, including the user's supplied original GIF and screenshot. Do not substitute explanatory illustrations, reconstructed interfaces, or generated product images. Record whether each capture comes from the authenticated product or a local build of the actual site; do not describe current captures as historical iterations.
+The case study now uses the actual product. The earlier explanatory images have been removed from the article, presentation, card cover, and source assets.
 
-The commit-history timeline is native, selectable HTML shared by the article and presentation through `ProjectTimeline.astro`. The architecture is described in prose. Neither belongs in the product-media gallery as a raster diagram.
+- `asset-library-original.png` is the exact user-supplied overview image recovered from this chat. The file exposed by the attachment is a single-frame PNG (1391 × 1507), not an animated GIF. It is included unchanged in the article and presentation.
+- `asset-library-browsing.gif` records the running supplied build switching from system icons to emoji and illustrations, then searching for design illustrations.
+- `asset-library-search-variants.gif` records search, clearing the query, opening Accessibility, choosing Filled, changing from 16px to 32px, navigating the carousel, and copying the current URL.
+- `asset-library-details.png` is a still of the actual detail panel with the 32px regular Accessibility variant selected. It also supplies the project card cover.
 
-The media correction is staged while capture access and original media files are being obtained. The old conceptual cover remains pending replacement on the working branch; this incomplete correction must not be published as a finished product-media update.
+The GIFs and detail still were captured with Playwright from the user-supplied built distribution, served locally at its asset-library route. These are current product captures, not reconstructions or historical iteration screenshots. The product DOM, styling, labels, and images were not redrawn or replaced. Recordings are cropped to the product content area and encoded at 10 fps. They demonstrate interactions, not benchmark timings. The user's built distribution and raw source exports remain outside the public repository.
+
+The original animated GIF binary was not exposed in the chat attachment: repeated references resolve to the same single-frame PNG. The portfolio includes that exact supplied image and fresh recordings of the running product; it does not claim that a still attachment preserves an unavailable original animation.
+
+The commit-history timeline is native, selectable HTML shared by the article and presentation through `ProjectTimeline.astro`. The architecture is described in prose. Neither is presented as a raster diagram.
