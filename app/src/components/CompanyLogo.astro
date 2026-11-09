@@ -7,3 +7,10 @@ interface Props { company: keyof typeof marks }
 const { company } = Astro.props;
 ---
 <span class:list={["work-logo", `work-logo-${company}`]} aria-hidden="true" set:html={marks[company]} />
+
+<style>
+  /* Use the brands' reversed marks on dark cards. Microsoft stays full color. */
+  @media (prefers-color-scheme: dark) {
+    .work-logo-ibm :global(svg), .work-logo-lockheed-martin :global(svg) { fill: #fff; }
+  }
+</style>
