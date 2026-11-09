@@ -14,6 +14,9 @@ try {
     await page.locator('[data-project-present]').click();
     await page.waitForURL('**/present?**#slide-1');
     await page.evaluate(() => document.fonts.ready);
+    assert.equal(await page.locator('[data-print], [data-fullscreen], .deck-keyboard-hint, .deck-article-link').count(), 0);
+    const title = await page.locator('.deck-project-name').boundingBox();
+    assert(Math.abs(title.x + title.width / 2 - 720) < 1, 'header title is centered');
     const count = projectPresentations[project.slug].slides.length + 1;
     assert.equal(await page.locator('[data-slide]').count(), count);
     assert(await page.locator('[data-previous]').isDisabled());
@@ -71,10 +74,6 @@ try {
   await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: 'dark' });
   await page.keyboard.press('ArrowRight');
   assert.equal(await page.locator('[data-slide]:visible').evaluate(e => getComputedStyle(e).animationName), 'none');
-  await page.evaluate(() => { window.print = () => { window.printCalled = true; }; });
-  await page.locator('[data-print]').click();
-  await page.waitForFunction(() => window.printCalled === true);
-  assert(await page.locator('img').evaluateAll(images => images.every(image => image.complete && image.naturalWidth > 0)));
   await page.emulateMedia({ media: 'print' });
   assert.equal(await page.locator('[data-slide]:visible').count(), 7, 'printing includes hidden slides');
   assert.deepEqual(errors, []);

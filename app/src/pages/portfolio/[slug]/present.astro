@@ -36,8 +36,6 @@ const imageFor = (src: string) => {
       <span class="deck-project-name">{project.title}</span>
       <div class="deck-tools">
         <details class="deck-outline"><summary>Slides</summary><nav aria-label="Slide outline">{slides.map((slide, index) => <a href={`#slide-${index + 1}`} data-slide-choice={index}><span>{String(index + 1).padStart(2, '0')}</span>{index === 0 ? 'Title' : slide.section}</a>)}</nav></details>
-        <button type="button" data-print>Print / PDF</button>
-        <button type="button" data-fullscreen aria-pressed="false">Fullscreen</button>
       </div>
     </header>
     <main class="deck" aria-label={`${project.title} presentation`}>
@@ -57,9 +55,7 @@ const imageFor = (src: string) => {
       </section>)}
     </main>
     <footer class="deck-controls">
-      <p class="deck-keyboard-hint">← → to move <span>· F for fullscreen</span></p>
       <div class="deck-paging"><button type="button" data-previous aria-label="Previous slide">← <span>Previous</span></button><span class="deck-counter" aria-live="off"><span data-current>1</span> <span aria-hidden="true">/</span> {slides.length}</span><button type="button" data-next aria-label="Next slide"><span>Next</span> →</button></div>
-      <a class="deck-article-link" href={`/portfolio/${project.slug}`}>Read the full story ↗</a>
       <div class="deck-progress" role="progressbar" aria-label="Presentation progress" aria-valuemin="1" aria-valuemax={slides.length} aria-valuenow="1"><span></span></div>
     </footer>
     <p class="sr-only" data-slide-announcement role="status" aria-live="polite" aria-atomic="true"></p>

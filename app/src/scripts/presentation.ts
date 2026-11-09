@@ -8,7 +8,6 @@ export function initPresentation() {
   const progress = document.querySelector<HTMLElement>('.deck-progress')!;
   const announcement = document.querySelector<HTMLElement>('[data-slide-announcement]')!;
   const outline = document.querySelector<HTMLDetailsElement>('.deck-outline')!;
-  const fullscreen = document.querySelector<HTMLButtonElement>('[data-fullscreen]')!;
   const exit = document.querySelector<HTMLAnchorElement>('.deck-exit')!;
   let index = 0;
   const fromHash = () => {
@@ -47,24 +46,10 @@ export function initPresentation() {
       const target = new URL(article, location.origin), expected = new URL(exit.href);
       const normalize = (path: string) => path.replace(/\.html$/, '').replace(/\/+$/, '');
       if (target.origin === expected.origin && normalize(target.pathname) === normalize(expected.pathname)) {
-        document.querySelectorAll<HTMLAnchorElement>('.deck-exit, .deck-article-link').forEach(link => { link.href = target.href; });
+        exit.href = target.href;
       }
     } catch { /* Retain the safe article URL. */ }
   }
-  const toggleFullscreen = async () => {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else await document.documentElement.requestFullscreen();
-    } catch {
-      announcement.textContent = 'Fullscreen is unavailable in this browser. You can still use the presentation controls.';
-    }
-  };
-  fullscreen.hidden = !document.fullscreenEnabled;
-  fullscreen.addEventListener('click', toggleFullscreen);
-  document.addEventListener('fullscreenchange', () => {
-    fullscreen.setAttribute('aria-pressed', String(!!document.fullscreenElement));
-    fullscreen.textContent = document.fullscreenElement ? 'Exit fullscreen' : 'Fullscreen';
-  });
   previous.addEventListener('click', () => show(index - 1));
   next.addEventListener('click', () => show(index + 1));
   outline.addEventListener('click', event => {
@@ -81,7 +66,6 @@ export function initPresentation() {
     if (target?.closest('input, textarea, select, [contenteditable="true"]')) return;
     if (event.key === 'Escape') {
       if (outline.open) { outline.open = false; outline.querySelector('summary')?.focus(); }
-      else if (document.fullscreenElement) void document.exitFullscreen();
       else location.assign(exit.href);
       return;
     }
@@ -91,7 +75,6 @@ export function initPresentation() {
     else if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); show(index - 1); }
     else if (event.key === 'Home') { event.preventDefault(); show(0); }
     else if (event.key === 'End') { event.preventDefault(); show(slides.length - 1); }
-    else if (event.key.toLowerCase() === 'f' && document.fullscreenEnabled) { event.preventDefault(); void toggleFullscreen(); }
   });
   window.addEventListener('hashchange', () => show(fromHash()));
   const loadPrintImages = async () => {
@@ -101,10 +84,6 @@ export function initPresentation() {
     }));
   };
   window.addEventListener('beforeprint', () => { void loadPrintImages(); });
-  document.querySelector('[data-print]')!.addEventListener('click', async () => {
-    await loadPrintImages();
-    window.print();
-  });
   document.documentElement.dataset.presentation = '';
   show(fromHash(), false);
 }
