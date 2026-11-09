@@ -1,6 +1,7 @@
 ---
 import { projectStories } from "../../data/project-stories";
 import Base from "../../layouts/Base.astro";
+import ProjectTimeline from "../../components/ProjectTimeline.astro";
 import ProjectFigure from "../../components/ProjectFigure.astro";
 import ProjectEmbed from "../../components/ProjectEmbed.astro";
 import "../../styles/portfolio.css";
@@ -40,6 +41,7 @@ const labelFor = (label: string) => label.replace(/<[^>]*>/g, "").replace(/[â†’â
         {section.media?.length && <div class="project-chapter-media" data-arrangement={section.arrangement ?? "sequence"}>
           {section.media.map(src => <ProjectFigure image={imageFor(src)} caption={story.captions[src]} compact={section.arrangement === "pair" || (index === 0 && story.opening === "paired")} priority={index === 0 && story.opening === "paired"} />)}
         </div>}
+        {section.timeline && <ProjectTimeline items={section.timeline} />}
         {section.embed && <div class="project-chapter-media"><ProjectEmbed embed={section.embed} /></div>}
       </section>)}
     </div>

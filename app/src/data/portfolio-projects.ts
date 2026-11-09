@@ -18,14 +18,6 @@ export const portfolioProjects = [
       {
         "src": "img/portfolio/fluent-asset-library/asset-families.png",
         "alt": "Diagram: asset families and variant controls"
-      },
-      {
-        "src": "img/portfolio/fluent-asset-library/asset-delivery.png",
-        "alt": "Diagram: from CDN variant records to the selected file"
-      },
-      {
-        "src": "img/portfolio/fluent-asset-library/iteration-notes.png",
-        "alt": "Commit notes: July 29–August 13, 2026"
       }
     ],
     "links": [

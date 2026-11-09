@@ -43,4 +43,8 @@ These facts do not establish measured performance improvements, accessibility ce
 
 ## Visuals
 
-The three source SVGs and rasterized PNGs under `img/portfolio/fluent-asset-library` are newly authored **explanatory diagrams**, labeled as such in captions. They are not product screenshots or reconstructions of earlier designs. They explain asset families, final implementation flow, and changes recorded in commit messages. Actual iteration screenshots can be added when supplied with their corresponding version/context.
+Use screenshots and recordings from the actual running asset library, including the user's supplied original GIF and screenshot. Do not substitute explanatory illustrations, reconstructed interfaces, or generated product images. Record whether each capture comes from the authenticated product or a local build of the actual site; do not describe current captures as historical iterations.
+
+The commit-history timeline is native, selectable HTML shared by the article and presentation through `ProjectTimeline.astro`. The architecture is described in prose. Neither belongs in the product-media gallery as a raster diagram.
+
+The media correction is staged while capture access and original media files are being obtained. The old conceptual cover remains pending replacement on the working branch; this incomplete correction must not be published as a finished product-media update.

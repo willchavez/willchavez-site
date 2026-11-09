@@ -1,0 +1,29 @@
+---
+import type { ProjectTimelineItem } from '../data/asset-library-timeline';
+interface Props { items: ProjectTimelineItem[] }
+const { items } = Astro.props;
+---
+<ol class="project-timeline" aria-label="Project iteration timeline">
+  {items.map(item => <li>
+    <p class="timeline-date">{item.date}</p>
+    <div class="timeline-entry"><h3>{item.title}</h3><p>{item.body}</p></div>
+  </li>)}
+</ol>
+<style>
+  .project-timeline { list-style: none; padding: 0; margin: 1.8rem auto 0; max-width: 42rem; }
+  .project-timeline li { display: grid; grid-template-columns: 5.8rem minmax(0, 1fr); gap: 1rem; margin: 0; }
+  .timeline-date { color: var(--muted); font-size: .8rem; line-height: 1.5; padding-top: .12rem; }
+  .timeline-entry { position: relative; border-left: 1px solid var(--hairline); padding: 0 0 1.5rem 1.35rem; }
+  .timeline-entry::before { content: ''; position: absolute; width: .45rem; height: .45rem; left: -.25rem; top: .4rem; border-radius: 50%; background: var(--rust); }
+  .timeline-entry h3 { font-size: 1.05rem; line-height: 1.35; margin: 0 0 .3rem; }
+  .timeline-entry p { color: var(--muted); font-size: .9rem; line-height: 1.55; margin: 0; }
+  li:last-child .timeline-entry { border-left-color: transparent; padding-bottom: 0; }
+  :global(.slide-with-timeline) .project-timeline { margin: 0; max-width: none; }
+  :global(.slide-with-timeline) .timeline-entry { padding-bottom: 1.1rem; }
+  :global(.slide-with-timeline) .timeline-entry h3 { font-size: 1rem; }
+  :global(.slide-with-timeline) .timeline-entry p { font-size: .85rem; }
+  @media (max-width: 520px) {
+    .project-timeline li { grid-template-columns: 4.2rem minmax(0, 1fr); gap: .7rem; }
+    .timeline-entry { padding-left: .9rem; }
+  }
+</style>

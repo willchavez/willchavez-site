@@ -1,3 +1,4 @@
+import { assetLibraryTimeline, type ProjectTimelineItem } from './asset-library-timeline';
 // Presentation narratives are curated separately from the reading experience.
 // Keep collaborator names, evaluation figures, and outcomes grounded in the
 // project records and linked Notes. Explorations do not imply shipped results.
@@ -7,6 +8,7 @@ export interface PresentationSlide {
   body?: string;
   points?: string[];
   media?: string[];
+  timeline?: ProjectTimelineItem[];
   embed?: { src: string; title: string; caption: string; kind: "coffee" | "gallery" };
 }
 export interface ProjectPresentation {
@@ -51,18 +53,13 @@ export const projectPresentations: Record<string, ProjectPresentation> = {
       {
         "section": "Implementation",
         "title": "Group once. Load what’s needed.",
-        "body": "Build category indexes from CDN variant records, cache each category on demand, and render visible grid rows plus a buffer.",
-        "media": [
-          "img/portfolio/fluent-asset-library/asset-delivery.png"
-        ]
+        "body": "Build category indexes from CDN variant records, cache each category on demand, and render visible grid rows plus a buffer."
       },
       {
         "section": "Iteration",
         "title": "Refine the experience in the details",
-        "body": "The commit messages document search and layout work, interaction states, rendering fixes, and finishing details. These notes trace the work; they do not recreate earlier screens.",
-        "media": [
-          "img/portfolio/fluent-asset-library/iteration-notes.png"
-        ]
+        "body": "Changes recorded across the July 29–August 13 commit history.",
+        "timeline": assetLibraryTimeline
       },
       {
         "section": "Refinement",

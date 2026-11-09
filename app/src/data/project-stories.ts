@@ -1,10 +1,11 @@
+import { assetLibraryTimeline, type ProjectTimelineItem } from './asset-library-timeline';
 // Editorial sequences and factual context, grounded in the project records and Notes.
 export interface ProjectStory {
   role: string;
   status: string;
   opening: "essay" | "paired" | "visual";
   leadImage?: string;
-  sections: { title: string; body: string; media?: string[]; embed?: { src: string; title: string; caption: string; kind: "coffee" | "gallery" }; arrangement?: "pair" | "inset" }[];
+  sections: { title: string; body: string; media?: string[]; timeline?: ProjectTimelineItem[]; embed?: { src: string; title: string; caption: string; kind: "coffee" | "gallery" }; arrangement?: "pair" | "inset" }[];
   captions: Record<string, string>;
   related?: { href: string; label: string };
 }
@@ -31,10 +32,7 @@ export const projectStories: Record<string, ProjectStory> = {
       },
       {
         "title": "Do the grouping before the page loads",
-        "body": "A comment in the build script estimates roughly 44,500 upstream variant records and 7.6 MB uncompressed. I grouped records by category and asset name at build time, then emitted separate category indexes. The browser loads and caches a category when it’s needed. Variant metadata is derived from filenames as assets are rendered or inspected.",
-        "media": [
-          "img/portfolio/fluent-asset-library/asset-delivery.png"
-        ]
+        "body": "A comment in the build script estimates roughly 44,500 upstream variant records and 7.6 MB uncompressed. I grouped records by category and asset name at build time, then emitted separate category indexes. The browser loads and caches a category when it’s needed. Variant metadata is derived from filenames as assets are rendered or inspected."
       },
       {
         "title": "Keep your place while you browse",
@@ -43,9 +41,7 @@ export const projectStories: Record<string, ProjectStory> = {
       {
         "title": "The work lived in the details",
         "body": "The first commit describes three detail presentations: inline expansion, a modal, and a right rail. Later messages record search and grid refinements, removal of the asset count, and changes to hover, selection, and borders. The final implementation has scrollable asset details and a synchronized variant carousel. The history also records virtualization changes, skeleton loading, high-contrast fixes, and a return-to-top button. Those changes added up to the final browsing and detail experience.",
-        "media": [
-          "img/portfolio/fluent-asset-library/iteration-notes.png"
-        ]
+        "timeline": assetLibraryTimeline
       },
       {
         "title": "Displaying the actual assets meant handling the actual files",
@@ -61,9 +57,7 @@ export const projectStories: Record<string, ProjectStory> = {
       }
     ],
     "captions": {
-      "img/portfolio/fluent-asset-library/asset-families.png": "Explanatory diagram: asset families and variant controls.",
-      "img/portfolio/fluent-asset-library/asset-delivery.png": "Final implementation diagram: category indexes, browsing, variants, and file actions.",
-      "img/portfolio/fluent-asset-library/iteration-notes.png": "Commit-message timeline; intermediate screens were not included in the export."
+      "img/portfolio/fluent-asset-library/asset-families.png": "Explanatory diagram: asset families and variant controls."
     }
   },
 
