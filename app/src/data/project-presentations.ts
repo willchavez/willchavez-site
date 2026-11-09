@@ -7,6 +7,7 @@ export interface PresentationSlide {
   body?: string;
   points?: string[];
   media?: string[];
+  embed?: { src: string; title: string; caption: string; kind: "coffee" | "gallery" };
 }
 export interface ProjectPresentation {
   collaborators: string;
@@ -19,11 +20,11 @@ export const projectPresentations: Record<string, ProjectPresentation> = {
       { section: 'Context', title: 'Charts carry many small decisions', body: 'A chart needs consistent choices for labels, spacing, color, and interaction as well as the right form.' },
       { section: 'My role & collaboration', title: 'Create the flex-dataviz plugin', points: ['My role: creator of the flex-dataviz plugin.', 'Collaboration: Fluent Design Studio and the Fluent Flex design system team.', 'Contribution: chart guidance, interactive galleries, and a five-minute walkthrough.'] },
       { section: 'System', title: 'Three plugins, one shared language', body: 'The walkthrough connects flex-system principles, flex-tokens values, and flex-dataviz chart guidance. An agency.toml file gives an agent access to that system.' },
-      { section: 'Structure', title: 'From principles to chart-specific rules', body: 'Shared guidance covers corner radius, typography, density, and color with patterns. Skills for axes, legends, callouts, and individual chart types make those rules actionable.', media: ['img/portfolio/dataviz/gallery-examples.png'] },
-      { section: 'Ask', title: 'Ask naturally. Generate coherently.', body: 'The walkthrough asks for charts about a Seattle coffee crawl: monthly latte orders, neighborhood favorites, café buzz, and rainy-day drinks.', media: ['img/portfolio/dataviz/coffee-crawl.png'] },
+      { section: 'Structure', title: 'From principles to chart-specific rules', body: 'Shared guidance covers corner radius, typography, density, and color with patterns. Skills for axes, legends, callouts, and individual chart types make those rules actionable.', embed: { src: '/dataviz/gallery-v2.html?embed=portfolio', title: 'Interactive Sankey and heatmap examples', caption: 'Hover or focus a flow or cell to inspect the original gallery charts.', kind: 'gallery' } },
+      { section: 'Ask', title: 'Ask naturally. Generate coherently.', body: 'The walkthrough asks for charts about a Seattle coffee crawl: monthly latte orders, neighborhood favorites, café buzz, and rainy-day drinks.', embed: { src: '/dataviz/walkthrough.html?embed=portfolio', title: 'Interactive Seattle coffee crawl charts', caption: 'Hover or focus a chart mark to inspect the walkthrough examples.', kind: 'coffee' } },
       { section: 'Evaluate', title: 'Use the output to improve the system', body: 'The generated charts become an evaluation surface. They reveal where guidance needs to be more precise, accessible, or ready for implementation.' },
       { section: 'Next', title: 'From guidance to Figma generation', points: ['Translate the guidance into drawing rules.', 'Generate varied chart batches.', 'Keep the layers clean so designers can keep working with the output.'] },
-      { section: 'Explore', title: 'Open the original interactive examples', body: 'The five-minute walkthrough and two HTML galleries are linked from the project article. They show the chart behaviors and full narrative beyond these static views.' },
+      { section: 'Explore', title: 'Open the full walkthrough and galleries', body: 'The five-minute walkthrough and two HTML galleries are linked from the project article. They include the complete narrative and chart families beyond these embedded examples.' },
     ],
   },
   'genui-bebop': {

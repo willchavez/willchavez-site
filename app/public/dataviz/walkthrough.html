@@ -6,7 +6,9 @@
   <meta name="color-scheme" content="dark">
   <title>Fluent Dataviz — Five-minute walkthrough</title>
   <script>
-    document.documentElement.dataset.theme = localStorage.getItem("dataviz-theme") || "dark";
+    const portfolioEmbed = new URLSearchParams(location.search).get("embed") === "portfolio";
+    if (portfolioEmbed) document.documentElement.classList.add("portfolio-embed");
+    document.documentElement.dataset.theme = portfolioEmbed ? "dark" : (localStorage.getItem("dataviz-theme") || "dark");
   </script>
   <style>
     :root {
@@ -2085,6 +2087,22 @@
         animation: none;
       }
     }
+
+    .portfolio-embed body { height:auto; min-height:0; overflow:auto; }
+    .portfolio-embed .topbar, .portfolio-embed .progress, .portfolio-embed .noise, .portfolio-embed .dots, .portfolio-embed .hint, .portfolio-embed .controls { display:none; }
+    .portfolio-embed main { display:block; width:100%; height:auto; transform:none !important; transition:none; }
+    .portfolio-embed .scene { display:none; }
+    .portfolio-embed .scene--generation { display:block; width:100%; height:auto; min-height:0; padding:12px; overflow:visible; }
+    .portfolio-embed .scene--generation .scene-copy { display:none; }
+    .portfolio-embed .scene--generation .visual.gallery { display:grid; width:100%; height:auto !important; min-height:0 !important; grid-template-columns:repeat(2,minmax(0,1fr)); opacity:1 !important; transform:none !important; padding:12px; }
+    .portfolio-embed .mini-chart { display:flex !important; min-height:180px; }
+    .portfolio-embed .mini-chart:nth-child(2) { min-height:220px; }
+    .portfolio-embed .mini-chart:nth-child(2) .donut { top:60%; }
+    .portfolio-embed .generation-pixels { display:none; }
+    .portfolio-embed .chart-callout { z-index:100; }
+    @media (max-width:560px) {
+      .portfolio-embed .scene--generation .visual.gallery { grid-template-columns:1fr; }
+    }
   </style>
 </head>
 <body>
@@ -3169,6 +3187,7 @@ default = ["github:x3-design/fluent-design:plugins/system", "github:x3-design/fl
     chartDefinitions.forEach(configureChart);
 
     document.addEventListener("keydown", (event) => {
+      if (portfolioEmbed) return;
       if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
         event.preventDefault();
         showScene(current + 1);
@@ -3187,6 +3206,7 @@ default = ["github:x3-design/fluent-design:plugins/system", "github:x3-design/fl
     syncSlideColumnHeights();
     startSceneCountdown(current);
     setupOrbitPhysics();
+    if (portfolioEmbed) generationScene.classList.add("is-active", "is-intro-ready");
   </script>
 </body>
 </html>

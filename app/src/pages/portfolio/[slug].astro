@@ -2,6 +2,7 @@
 import { projectStories } from "../../data/project-stories";
 import Base from "../../layouts/Base.astro";
 import ProjectFigure from "../../components/ProjectFigure.astro";
+import ProjectEmbed from "../../components/ProjectEmbed.astro";
 import "../../styles/portfolio.css";
 import { portfolioProjects } from "../../data/portfolio-projects";
 
@@ -19,7 +20,7 @@ const imageFor = (src: string) => {
   return image;
 };
 const placed = new Set([story.leadImage, ...story.sections.flatMap(section => section.media ?? [])]);
-const extras = images.filter(image => !placed.has(image.src));
+const extras = images.filter(image => !placed.has(image.src) && !(project.slug === "fluent-dataviz" && image.src === project.cover));
 const labelFor = (label: string) => label.replace(/<[^>]*>/g, "").replace(/[→↗]/g, "").trim();
 ---
 <Base title={project.title} current="portfolio" navAlignment="center" showHeading={false} description={project.summary}>
@@ -39,6 +40,7 @@ const labelFor = (label: string) => label.replace(/<[^>]*>/g, "").replace(/[→�
         {section.media?.length && <div class="project-chapter-media" data-arrangement={section.arrangement ?? "sequence"}>
           {section.media.map(src => <ProjectFigure image={imageFor(src)} caption={story.captions[src]} compact={section.arrangement === "pair" || (index === 0 && story.opening === "paired")} priority={index === 0 && story.opening === "paired"} />)}
         </div>}
+        {section.embed && <div class="project-chapter-media"><ProjectEmbed embed={section.embed} /></div>}
       </section>)}
     </div>
     <section class="portfolio-project-copy" aria-labelledby="contribution-title">

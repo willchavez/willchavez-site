@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Fluent Bebop · Data Viz Gallery v2</title>
+<script>if (new URLSearchParams(location.search).get("embed") === "portfolio") document.documentElement.classList.add("portfolio-embed");</script>
 <style>
   /* ───────────────────────────────────────────────────────────────────────
      Tokens — resolved from the flex-tokens expression palette
@@ -113,6 +114,18 @@
   .hint { font-size:11px; color:var(--brand); margin-top:6px; }
   footer { padding:30px 48px; color:var(--fg3); font-size:12px; border-top:1px solid var(--stroke); }
   footer code { background:#eef1f5; padding:1px 5px; border-radius:4px; }
+  .portfolio-embed body { overflow:hidden; }
+  .portfolio-embed .hero, .portfolio-embed .toc, .portfolio-embed footer { display:none; }
+  .portfolio-embed main { max-width:none; padding:12px; }
+  .portfolio-embed .portfolio-showcase { display:grid; grid-template-columns:1.15fr 1fr; gap:12px; }
+  .portfolio-embed .card { min-width:0; padding:14px; }
+  .portfolio-embed .viz { min-width:0; min-height:284px; padding:10px; overflow:hidden; }
+  .portfolio-embed .viz svg { width:100%; height:auto; max-width:500px; }
+  @media (max-width:700px) {
+    .portfolio-embed body { overflow:auto; }
+    .portfolio-embed .portfolio-showcase { grid-template-columns:1fr; }
+    .portfolio-embed .viz { min-height:0; }
+  }
 </style>
 </head>
 <body>
@@ -764,6 +777,17 @@ run("svg[data-scatter]",scatterChart); run("svg[data-bubble]",bubbleChart);
 run("svg[data-spark]",sparkChart); run("svg[data-heatmap]",heatmapChart);
 run("svg[data-sankey]",sankeyChart); run("svg[data-funnel]",funnelChart);
 run("svg[data-tree]",treeChart); run("svg[data-axis]",axisDemo); run("svg[data-calloutline]",calloutLine);
+if (document.documentElement.classList.contains("portfolio-embed")) {
+  const sankey = document.querySelector("#sankey .card");
+  const heatmap = document.querySelector("#heatmap .card");
+  const showcase = document.createElement("div");
+  showcase.className = "portfolio-showcase";
+  showcase.append(sankey, heatmap);
+  document.querySelector("main").replaceChildren(showcase);
+  showcase.querySelectorAll("svg[width][height]").forEach(svg => {
+    svg.setAttribute("viewBox", `0 0 ${svg.getAttribute("width")} ${svg.getAttribute("height")}`);
+  });
+}
 </script>
 </body>
 </html>

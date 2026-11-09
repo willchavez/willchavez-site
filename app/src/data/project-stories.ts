@@ -4,7 +4,7 @@ export interface ProjectStory {
   status: string;
   opening: "essay" | "paired" | "visual";
   leadImage?: string;
-  sections: { title: string; body: string; media?: string[]; arrangement?: "pair" | "inset" }[];
+  sections: { title: string; body: string; media?: string[]; embed?: { src: string; title: string; caption: string; kind: "coffee" | "gallery" }; arrangement?: "pair" | "inset" }[];
   captions: Record<string, string>;
   related?: { href: string; label: string };
 }
@@ -12,27 +12,24 @@ export const projectStories: Record<string, ProjectStory> = {
   "fluent-dataviz": {
     "role": "Creator of the flex-dataviz plugin",
     "status": "Fluent Flex design system work",
-    "opening": "paired",
+    "opening": "essay",
     "sections": [
       {
         "title": "A chart needs more than a visual style",
         "body": "Choosing a chart is only the beginning. Labels, density, color, and interaction all affect whether someone can understand and explore the data. I created the flex-dataviz plugin to put those decisions in one navigable system.",
-        "media": ["img/portfolio/dataviz/coffee-crawl.png"]
+        "embed": { "src": "/dataviz/walkthrough.html?embed=portfolio", "title": "Interactive Seattle coffee crawl charts", "caption": "Explore the walkthrough’s area, donut, heatmap, and bar charts. Hover or focus a mark to see its value.", "kind": "coffee" }
       },
       {
         "title": "Principles that travel across chart types",
-        "body": "The plugin starts with shared rules for corner radius, typography, density, and color with patterns. It connects those rules to chart-specific guidance, from bars and lines to heatmaps, Sankey diagrams, axes, legends, and callouts. These Sankey, donut, and heatmap examples come from the Bebop gallery.",
-        "media": ["img/portfolio/dataviz/gallery-examples.png"]
+        "body": "The plugin starts with shared rules for corner radius, typography, density, and color with patterns. It connects those rules to chart-specific guidance, from bars and lines to heatmaps, Sankey diagrams, axes, legends, and callouts. Explore the Sankey and heatmap examples from the original Bebop gallery below.",
+        "embed": { "src": "/dataviz/gallery-v2.html?embed=portfolio", "title": "Interactive Sankey and heatmap examples", "caption": "Original Bebop gallery charts. Hover or focus a flow or cell to inspect the data.", "kind": "gallery" }
       },
       {
         "title": "From a natural request to charts",
         "body": "The five-minute walkthrough asks an agent for charts about a Seattle coffee crawl. Its area, donut, heatmap, and bar examples show how guidance can shape a coherent set. The walkthrough then uses the output to evaluate the rules and explains the path toward Figma generation. Open it and the two galleries below to explore the original examples."
       }
     ],
-    "captions": {
-      "img/portfolio/dataviz/coffee-crawl.png": "The walkthrough's Seattle coffee crawl brings area, donut, heatmap, and bar charts together.",
-      "img/portfolio/dataviz/gallery-examples.png": "Flow, proportion, and two-dimensional patterns from the Bebop data visualization gallery."
-    }
+    "captions": {}
   },
   "genui-bebop": {
     "role": "Interaction design & prototyping",
