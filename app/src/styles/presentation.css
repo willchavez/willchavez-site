@@ -22,8 +22,10 @@ button:disabled { opacity: .35; cursor: default; }
 .deck-outline nav a { display: flex; gap: .8rem; padding: .65rem .8rem; border-radius: .6rem; text-decoration: none; }
 .deck-outline nav a > span { color: var(--muted); font-variant-numeric: tabular-nums; }
 .deck-outline nav a:hover, .deck-outline nav a[aria-current] { background: var(--wash); }
-.deck { max-width: 1600px; margin: 0 auto; }
-.slide { position: relative; padding: clamp(2rem, 5vw, 5rem); border-bottom: 1px solid var(--hairline); }
+.deck { width: 100%; margin: 0; }
+.slide { max-width: 1600px; margin-inline: auto; position: relative; padding: clamp(2rem, 5vw, 5rem); border-bottom: 1px solid var(--hairline); }
+/* Hash-targeted slides are reading containers; controls keep their focus rings. */
+.slide:focus-visible { outline: none; }
 .slide-copy { min-width: 0; max-width: 62rem; }
 .slide-section { margin: 0 0 1rem; color: var(--rust); font: 600 .72rem/1.4 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .1em; }
 h1, h2 { margin: 0; font-weight: 450; letter-spacing: -.045em; text-wrap: balance; }
@@ -37,6 +39,11 @@ h2 { font-size: clamp(2rem, 3.7vw, 3.7rem); line-height: 1.13; max-width: 22ch; 
 .slide-intro-meta p { margin: .4rem 0; }
 .slide-intro-meta span, .slide-collaborators { color: var(--muted); }
 .slide-title { background: linear-gradient(120deg, color-mix(in srgb, var(--rust) 6%, var(--paper)), var(--paper) 65%); }
+/* The reading/visual canvas stays bounded; the title wash spans the viewport. */
+@media screen {
+  html[data-presentation] .deck:has(.slide-title:not([hidden])) { background: linear-gradient(120deg, color-mix(in srgb, var(--rust) 6%, var(--paper)), var(--paper) 65%); }
+  html[data-presentation] .slide-title { background: none; }
+}
 .slide-with-media { display: grid; grid-template-columns: .9fr 1.25fr; align-items: center; gap: 2.5rem; }
 .slide-with-media h2 { font-size: clamp(1.8rem, 3vw, 3rem); }
 .slide-with-media .slide-body, .slide-with-media .slide-points { font-size: clamp(1rem, 1.5vw, 1.3rem); }

@@ -49,6 +49,19 @@ try {
     await page.waitForURL(`${base}/portfolio/${project.slug}`);
     assert.equal(await page.locator('.portfolio-project').count(), 1);
   }
+  for (const width of [1920, 2560, 3440]) {
+    await page.setViewportSize({ width, height: 1440 });
+    for (const slug of ['visual-diff', 'agent-builder']) {
+      await page.goto(`${base}/portfolio/${slug}/present`);
+      const stage = await page.locator('.deck').boundingBox();
+      assert(Math.abs(stage.x) < 1 && Math.abs(stage.width - width) < 1, 'presentation background fills wide viewport');
+      assert.match(await page.locator('.deck').evaluate(e => getComputedStyle(e).backgroundImage), /linear-gradient/, 'title wash covers the full stage');
+      assert((await page.locator('[data-slide]:visible').boundingBox()).width <= 1600, 'slide content remains bounded');
+      await page.keyboard.press('ArrowRight');
+      assert.equal(await page.locator('.deck').evaluate(e => getComputedStyle(e).backgroundImage), 'none', 'title wash clears on other slides');
+      assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth));
+    }
+  }
   for (const [width, height] of [[320, 850], [375, 850], [768, 1000], [1280, 720]]) {
     await page.setViewportSize({ width, height });
     for (const project of portfolioProjects) {
