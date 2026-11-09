@@ -74,20 +74,20 @@ button.enjoying-tag:disabled { cursor: default; opacity: 1; }
 button.enjoying-tag:not(:disabled):hover { border-color: currentColor; box-shadow: 0 0 0 1px currentColor; }
 button.enjoying-tag:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 :is(.enjoying-tag, .metadata-kind)[data-kind="music"] { --media-tag-bg: #ece5f4; --media-tag-ink: #654779; }
-:is(.enjoying-tag, .metadata-kind)[data-kind="film"] { --media-tag-bg: #f1dfd5; --media-tag-ink: #83442c; }
+:is(.enjoying-tag, .metadata-kind)[data-kind="film"] { --media-tag-bg: #dfe8f1; --media-tag-ink: #375b7b; }
 :is(.enjoying-tag, .metadata-kind)[data-kind="book"] { --media-tag-bg: #e1ebe2; --media-tag-ink: #3f624a; }
-:is(.enjoying-tag, .metadata-kind)[data-kind="paper"] { --media-tag-bg: #dfe8f1; --media-tag-ink: #375b7b; }
+:is(.enjoying-tag, .metadata-kind)[data-kind="paper"] { --media-tag-bg: #f1dfd5; --media-tag-ink: #83442c; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) :is(.enjoying-tag, .metadata-kind)[data-kind="music"] { --media-tag-bg: #382e43; --media-tag-ink: #ddc7f0; }
-  :root:not([data-theme="light"]) :is(.enjoying-tag, .metadata-kind)[data-kind="film"] { --media-tag-bg: #432d23; --media-tag-ink: #f1c2aa; }
+  :root:not([data-theme="light"]) :is(.enjoying-tag, .metadata-kind)[data-kind="film"] { --media-tag-bg: #263848; --media-tag-ink: #bed5ef; }
   :root:not([data-theme="light"]) :is(.enjoying-tag, .metadata-kind)[data-kind="book"] { --media-tag-bg: #293d30; --media-tag-ink: #bedbc3; }
-  :root:not([data-theme="light"]) :is(.enjoying-tag, .metadata-kind)[data-kind="paper"] { --media-tag-bg: #263848; --media-tag-ink: #bed5ef; }
+  :root:not([data-theme="light"]) :is(.enjoying-tag, .metadata-kind)[data-kind="paper"] { --media-tag-bg: #432d23; --media-tag-ink: #f1c2aa; }
 
 }
 :root[data-theme="dark"] :is(.enjoying-tag, .metadata-kind)[data-kind="music"] { --media-tag-bg: #382e43; --media-tag-ink: #ddc7f0; }
-  :root[data-theme="dark"] :is(.enjoying-tag, .metadata-kind)[data-kind="film"] { --media-tag-bg: #432d23; --media-tag-ink: #f1c2aa; }
+  :root[data-theme="dark"] :is(.enjoying-tag, .metadata-kind)[data-kind="film"] { --media-tag-bg: #263848; --media-tag-ink: #bed5ef; }
   :root[data-theme="dark"] :is(.enjoying-tag, .metadata-kind)[data-kind="book"] { --media-tag-bg: #293d30; --media-tag-ink: #bedbc3; }
-  :root[data-theme="dark"] :is(.enjoying-tag, .metadata-kind)[data-kind="paper"] { --media-tag-bg: #263848; --media-tag-ink: #bed5ef; }
+  :root[data-theme="dark"] :is(.enjoying-tag, .metadata-kind)[data-kind="paper"] { --media-tag-bg: #432d23; --media-tag-ink: #f1c2aa; }
 
 
 .ent-meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: .3rem .6rem; margin-top: .3rem; }
