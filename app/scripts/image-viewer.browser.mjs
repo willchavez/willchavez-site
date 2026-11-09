@@ -8,6 +8,7 @@ for(const width of [1440,390]) {
  await p.setViewportSize({width,height:900});
  for(const route of ['/portfolio/genui-bebop','/notes/2025-06-21-making-navigation-feel-like-a-place-to-return','/portfolio/genui-bebop/present#slide-4']) {
   await p.goto(base+route);
+  if (width < 800 && route.includes("/present")) await p.waitForURL(base + "/portfolio/genui-bebop");
   const img=p.locator('[data-zoom-ready]:visible').first();
   const expectedCaption=await img.evaluate(i=>i.closest('figure')?.querySelector('figcaption')?.textContent?.trim() || i.alt);
   await img.click();
@@ -17,7 +18,7 @@ for(const width of [1440,390]) {
   const slide=await p.locator('[data-current]').count() ? await p.locator('[data-current]').textContent() : null;
   await p.keyboard.press('ArrowRight');
   if(slide) assert.equal(await p.locator('[data-current]').textContent(),slide);
-  await p.locator('dialog img').click();
+  await p.locator('dialog img:visible, dialog video:visible').click();
   assert.equal(await p.locator('dialog[open]').count(),0);
   await img.focus();await p.keyboard.press('Enter');
   assert.equal(await p.locator('dialog[open]').count(),1);

@@ -32,13 +32,15 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: app/.cache/responsive-images
-          key: responsive-images-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('app/scripts/images.mjs', 'app/package-lock.json') }}-${{ hashFiles('app/public/uploads/**', 'img/portfolio/**') }}
+          key: responsive-images-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('app/scripts/images.mjs', 'app/scripts/animations.mjs', 'app/package-lock.json') }}-${{ hashFiles('app/public/**', 'img/portfolio/**') }}
           restore-keys: |
-            responsive-images-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('app/scripts/images.mjs', 'app/package-lock.json') }}-
+            responsive-images-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('app/scripts/images.mjs', 'app/scripts/animations.mjs', 'app/package-lock.json') }}-
+      - name: Ensure animation encoder is available
+        run: command -v ffmpeg || (sudo apt-get update && sudo apt-get install -y ffmpeg)
       - name: Build site
         run: sh app/build.sh
-      - name: Check image caching
-        run: node --test app/scripts/images.test.mjs
+      - name: Check image and animation caching
+        run: node --test app/scripts/images.test.mjs app/scripts/animations.test.mjs
       - name: Save responsive images
         if: steps.images-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4

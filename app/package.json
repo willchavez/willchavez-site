@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/images.mjs",
+    "build": "astro build && node scripts/images.mjs && node scripts/animations.mjs",
     "preview": "astro preview",
     "test:analytics": "node scripts/analytics.browser.mjs",
     "test:presentation": "node scripts/presentation.browser.mjs",
