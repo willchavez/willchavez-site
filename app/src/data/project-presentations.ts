@@ -14,6 +14,73 @@ export interface ProjectPresentation {
   slides: PresentationSlide[];
 }
 export const projectPresentations: Record<string, ProjectPresentation> = {
+  "fluent-asset-library": {
+    "collaborators": "Jason Custer · Principal Product Design Manager, designer & illustrator · design guidance, feedback, and critiques",
+    "slides": [
+      {
+        "section": "Context",
+        "title": "The brief was to show the icons",
+        "body": "Use the actual CDN images and technical assets to demonstrate the collection on the upcoming Fluent Flex design site."
+      },
+      {
+        "section": "My role & collaboration",
+        "title": "Room to design the experience, too",
+        "points": [
+          "I built the browser and its React/TypeScript implementation.",
+          "Jason Custer, Principal Product Design Manager, guided me through design feedback and critiques.",
+          "He made room for my creativity, including learning where to reduce space and where to add it."
+        ]
+      },
+      {
+        "section": "Design question",
+        "title": "Three asset families, different choices",
+        "body": "Icons need size and style; emoji need skin tone and format; illustrations need size and theme. The controls need to match the asset.",
+        "media": [
+          "img/portfolio/fluent-asset-library/asset-families.png"
+        ]
+      },
+      {
+        "section": "Interaction",
+        "title": "Keep one active variant connected",
+        "points": [
+          "Variant controls and carousel selection stay synchronized with the preview.",
+          "Copy URL and Download use the active variant.",
+          "Hide controls when the asset has no corresponding metadata."
+        ]
+      },
+      {
+        "section": "Implementation",
+        "title": "Group once. Load what’s needed.",
+        "body": "Build category indexes from CDN variant records, cache each category on demand, and render visible grid rows plus a buffer.",
+        "media": [
+          "img/portfolio/fluent-asset-library/asset-delivery.png"
+        ]
+      },
+      {
+        "section": "Iteration",
+        "title": "Refine the experience in the details",
+        "body": "The commit messages document search and layout work, interaction states, rendering fixes, and finishing details. These notes trace the work; they do not recreate earlier screens.",
+        "media": [
+          "img/portfolio/fluent-asset-library/iteration-notes.png"
+        ]
+      },
+      {
+        "section": "Refinement",
+        "title": "Preserve the asset—and your place",
+        "points": [
+          "Restore category scroll position and anchor the selected item on resize.",
+          "Preserve SVG presentation attributes and namespace IDs.",
+          "Handle keyboard focus, loading, live announcements, reduced motion, and forced colors."
+        ]
+      },
+      {
+        "section": "Result",
+        "title": "A browser from discovery to the file",
+        "body": "PR #1096 merged August 13, 2026. The final change connects search, variants, previews, and file actions across icons, emoji, and illustrations. The library and PR require Microsoft access."
+      }
+    ]
+  },
+
   'fluent-dataviz': {
     collaborators: 'Fluent Design Studio and the Fluent Flex design system team',
     slides: [

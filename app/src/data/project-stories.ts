@@ -9,6 +9,64 @@ export interface ProjectStory {
   related?: { href: string; label: string };
 }
 export const projectStories: Record<string, ProjectStory> = {
+  "fluent-asset-library": {
+    "role": "Interaction design & implementation",
+    "status": "Fluent Flex design site · merged August 2026",
+    "opening": "essay",
+    "sections": [
+      {
+        "title": "The brief sounded simple: show the icons",
+        "body": "The starting point was to demonstrate the icons using the actual CDN images and technical assets. Working with Jason Custer, Principal Product Design Manager, designer, and illustrator, I built the asset browser for the upcoming Fluent Flex design site. The work became about more than displaying images: how do you browse a large collection, compare variants, and get the right file without losing your place?",
+        "media": [
+          "img/portfolio/fluent-asset-library/asset-families.png"
+        ]
+      },
+      {
+        "title": "Room to help shape the experience",
+        "body": "I’m often brought into a project for prototyping or engineering. Jason looks for opportunities for me to bring my own creativity to the work and help design the experience, too. He guided me through design feedback and critiques, helping me understand where to reduce space and where to give something more room."
+      },
+      {
+        "title": "Different assets need different choices",
+        "body": "The library spans system icons, emoji, and illustrations. Each family needs its own controls: size and style for icons, skin tone and format for emoji, and size and theme for illustrations. I connected those choices to the active variant so the preview, carousel, Copy URL, and Download actions stay in sync. Controls disappear when the asset has no corresponding metadata, rather than offering choices that don’t exist."
+      },
+      {
+        "title": "Do the grouping before the page loads",
+        "body": "A comment in the build script estimates roughly 44,500 upstream variant records and 7.6 MB uncompressed. I grouped records by category and asset name at build time, then emitted separate category indexes. The browser loads and caches a category when it’s needed. Variant metadata is derived from filenames as assets are rendered or inspected.",
+        "media": [
+          "img/portfolio/fluent-asset-library/asset-delivery.png"
+        ]
+      },
+      {
+        "title": "Keep your place while you browse",
+        "body": "A big collection still needs to feel like one place. I used a virtualized grid that renders visible rows plus a buffer, with fuzzy search on a 120 ms debounce. Switching categories restores the category’s scroll position. Resizing keeps the selected item anchored as the column count changes. Keyboard navigation and focus restoration help connect the grid to the asset details instead of leaving focus behind when the visible rows change."
+      },
+      {
+        "title": "The work lived in the details",
+        "body": "The first commit describes three detail presentations: inline expansion, a modal, and a right rail. Later messages record search and grid refinements, removal of the asset count, and changes to hover, selection, and borders. The final implementation has scrollable asset details and a synchronized variant carousel. The history also records virtualization changes, skeleton loading, high-contrast fixes, and a return-to-top button. Those changes added up to the final browsing and detail experience.",
+        "media": [
+          "img/portfolio/fluent-asset-library/iteration-notes.png"
+        ]
+      },
+      {
+        "title": "Displaying the actual assets meant handling the actual files",
+        "body": "The SVGs needed care as well as the interface around them. I namespaced IDs and preserved root presentation attributes when processing SVG content, including inherited attributes that affect how an image renders. The history records fixes for dropped SVG attributes and browser compositing artifacts. Working with the real CDN files made these rendering details part of the browsing experience."
+      },
+      {
+        "title": "Make the less visible paths work, too",
+        "body": "I worked through loading skeletons, keyboard navigation, focus restoration, live announcements, reduced-motion handling, and forced-color styling. The index build retries fetches and can retain previously generated indexes when a fetch fails. Reusable Markdown embeds let the site include the browser and featured asset previews without rebuilding those experiences in each document."
+      },
+      {
+        "title": "From showing assets to choosing the right file",
+        "body": "PR #1096, “feat(site): improve expression asset browsing,” merged on August 13, 2026, after commits spanning July 29–August 13. The result of that change is a React and TypeScript browser connecting discovery, variant selection, and file actions across the three asset families. The library and PR links below require Microsoft access."
+      }
+    ],
+    "captions": {
+      "img/portfolio/fluent-asset-library/asset-families.png": "Explanatory diagram: asset families and variant controls.",
+      "img/portfolio/fluent-asset-library/asset-delivery.png": "Final implementation diagram: category indexes, browsing, variants, and file actions.",
+      "img/portfolio/fluent-asset-library/iteration-notes.png": "Commit-message timeline; intermediate screens were not included in the export."
+    }
+  },
+
   "fluent-dataviz": {
     "role": "Creator of the flex-dataviz plugin",
     "status": "Fluent Flex design system work",
