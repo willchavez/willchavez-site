@@ -17,10 +17,13 @@ export const projectPresentations: Record<string, ProjectPresentation> = {
     collaborators: 'Fluent Design Studio and the Fluent Flex design system team',
     slides: [
       { section: 'Context', title: 'Charts carry many small decisions', body: 'A chart needs consistent choices for labels, spacing, color, and interaction as well as the right form.' },
-      { section: 'My role & collaboration', title: 'Make the guidance easier to use', points: ['My role: data visualization guidance and examples.', 'Collaboration: Fluent Design Studio and the Fluent Flex design system team.', 'Contribution: work on the flex-dataviz plugin and interactive material that demonstrates it.'] },
-      { section: 'System', title: 'Start with principles, then choose a chart', body: 'Shared rules cover radius, typography, density, and color with patterns. Chart-specific skills build on those rules.', media: ['img/portfolio/dataviz/overview.png'] },
-      { section: 'Details', title: 'Connect visual and interaction guidance', body: 'Axes, legends, and callouts support reading and exploring charts across the library.', media: ['img/portfolio/dataviz/color-patterns.png'] },
-      { section: 'Examples', title: 'See the guidance in action', body: 'The linked HTML gallery brings the chart types together in an interactive browser view. A separate presentation explains the system and its structure.' },
+      { section: 'My role & collaboration', title: 'Create the flex-dataviz plugin', points: ['My role: creator of the flex-dataviz plugin.', 'Collaboration: Fluent Design Studio and the Fluent Flex design system team.', 'Contribution: chart guidance, interactive galleries, and a five-minute walkthrough.'] },
+      { section: 'System', title: 'Three plugins, one shared language', body: 'The walkthrough connects flex-system principles, flex-tokens values, and flex-dataviz chart guidance. An agency.toml file gives an agent access to that system.' },
+      { section: 'Structure', title: 'From principles to chart-specific rules', body: 'Shared guidance covers corner radius, typography, density, and color with patterns. Skills for axes, legends, callouts, and individual chart types make those rules actionable.', media: ['img/portfolio/dataviz/gallery-examples.png'] },
+      { section: 'Ask', title: 'Ask naturally. Generate coherently.', body: 'The walkthrough asks for charts about a Seattle coffee crawl: monthly latte orders, neighborhood favorites, café buzz, and rainy-day drinks.', media: ['img/portfolio/dataviz/coffee-crawl.png'] },
+      { section: 'Evaluate', title: 'Use the output to improve the system', body: 'The generated charts become an evaluation surface. They reveal where guidance needs to be more precise, accessible, or ready for implementation.' },
+      { section: 'Next', title: 'From guidance to Figma generation', points: ['Translate the guidance into drawing rules.', 'Generate varied chart batches.', 'Keep the layers clean so designers can keep working with the output.'] },
+      { section: 'Explore', title: 'Open the original interactive examples', body: 'The five-minute walkthrough and two HTML galleries are linked from the project article. They show the chart behaviors and full narrative beyond these static views.' },
     ],
   },
   'genui-bebop': {

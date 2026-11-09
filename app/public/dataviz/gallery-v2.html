@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fluent Bebop · Data Viz Gallery v2</title>
+<style>
+  /* ───────────────────────────────────────────────────────────────────────
+     Tokens — resolved from the flex-tokens expression palette
+     (--gnrc-color-expression-{family}-{weight}, semantic-light.css).
+     Per flex-dataviz:dataviz-core, data marks draw only from the expression
+     families — never arbitrary hex, never status families.
+     ─────────────────────────────────────────────────────────────────────── */
+  :root {
+    --fg1:#242424; --fg2:#424242; --fg3:#6f6f6f; --fg-disabled:#bdbdbd;
+    --stroke:#d1d1d1; --stroke-heavy:#242424; --grid:#e6e6e6;
+    --surface:#ffffff; --surface-near:#fafafa; --track:#f0f0f0; --page:#f5f5f5;
+    --brand:#0F6CBD; --focus:#0F6CBD;
+
+    --x-gray-heavy:#484848;   --x-gray-loud:#929292;   --x-gray-soft:#dedede;   --x-gray-subtle:#f5f5f5;
+    --x-navy-heavy:#294482;   --x-navy-loud:#5c8df8;   --x-navy-soft:#cedeff;   --x-navy-subtle:#f0f5ff;
+    --x-blue-heavy:#0b497f;   --x-blue-loud:#2f95f4;   --x-blue-soft:#c6e1ff;   --x-blue-subtle:#eef6ff;
+    --x-green-heavy:#0c5722;  --x-green-loud:#32ad52;  --x-green-soft:#baedc1;  --x-green-subtle:#e7fce9;
+    --x-lime-heavy:#345200;   --x-lime-loud:#6da603;   --x-lime-soft:#cbff93;   --x-lime-subtle:#e6ffcf;
+    --x-yellow-heavy:#524800; --x-yellow-loud:#fbdf06; --x-yellow-soft:#ffed85; --x-yellow-subtle:#fff7c4;
+    --x-pumpkin-heavy:#762f0e;--x-pumpkin-loud:#fb966e;--x-pumpkin-soft:#ffd3c2;--x-pumpkin-subtle:#fef2ee;
+    --x-red-heavy:#772b28;    --x-red-loud:#e7615b;    --x-red-soft:#ffd2cd;    --x-red-subtle:#fff2f0;
+    --x-pink-heavy:#6f2b53;   --x-pink-loud:#d961a6;   --x-pink-soft:#ffcee6;   --x-pink-subtle:#fff1f7;
+    --x-purple-heavy:#523778; --x-purple-loud:#a575e8; --x-purple-soft:#e4d6ff; --x-purple-subtle:#f7f3ff;
+
+    /* Qualitative "Colorful" default ordering (all `loud`):
+       blue · yellow · purple · green · pink · lime · navy · pumpkin */
+    --q1:var(--x-blue-loud); --q2:var(--x-yellow-loud); --q3:var(--x-purple-loud);
+    --q4:var(--x-green-loud); --q5:var(--x-pink-loud);   --q6:var(--x-lime-loud);
+    --q7:var(--x-navy-loud);  --q8:var(--x-pumpkin-loud);
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--fg1);
+    font-family:"Segoe UI","Segoe UI Variable","Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.4; }
+
+  header.hero { padding:40px 48px 26px; background:linear-gradient(180deg,#fff,#fafafa); border-bottom:1px solid var(--stroke); }
+  header.hero h1 { margin:0 0 6px; font-size:28px; font-weight:600; letter-spacing:-.01em; }
+  header.hero p { margin:0; color:var(--fg3); font-size:13px; max-width:840px; }
+  .badge { display:inline-block; font-size:11px; font-weight:600; color:var(--brand);
+    background:#eaf2fb; border:1px solid #cfe2f6; padding:2px 8px; border-radius:10px; margin-bottom:14px; }
+
+  nav.toc { position:sticky; top:0; z-index:10; display:flex; flex-wrap:wrap; gap:4px;
+    padding:10px 48px; background:rgba(255,255,255,.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--stroke); }
+  nav.toc a { font-size:12px; color:var(--fg2); text-decoration:none; padding:4px 10px; border-radius:6px; }
+  nav.toc a:hover { background:#eef1f5; color:var(--fg1); }
+
+  main { padding:8px 48px 90px; max-width:1320px; margin:0 auto; }
+  section { padding-top:38px; }
+  section > h2 { font-size:19px; font-weight:600; margin:0 0 2px; display:flex; align-items:baseline; gap:10px; }
+  section > h2 .tag { font-size:11px; font-weight:600; color:var(--fg3); background:#eee; padding:2px 7px; border-radius:6px; }
+  section > .sec-desc { color:var(--fg3); font-size:12.5px; margin:0 0 18px; max-width:880px; }
+  section > .sec-desc code { background:#eef1f5; padding:1px 5px; border-radius:4px; font-size:11.5px; }
+
+  .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fill,minmax(380px,1fr)); }
+  .grid.wide { grid-template-columns:repeat(auto-fill,minmax(560px,1fr)); }
+  .card { background:var(--surface); border:1px solid var(--stroke); border-radius:8px; padding:16px; display:flex; flex-direction:column; }
+  .card h3 { margin:0 0 2px; font-size:13px; font-weight:600; }
+  .card .vlabel { font-size:11px; color:var(--fg3); margin:0 0 14px; }
+  .viz { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    flex:1; min-height:60px; background:var(--surface-near); border-radius:6px; padding:16px; }
+
+  svg { display:block; overflow:visible; }
+  text { font-family:inherit; }
+  .axis-title { font-size:10px; font-weight:600; fill:var(--fg2); }   /* caption-strong */
+  .tick { font-size:10px; fill:var(--fg3); }                          /* caption */
+  .gridline { stroke:var(--grid); stroke-width:1; }
+  .axisline { stroke:var(--stroke); stroke-width:1; }
+
+  /* Inspectable data marks — visible keyboard focus ring (flex-system:accessibility) */
+  .ip { cursor:pointer; outline:none; }
+  .ip:focus-visible { outline:2px solid var(--focus); outline-offset:2px; border-radius:3px; }
+  .ip:hover { filter:brightness(1.05); }
+
+  /* Shared callout card (flex-dataviz:callout) */
+  #callout { position:fixed; z-index:50; pointer-events:none; min-width:96px; max-width:220px;
+    background:var(--surface); border:1px solid var(--stroke); border-radius:8px;
+    box-shadow:0 4px 16px rgba(0,0,0,.14); padding:8px 10px; opacity:0; transform:translateY(2px);
+    transition:opacity .08s ease; font-size:12px; }
+  #callout.show { opacity:1; transform:none; }
+  #callout .co-head { font-size:11px; color:var(--fg3); margin-bottom:2px; display:flex; align-items:center; gap:6px; }
+  #callout .co-sw { width:9px; height:9px; border-radius:2px; display:inline-block; }
+  #callout .co-val { font-size:13px; font-weight:600; color:var(--fg1); }   /* body strong small */
+  #callout .co-ratio { font-size:11px; color:var(--fg3); }
+
+  .legend { display:flex; flex-wrap:wrap; gap:6px 14px; justify-content:center; margin-top:4px; }
+  .legend .it { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:var(--fg2); }
+  .legend .sw { width:11px; height:11px; border-radius:3px; display:inline-block; }
+
+  .kpi { display:flex; flex-direction:column; gap:2px; align-items:center; text-align:center; }
+  .kpi .k-num { font-size:40px; font-weight:600; line-height:1; letter-spacing:-.02em; }
+  .kpi .k-num.sm { font-size:24px; }
+  .kpi .k-title { font-size:12px; color:var(--fg3); }
+  .kpi .k-trend { font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:4px; }
+  .up { color:var(--x-green-heavy); } .down { color:var(--x-red-heavy); }
+
+  .cab-row { display:flex; flex-direction:column; gap:8px; width:100%; }
+  .cab { display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--stroke);
+    border-radius:6px; background:var(--surface); cursor:pointer; outline:none; }
+  .cab:hover { background:var(--surface-near); }
+  .cab:focus-visible { outline:2px solid var(--focus); outline-offset:1px; }
+  .cab .bar { width:4px; align-self:stretch; min-height:30px; border-radius:2px; }
+  .cab .cab-title { font-size:12px; color:var(--fg2); flex:1; }
+  .cab .cab-count { font-size:20px; font-weight:600; }
+  .cab .cab-count.frac span { font-size:12px; font-weight:400; color:var(--fg3); }
+
+  .note { font-size:11px; color:var(--fg3); margin-top:10px; }
+  .hint { font-size:11px; color:var(--brand); margin-top:6px; }
+  footer { padding:30px 48px; color:var(--fg3); font-size:12px; border-top:1px solid var(--stroke); }
+  footer code { background:#eef1f5; padding:1px 5px; border-radius:4px; }
+</style>
+</head>
+<body>
+<header class="hero">
+  <span class="badge">flex-dataviz</span>
+  <h1>Fluent Bebop · Data Viz Gallery v2</h1>
+  <p>Every chart family in <code>flex-dataviz</code>, rendered from fake data. Colors draw only from the
+  expression palette; the default scheme is the published <strong>Colorful qualitative</strong> ordering, with
+  sequential / diverging / threat schemes where the data shape calls for them. Data marks are
+  <strong>keyboard-focusable</strong> and open a live <strong>callout</strong> on hover <em>and</em> focus
+  (parity), with a visible focus ring — try <kbd>Tab</kbd>.</p>
+</header>
+
+<nav class="toc">
+  <a href="#single">Single-value</a><a href="#cab">Count Annotation Bar</a><a href="#gauge">Gauge</a>
+  <a href="#donut">Donut</a><a href="#bar">Bar</a><a href="#line">Area / Line</a><a href="#scatter">Scatter</a>
+  <a href="#spark">Sparkline</a><a href="#heatmap">Heatmap</a><a href="#sankey">Sankey</a>
+  <a href="#funnel">Funnel</a><a href="#tree">Tree</a><a href="#foundational">Axis · Legend · Callout</a>
+</nav>
+
+<main>
+  <!-- ─────────── KPI ─────────── -->
+  <section id="single">
+    <h2>Single-value · KPI <span class="tag">flex-dataviz:kpi</span></h2>
+    <p class="sec-desc">Hero metric tiles. Large (40&nbsp;px) / Small (24&nbsp;px) variants, optional trend icon,
+      large numbers abbreviated <code>K / M / B</code>.</p>
+    <div class="grid">
+      <div class="card"><h3>Large KPI</h3><p class="vlabel">Monthly active users</p>
+        <div class="viz"><div class="kpi"><span class="k-num">1.28M</span>
+          <span class="k-trend up">▲ 12.4% vs last month</span><span class="k-title">Monthly active users</span></div></div></div>
+      <div class="card"><h3>Small KPI</h3><p class="vlabel">Negative trend</p>
+        <div class="viz"><div class="kpi"><span class="k-num sm">$84.2K</span>
+          <span class="k-trend down">▼ 3.1% week over week</span><span class="k-title">Open pipeline</span></div></div></div>
+      <div class="card"><h3>KPI + Sparkline</h3><p class="vlabel">Hero metric with inline trend</p>
+        <div class="viz"><div class="kpi"><span class="k-num">99.96%</span><span class="k-title">Service uptime · 30d</span>
+          <svg width="126" height="24" data-spark="98,99,97,99,100,99,99,100,99,100" data-spark-color="var(--x-green-loud)"></svg></div></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── CAB ─────────── -->
+  <section id="cab">
+    <h2>Count Annotation Bar <span class="tag">flex-dataviz:count-annotation-bar</span></h2>
+    <p class="sec-desc">Filter chips with a vertical color bar, title, and count. Small / Large / Fraction number
+      styles. Clickable + keyboard-focusable as list filters.</p>
+    <div class="grid">
+      <div class="card"><h3>Large + Small + Fraction</h3><p class="vlabel">Incident triage filters</p>
+        <div class="viz" style="align-items:stretch"><div class="cab-row">
+          <div class="cab" tabindex="0"><span class="bar" style="background:var(--q1)"></span><span class="cab-title">Open incidents</span><span class="cab-count">248</span></div>
+          <div class="cab" tabindex="0"><span class="bar" style="background:var(--q2)"></span><span class="cab-title">Awaiting triage</span><span class="cab-count">1.4K</span></div>
+          <div class="cab" tabindex="0"><span class="bar" style="background:var(--q3)"></span><span class="cab-title">Assigned to me</span><span class="cab-count frac">12<span>&nbsp;/&nbsp;40</span></span></div>
+          <div class="cab" tabindex="0"><span class="bar" style="background:var(--q4)"></span><span class="cab-title">Resolved today</span><span class="cab-count">86</span></div>
+        </div></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── GAUGE ─────────── -->
+  <section id="gauge">
+    <h2>Gauge <span class="tag">flex-dataviz:gauge-chart</span></h2>
+    <p class="sec-desc">A value against a min/max scale. Per the <strong>geometry contract</strong>: the arc is an exact
+      180° semicircle, the needle pivots at the diameter midpoint and stops at the arc, and the value / status / min-max
+      labels sit in reserved clear space below the diameter — no overlap. Large carries threat-diverging zones.</p>
+    <div class="grid">
+      <div class="card"><h3>Large · threshold zones + needle</h3><p class="vlabel">CPU saturation · threat-diverging</p>
+        <div class="viz"><svg width="240" height="172" data-gauge="0.72" data-gauge-large="1"></svg></div></div>
+      <div class="card"><h3>Medium · sweep only</h3><p class="vlabel">SLA attainment · sequential blue</p>
+        <div class="viz"><svg width="200" height="132" data-gauge="0.91" data-gauge-plain="var(--x-blue-loud)"></svg></div></div>
+      <div class="card"><h3>Small · sweep only</h3><p class="vlabel">Disk used · sequential blue</p>
+        <div class="viz"><svg width="150" height="104" data-gauge="0.44" data-gauge-plain="var(--x-blue-loud)" data-gauge-sm="1"></svg></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── DONUT ─────────── -->
+  <section id="donut">
+    <h2>Donut <span class="tag">flex-dataviz:donut-chart</span></h2>
+    <p class="sec-desc">Part-of-whole. 140&nbsp;px ring, large-title center value. Segment&nbsp;4 / Segment&nbsp;10 with an
+      "Others" rollup. Segments are focusable and open a callout with a part-to-whole ratio.</p>
+    <div class="grid">
+      <div class="card"><h3>Segment 4</h3><p class="vlabel">Traffic by channel</p>
+        <div class="viz"><svg width="160" height="160" data-donut="42,28,18,12"
+            data-donut-labels="Organic,Paid,Social,Referral" data-donut-center="42%" data-donut-sub="Organic"></svg>
+          <div class="legend">
+            <span class="it"><span class="sw" style="background:var(--q1)"></span>Organic</span>
+            <span class="it"><span class="sw" style="background:var(--q2)"></span>Paid</span>
+            <span class="it"><span class="sw" style="background:var(--q3)"></span>Social</span>
+            <span class="it"><span class="sw" style="background:var(--q4)"></span>Referral</span></div></div></div>
+      <div class="card"><h3>Segment 10 + Others rollup</h3><p class="vlabel">Spend by service</p>
+        <div class="viz"><svg width="160" height="160" data-donut="26,19,14,11,9,7,5,4,3,2"
+            data-donut-labels="Compute,Storage,Network,Database,Cache,Queue,DNS,CDN,Logs,Other"
+            data-donut-center="$3.2M" data-donut-sub="Total spend"></svg>
+          <div class="legend">
+            <span class="it"><span class="sw" style="background:var(--q1)"></span>Compute</span>
+            <span class="it"><span class="sw" style="background:var(--q2)"></span>Storage</span>
+            <span class="it"><span class="sw" style="background:var(--q3)"></span>Network</span>
+            <span class="it"><span class="sw" style="background:var(--q4)"></span>Database</span>
+            <span class="it"><span class="sw" style="background:var(--x-gray-loud)"></span>Others +6</span></div></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── BAR ─────────── -->
+  <section id="bar">
+    <h2>Bar <span class="tag">flex-dataviz:bar-chart</span></h2>
+    <p class="sec-desc">Six variants. 32&nbsp;px bars → 12&nbsp;px top-corner radius (rounded only away from the axis).
+      Single-series uses neutral <code>gray-loud</code>; multi-series uses the qualitative ordering. Bars are focusable.</p>
+    <div class="grid">
+      <div class="card"><h3>Vertical · basic</h3><p class="vlabel">Sign-ups per quarter · neutral</p>
+        <div class="viz"><svg width="320" height="180" data-bar="Q1:62,Q2:78,Q3:54,Q4:91" data-bar-color="var(--x-gray-loud)"></svg></div></div>
+      <div class="card"><h3>Vertical · stacked</h3><p class="vlabel">Revenue by segment</p>
+        <div class="viz"><svg width="320" height="180"
+            data-stack="Q1:30,24,12|Q2:38,26,16|Q3:22,30,14|Q4:44,28,20" data-stack-colors="var(--q1),var(--q2),var(--q3)"
+            data-stack-names="Enterprise,Mid-market,SMB"></svg>
+          <div class="legend">
+            <span class="it"><span class="sw" style="background:var(--q1)"></span>Enterprise</span>
+            <span class="it"><span class="sw" style="background:var(--q2)"></span>Mid-market</span>
+            <span class="it"><span class="sw" style="background:var(--q3)"></span>SMB</span></div></div></div>
+      <div class="card"><h3>Vertical · grouped</h3><p class="vlabel">Plan vs actual</p>
+        <div class="viz"><svg width="320" height="180"
+            data-group="Jan:52,44|Feb:61,58|Mar:48,55|Apr:70,64" data-group-colors="var(--q1),var(--q4)"
+            data-group-names="Plan,Actual"></svg>
+          <div class="legend">
+            <span class="it"><span class="sw" style="background:var(--q1)"></span>Plan</span>
+            <span class="it"><span class="sw" style="background:var(--q4)"></span>Actual</span></div></div></div>
+      <div class="card"><h3>Horizontal · basic</h3><p class="vlabel">Top regions · neutral</p>
+        <div class="viz"><svg width="320" height="180" data-hbar="Americas:88,EMEA:71,APAC:63,LATAM:39,MEA:21" data-hbar-color="var(--x-gray-loud)"></svg></div></div>
+      <div class="card"><h3>Horizontal · multi stacked</h3><p class="vlabel">Tickets by status per team</p>
+        <div class="viz"><svg width="320" height="180"
+            data-hstack="Core:18,9,4|Web:12,14,6|Mobile:8,7,11|Data:15,5,3" data-hstack-colors="var(--q4),var(--q2),var(--q5)"
+            data-hstack-names="Done,In progress,Blocked"></svg>
+          <div class="legend">
+            <span class="it"><span class="sw" style="background:var(--q4)"></span>Done</span>
+            <span class="it"><span class="sw" style="background:var(--q2)"></span>In progress</span>
+            <span class="it"><span class="sw" style="background:var(--q5)"></span>Blocked</span></div></div></div>
+      <div class="card"><h3>Mini bar</h3><p class="vlabel">Compact in-row chart</p>
+        <div class="viz"><svg width="160" height="60" data-bar="·:8,·:14,·:6,·:18,·:11,·:16,·:9" data-bar-color="var(--x-blue-loud)" data-bar-mini="1"></svg></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── AREA / LINE ─────────── -->
+  <section id="line">
+    <h2>Area / Line <span class="tag">flex-dataviz:area-line-chart</span></h2>
+    <p class="sec-desc">Trend over time. Basic area, overlapping lines (≤&nbsp;2 series), stacked area. Points are
+      focusable; the callout snaps to the nearest point.</p>
+    <div class="grid">
+      <div class="card"><h3>Basic area</h3><p class="vlabel">Weekly active users</p>
+        <div class="viz"><svg width="320" height="180"
+            data-area="20,32,28,40,38,52,48,60,57,68,64,75" data-area-color="var(--x-blue-loud)"></svg></div></div>
+      <div class="card"><h3>Overlapping lines</h3><p class="vlabel">This year vs last year</p>
+        <div class="viz"><svg width="320" height="180"
+            data-lines="30,42,38,50,47,62,58,70|22,30,34,40,44,48,52,55" data-lines-colors="var(--q1),var(--q5)"
+            data-lines-names="This year,Last year"></svg>
+          <div class="legend">
+            <span class="it"><span class="sw" style="background:var(--q1)"></span>This year</span>
+            <span class="it"><span class="sw" style="background:var(--q5)"></span>Last year</span></div></div></div>
+      <div class="card"><h3>Stacked area</h3><p class="vlabel">Storage growth by tier</p>
+        <div class="viz"><svg width="320" height="180"
+            data-sarea="10,14,16,20,24,30|8,9,11,12,14,15|4,5,6,8,9,11" data-sarea-colors="var(--q1),var(--q2),var(--q3)"></svg>
+          <div class="legend">
+            <span class="it"><span class="sw" style="background:var(--q1)"></span>Hot</span>
+            <span class="it"><span class="sw" style="background:var(--q2)"></span>Warm</span>
+            <span class="it"><span class="sw" style="background:var(--q3)"></span>Cold</span></div></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── SCATTER ─────────── -->
+  <section id="scatter">
+    <h2>Scatter <span class="tag">flex-dataviz:scatter-chart</span></h2>
+    <p class="sec-desc">Two continuous measures as points. Multi-series pairs a qualitative family with a distinct
+      pattern shape (●/▲) for accessibility; bubble encodes a third measure as size.</p>
+    <div class="grid">
+      <div class="card"><h3>Multi-series + patterns</h3><p class="vlabel">Latency vs throughput</p>
+        <div class="viz"><svg width="320" height="200" data-scatter="1"></svg>
+          <div class="legend">
+            <span class="it"><span class="sw" style="background:var(--q1)"></span>Cluster A ●</span>
+            <span class="it"><span class="sw" style="background:var(--q3)"></span>Cluster B ▲</span></div></div></div>
+      <div class="card"><h3>Bubble</h3><p class="vlabel">Reach vs engagement (size = spend)</p>
+        <div class="viz"><svg width="320" height="200" data-bubble="1"></svg></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── SPARKLINE ─────────── -->
+  <section id="spark">
+    <h2>Sparkline <span class="tag">flex-dataviz:sparkline</span></h2>
+    <p class="sec-desc">24&nbsp;×&nbsp;126&nbsp;px glyph with trend arrow + value — for dense dashboards and table rows.</p>
+    <div class="grid">
+      <div class="card"><h3>Table-row trends</h3><p class="vlabel">Inline micro-charts</p>
+        <div class="viz" style="align-items:stretch">
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tr style="border-bottom:1px solid var(--stroke)"><td style="padding:8px 6px;color:var(--fg2)">Requests</td>
+              <td><svg width="126" height="24" data-spark="40,42,38,50,48,60,57,68" data-spark-color="var(--x-blue-loud)"></svg></td>
+              <td style="text-align:right;font-weight:600">68K</td><td class="up" style="text-align:right;padding-left:8px">▲ 9%</td></tr>
+            <tr style="border-bottom:1px solid var(--stroke)"><td style="padding:8px 6px;color:var(--fg2)">Errors</td>
+              <td><svg width="126" height="24" data-spark="12,10,14,9,8,11,7,5" data-spark-color="var(--x-red-loud)"></svg></td>
+              <td style="text-align:right;font-weight:600">5</td><td class="up" style="text-align:right;padding-left:8px">▼ 58%</td></tr>
+            <tr><td style="padding:8px 6px;color:var(--fg2)">Latency</td>
+              <td><svg width="126" height="24" data-spark="30,28,33,31,29,27,30,26" data-spark-color="var(--x-gray-loud)"></svg></td>
+              <td style="text-align:right;font-weight:600">26ms</td><td class="up" style="text-align:right;padding-left:8px">▼ 13%</td></tr>
+          </table></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── HEATMAP ─────────── -->
+  <section id="heatmap">
+    <h2>Heatmap <span class="tag">flex-dataviz:heatmap</span></h2>
+    <p class="sec-desc">Two-dimensional grid (rows × columns → color). Axis <em>No lines</em> variant. Sequential walks one
+      family's weight ramp; diverging meets at a gray center. Cells are focusable.</p>
+    <div class="grid wide">
+      <div class="card"><h3>Sequential</h3><p class="vlabel">Activity by day × hour · blue ramp</p>
+        <div class="viz"><svg width="440" height="190" data-heatmap="seq"></svg></div></div>
+      <div class="card"><h3>Diverging</h3><p class="vlabel">Week-over-week change · blue ↔ gray ↔ red</p>
+        <div class="viz"><svg width="440" height="190" data-heatmap="div"></svg></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── SANKEY ─────────── -->
+  <section id="sankey">
+    <h2>Sankey <span class="tag">flex-dataviz:sankey-chart</span></h2>
+    <p class="sec-desc">Column groups with proportional streams. Node families from the qualitative palette; streams
+      inherit source color at low opacity.</p>
+    <div class="grid wide">
+      <div class="card"><h3>Acquisition → plan → outcome</h3><p class="vlabel">User flow</p>
+        <div class="viz"><svg width="500" height="260" data-sankey="1"></svg></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── FUNNEL ─────────── -->
+  <section id="funnel">
+    <h2>Funnel <span class="tag">flex-dataviz:funnel-chart</span></h2>
+    <p class="sec-desc">Sequential stages that monotonically narrow. The sequential blue ramp runs dark→light down the
+      stages, so each band's label color is chosen <strong>per band</strong> for contrast against its own fill
+      (<em>On-mark label contrast</em>): light text on the dark top bands, dark text on the light lower bands.</p>
+    <div class="grid">
+      <div class="card"><h3>Conversion funnel</h3><p class="vlabel">Visit → purchase</p>
+        <div class="viz"><svg width="320" height="240"
+            data-funnel="Visited:10000|Signed up:6200|Activated:3800|Trial:1900|Purchased:840"></svg></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── TREE ─────────── -->
+  <section id="tree">
+    <h2>Tree <span class="tag">flex-dataviz:tree-chart</span></h2>
+    <p class="sec-desc">Hierarchy / org chart. Laid out by the <strong>deterministic capacity check</strong>: each child row
+      is placed from a single origin with exact 16&nbsp;px gaps and ≥&nbsp;80&nbsp;px boxes, and every subtree is confined to
+      its parent's horizontal slot — so no two boxes can overlap.</p>
+    <div class="grid wide">
+      <div class="card"><h3>Org chart</h3><p class="vlabel">Reporting structure</p>
+        <div class="viz"><svg width="500" height="240" data-tree="1"></svg></div></div>
+    </div>
+  </section>
+
+  <!-- ─────────── FOUNDATIONAL ─────────── -->
+  <section id="foundational">
+    <h2>Foundational <span class="tag">axis · legends · callout</span></h2>
+    <p class="sec-desc">The shared chrome used by cartesian charts.</p>
+    <div class="grid">
+      <div class="card"><h3>Axis · three variants</h3><p class="vlabel">Horizontal lines / Vertical lines / No lines</p>
+        <div class="viz" style="flex-direction:row;flex-wrap:wrap;gap:14px">
+          <svg width="120" height="110" data-axis="h"></svg>
+          <svg width="120" height="110" data-axis="v"></svg>
+          <svg width="120" height="110" data-axis="n"></svg></div>
+        <p class="note">Titles = caption-strong · ticks = caption.</p></div>
+      <div class="card"><h3>Legend · interactive states</h3><p class="vlabel">Key + highlight / filter control</p>
+        <div class="viz" style="align-items:stretch"><div class="legend" style="justify-content:flex-start">
+          <span class="it"><span class="sw" style="background:var(--q1)"></span>Series A</span>
+          <span class="it" style="opacity:.4"><span class="sw" style="background:var(--q2)"></span>Series B (filtered)</span>
+          <span class="it"><span class="sw" style="background:var(--q3)"></span>Series C</span>
+          <span class="it" style="color:var(--fg3)"><span class="sw" style="background:var(--x-gray-soft)"></span>+4</span></div>
+          <p class="note">Hover de-emphasizes peers; click filters; "+N" collapses overflow.</p></div></div>
+      <div class="card"><h3>Callout · hover + focus parity</h3><p class="vlabel">Live inspect card</p>
+        <div class="viz"><svg width="300" height="170" data-calloutline="1"></svg></div>
+        <p class="hint">Hover a point — or <kbd>Tab</kbd> to it — to open the same card.</p></div>
+    </div>
+  </section>
+</main>
+
+<div id="callout" role="status" aria-live="polite"></div>
+
+<footer>
+  Generated per <code>flex-dataviz</code> guidance (gauge geometry contract · on-mark label contrast · tree
+  deterministic layout · callout hover+focus parity). Colors resolve from <code>--gnrc-color-expression-*</code>.
+  All data is fabricated for illustration.
+</footer>
+
+<script>
+/* ───────────────────────── SVG chart layer ───────────────────────── */
+const NS="http://www.w3.org/2000/svg";
+const el=(n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const fmt=v=>v>=1e9?(v/1e9).toFixed(1)+"B":v>=1e6?(v/1e6).toFixed(1)+"M":v>=1e3?(v/1e3).toFixed(1).replace(/\.0$/,"")+"K":(""+v);
+
+/* ── callout (hover + focus parity) ── */
+const callout=document.getElementById("callout");
+function showCallout(target,{head,val,ratio,swatch}){
+  let html="";
+  if(head) html+=`<div class="co-head">${swatch?`<span class="co-sw" style="background:${swatch}"></span>`:""}${head}</div>`;
+  html+=`<div class="co-val">${val}</div>`;
+  if(ratio) html+=`<div class="co-ratio">${ratio}</div>`;
+  callout.innerHTML=html; callout.classList.add("show");
+  const r=target.getBoundingClientRect();
+  let x=r.left+r.width/2, y=r.top-8;
+  requestAnimationFrame(()=>{const cw=callout.offsetWidth,ch=callout.offsetHeight;
+    x=Math.min(Math.max(8,x-cw/2),innerWidth-cw-8);
+    y=y-ch; if(y<8)y=r.bottom+8;
+    callout.style.left=x+"px"; callout.style.top=y+"px";});
+}
+function hideCallout(){callout.classList.remove("show");}
+/* attach to an inspectable element: makes it focusable + wires both triggers */
+function inspectable(node,info){
+  node.classList.add("ip"); node.setAttribute("tabindex","0"); node.setAttribute("role","img");
+  node.setAttribute("aria-label", info.aria || (info.head?info.head+": ":"")+info.val);
+  const open=()=>showCallout(node,info);
+  node.addEventListener("mouseenter",open); node.addEventListener("mouseleave",hideCallout);
+  node.addEventListener("focus",open); node.addEventListener("blur",hideCallout);
+}
+
+/* ── geometry helpers ── */
+function topRoundRect(x,y,w,h,r){r=Math.min(r,w/2,Math.max(h,0.001));
+  return `M${x},${y+h} L${x},${y+r} Q${x},${y} ${x+r},${y} L${x+w-r},${y} Q${x+w},${y} ${x+w},${y+r} L${x+w},${y+h} Z`;}
+function endRoundRectH(x,y,w,h,r){r=Math.min(r,h/2,Math.max(w,0.001));
+  return `M${x},${y} L${x+w-r},${y} Q${x+w},${y} ${x+w},${y+r} L${x+w},${y+h-r} Q${x+w},${y+h} ${x+w-r},${y+h} L${x},${y+h} Z`;}
+const radiusFor=w=>w<=10?2:w<=20?4:w<=30?8:w<=50?12:16;
+/* resolve a CSS var() string to a hex via computed style (for luminance tests) */
+function resolve(c){if(!c.startsWith("var("))return c;
+  const name=c.slice(4,-1).trim(); return getComputedStyle(document.documentElement).getPropertyValue(name).trim()||"#000";}
+function luminance(hex){hex=resolve(hex).replace("#","");
+  if(hex.length===3)hex=hex.split("").map(x=>x+x).join("");
+  const r=parseInt(hex.slice(0,2),16)/255,g=parseInt(hex.slice(2,4),16)/255,b=parseInt(hex.slice(4,6),16)/255;
+  const f=c=>c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4);
+  return .2126*f(r)+.7152*f(g)+.0722*f(b);}
+/* On-mark label contrast: pick light or dark text for a given fill */
+const onMarkFg=fill=>luminance(fill)<0.42?"#ffffff":"#242424";
+
+/* ── vertical bar ── */
+function barChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),mini=svg.dataset.barMini==="1";
+  const pad=mini?{l:4,r:4,t:6,b:6}:{l:30,r:8,t:14,b:22};
+  const data=svg.dataset.bar.split(",").map(s=>{const[k,v]=s.split(":");return{k,v:+v};});
+  const color=svg.dataset.barColor,max=Math.max(...data.map(d=>d.v));
+  const cw=(W-pad.l-pad.r)/data.length,bw=Math.min(32,cw*0.6),gap=(cw-bw)/2,plotH=H-pad.t-pad.b;
+  if(!mini)for(let i=0;i<=2;i++){const y=pad.t+plotH*i/2;svg.appendChild(el("line",{x1:pad.l,y1:y,x2:W-pad.r,y2:y,class:"gridline"}));
+    const t=el("text",{x:pad.l-4,y:y+3,"text-anchor":"end",class:"tick"});t.textContent=fmt(Math.round(max*(1-i/2)));svg.appendChild(t);}
+  data.forEach((d,i)=>{const h=plotH*d.v/max,x=pad.l+i*cw+gap,y=pad.t+plotH-h;
+    const p=el("path",{d:topRoundRect(x,y,bw,h,mini?2:radiusFor(bw)),fill:color});svg.appendChild(p);
+    if(!mini)inspectable(p,{head:d.k,val:fmt(d.v)});
+    if(!mini){const t=el("text",{x:x+bw/2,y:H-pad.b+12,"text-anchor":"middle",class:"tick"});t.textContent=d.k;svg.appendChild(t);}});
+}
+/* ── stacked vertical ── */
+function stackChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),pad={l:30,r:8,t:14,b:22};
+  const cols=svg.dataset.stackColors.split(","),names=(svg.dataset.stackNames||"").split(",");
+  const data=svg.dataset.stack.split("|").map(s=>{const[k,r]=s.split(":");return{k,vals:r.split(",").map(Number)};});
+  const totals=data.map(d=>d.vals.reduce((a,b)=>a+b,0)),max=Math.max(...totals);
+  const cw=(W-pad.l-pad.r)/data.length,bw=Math.min(32,cw*0.6),gap=(cw-bw)/2,plotH=H-pad.t-pad.b;
+  for(let i=0;i<=2;i++){const y=pad.t+plotH*i/2;svg.appendChild(el("line",{x1:pad.l,y1:y,x2:W-pad.r,y2:y,class:"gridline"}));
+    const t=el("text",{x:pad.l-4,y:y+3,"text-anchor":"end",class:"tick"});t.textContent=fmt(Math.round(max*(1-i/2)));svg.appendChild(t);}
+  data.forEach((d,i)=>{const x=pad.l+i*cw+gap,tot=totals[i];let acc=0;
+    d.vals.forEach((v,j)=>{const h=plotH*v/max,y=pad.t+plotH-acc-h,top=j===d.vals.length-1;
+      const p=el("path",{d:top?topRoundRect(x,y,bw,h,radiusFor(bw)):`M${x},${y} h${bw} v${h} h${-bw} Z`,fill:cols[j]});svg.appendChild(p);
+      inspectable(p,{head:d.k,swatch:cols[j],val:names[j]+": "+fmt(v),ratio:Math.round(v/tot*100)+"% of "+fmt(tot)});acc+=h;});
+    const t=el("text",{x:x+bw/2,y:H-pad.b+12,"text-anchor":"middle",class:"tick"});t.textContent=d.k;svg.appendChild(t);});
+}
+/* ── grouped vertical ── */
+function groupChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),pad={l:30,r:8,t:14,b:22};
+  const cols=svg.dataset.groupColors.split(","),names=(svg.dataset.groupNames||"").split(",");
+  const data=svg.dataset.group.split("|").map(s=>{const[k,r]=s.split(":");return{k,vals:r.split(",").map(Number)};});
+  const max=Math.max(...data.flatMap(d=>d.vals)),cw=(W-pad.l-pad.r)/data.length,plotH=H-pad.t-pad.b;
+  const n=data[0].vals.length,bw=Math.min(20,(cw*0.6)/n),grpW=bw*n+4*(n-1),gap=(cw-grpW)/2;
+  for(let i=0;i<=2;i++){const y=pad.t+plotH*i/2;svg.appendChild(el("line",{x1:pad.l,y1:y,x2:W-pad.r,y2:y,class:"gridline"}));
+    const t=el("text",{x:pad.l-4,y:y+3,"text-anchor":"end",class:"tick"});t.textContent=fmt(Math.round(max*(1-i/2)));svg.appendChild(t);}
+  data.forEach((d,i)=>{const x0=pad.l+i*cw+gap;
+    d.vals.forEach((v,j)=>{const h=plotH*v/max,x=x0+j*(bw+4),y=pad.t+plotH-h;
+      const p=el("path",{d:topRoundRect(x,y,bw,h,radiusFor(bw)),fill:cols[j]});svg.appendChild(p);
+      inspectable(p,{head:d.k,swatch:cols[j],val:names[j]+": "+fmt(v)});});
+    const t=el("text",{x:x0+grpW/2,y:H-pad.b+12,"text-anchor":"middle",class:"tick"});t.textContent=d.k;svg.appendChild(t);});
+}
+/* ── horizontal bar ── */
+function hbarChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),pad={l:64,r:24,t:8,b:8};
+  const data=svg.dataset.hbar.split(",").map(s=>{const[k,v]=s.split(":");return{k,v:+v};});
+  const color=svg.dataset.hbarColor,max=Math.max(...data.map(d=>d.v));
+  const rh=(H-pad.t-pad.b)/data.length,bh=Math.min(20,rh*0.6),plotW=W-pad.l-pad.r;
+  data.forEach((d,i)=>{const w=plotW*d.v/max,y=pad.t+i*rh+(rh-bh)/2;
+    const p=el("path",{d:endRoundRectH(pad.l,y,w,bh,radiusFor(bh)),fill:color});svg.appendChild(p);
+    inspectable(p,{head:d.k,val:fmt(d.v)});
+    const t=el("text",{x:pad.l-6,y:y+bh/2+3,"text-anchor":"end",class:"tick"});t.textContent=d.k;svg.appendChild(t);
+    const v=el("text",{x:pad.l+w+5,y:y+bh/2+3,class:"tick"});v.textContent=fmt(d.v);svg.appendChild(v);});
+}
+/* ── horizontal stacked ── */
+function hstackChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),pad={l:54,r:10,t:8,b:8};
+  const cols=svg.dataset.hstackColors.split(","),names=(svg.dataset.hstackNames||"").split(",");
+  const data=svg.dataset.hstack.split("|").map(s=>{const[k,r]=s.split(":");return{k,vals:r.split(",").map(Number)};});
+  const max=Math.max(...data.map(d=>d.vals.reduce((a,b)=>a+b,0)));
+  const rh=(H-pad.t-pad.b)/data.length,bh=Math.min(20,rh*0.6),plotW=W-pad.l-pad.r;
+  data.forEach((d,i)=>{const y=pad.t+i*rh+(rh-bh)/2,tot=d.vals.reduce((a,b)=>a+b,0);let acc=0;
+    d.vals.forEach((v,j)=>{const w=plotW*v/max,last=j===d.vals.length-1;
+      const p=el("path",{d:last?endRoundRectH(pad.l+acc,y,w,bh,radiusFor(bh)):`M${pad.l+acc},${y} h${w} v${bh} h${-w} Z`,fill:cols[j]});svg.appendChild(p);
+      inspectable(p,{head:d.k,swatch:cols[j],val:names[j]+": "+fmt(v),ratio:Math.round(v/tot*100)+"%"});acc+=w;});
+    const t=el("text",{x:pad.l-6,y:y+bh/2+3,"text-anchor":"end",class:"tick"});t.textContent=d.k;svg.appendChild(t);});
+}
+/* ── area ── */
+function areaChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),pad={l:30,r:8,t:14,b:20};
+  const vals=svg.dataset.area.split(",").map(Number),color=svg.dataset.areaColor;
+  const max=Math.max(...vals),plotW=W-pad.l-pad.r,plotH=H-pad.t-pad.b;
+  const X=i=>pad.l+plotW*i/(vals.length-1),Y=v=>pad.t+plotH*(1-v/max);
+  for(let i=0;i<=2;i++){const y=pad.t+plotH*i/2;svg.appendChild(el("line",{x1:pad.l,y1:y,x2:W-pad.r,y2:y,class:"gridline"}));
+    const t=el("text",{x:pad.l-4,y:y+3,"text-anchor":"end",class:"tick"});t.textContent=fmt(Math.round(max*(1-i/2)));svg.appendChild(t);}
+  let d="M"+X(0)+","+Y(vals[0]);vals.forEach((v,i)=>{if(i)d+=" L"+X(i)+","+Y(v);});
+  svg.appendChild(el("path",{d:d+` L${X(vals.length-1)},${pad.t+plotH} L${X(0)},${pad.t+plotH} Z`,fill:color,"fill-opacity":.18}));
+  svg.appendChild(el("path",{d,fill:"none",stroke:color,"stroke-width":2}));
+  vals.forEach((v,i)=>{const c=el("circle",{cx:X(i),cy:Y(v),r:3.5,fill:color});svg.appendChild(c);
+    inspectable(c,{head:"Week "+(i+1),val:fmt(v)+" users"});});
+}
+/* ── overlapping lines ── */
+function linesChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),pad={l:30,r:8,t:14,b:20};
+  const cols=svg.dataset.linesColors.split(","),names=(svg.dataset.linesNames||"").split(",");
+  const series=svg.dataset.lines.split("|").map(s=>s.split(",").map(Number));
+  const max=Math.max(...series.flat()),plotW=W-pad.l-pad.r,plotH=H-pad.t-pad.b;
+  for(let i=0;i<=2;i++){const y=pad.t+plotH*i/2;svg.appendChild(el("line",{x1:pad.l,y1:y,x2:W-pad.r,y2:y,class:"gridline"}));
+    const t=el("text",{x:pad.l-4,y:y+3,"text-anchor":"end",class:"tick"});t.textContent=fmt(Math.round(max*(1-i/2)));svg.appendChild(t);}
+  series.forEach((vals,si)=>{const X=i=>pad.l+plotW*i/(vals.length-1),Y=v=>pad.t+plotH*(1-v/max);
+    let d="M"+X(0)+","+Y(vals[0]);vals.forEach((v,i)=>{if(i)d+=" L"+X(i)+","+Y(v);});
+    svg.appendChild(el("path",{d,fill:"none",stroke:cols[si],"stroke-width":2.5}));
+    vals.forEach((v,i)=>{const c=el("circle",{cx:X(i),cy:Y(v),r:3,fill:cols[si]});svg.appendChild(c);
+      inspectable(c,{head:names[si],swatch:cols[si],val:fmt(v)});});});
+}
+/* ── stacked area ── */
+function sareaChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),pad={l:30,r:8,t:14,b:20};
+  const cols=svg.dataset.sareaColors.split(",");
+  const series=svg.dataset.sarea.split("|").map(s=>s.split(",").map(Number));
+  const n=series[0].length,totals=Array.from({length:n},(_,i)=>series.reduce((a,s)=>a+s[i],0));
+  const max=Math.max(...totals),plotW=W-pad.l-pad.r,plotH=H-pad.t-pad.b;
+  const X=i=>pad.l+plotW*i/(n-1),Y=v=>pad.t+plotH*(1-v/max);
+  for(let i=0;i<=2;i++){const y=pad.t+plotH*i/2;svg.appendChild(el("line",{x1:pad.l,y1:y,x2:W-pad.r,y2:y,class:"gridline"}));
+    const t=el("text",{x:pad.l-4,y:y+3,"text-anchor":"end",class:"tick"});t.textContent=fmt(Math.round(max*(1-i/2)));svg.appendChild(t);}
+  const lower=Array(n).fill(0);
+  series.forEach((vals,si)=>{const upper=vals.map((v,i)=>lower[i]+v);
+    let d="M"+X(0)+","+Y(upper[0]);for(let i=1;i<n;i++)d+=" L"+X(i)+","+Y(upper[i]);
+    for(let i=n-1;i>=0;i--)d+=" L"+X(i)+","+Y(lower[i]);d+=" Z";
+    svg.appendChild(el("path",{d,fill:cols[si],"fill-opacity":.65}));
+    for(let i=0;i<n;i++)lower[i]=upper[i];});
+}
+/* ── donut ── */
+function donutChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height");
+  const cx=W/2,cy=H/2,R=Math.min(W,H)/2-6,stroke=26;
+  const vals=svg.dataset.donut.split(",").map(Number),total=vals.reduce((a,b)=>a+b,0);
+  const labels=(svg.dataset.donutLabels||"").split(",");
+  const qual=["--q1","--q2","--q3","--q4","--q5","--q6","--q7","--q8"];
+  let a0=-Math.PI/2;
+  vals.forEach((v,i)=>{const a1=a0+2*Math.PI*v/total;
+    const color=i<7?`var(${qual[i]})`:"var(--x-gray-loud)";
+    const x0=cx+R*Math.cos(a0),y0=cy+R*Math.sin(a0),x1=cx+R*Math.cos(a1),y1=cy+R*Math.sin(a1);
+    const large=(a1-a0)>Math.PI?1:0;
+    const p=el("path",{d:`M${x0},${y0} A${R},${R} 0 ${large} 1 ${x1},${y1}`,fill:"none",stroke:color,"stroke-width":stroke});
+    svg.appendChild(p);
+    inspectable(p,{head:labels[i]||"Segment "+(i+1),swatch:color,val:fmt(v),ratio:Math.round(v/total*100)+"% of total"});
+    a0=a1;});
+  const c=el("text",{x:cx,y:cy-2,"text-anchor":"middle","font-weight":"600","font-size":"26",fill:"var(--fg1)"});c.textContent=svg.dataset.donutCenter;svg.appendChild(c);
+  const s=el("text",{x:cx,y:cy+15,"text-anchor":"middle",class:"tick"});s.textContent=svg.dataset.donutSub;svg.appendChild(s);
+}
+/* ── gauge — exact 180° semicircle per geometry contract ── */
+function gaugeChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height");
+  const val=+svg.dataset.gauge,large=svg.dataset.gaugeLarge==="1",sm=svg.dataset.gaugeSm==="1";
+  const stroke=sm?12:18;
+  const cx=W/2;                      // shared pivot x
+  const cy=H-(large?52:(sm?34:40));  // diameter line y — reserve clear zone below for labels
+  const R=Math.min(W/2-(stroke/2+6),cy-(stroke/2+6));
+  // point on the semicircle for fraction f (f=0 left/min, f=1 right/max)
+  const pt=f=>{const t=Math.PI*(1-f);return[cx+R*Math.cos(t),cy-R*Math.sin(t)];};
+  const arc=(a,b,col)=>{const[x0,y0]=pt(a),[x1,y1]=pt(b);
+    // gauge arcs never exceed the 180° semicircle, so large-arc-flag is always 0
+    svg.appendChild(el("path",{d:`M${x0},${y0} A${R},${R} 0 0 1 ${x1},${y1}`,fill:"none",stroke:col,"stroke-width":stroke,"stroke-linecap":"butt"}));};
+  if(large){
+    // threat-diverging threshold zones (green → yellow → red)
+    arc(0,0.6,"var(--x-green-loud)"); arc(0.6,0.8,"var(--x-yellow-loud)"); arc(0.8,1,"var(--x-red-loud)");
+    // needle — pivots at diameter midpoint, stops at the arc
+    const[nx,ny]=pt(val);
+    svg.appendChild(el("line",{x1:cx,y1:cy,x2:cx+(nx-cx)*0.92,y2:cy+(ny-cy)*0.92,stroke:"var(--stroke-heavy)","stroke-width":2.5}));
+    svg.appendChild(el("circle",{cx,cy,r:4,fill:"var(--stroke-heavy)"}));
+  } else {
+    arc(0,1,"var(--x-gray-soft)"); arc(0,val,svg.dataset.gaugePlain);
+  }
+  // min / max labels anchor to the endpoints, on the diameter line
+  if(!sm){
+    const mn=el("text",{x:cx-R,y:cy+14,"text-anchor":"middle",class:"tick"});mn.textContent="0%";svg.appendChild(mn);
+    const mx=el("text",{x:cx+R,y:cy+14,"text-anchor":"middle",class:"tick"});mx.textContent="100%";svg.appendChild(mx);
+  }
+  // value number — reserved clear zone below the diameter (never crossed by arc/needle)
+  const vy=cy+(large?30:(sm?18:26));
+  const v=el("text",{x:cx,y:vy,"text-anchor":"middle","font-weight":"600","font-size":sm?"18":(large?"30":"24"),fill:"var(--fg1)"});
+  v.textContent=Math.round(val*100)+"%";svg.appendChild(v);
+  // status label (Large) — below value, clear space
+  if(large){const st=el("text",{x:cx,y:vy+16,"text-anchor":"middle","font-size":"11","font-weight":"600",fill:"var(--x-yellow-heavy)"});
+    st.textContent="Elevated — investigate";svg.appendChild(st);}
+}
+/* ── scatter ── */
+function scatterChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),pad={l:30,r:10,t:10,b:24};
+  drawAxisFrame(svg,pad,W,H,"Throughput","Latency");
+  const rnd=(s=>()=>(s=(s*9301+49297)%233280)/233280)(7);
+  [{c:"var(--q1)",shape:"circle",n:14,bx:.25,by:.6,name:"Cluster A"},
+   {c:"var(--q3)",shape:"tri",n:14,bx:.65,by:.3,name:"Cluster B"}].forEach(s=>{
+    for(let i=0;i<s.n;i++){const x=pad.l+(W-pad.l-pad.r)*(s.bx+rnd()*0.3),y=pad.t+(H-pad.t-pad.b)*(s.by+rnd()*0.3);
+      let m;if(s.shape==="circle")m=el("circle",{cx:x,cy:y,r:4,fill:s.c,"fill-opacity":.85});
+      else m=el("path",{d:`M${x},${y-5} L${x+5},${y+4} L${x-5},${y+4} Z`,fill:s.c,"fill-opacity":.85});
+      svg.appendChild(m);inspectable(m,{head:s.name,swatch:s.c,val:Math.round((1-(y-pad.t)/(H-pad.t-pad.b))*120)+"ms latency"});}});
+}
+function bubbleChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),pad={l:30,r:10,t:10,b:24};
+  drawAxisFrame(svg,pad,W,H,"Reach","Engagement");
+  [[.2,.7,16],[.35,.5,9],[.5,.62,22],[.62,.35,12],[.75,.55,7],[.85,.28,18],[.45,.8,10]].forEach(([fx,fy,r])=>{
+    const x=pad.l+(W-pad.l-pad.r)*fx,y=pad.t+(H-pad.t-pad.b)*fy;
+    const c=el("circle",{cx:x,cy:y,r,fill:"var(--q1)","fill-opacity":.35,stroke:"var(--q1)"});svg.appendChild(c);
+    inspectable(c,{head:"Campaign",swatch:"var(--q1)",val:"Spend $"+(r*1.2).toFixed(1)+"K"});});
+}
+function drawAxisFrame(svg,pad,W,H,xt,yt){
+  svg.appendChild(el("line",{x1:pad.l,y1:H-pad.b,x2:W-pad.r,y2:H-pad.b,class:"axisline"}));
+  svg.appendChild(el("line",{x1:pad.l,y1:pad.t,x2:pad.l,y2:H-pad.b,class:"axisline"}));
+  const a=el("text",{x:(pad.l+W-pad.r)/2,y:H-4,"text-anchor":"middle",class:"axis-title"});a.textContent=xt;svg.appendChild(a);
+  const m=(pad.t+H-pad.b)/2,b=el("text",{x:10,y:m,"text-anchor":"middle",class:"axis-title",transform:`rotate(-90 10 ${m})`});b.textContent=yt;svg.appendChild(b);
+}
+/* ── sparkline ── */
+function sparkChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height");
+  const vals=svg.dataset.spark.split(",").map(Number),color=svg.dataset.sparkColor;
+  const min=Math.min(...vals),max=Math.max(...vals),pad=3;
+  const X=i=>pad+(W-2*pad)*i/(vals.length-1),Y=v=>pad+(H-2*pad)*(1-(v-min)/((max-min)||1));
+  let d="M"+X(0)+","+Y(vals[0]);vals.forEach((v,i)=>{if(i)d+=" L"+X(i)+","+Y(v);});
+  svg.appendChild(el("path",{d,fill:"none",stroke:color,"stroke-width":1.75}));
+  svg.appendChild(el("circle",{cx:X(vals.length-1),cy:Y(vals[vals.length-1]),r:2.5,fill:color}));
+}
+/* ── heatmap ── */
+function heatmapChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),mode=svg.dataset.heatmap;
+  const cols=7,rows=5,pad={l:34,t:16,r:8,b:8},cw=(W-pad.l-pad.r)/cols,ch=(H-pad.t-pad.b)/rows;
+  const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],bands=["00","06","12","18","24"];
+  const lerp=(a,b,t)=>a.map((c,i)=>Math.round(c+(b[i]-a[i])*t)),hex=c=>"#"+c.map(v=>v.toString(16).padStart(2,"0")).join("");
+  const blueSub=[238,246,255],blueLoud=[47,149,244],blueHeavy=[11,73,127],redLoud=[231,97,91],graySub=[245,245,245];
+  const seq=t=>t<.5?lerp(blueSub,blueLoud,t/.5):lerp(blueLoud,blueHeavy,(t-.5)/.5);
+  const div=t=>t<.5?lerp(blueLoud,graySub,t/.5):lerp(graySub,redLoud,(t-.5)/.5);
+  const rnd=(s=>()=>(s=(s*9301+49297)%233280)/233280)(mode==="seq"?3:11);
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const t=rnd(),col=hex(mode==="seq"?seq(t):div(t));
+    const cell=el("rect",{x:pad.l+c*cw,y:pad.t+r*ch,width:cw-3,height:ch-3,rx:3,fill:col});svg.appendChild(cell);
+    inspectable(cell,{head:days[c]+" · "+bands[r],val:mode==="seq"?Math.round(t*100)+" events":(t<.5?"−":"+")+Math.round(Math.abs(t-.5)*200)+"%"});}
+  days.forEach((d,c)=>{const t=el("text",{x:pad.l+c*cw+(cw-3)/2,y:pad.t-4,"text-anchor":"middle",class:"tick"});t.textContent=d;svg.appendChild(t);});
+  bands.forEach((b,r)=>{const t=el("text",{x:pad.l-6,y:pad.t+r*ch+ch/2,"text-anchor":"end",class:"tick"});t.textContent=b;svg.appendChild(t);});
+}
+/* ── sankey ── */
+function sankeyChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),nodeW=24,colsX=[20,W/2-30,W-110];
+  const place=(col,x)=>{let y=20;return col.map(([name,v,c])=>{const h=v*1.7,o={name,v,c,x,y,h};y+=h+14;return o;});};
+  const A=place([["Organic",60,"--q1"],["Paid",40,"--q2"]],colsX[0]);
+  const B=place([["Free plan",55,"--q4"],["Pro plan",45,"--q3"]],colsX[1]);
+  const C=place([["Retained",62,"--q6"],["Churned",38,"--q5"]],colsX[2]);
+  const stream=(a,b,frac,oa,ob)=>{const ya=a.y+oa,yb=b.y+ob,th=a.h*frac,x0=a.x+nodeW,x1=b.x,mx=(x0+x1)/2;
+    svg.appendChild(el("path",{d:`M${x0},${ya} C${mx},${ya} ${mx},${yb} ${x1},${yb} L${x1},${yb+th} C${mx},${yb+th} ${mx},${ya+th} ${x0},${ya+th} Z`,fill:`var(${a.c})`,"fill-opacity":.28}));};
+  stream(A[0],B[0],.6,0,0);stream(A[0],B[1],.4,A[0].h*.6,0);stream(A[1],B[1],.55,0,B[1].h*.4);stream(A[1],B[0],.45,A[1].h*.55,B[0].h*.6);
+  stream(B[0],C[0],.65,0,0);stream(B[0],C[1],.35,B[0].h*.65,0);stream(B[1],C[0],.55,0,C[0].h*.65);stream(B[1],C[1],.45,B[1].h*.55,C[1].h*.35);
+  [...A,...B,...C].forEach(n=>{const rect=el("rect",{x:n.x,y:n.y,width:nodeW,height:n.h,rx:3,fill:`var(${n.c})`});svg.appendChild(rect);
+    inspectable(rect,{head:n.name,swatch:`var(${n.c})`,val:n.v+" users"});
+    const t=el("text",{x:n.x+(n.x>W/2?-6:nodeW+6),y:n.y+n.h/2+3,"text-anchor":n.x>W/2?"end":"start",class:"tick"});t.textContent=n.name;svg.appendChild(t);});
+}
+/* ── funnel — per-band adaptive label color (On-mark label contrast) ── */
+function funnelChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height");
+  const stages=svg.dataset.funnel.split("|").map(s=>{const[k,v]=s.split(":");return{k,v:+v};});
+  const max=stages[0].v,pad={t:6,b:6,l:8,r:8},rowH=(H-pad.t-pad.b)/stages.length;
+  const ramp=["--x-blue-heavy","--x-blue-loud","--x-blue-loud","--x-blue-soft","--x-blue-subtle"];
+  stages.forEach((s,i)=>{
+    const w=(W-pad.l-pad.r)*s.v/max,x=(W-w)/2,y=pad.t+i*rowH,h=rowH-8;
+    const wn=i<stages.length-1?(W-pad.l-pad.r)*stages[i+1].v/max:w,xn=(W-wn)/2;
+    const fillVar=ramp[i]||"--x-blue-subtle",fill=`var(${fillVar})`;
+    const p=el("path",{d:`M${x},${y} L${x+w},${y} L${xn+wn},${y+h} L${xn},${y+h} Z`,fill});svg.appendChild(p);
+    const fg=onMarkFg(fill);   // light-on-dark / dark-on-light, chosen per band
+    inspectable(p,{head:s.k,val:fmt(s.v),ratio:Math.round(s.v/max*100)+"% of "+fmt(max)});
+    const t=el("text",{x:W/2,y:y+h/2-2,"text-anchor":"middle","font-size":"12","font-weight":"600",fill:fg});t.textContent=s.k;svg.appendChild(t);
+    const v=el("text",{x:W/2,y:y+h/2+12,"text-anchor":"middle","font-size":"11",fill:fg,"fill-opacity":.85});
+    v.textContent=fmt(s.v)+"  ·  "+Math.round(s.v/max*100)+"%";svg.appendChild(v);});
+}
+/* ── tree — deterministic capacity layout, subtrees confined to parent slot ── */
+function treeChart(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height");
+  const GAP=16;
+  function node(cx,y,w,label,sub,fill){
+    const h=sub?40:34,x=cx-w/2;
+    svg.appendChild(el("rect",{x,y,width:w,height:h,rx:4,fill:fill||"var(--surface)",stroke:fill?"none":"var(--stroke)"}));
+    const t=el("text",{x:cx,y:y+(sub?16:h/2+4),"text-anchor":"middle","font-size":"12","font-weight":"600",fill:fill?"#fff":"var(--fg1)"});
+    t.textContent=label;svg.appendChild(t);
+    if(sub){const s=el("text",{x:cx,y:y+30,"text-anchor":"middle","font-size":"10",fill:fill?"#fff":"var(--fg3)"});s.textContent=sub;svg.appendChild(s);}
+    return{cx,y,w,h};
+  }
+  const link=(a,b)=>svg.appendChild(el("path",{d:`M${a.cx},${a.y+a.h} C${a.cx},${(a.y+a.h+b.y)/2} ${b.cx},${(a.y+a.h+b.y)/2} ${b.cx},${b.y}`,fill:"none",stroke:"var(--stroke)","stroke-width":1.5}));
+  /* lay out N boxes within a slot [x0,x1]: equal widths (capped), exact GAP, centered.
+     subtree stays inside its parent's slot, so siblings can never collide. */
+  function layoutRow(N,slotX0,slotX1,maxBoxW){
+    const slotW=slotX1-slotX0;
+    let boxW=Math.min(maxBoxW,(slotW-(N-1)*GAP)/N);
+    boxW=Math.max(boxW,80>slotW/N?Math.min(80,(slotW-(N-1)*GAP)/N):80); // honor floor where slot allows
+    const rowW=N*boxW+(N-1)*GAP,origin=slotX0+(slotW-rowW)/2,centers=[];
+    for(let i=0;i<N;i++)centers.push(origin+i*(boxW+GAP)+boxW/2);
+    return{boxW,centers};
+  }
+  // Level 1 — root spans full width
+  const root=node(W/2,10,140,"VP Engineering","Leadership","var(--q1)");
+  // Level 2 — 2 children, each owns half the width as its slot
+  const halfW=W/2, slots2=[[0,halfW],[halfW,W]];
+  const r2=layoutRow(2,0,W,150);
+  const mids=r2.centers.map((cx,i)=>{const n=node(cx,96,r2.boxW,i===0?"Platform":"Product","Division");link(root,n);return{n,slot:slots2[i]};});
+  // Level 3 — under each mid, 2 leaves confined to that mid's half-width slot (no cross-slot overlap)
+  const leafLabels=[["Core","Infra"],["Web","Mobile"]];
+  mids.forEach((m,mi)=>{const r3=layoutRow(2,m.slot[0]+8,m.slot[1]-8,100);
+    r3.centers.forEach((cx,li)=>{const lf=node(cx,182,r3.boxW,leafLabels[mi][li],"Team");link(m.n,lf);});});
+}
+/* ── axis variants ── */
+function axisDemo(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),v=svg.dataset.axis,pad={l:22,r:8,t:8,b:18};
+  if(v==="h")for(let i=0;i<=3;i++){const y=pad.t+(H-pad.t-pad.b)*i/3;svg.appendChild(el("line",{x1:pad.l,y1:y,x2:W-pad.r,y2:y,class:"gridline"}));}
+  if(v==="v")for(let i=0;i<=4;i++){const x=pad.l+(W-pad.l-pad.r)*i/4;svg.appendChild(el("line",{x1:x,y1:pad.t,x2:x,y2:H-pad.b,class:"gridline"}));}
+  svg.appendChild(el("line",{x1:pad.l,y1:H-pad.b,x2:W-pad.r,y2:H-pad.b,class:"axisline"}));
+  svg.appendChild(el("line",{x1:pad.l,y1:pad.t,x2:pad.l,y2:H-pad.b,class:"axisline"}));
+  ["A","B","C","D"].forEach((d,i)=>{const x=pad.l+(W-pad.l-pad.r)*(i+.5)/4;const t=el("text",{x,y:H-6,"text-anchor":"middle",class:"tick"});t.textContent=d;svg.appendChild(t);});
+  const lbl={h:"Horizontal",v:"Vertical",n:"No lines"}[v];
+  const c=el("text",{x:(pad.l+W-pad.r)/2,y:pad.t-2,"text-anchor":"middle",class:"axis-title"});c.textContent=lbl;svg.appendChild(c);
+}
+/* ── callout demo (interactive line) ── */
+function calloutLine(svg){
+  const W=+svg.getAttribute("width"),H=+svg.getAttribute("height"),pad={l:30,r:8,t:14,b:20};
+  const months=["Jan","Feb","Mar","Apr","May","Jun"],vals=[24,38,30,46,42,55];
+  const max=Math.max(...vals),plotW=W-pad.l-pad.r,plotH=H-pad.t-pad.b;
+  const X=i=>pad.l+plotW*i/(vals.length-1),Y=v=>pad.t+plotH*(1-v/max);
+  svg.appendChild(el("line",{x1:pad.l,y1:H-pad.b,x2:W-pad.r,y2:H-pad.b,class:"axisline"}));
+  let d="M"+X(0)+","+Y(vals[0]);vals.forEach((v,i)=>{if(i)d+=" L"+X(i)+","+Y(v);});
+  svg.appendChild(el("path",{d,fill:"none",stroke:"var(--q1)","stroke-width":2.5}));
+  vals.forEach((v,i)=>{const c=el("circle",{cx:X(i),cy:Y(v),r:4,fill:"var(--q1)",stroke:"#fff","stroke-width":1.5});svg.appendChild(c);
+    inspectable(c,{head:months[i],swatch:"var(--q1)",val:v+" users"});
+    const t=el("text",{x:X(i),y:H-6,"text-anchor":"middle",class:"tick"});t.textContent=months[i];svg.appendChild(t);});
+}
+
+/* dispatch */
+const run=(sel,fn)=>document.querySelectorAll(sel).forEach(fn);
+run("svg[data-bar]",barChart); run("svg[data-stack]",stackChart); run("svg[data-group]",groupChart);
+run("svg[data-hbar]",hbarChart); run("svg[data-hstack]",hstackChart);
+run("svg[data-area]",areaChart); run("svg[data-lines]",linesChart); run("svg[data-sarea]",sareaChart);
+run("svg[data-donut]",donutChart); run("svg[data-gauge]",gaugeChart);
+run("svg[data-scatter]",scatterChart); run("svg[data-bubble]",bubbleChart);
+run("svg[data-spark]",sparkChart); run("svg[data-heatmap]",heatmapChart);
+run("svg[data-sankey]",sankeyChart); run("svg[data-funnel]",funnelChart);
+run("svg[data-tree]",treeChart); run("svg[data-axis]",axisDemo); run("svg[data-calloutline]",calloutLine);
+</script>
+</body>
+</html>

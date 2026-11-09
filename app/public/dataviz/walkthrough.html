@@ -1,0 +1,3192 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Fluent Dataviz — Five-minute walkthrough</title>
+  <script>
+    document.documentElement.dataset.theme = localStorage.getItem("dataviz-theme") || "dark";
+  </script>
+  <style>
+    :root {
+      --ink: #f4f4f4;
+      --muted: #b6b3bc;
+      --canvas: #1a191e;
+      --surface: rgba(42, 40, 47, 0.88);
+      --surface-strong: #29272e;
+      --stroke: rgba(255, 255, 255, 0.12);
+      --grid-line: rgba(255, 255, 255, 0.055);
+      --violet: #a78bfa;
+      --blue: #60a5fa;
+      --cyan: #67e8f9;
+      --lime: #bef264;
+      --orange: #fb923c;
+      --pink: #f472b6;
+      --chart-cyan: var(--cyan);
+      --chart-violet: var(--violet);
+      --chart-pink: var(--pink);
+      --chart-lime: var(--lime);
+      --chart-orange: var(--orange);
+      --chart-blue: var(--blue);
+      --chart-neutral: var(--muted);
+      --chart-heat-base: #26314a;
+      --chart-area-theme: #ff9a62;
+      --chart-heat-theme: #54cf78;
+      --chart-heat-theme-base: #1c3826;
+      --pattern-ink: rgba(18, 16, 23, .48);
+      --ease: cubic-bezier(.2, .8, .2, 1);
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --ink: #17131f;
+      --muted: #565160;
+      --canvas: #f5f4f6;
+      --surface: rgba(255, 255, 255, 0.9);
+      --surface-strong: #ffffff;
+      --stroke: rgba(50, 36, 66, 0.15);
+      --grid-line: rgba(50, 36, 66, 0.065);
+      --violet: #6544c5;
+      --blue: #1d5fc4;
+      --cyan: #00788f;
+      --lime: #3f6000;
+      --orange: #b94700;
+      --pink: #b52d79;
+      --chart-cyan: #169ab0;
+      --chart-violet: #8064e8;
+      --chart-pink: #d94d98;
+      --chart-lime: #75a21f;
+      --chart-orange: #e66a23;
+      --chart-blue: #4c85e8;
+      --chart-neutral: #96909d;
+      --chart-heat-base: #d8e7fb;
+      --chart-area-theme: #e66a23;
+      --chart-heat-theme: #35a85a;
+      --chart-heat-theme-base: #e2f4e7;
+      --pattern-ink: rgba(23, 19, 31, .48);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--canvas);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "Segoe UI Variable", "Segoe UI", Inter, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.72), transparent 88%);
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 68px;
+      padding: 14px clamp(20px, 4vw, 64px);
+      border-bottom: 1px solid var(--stroke);
+      background: color-mix(in srgb, var(--canvas) 88%, transparent);
+      backdrop-filter: blur(20px);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 7px 11px;
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      color: var(--muted);
+      background: color-mix(in srgb, var(--ink) 4%, transparent);
+      cursor: pointer;
+      transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .theme-toggle:hover {
+      color: var(--ink);
+      border-color: rgba(167, 139, 250, 0.55);
+      background: rgba(167, 139, 250, 0.1);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 3px;
+      box-shadow: 0 0 0 5px #4f46e5;
+    }
+
+    .theme-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .theme-toggle__moon,
+    html[data-theme="light"] .theme-toggle__sun {
+      display: none;
+    }
+
+    html[data-theme="light"] .theme-toggle__moon {
+      display: block;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      color: var(--ink);
+    }
+
+    .fluent-flex-wordmark {
+      display: inline-flex;
+      align-items: baseline;
+      color: currentColor;
+      font-size: 18px;
+      white-space: nowrap;
+      --wordmark-easing: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .wordmark-f,
+    .wordmark-u,
+    .wordmark-n,
+    .wordmark-e-flex,
+    .wordmark-glyph {
+      display: inline-block;
+      flex: none;
+    }
+
+    .wordmark-f {
+      width: 0.467em;
+      height: 0.714em;
+      transition: width 748ms var(--wordmark-easing);
+    }
+
+    .wordmark-f svg {
+      display: block;
+      width: 0.612em;
+      height: 0.714em;
+      overflow: visible;
+      fill: currentColor;
+    }
+
+    .wordmark-f-top,
+    .wordmark-f-middle {
+      transition: x 748ms var(--wordmark-easing), width 748ms var(--wordmark-easing);
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-f {
+      width: 0.681em;
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-f-top {
+      x: 4.24316px;
+      width: 4.32135px;
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-f-middle {
+      x: 4.24316px;
+      width: 4.04523px;
+    }
+
+    .wordmark-glyph {
+      height: 0.714em;
+      overflow: visible;
+    }
+
+    .wordmark-glyph svg {
+      display: block;
+      height: 0.714em;
+      overflow: visible;
+      fill: currentColor;
+    }
+
+    .wordmark-l { width: 0.479em; }
+    .wordmark-l svg { width: 0.409em; }
+    .wordmark-e { width: 0.483em; }
+    .wordmark-e svg { width: 0.413em; }
+    .wordmark-t { width: 0.94em; }
+    .wordmark-t svg { width: 0.546em; }
+    .wordmark-flex-f { width: 0.467em; }
+    .wordmark-flex-f svg { width: 0.397em; }
+    .wordmark-x { width: 0.636em; }
+    .wordmark-x svg { width: 0.636em; }
+
+    .wordmark-u {
+      width: 0.64em;
+      height: 0.716em;
+      transition: width 748ms var(--wordmark-easing);
+    }
+
+    .wordmark-u svg {
+      display: block;
+      width: 0.927em;
+      height: 0.716em;
+      overflow: visible;
+      fill: currentColor;
+    }
+
+    .wordmark-u-right {
+      transition: transform 748ms var(--wordmark-easing);
+    }
+
+    .wordmark-u-middle {
+      transition: width 748ms var(--wordmark-easing);
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-u {
+      width: 0.997em;
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-u-right {
+      transform: translateX(5px);
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-u-middle {
+      width: 5.3122px;
+    }
+
+    .wordmark-n {
+      width: 0.69em;
+      height: 0.714em;
+      transition: width 748ms var(--wordmark-easing);
+    }
+
+    .wordmark-n svg {
+      display: block;
+      width: 0.834em;
+      height: 0.716em;
+      overflow: visible;
+      fill: currentColor;
+    }
+
+    .wordmark-n-right,
+    .wordmark-n-diagonal {
+      transition: transform 748ms var(--wordmark-easing);
+    }
+
+    .wordmark-n-stretch-left,
+    .wordmark-n-stretch-right,
+    .wordmark-n-clip {
+      transition: x 748ms var(--wordmark-easing), width 748ms var(--wordmark-easing);
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-n {
+      width: 0.905em;
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-n-right {
+      transform: translateX(3px);
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-n-diagonal {
+      transform: matrix(1.451, 0, 0, 1, 0.036, -0.003);
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-n-stretch-left {
+      width: 1.88342px;
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-n-stretch-right {
+      x: 10.12158px;
+      width: 1.56006px;
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-n-clip {
+      width: 11.68164px;
+    }
+
+    .wordmark-e-flex {
+      width: 0.483em;
+      height: 0.714em;
+      transition: width 748ms var(--wordmark-easing);
+    }
+
+    .wordmark-e-flex svg {
+      display: block;
+      width: 1.413em;
+      height: 0.714em;
+      overflow: visible;
+      fill: currentColor;
+    }
+
+    .wordmark-e-flex-top,
+    .wordmark-e-flex-middle,
+    .wordmark-e-flex-bottom {
+      transition: x 748ms var(--wordmark-easing), width 748ms var(--wordmark-easing);
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-e-flex {
+      width: 1.483em;
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-e-flex-top {
+      x: 4.51025px;
+      width: 15.04523px;
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-e-flex-middle {
+      width: 16.04523px;
+    }
+
+    .fluent-flex-wordmark:hover .wordmark-e-flex-bottom {
+      x: 2.73804px;
+      width: 17.04523px;
+    }
+
+    .counter {
+      color: var(--muted);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .counter strong {
+      color: var(--ink);
+    }
+
+    .progress {
+      position: fixed;
+      top: 67px;
+      right: 0;
+      left: 0;
+      z-index: 11;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .progress span {
+      display: block;
+      width: 20%;
+      height: 100%;
+      background: var(--violet);
+      transition: width 500ms var(--ease);
+    }
+
+    main {
+      display: flex;
+      width: 600vw;
+      height: 100vh;
+      transition: transform 650ms var(--ease);
+    }
+
+    .scene {
+      position: relative;
+      display: grid;
+      width: 100vw;
+      height: 100vh;
+      flex: 0 0 100vw;
+      grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+      align-items: center;
+      gap: clamp(28px, 6vw, 96px);
+      padding: 108px clamp(24px, 6vw, 96px) 92px;
+      overflow: hidden;
+    }
+
+    .scene-copy {
+      max-width: 740px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 500ms var(--ease) 120ms, transform 500ms var(--ease) 120ms;
+    }
+
+    .scene.is-active .scene-copy {
+      opacity: 1;
+      transform: none;
+    }
+
+    .scene--architecture {
+      grid-template-columns: minmax(0, .82fr) minmax(520px, 1.18fr);
+      gap: clamp(28px, 3vw, 52px);
+    }
+
+    .scene--height-sync .install-stack {
+      height: 100%;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: var(--cyan);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 28px;
+      height: 1px;
+      content: "";
+      background: currentColor;
+    }
+
+    .eyebrow-timer {
+      display: inline-block;
+      min-width: 2ch;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .eyebrow-timer.is-expired {
+      animation: alarm-blink 1s steps(1, end) infinite;
+    }
+
+    h1,
+    h2 {
+      max-width: 700px;
+      margin: 0;
+      font-family: "Segoe Serif", Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      letter-spacing: -0.032em;
+      line-height: 1.04;
+      text-wrap: balance;
+    }
+
+    h1 {
+      font-size: clamp(48px, 5.6vw, 84px);
+    }
+
+    h2 {
+      font-size: clamp(40px, 4.35vw, 66px);
+    }
+
+    .gradient-text {
+      color: var(--ink);
+      background: none;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .lead {
+      max-width: 660px;
+      margin: 34px 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 1.45vw, 22px);
+      line-height: 1.58;
+      text-wrap: pretty;
+    }
+
+    .agency-hub-link {
+      color: inherit;
+      text-decoration-color: color-mix(in srgb, var(--cyan) 68%, transparent);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+
+    .agency-hub-link:hover {
+      color: var(--cyan);
+    }
+
+    .agency-hub-link:focus-visible {
+      border-radius: 3px;
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .visual {
+      position: relative;
+      min-height: 470px;
+      opacity: 0;
+      transform: scale(0.97) translateY(12px);
+      transition: opacity 650ms var(--ease) 220ms, transform 650ms var(--ease) 220ms;
+    }
+
+    .scene.is-active .visual {
+      opacity: 1;
+      transform: none;
+    }
+
+    .scene--generation .scene-copy {
+      opacity: 1;
+      transform: none;
+    }
+
+    .generation-title-line {
+      display: block;
+      min-height: 1.04em;
+      white-space: nowrap;
+    }
+
+    .generation-title-line.is-typing::after {
+      display: inline-block;
+      width: 2px;
+      height: .78em;
+      margin-left: 5px;
+      content: "";
+      background: currentColor;
+      animation: cursor-blink 720ms steps(1, end) infinite;
+      vertical-align: .02em;
+    }
+
+    .generation-detail,
+    .scene--generation.is-active .visual {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 600ms var(--ease),
+        transform 600ms var(--ease);
+    }
+
+    .scene--generation.is-intro-ready .generation-detail,
+    .scene--generation.is-active.is-intro-ready .visual {
+      opacity: 1;
+      transform: none;
+    }
+
+    .glass {
+      border: 1px solid var(--stroke);
+      border-radius: 24px;
+      background: var(--surface);
+      box-shadow: none;
+    }
+
+    .hero-chart {
+      position: relative;
+      width: calc(100% - 2%);
+      min-height: 448px;
+      margin: 5% 0 0 2%;
+      padding: 28px 28px 54px;
+      overflow: hidden;
+    }
+
+    .chart-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 34px;
+    }
+
+    .chart-title {
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .chart-subtitle {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .delta {
+      padding: 7px 10px;
+      border: 1px solid rgba(190, 242, 100, 0.25);
+      border-radius: 999px;
+      color: var(--lime);
+      background: rgba(190, 242, 100, 0.08);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .bars {
+      display: grid;
+      height: 280px;
+      grid-template-columns: repeat(7, 1fr);
+      align-items: end;
+      gap: clamp(12px, 2vw, 24px);
+      padding: 0 10px;
+      border-bottom: 1px solid var(--stroke);
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 69px, var(--stroke) 70px);
+    }
+
+    .bar {
+      position: relative;
+      height: var(--value);
+      min-height: 10px;
+      border-radius: 12px 12px 0 0;
+      transform: scaleY(0);
+      transform-origin: bottom;
+      background: var(--bar-color);
+      box-shadow: none;
+      animation: grow 900ms var(--ease) forwards;
+      animation-delay: calc(var(--i) * 90ms + 350ms);
+      cursor: crosshair;
+      transition: opacity 180ms var(--ease), filter 180ms var(--ease);
+    }
+
+    .bars.is-dimmed .bar:not(.is-active),
+    .mini-bars.is-dimmed rect:not(.is-active),
+    .heatmap.is-dimmed span:not(.is-active),
+    .donut.is-dimmed .donut-slice:not(.is-active) {
+      opacity: .34;
+    }
+
+    .bar.is-active,
+    .mini-bars rect.is-active,
+    .heatmap span.is-active,
+    .donut-slice.is-active {
+      filter: saturate(1.14) brightness(1.08);
+    }
+
+    .data-mark:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 3px;
+      box-shadow: 0 0 0 5px #4f46e5;
+    }
+
+    .bar::after {
+      position: absolute;
+      right: 0;
+      bottom: -26px;
+      left: 0;
+      color: var(--muted);
+      content: attr(data-label);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .orb {
+      display: none;
+    }
+
+    .orb.one { top: -24px; right: -40px; }
+    .orb.two { bottom: -40px; left: -58px; animation-delay: -3s; }
+
+    .install-stack {
+      display: grid;
+      gap: 14px;
+      padding: 20px;
+    }
+
+    .install-card {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--surface-strong) 72%, transparent);
+      transition: background-color 200ms var(--ease), border-color 200ms var(--ease);
+    }
+
+    .install-card:hover {
+      border-color: rgba(167, 139, 250, 0.45);
+      background: color-mix(in srgb, var(--violet) 6%, var(--surface-strong));
+    }
+
+    .plugin-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 12px;
+      color: var(--icon);
+      background: color-mix(in srgb, var(--icon) 12%, transparent);
+      font-weight: 800;
+    }
+
+    .install-card h3 {
+      margin: 0 0 3px;
+      font-size: 15px;
+    }
+
+    .install-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status {
+      color: var(--lime);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .terminal {
+      height: 220px;
+      margin-top: 14px;
+      padding: 18px 20px;
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      color: #d9f99d;
+      background: rgba(5, 5, 10, 0.75);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    .terminal__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+      color: #a1a1aa;
+      font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .terminal__state {
+      color: #d9f99d;
+    }
+
+    .terminal__output {
+      height: 150px;
+      overflow: hidden;
+    }
+
+    .terminal__line {
+      opacity: 0;
+      transform: translateY(4px);
+      animation: terminal-line-in 180ms var(--ease) forwards;
+    }
+
+    .terminal__prompt {
+      color: #71717f;
+      user-select: none;
+    }
+
+    .terminal__success {
+      color: #86efac;
+    }
+
+    .terminal__working {
+      color: #93c5fd;
+    }
+
+    .copilot-cli {
+      height: 240px;
+      margin-top: 28px;
+    }
+
+    .copilot-cli .terminal__output {
+      height: 170px;
+    }
+
+    .terminal__typed {
+      color: #f4f4f5;
+    }
+
+    .terminal__cursor {
+      display: inline-block;
+      width: 7px;
+      height: 1.05em;
+      margin-left: 3px;
+      vertical-align: -.16em;
+      background: currentColor;
+      animation: cursor-blink 720ms steps(1) infinite;
+    }
+
+    .repo-install {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: start;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border: 1px solid rgba(96, 165, 250, 0.24);
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--blue) 7%, var(--surface-strong));
+    }
+
+    .repo-install__badge {
+      padding: 6px 9px;
+      border-radius: 999px;
+      color: var(--blue);
+      background: rgba(96, 165, 250, 0.12);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .repo-install h3 {
+      margin: 1px 0 5px;
+      font-size: 13px;
+    }
+
+    .repo-install__snippet {
+      display: block;
+      color: var(--blue);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 10px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+
+    .repo-install h3 code {
+      color: var(--blue);
+      font: inherit;
+    }
+
+    .architecture {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 22px;
+    }
+
+    .arch-layer {
+      position: relative;
+      display: grid;
+      width: 100%;
+      grid-template-columns: 1fr;
+      align-items: center;
+      gap: 10px;
+      min-height: 104px;
+      padding: 20px max(18px, var(--tier-top));
+      border: 0;
+      border-radius: 0;
+      overflow: hidden;
+      clip-path: polygon(
+        var(--tier-top) 0,
+        calc(100% - var(--tier-top)) 0,
+        calc(100% - var(--tier-bottom)) 100%,
+        var(--tier-bottom) 100%
+      );
+      background: color-mix(in srgb, var(--accent) 9%, var(--surface-strong));
+      text-align: center;
+      transition: background-color 180ms var(--ease), filter 180ms var(--ease);
+    }
+
+    .arch-layer--charts {
+      --tier-top: 24%;
+      --tier-bottom: 13.3%;
+      height: 196px;
+    }
+
+    .arch-layer--foundations {
+      --tier-top: 13.3%;
+      --tier-bottom: 5.9%;
+      height: 135px;
+    }
+
+    .arch-layer--core {
+      --tier-top: 5.9%;
+      --tier-bottom: 0%;
+      height: 108px;
+    }
+
+    .arch-layer::before {
+      position: absolute;
+      top: 0;
+      right: var(--tier-top);
+      left: var(--tier-top);
+      height: 3px;
+      content: "";
+      background: var(--accent);
+    }
+
+    .arch-kicker {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 7px 10px;
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      color: var(--ink);
+      background: transparent;
+      font-size: 12px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 16px;
+      transform: none;
+      --generation-blur: 0px;
+    }
+
+    .mini-chart {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+      padding: 18px;
+      overflow: hidden;
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--surface-strong) 72%, transparent);
+      filter: blur(var(--generation-blur));
+    }
+
+    .generation-pixels {
+      position: absolute;
+      inset: 16px;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap: 2px;
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--surface-strong) 82%, var(--violet));
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transition: opacity 220ms var(--ease);
+    }
+
+    .gallery.is-generating .generation-pixels {
+      opacity: 1;
+    }
+
+    .generation-pixels span {
+      position: relative;
+      border-radius: 3px;
+      background: var(--pixel-color);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 7%, transparent);
+      opacity: .98;
+      overflow: hidden;
+      transform: scale(1.04);
+      animation: pixel-signal var(--pixel-speed) steps(2, end) var(--pixel-delay) infinite;
+      transition: opacity 260ms var(--ease), transform 260ms var(--ease);
+    }
+
+    .generation-pixels span::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      opacity: .42;
+      background-size: 12px 12px;
+    }
+
+    .generation-pixels .pixel--dot::after {
+      background-image: radial-gradient(circle, var(--pattern-ink) 1.5px, transparent 1.8px);
+    }
+
+    .generation-pixels .pixel--dash::after {
+      background-image: repeating-linear-gradient(135deg, transparent 0 6px, var(--pattern-ink) 6px 8px, transparent 8px 12px);
+    }
+
+    .generation-pixels .pixel--grid::after {
+      background-image:
+        linear-gradient(var(--pattern-ink) 1px, transparent 1px),
+        linear-gradient(90deg, var(--pattern-ink) 1px, transparent 1px);
+    }
+
+    .generation-pixels .pixel--ring::after {
+      background-image: radial-gradient(circle, transparent 0 3px, var(--pattern-ink) 3.5px 4.5px, transparent 5px);
+    }
+
+    .generation-pixels span.is-clear {
+      opacity: 0;
+      transform: scale(.72);
+    }
+
+    .mini-chart h3 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .mini-chart svg {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      left: 12px;
+      width: calc(100% - 24px);
+      height: 120px;
+      overflow: visible;
+    }
+
+    .area-chart {
+      cursor: crosshair;
+    }
+
+    .area-guide,
+    .area-point {
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity 140ms var(--ease),
+        transform 180ms var(--ease),
+        r 180ms var(--ease);
+    }
+
+    .area-guide {
+      stroke: color-mix(in srgb, var(--ink) 48%, transparent);
+      stroke-dasharray: 3 4;
+      transform: translateX(calc(var(--active-x, 0) * 1px));
+    }
+
+    .area-point {
+      fill: var(--surface-strong);
+      stroke: var(--chart-area-theme);
+      stroke-width: 3;
+    }
+
+    .area-chart.is-inspecting .area-guide,
+    .area-point.is-active,
+    .area-point:focus-visible {
+      opacity: 1;
+    }
+
+    .area-point.is-active,
+    .area-point:focus-visible {
+      r: 6px;
+      fill: var(--chart-area-theme);
+      stroke: var(--surface-strong);
+      pointer-events: auto;
+    }
+
+    .area-point:focus-visible {
+      outline: none;
+      filter: drop-shadow(0 0 1px white) drop-shadow(0 0 4px #4f46e5);
+    }
+
+    .draw-line {
+      stroke: var(--chart-area-theme);
+      stroke-dasharray: 480;
+      stroke-dashoffset: 480;
+    }
+
+    .scene--generation.is-intro-ready .draw-line {
+      animation: draw 1.5s var(--ease) forwards 500ms;
+    }
+
+    .area-stop {
+      stop-color: var(--chart-area-theme);
+    }
+
+    .donut {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: grid;
+      width: 142px;
+      height: 142px;
+      margin: 0;
+      place-items: center;
+      border-radius: 50%;
+      translate: -50% -50%;
+    }
+
+    .scene--generation.is-intro-ready .donut {
+      animation: spin-in 900ms var(--ease) both 420ms;
+    }
+
+    .donut svg {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      transform: rotate(-90deg);
+    }
+
+    .donut-slice {
+      fill: none;
+      stroke: var(--slice);
+      stroke-width: 24;
+      cursor: crosshair;
+      transition:
+        opacity 180ms var(--ease),
+        filter 180ms var(--ease),
+        stroke-width 180ms var(--ease);
+    }
+
+    .donut-slice.is-active {
+      stroke-width: 28;
+    }
+
+    .donut-slice:focus-visible {
+      outline: none;
+      stroke-width: 28;
+      filter: drop-shadow(0 0 1px white) drop-shadow(0 0 4px #4f46e5);
+    }
+
+    .donut::after {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      width: 94px;
+      height: 94px;
+      margin: 0;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--ink);
+      content: "1.2K";
+      background: var(--surface-strong);
+      font-size: 20px;
+      font-weight: 750;
+      pointer-events: none;
+    }
+
+    .heatmap {
+      display: grid;
+      min-height: 0;
+      flex: 1;
+      margin-top: 22px;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .heatmap span {
+      min-height: 0;
+      border-radius: 5px;
+      background: color-mix(in srgb, var(--chart-heat-theme) var(--heat), var(--chart-heat-theme-base));
+      cursor: crosshair;
+      transition:
+        opacity 180ms var(--ease),
+        filter 180ms var(--ease),
+        transform 180ms var(--ease);
+    }
+
+    .scene--generation.is-intro-ready .heatmap span {
+      animation: heat-reveal 480ms var(--ease) both;
+      animation-delay: calc(var(--i) * 35ms + 320ms);
+    }
+
+    .heatmap span.is-active {
+      transform: scale(1.08);
+    }
+
+    .mini-bars > rect {
+      cursor: crosshair;
+      transition:
+        opacity 180ms var(--ease),
+        filter 180ms var(--ease),
+        stroke-width 180ms var(--ease);
+    }
+
+    .mini-bars > rect.is-active {
+      stroke: var(--surface-strong);
+      stroke-width: 3;
+    }
+
+    .mini-bars > rect:focus-visible {
+      outline: none;
+      stroke: white;
+      stroke-width: 3;
+      filter: drop-shadow(0 0 3px #4f46e5);
+    }
+
+    .bar-pattern--dash { fill: url("#bar-pattern-dash"); }
+    .bar-pattern--dot { fill: url("#bar-pattern-dot"); }
+    .bar-pattern--wave { fill: url("#bar-pattern-wave"); }
+    .bar-pattern--cross { fill: url("#bar-pattern-cross"); }
+
+    .scene--generation.is-intro-ready .mini-bars > rect {
+      transform-box: fill-box;
+      transform-origin: center bottom;
+      animation: mini-bar-rise 620ms var(--ease) both;
+    }
+
+    .scene--generation.is-intro-ready .mini-bars > rect:nth-of-type(2) { animation-delay: 90ms; }
+    .scene--generation.is-intro-ready .mini-bars > rect:nth-of-type(3) { animation-delay: 180ms; }
+    .scene--generation.is-intro-ready .mini-bars > rect:nth-of-type(4) { animation-delay: 270ms; }
+
+    .loop {
+      position: relative;
+      display: grid;
+      min-height: 470px;
+      place-items: center;
+      --orbit-duration: 32s;
+    }
+
+    .loop-orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 380px;
+      height: 380px;
+      translate: -50% -50%;
+      will-change: rotate;
+    }
+
+    .loop-ring {
+      position: absolute;
+      inset: 0;
+      border: 1px dashed rgba(255,255,255,.2);
+      border-radius: 50%;
+    }
+
+    .loop-core {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      width: 180px;
+      height: 180px;
+      place-items: center;
+      border: 1px solid rgba(167, 139, 250, .4);
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--violet) 8%, var(--surface-strong));
+      box-shadow: none;
+      text-align: center;
+      transition: background-color 220ms var(--ease), border-color 220ms var(--ease);
+    }
+
+    .loop-core strong {
+      display: block;
+      font-size: 28px;
+      letter-spacing: -.04em;
+    }
+
+    .loop-core span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .loop-item {
+      position: absolute;
+      z-index: 2;
+      display: grid;
+      width: 146px;
+      grid-template-columns: 24px minmax(0, 1fr);
+      align-items: start;
+      gap: 10px;
+      padding: 14px 16px;
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      background: var(--surface-strong);
+      box-shadow: none;
+      font-size: 13px;
+      font-weight: 650;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      will-change: rotate;
+    }
+
+    .loop-item__number {
+      display: grid;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border-radius: 8px;
+      color: var(--violet);
+      background: color-mix(in srgb, var(--violet) 13%, transparent);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+
+    .loop-item__content strong {
+      display: block;
+      font: inherit;
+    }
+
+    .loop-item small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .loop-item--generate {
+      top: 0;
+      left: 50%;
+      translate: -50% -50%;
+    }
+
+    .loop-item--evaluate {
+      top: 50%;
+      right: 0;
+      translate: 50% -50%;
+    }
+
+    .loop-item--refine {
+      bottom: 0;
+      left: 50%;
+      translate: -50% 50%;
+    }
+
+    .loop-item--share {
+      top: 50%;
+      left: 0;
+      translate: -50% -50%;
+    }
+
+    .loop.is-dragging .loop-item {
+      cursor: grabbing;
+    }
+
+    .loop.is-dragging .loop-core,
+    .loop.is-spinning .loop-core {
+      border-color: color-mix(in srgb, var(--violet) 72%, var(--stroke));
+      background: color-mix(in srgb, var(--violet) 14%, var(--surface-strong));
+    }
+
+    .loop.is-dragging .loop-ring,
+    .loop.is-spinning .loop-ring {
+      border-color: color-mix(in srgb, var(--violet) 62%, transparent);
+    }
+
+    .takeaway-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .takeaway {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .takeaway b {
+      display: grid;
+      width: 26px;
+      height: 26px;
+      flex: 0 0 26px;
+      place-items: center;
+      border: 1px solid color-mix(in srgb, var(--chart-lime) 30%, transparent);
+      border-radius: 8px;
+      color: var(--lime);
+      background: color-mix(in srgb, var(--chart-lime) 20%, var(--surface-strong));
+      font-size: 12px;
+    }
+
+    .roadmap {
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      min-height: 470px;
+      padding: 22px;
+    }
+
+    .scene--expressions > .scene-copy,
+    .scene--expressions > .roadmap {
+      position: relative;
+      z-index: 1;
+    }
+
+    .expressions-echoes {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      overflow: hidden;
+      perspective: 1200px;
+      pointer-events: none;
+    }
+
+    .expression-float {
+      position: absolute;
+      display: block;
+      height: auto;
+      opacity: 0;
+      filter: saturate(1.08) drop-shadow(0 22px 30px rgba(0, 0, 0, .08));
+      mix-blend-mode: screen;
+      transform: translateY(24px) rotate(var(--expression-rotate, 0deg));
+      transition:
+        opacity 900ms var(--ease) 360ms,
+        transform 1100ms var(--ease) 360ms;
+      will-change: translate, rotate, scale;
+    }
+
+    html[data-theme="light"] .expression-float {
+      mix-blend-mode: multiply;
+    }
+
+    .scene--expressions.is-active .expression-float {
+      opacity: var(--expression-opacity, .16);
+      transform: translateY(0) rotate(var(--expression-rotate, 0deg));
+    }
+
+    .expression-float--radial {
+      --expression-opacity: .2;
+      --expression-rotate: -3deg;
+      top: 3%;
+      right: -8%;
+      width: min(43vw, 760px);
+      animation: expression-orbit-radial 18s ease-in-out 1.45s infinite;
+    }
+
+    .expression-float--stacks {
+      --expression-opacity: .14;
+      --expression-rotate: 7deg;
+      bottom: -22%;
+      left: 43%;
+      width: min(29vw, 530px);
+      animation: expression-orbit-stacks 22s ease-in-out 1.8s infinite;
+    }
+
+    .expression-float--bars {
+      --expression-opacity: .12;
+      --expression-rotate: -6deg;
+      bottom: -15%;
+      left: -5%;
+      width: min(22vw, 390px);
+      animation: expression-orbit-bars 16s ease-in-out 2.15s infinite;
+    }
+
+    .expressions-note {
+      display: grid;
+      max-width: 600px;
+      grid-template-columns: 42px minmax(0, 1fr);
+      align-items: center;
+      gap: 14px;
+      margin-top: 28px;
+      padding: 14px 16px;
+      border: 1px solid color-mix(in srgb, var(--violet) 34%, var(--stroke));
+      border-radius: 16px;
+      color: var(--ink);
+      background: color-mix(in srgb, var(--violet) 8%, var(--surface-strong));
+    }
+
+    .expressions-note__mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 14px;
+      color: var(--violet);
+      background:
+        radial-gradient(circle, currentColor 1.5px, transparent 1.8px) 0 0 / 8px 8px,
+        color-mix(in srgb, var(--violet) 13%, var(--surface-strong));
+    }
+
+    .expressions-note__mark::before {
+      width: 18px;
+      height: 18px;
+      border: 2px solid currentColor;
+      border-radius: 50% 50% 48% 52% / 58% 44% 56% 42%;
+      content: "";
+      background: var(--surface-strong);
+    }
+
+    .expressions-note strong,
+    .expressions-note small {
+      display: block;
+    }
+
+    .expressions-note strong {
+      font-size: 13px;
+    }
+
+    .expressions-note small {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .pr-banner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px;
+      border: 1px solid rgba(190, 242, 100, 0.26);
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--lime) 7%, var(--surface-strong));
+    }
+
+    .pr-banner__status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--lime);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .pr-banner__status::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      content: "";
+      background: currentColor;
+      animation: pulse 1.8s var(--ease) infinite alternate;
+    }
+
+    .pr-banner strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .pr-link {
+      flex: 0 0 auto;
+      padding: 8px 11px;
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .pr-link:hover {
+      border-color: rgba(167, 139, 250, 0.55);
+      background: rgba(167, 139, 250, 0.1);
+    }
+
+    .roadmap-step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 16px;
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--surface-strong) 72%, transparent);
+    }
+
+    .roadmap-step__number {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 13px;
+      color: var(--step-color);
+      background: color-mix(in srgb, var(--step-color) 12%, transparent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .roadmap-step h3 {
+      margin: 2px 0 5px;
+      font-size: 14px;
+    }
+
+    .roadmap-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .mini-chart,
+    .loop-item,
+    .pr-banner,
+    .roadmap-step {
+      z-index: 0;
+      scale: 1;
+      transition:
+        scale 220ms var(--ease),
+        background-color 220ms var(--ease),
+        border-color 220ms var(--ease),
+        filter 260ms var(--ease);
+      will-change: scale;
+    }
+
+    @media (hover: hover) {
+      .mini-chart:hover,
+      .roadmap-step:hover {
+        z-index: 2;
+        scale: 1.025;
+        border-color: rgba(167, 139, 250, 0.48);
+        background: color-mix(in srgb, var(--violet) 6%, var(--surface-strong));
+      }
+
+      .arch-layer:hover {
+        z-index: 2;
+        background: color-mix(in srgb, var(--accent) 15%, var(--surface-strong));
+        filter: saturate(1.08);
+      }
+
+      .loop-item:hover {
+        z-index: 2;
+        scale: 1.06;
+        border-color: rgba(167, 139, 250, 0.52);
+        background: color-mix(in srgb, var(--violet) 7%, var(--surface-strong));
+      }
+
+      .pr-banner:hover,
+      .pr-banner:focus-within {
+        z-index: 2;
+        scale: 1.018;
+        border-color: rgba(190, 242, 100, 0.5);
+        background: color-mix(in srgb, var(--lime) 9%, var(--surface-strong));
+      }
+    }
+
+    html[data-theme="light"] body {
+      background: var(--canvas);
+    }
+
+    html[data-theme="light"] .topbar {
+      background: color-mix(in srgb, var(--canvas) 88%, transparent);
+    }
+
+    html[data-theme="light"] .chip,
+    html[data-theme="light"] .mini-chart h3,
+    html[data-theme="light"] .takeaway {
+      color: var(--ink);
+    }
+
+    html[data-theme="light"] .chart-subtitle,
+    html[data-theme="light"] .install-card p,
+    html[data-theme="light"] .roadmap-step p,
+    html[data-theme="light"] .loop-item small {
+      color: var(--muted);
+    }
+
+    html[data-theme="light"] .delta,
+    html[data-theme="light"] .status,
+    html[data-theme="light"] .pr-banner__status {
+      color: var(--lime);
+    }
+
+    html[data-theme="light"] .repo-install__badge,
+    html[data-theme="light"] .eyebrow {
+      color: var(--cyan);
+    }
+
+    html[data-theme="light"] .loop-ring {
+      border-color: rgba(50, 36, 66, 0.28);
+    }
+
+    html[data-theme="light"] .nav-button {
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    html[data-theme="light"] .progress {
+      background: rgba(50, 36, 66, 0.06);
+    }
+
+    html[data-theme="light"] .noise {
+      opacity: 1;
+    }
+
+    .controls {
+      position: fixed;
+      right: clamp(18px, 4vw, 60px);
+      bottom: 24px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-button {
+      display: grid;
+      width: 46px;
+      height: 46px;
+      place-items: center;
+      border: 1px solid var(--stroke);
+      border-radius: 50%;
+      color: var(--ink);
+      background: color-mix(in srgb, var(--surface-strong) 86%, transparent);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+
+    .nav-button:hover:not(:disabled) {
+      border-color: color-mix(in srgb, var(--violet) 54%, var(--stroke));
+      background: color-mix(in srgb, var(--violet) 10%, var(--surface-strong));
+      transform: translateY(-2px);
+    }
+
+    .nav-button:focus-visible,
+    .dot:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 3px;
+      box-shadow: 0 0 0 5px #4f46e5;
+    }
+
+    .nav-button:disabled {
+      opacity: .52;
+      cursor: not-allowed;
+    }
+
+    .nav-button svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .dots {
+      position: fixed;
+      bottom: 41px;
+      left: clamp(20px, 4vw, 64px);
+      z-index: 10;
+      display: flex;
+      gap: 9px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--ink) 28%, transparent);
+      cursor: pointer;
+      transition: width 260ms var(--ease), background 260ms ease;
+    }
+
+    .dot[aria-current="step"] {
+      width: 28px;
+      background: var(--violet);
+    }
+
+    .hint {
+      position: fixed;
+      right: calc(clamp(18px, 4vw, 60px) + 124px);
+      bottom: 39px;
+      z-index: 10;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .chart-callout {
+      position: fixed;
+      top: var(--callout-y, 0);
+      left: var(--callout-x, 0);
+      z-index: 30;
+      width: max-content;
+      min-width: 176px;
+      max-width: min(240px, calc(100vw - 24px));
+      padding: 12px 14px;
+      border: 1px solid color-mix(in srgb, var(--ink) 18%, var(--stroke));
+      border-radius: 12px;
+      opacity: 0;
+      color: var(--ink);
+      background: color-mix(in srgb, var(--surface-strong) 96%, transparent);
+      pointer-events: none;
+      transform: translateY(6px) scale(.98);
+      transform-origin: top left;
+      transition: opacity 120ms var(--ease), transform 160ms var(--ease);
+    }
+
+    .chart-callout[data-open="true"] {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .chart-callout__title {
+      margin-bottom: 9px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .chart-callout__row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chart-callout__swatch {
+      width: 10px;
+      height: 10px;
+      border: 1px solid color-mix(in srgb, var(--ink) 32%, transparent);
+      border-radius: 3px;
+      background:
+        repeating-linear-gradient(135deg, transparent 0 2px, color-mix(in srgb, var(--ink) 42%, transparent) 2px 3px),
+        var(--callout-color, var(--violet));
+    }
+
+    .chart-callout__swatch[hidden],
+    .chart-callout__ratio:empty {
+      display: none;
+    }
+
+    .chart-callout__series {
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .chart-callout__value {
+      font-size: 16px;
+      font-weight: 750;
+      letter-spacing: -.02em;
+    }
+
+    .chart-callout__ratio {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    @keyframes grow {
+      to { transform: scaleY(1); }
+    }
+
+    @keyframes draw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes spin-in {
+      from { opacity: 0; transform: rotate(-80deg) scale(.65); }
+    }
+
+    @keyframes float {
+      to { transform: translate(22px, -18px) scale(1.08); }
+    }
+
+    @keyframes heat-reveal {
+      from { opacity: 0; transform: scale(.72); }
+    }
+
+    @keyframes mini-bar-rise {
+      from { opacity: 0; transform: scaleY(.15); }
+    }
+
+    @keyframes pixel-signal {
+      0%, 100% { filter: brightness(.88) saturate(.92); }
+      50% { filter: brightness(1.18) saturate(1.3); }
+    }
+
+    @keyframes terminal-line-in {
+      to { opacity: 1; transform: none; }
+    }
+
+    @keyframes cursor-blink {
+      50% { opacity: 0; }
+    }
+
+    @keyframes alarm-blink {
+      50% { opacity: .12; }
+    }
+
+    @keyframes rotate {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes counter-rotate {
+      to { rotate: -360deg; }
+    }
+
+    @keyframes expression-orbit-radial {
+      0%, 100% { translate: 0 0; rotate: 0deg; scale: 1; }
+      28% { translate: -18px 16px; rotate: 1.5deg; scale: 1.025; }
+      62% { translate: 10px 28px; rotate: -1deg; scale: .985; }
+      84% { translate: 24px -8px; rotate: 1deg; scale: 1.01; }
+    }
+
+    @keyframes expression-orbit-stacks {
+      0%, 100% { translate: 0 0; rotate: 0deg; scale: 1; }
+      24% { translate: 26px -22px; rotate: -2deg; scale: 1.02; }
+      58% { translate: -16px -34px; rotate: 1.5deg; scale: .98; }
+      80% { translate: -28px 8px; rotate: -1deg; scale: 1.015; }
+    }
+
+    @keyframes expression-orbit-bars {
+      0%, 100% { translate: 0 0; rotate: 0deg; scale: 1; }
+      30% { translate: 18px -28px; rotate: 2.5deg; scale: 1.035; }
+      64% { translate: 34px 4px; rotate: -1.5deg; scale: .985; }
+      86% { translate: -8px 18px; rotate: 1deg; scale: 1.01; }
+    }
+
+    @media (max-width: 1100px) {
+      body { overflow-y: auto; }
+      main { height: auto; }
+      .scene {
+        height: auto;
+        min-height: 100vh;
+        grid-template-columns: 1fr;
+        align-content: start;
+        gap: 48px;
+      }
+      .visual { min-height: 420px; }
+      .scene--height-sync .visual {
+        height: auto !important;
+        min-height: 420px !important;
+      }
+      .scene--height-sync .install-stack {
+        height: auto;
+      }
+      .visual.loop {
+        width: min(680px, 100%);
+        min-height: 540px;
+        margin-inline: auto;
+      }
+      .loop-item {
+        width: 124px;
+        padding: 12px;
+        font-size: 12px;
+      }
+      .loop-item small {
+        font-size: 9px;
+      }
+      .hero-chart {
+        width: 100%;
+        min-height: 474px;
+        margin: 0;
+        padding-bottom: 58px;
+      }
+      .hint { display: none; }
+    }
+
+    @media (max-width: 700px) {
+      .expression-float--stacks,
+      .expression-float--bars {
+        display: none;
+      }
+      .expression-float--radial {
+        top: 12%;
+        right: -28%;
+        width: 82vw;
+      }
+      .visual.loop {
+        display: grid;
+        min-height: 0;
+        gap: 12px;
+        place-items: stretch;
+      }
+      .loop-ring {
+        display: none;
+      }
+      .loop-orbit {
+        position: static;
+        display: contents;
+        width: auto;
+        height: auto;
+        translate: none;
+        animation: none;
+        cursor: default;
+        touch-action: auto;
+      }
+      .loop-core {
+        width: auto;
+        height: auto;
+        min-height: 132px;
+        border-radius: 16px;
+      }
+      .loop-item {
+        position: static;
+        width: 100%;
+        padding: 14px 16px;
+        translate: none;
+        rotate: none;
+        animation: none;
+      }
+      .loop-item small {
+        font-size: 10px;
+      }
+      .loop-item--generate { order: 1; }
+      .loop-item--evaluate { order: 2; }
+      .loop-item--refine { order: 3; }
+      .loop-item--share { order: 4; }
+    }
+
+    @media (max-width: 560px) {
+      .scene { padding-inline: 20px; }
+      .gallery { grid-template-columns: 1fr; }
+      .mini-chart:nth-child(n+3) { display: none; }
+      .arch-layer {
+        width: 100%;
+        height: auto;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 18px;
+        border: 1px solid var(--stroke);
+        border-radius: 16px;
+        clip-path: none;
+      }
+      .arch-layer::before {
+        top: 0;
+        right: auto;
+        bottom: 0;
+        left: 0;
+        width: 4px;
+        height: auto;
+      }
+      .fluent-flex-wordmark { font-size: 15px; }
+      .counter { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+      }
+
+      .arch-layer:hover,
+      .mini-chart:hover,
+      .loop-item:hover,
+      .pr-banner:hover,
+      .pr-banner:focus-within,
+      .roadmap-step:hover {
+        scale: 1;
+      }
+
+      .loop-orbit,
+      .loop-item,
+      .expression-float {
+        animation: none;
+      }
+
+      .eyebrow-timer.is-expired {
+        opacity: 1;
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="fluent-flex-wordmark" role="img" aria-label="Fluent Flex">
+        <span class="wordmark-f" aria-hidden="true">
+          <svg viewBox="0 0 8.565 10">
+            <path d="M5.56445 1.68848H2.05078V4.23828H5.28418V5.91309H2.05078V9.80273H0V0H5.56445V1.68848Z"/>
+            <rect class="wordmark-f-middle" x="3.24316" y="4.24451" width="2.04523" height="1.66956"/>
+            <rect class="wordmark-f-top" x="3.51929" y="0" width="2.04523" height="1.6875"/>
+          </svg>
+        </span>
+        <span class="wordmark-glyph wordmark-l" aria-hidden="true">
+          <svg viewBox="0 0 5.729 10"><path d="M5.72852 9.80273H0V0H2.05078V8.12109H5.72852V9.80273Z"/></svg>
+        </span>
+        <span class="wordmark-u" aria-hidden="true">
+          <svg viewBox="0 0 12.984 10.025">
+            <path d="M2.05078 6.40137C2.05082 7.27025 2.75489 7.97417 3.625 7.97461H4.2998V10.0254H3.625C1.62403 10.0249 0.000038 8.40376 0 6.40137V0H2.05078V6.40137Z"/>
+            <path class="wordmark-u-right" d="M5.93359 6.40137C5.93356 7.27025 5.22949 7.97417 4.35938 7.97461H3.68457V10.0254H4.35938C6.36034 10.0249 7.98434 8.40376 7.98438 6.40137V0H5.93359V6.40137Z"/>
+            <rect class="wordmark-u-middle" x="3.83252" y="7.98047" width="0.312195" height="2.04297"/>
+          </svg>
+        </span>
+        <span class="wordmark-glyph wordmark-e" aria-hidden="true">
+          <svg viewBox="0 0 5.783 10"><path d="M5.7832 9.80273H0V0H5.55762V1.68848H2.05078V4.02637H5.31152V5.70801H2.05078V8.12109H5.7832V9.80273Z"/></svg>
+        </span>
+        <span class="wordmark-n" aria-hidden="true">
+          <svg viewBox="0 0 11.682 10.025">
+            <defs><clipPath id="fluent-flex-n-clip"><rect class="wordmark-n-clip" x="0" y="0" width="8.68164" height="9.80273"/></clipPath></defs>
+            <path d="M1.87891 2.52051L1.90918 2.61133H1.89355C1.91178 2.77539 1.92546 2.9873 1.93457 3.24707C1.94368 3.50684 1.94824 3.81217 1.94824 4.16309V9.80273H0V1.64355H0.728516L1.87891 2.52051Z"/>
+            <path class="wordmark-n-right" d="M8.68164 7.96582H7.96289L6.81348 7.08984L6.7832 7H6.79492C6.77669 6.88151 6.76302 6.70833 6.75391 6.48047C6.74813 6.33614 6.74528 6.17076 6.74316 5.98438V0H8.68164V7.96582Z"/>
+            <rect class="wordmark-n-stretch-left" x="0.00659" y="0.00647" width="2.138" height="2.599"/>
+            <rect class="wordmark-n-stretch-right" x="6.573" y="7.00391" width="2.1087" height="2.79883"/>
+            <g clip-path="url(#fluent-flex-n-clip)">
+              <line class="wordmark-n-diagonal" x1="0.65588" y1="-0.86792" x2="8.02675" y2="10.47179" stroke="currentColor" stroke-width="1.7"/>
+            </g>
+          </svg>
+        </span>
+        <span class="wordmark-glyph wordmark-t" aria-hidden="true">
+          <svg viewBox="0 0 7.649 10"><path d="M7.64941 1.68848H4.84668V9.80273H2.78906V1.68848H0V0H7.64941V1.68848Z"/></svg>
+        </span>
+        <span class="wordmark-glyph wordmark-flex-f" aria-hidden="true">
+          <svg viewBox="0 0 5.565 10"><path d="M5.56445 1.68848H2.05078V4.23828H5.28418V5.91309H2.05078V9.80273H0V0H5.56445V1.68848Z"/></svg>
+        </span>
+        <span class="wordmark-glyph wordmark-l" aria-hidden="true">
+          <svg viewBox="0 0 5.729 10"><path d="M5.72852 9.80273H0V0H2.05078V8.12109H5.72852V9.80273Z"/></svg>
+        </span>
+        <span class="wordmark-e-flex" aria-hidden="true">
+          <svg viewBox="0 0 19.783 10">
+            <path d="M5.7832 9.80273H0V0H5.55762V1.68848H2.05078V4.02637H5.31152V5.70801H2.05078V8.12109H5.7832V9.80273Z"/>
+            <rect class="wordmark-e-flex-middle" x="3.26807" y="4.02734" width="2.04523" height="1.67578"/>
+            <rect class="wordmark-e-flex-top" x="3.51025" y="0" width="2.04523" height="1.6875"/>
+            <rect class="wordmark-e-flex-bottom" x="3.73804" y="8.125" width="2.04523" height="1.67773"/>
+          </svg>
+        </span>
+        <span class="wordmark-glyph wordmark-x" aria-hidden="true">
+          <svg viewBox="0 0 8.907 10"><path d="M8.90723 9.80273H6.4668L4.69629 6.52832C4.65983 6.46908 4.62565 6.38704 4.59375 6.28223C4.56185 6.17741 4.52767 6.0498 4.49121 5.89941H4.46387C4.44564 5.96777 4.41829 6.05892 4.38184 6.17285C4.34538 6.28223 4.29753 6.40755 4.23828 6.54883L2.44727 9.80273H0L3.14453 4.89453L0.266602 0H2.76172L4.25195 3.01465C4.30664 3.12858 4.35905 3.25391 4.40918 3.39062C4.45931 3.52279 4.50716 3.66634 4.55273 3.82129H4.58008C4.61654 3.71647 4.65983 3.5957 4.70996 3.45898C4.76465 3.31771 4.82845 3.16048 4.90137 2.9873L6.53516 0H8.8252L5.86523 4.86035L8.90723 9.80273Z"/></svg>
+        </span>
+      </span>
+    </div>
+    <div class="top-actions">
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="false">
+        <svg class="theme-toggle__moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16.7 12.2A7 7 0 0 1 7.8 3.3 7 7 0 1 0 16.7 12.2Z"/></svg>
+        <svg class="theme-toggle__sun" viewBox="0 0 20 20" aria-hidden="true">
+          <circle cx="10" cy="10" r="3.25"/>
+          <path d="M10 1.5v2M10 16.5v2M1.5 10h2M16.5 10h2M4 4l1.4 1.4M14.6 14.6 16 16M16 4l-1.4 1.4M5.4 14.6 4 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+        <span id="theme-label">Light</span>
+      </button>
+      <div class="counter"><strong id="current-number">01</strong> / 06 · five-minute walkthrough</div>
+    </div>
+  </header>
+
+  <div class="progress" aria-hidden="true"><span id="progress-bar" style="width:16.667%"></span></div>
+
+  <main id="deck">
+    <section class="scene is-active" aria-labelledby="scene-1-title">
+      <div class="scene-copy">
+        <div class="eyebrow">The idea · <span class="eyebrow-timer" data-countdown="30">30</span><span class="eyebrow-timer-unit"> seconds</span></div>
+        <h1 id="scene-1-title">Dataviz guidance that agents can <span class="gradient-text">actually use.</span></h1>
+        <p class="lead">A structured knowledge layer for choosing, styling, labeling, and interacting with Fluent charts—without improvising the rules each time.</p>
+      </div>
+      <div class="visual" aria-label="Animated weekly adoption bar chart">
+        <div class="orb one" aria-hidden="true"></div>
+        <div class="orb two" aria-hidden="true"></div>
+        <div class="glass hero-chart">
+          <div class="chart-head">
+            <div>
+              <div class="chart-title">Skill-guided chart generations</div>
+              <div class="chart-subtitle">Weekly adoption · illustrative data</div>
+            </div>
+            <span class="delta">↗ 42%</span>
+          </div>
+          <div class="bars chart-interaction" role="group" aria-label="Skill-guided chart generations by day">
+            <span class="bar" style="--value:28%;--i:1;--bar-color:var(--chart-cyan)" data-label="M"></span>
+            <span class="bar" style="--value:46%;--i:2;--bar-color:var(--chart-violet)" data-label="T"></span>
+            <span class="bar" style="--value:39%;--i:3;--bar-color:var(--chart-pink)" data-label="W"></span>
+            <span class="bar" style="--value:67%;--i:4;--bar-color:var(--chart-lime)" data-label="T"></span>
+            <span class="bar" style="--value:58%;--i:5;--bar-color:var(--chart-orange)" data-label="F"></span>
+            <span class="bar" style="--value:82%;--i:6;--bar-color:var(--chart-blue)" data-label="S"></span>
+            <span class="bar" style="--value:94%;--i:7;--bar-color:var(--chart-violet)" data-label="S"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene--height-sync" aria-labelledby="scene-2-title">
+      <div class="scene-copy">
+        <div class="eyebrow">Install · <span class="eyebrow-timer" data-countdown="45">45</span><span class="eyebrow-timer-unit"> seconds</span></div>
+        <h2 id="scene-2-title">Three plugins.<br><span class="gradient-text">One shared language.</span></h2>
+        <p class="lead"><a class="agency-hub-link" href="https://aka.ms/agencyhub" target="_blank" rel="noreferrer">Install from Agency Hub</a> by searching for <strong>flex-dataviz</strong>, plus its system and token dependencies.</p>
+        <div class="terminal" id="install-terminal" aria-label="Simulated plugin installation" aria-live="polite">
+          <div class="terminal__head">
+            <span>Plugin installer</span>
+            <span class="terminal__state" id="terminal-state">Ready</span>
+          </div>
+          <div class="terminal__output" id="terminal-output"></div>
+        </div>
+      </div>
+      <div class="visual">
+        <div class="glass install-stack">
+          <div class="install-card">
+            <span class="plugin-icon" style="--icon:var(--blue)">S</span>
+            <div><h3>flex-system</h3><p>Principles and semantic guidance</p></div>
+            <span class="status">Required</span>
+          </div>
+          <div class="install-card">
+            <span class="plugin-icon" style="--icon:var(--pink)">T</span>
+            <div><h3>flex-tokens</h3><p>Color, type, spacing, and motion values</p></div>
+            <span class="status">Required</span>
+          </div>
+          <div class="install-card">
+            <span class="plugin-icon" style="--icon:var(--violet)">D</span>
+            <div><h3>flex-dataviz</h3><p>Core principles and chart rules</p></div>
+            <span class="status">Install</span>
+          </div>
+          <div class="repo-install">
+            <span class="repo-install__badge">For teams</span>
+            <div>
+              <h3>Commit an <code>agency.toml</code> at the repo root</h3>
+              <code class="repo-install__snippet">[plugins]
+default = ["github:x3-design/fluent-design:plugins/system", "github:x3-design/fluent-design:plugins/tokens", "github:x3-design/fluent-design:plugins/dataviz"]</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene--architecture" aria-labelledby="scene-3-title">
+      <div class="scene-copy">
+        <div class="eyebrow">Architecture · <span class="eyebrow-timer" data-countdown="60">60</span><span class="eyebrow-timer-unit"> seconds</span></div>
+        <h2 id="scene-3-title">From principles<br>to <span class="gradient-text">specific charts.</span></h2>
+        <p class="lead">The plugin starts with durable cross-chart rules, adds shared chart anatomy, then provides focused guidance for each visualization family.</p>
+      </div>
+      <div class="visual glass architecture">
+        <div class="arch-layer arch-layer--charts" style="--accent:var(--pink)">
+          <div class="arch-kicker">Chart skills</div>
+          <div class="chips">
+            <span class="chip">Bar</span><span class="chip">Area + line</span>
+            <span class="chip">Donut</span><span class="chip">Gauge</span>
+            <span class="chip">Heatmap</span><span class="chip">Sankey</span>
+            <span class="chip">Funnel</span><span class="chip">Tree</span>
+            <span class="chip">+ more</span>
+          </div>
+        </div>
+        <div class="arch-layer arch-layer--foundations" style="--accent:var(--violet)">
+          <div class="arch-kicker">Shared components</div>
+          <div class="chips">
+            <span class="chip">Axis</span>
+            <span class="chip">Legends</span>
+            <span class="chip">Callouts</span>
+            <span class="chip">Focus + keyboard</span>
+          </div>
+        </div>
+        <div class="arch-layer arch-layer--core" style="--accent:var(--cyan)">
+          <div class="arch-kicker">Core principles</div>
+          <div class="chips">
+            <span class="chip">Color + patterns</span>
+            <span class="chip">Typography</span>
+            <span class="chip">Density</span>
+            <span class="chip">Corner radius</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene--height-sync scene--generation" aria-labelledby="scene-4-title">
+      <div class="scene-copy">
+        <div class="eyebrow">The generation flow · <span class="eyebrow-timer" data-countdown="60">60</span><span class="eyebrow-timer-unit"> seconds</span></div>
+        <h2 id="scene-4-title">
+          <span class="generation-title-line" id="generation-title-ask">Ask naturally.</span>
+          <span class="generation-title-line gradient-text" id="generation-title-result">Generate coherently.</span>
+        </h2>
+        <div class="generation-detail">
+          <p class="lead">“Create charts for a Seattle coffee crawl: monthly latte orders, favorite neighborhoods, café buzz by weekday and time, and top rainy-day drinks. Follow flex-dataviz for all guidance, including color, axes, legends, interaction, and accessibility.”</p>
+          <div class="terminal copilot-cli" id="generation-terminal" aria-label="Simulated chart generation in Copilot CLI" aria-live="polite">
+            <div class="terminal__head">
+              <span>Copilot CLI</span>
+              <span class="terminal__state" id="generation-state">Ready</span>
+            </div>
+            <div class="terminal__output" id="generation-output"></div>
+          </div>
+        </div>
+      </div>
+      <div class="visual glass gallery">
+        <article class="mini-chart">
+          <h3>Latte orders · area</h3>
+          <svg class="area-chart chart-interaction" viewBox="0 0 260 120" role="group" aria-label="Monthly Seattle latte orders from January through June">
+            <defs>
+              <linearGradient id="area-fill" x1="0" y1="0" x2="0" y2="1">
+                <stop class="area-stop" offset="0" stop-opacity=".45"/>
+                <stop class="area-stop" offset="1" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0 100 C30 88,45 78,70 82 S110 54,140 62 S175 38,205 43 S238 15,260 20 L260 120 L0 120Z" fill="url(#area-fill)"/>
+            <path class="draw-line" d="M0 100 C30 88,45 78,70 82 S110 54,140 62 S175 38,205 43 S238 15,260 20" fill="none" stroke-width="4" stroke-linecap="round"/>
+            <line class="area-guide" x1="0" y1="4" x2="0" y2="116"/>
+            <circle class="area-point" cx="6" cy="97" r="4"/>
+            <circle class="area-point" cx="54" cy="81" r="4"/>
+            <circle class="area-point" cx="102" cy="71.2" r="4"/>
+            <circle class="area-point" cx="154" cy="62.9" r="4"/>
+            <circle class="area-point" cx="206" cy="42" r="4"/>
+            <circle class="area-point" cx="254" cy="21" r="4"/>
+          </svg>
+        </article>
+        <article class="mini-chart">
+          <h3>Neighborhood favorites · donut</h3>
+          <div class="donut chart-interaction" role="group" aria-label="1.2K coffee crawl stops across Seattle neighborhoods">
+            <svg viewBox="0 0 142 142">
+              <defs>
+                <pattern id="donut-pattern-dash" width="9" height="9" patternUnits="userSpaceOnUse">
+                  <rect width="9" height="9" fill="var(--chart-violet)"/>
+                  <path d="M-2 3 3-2M1 10 10 1M7 12 12 7" fill="none" stroke="var(--pattern-ink)" stroke-width="1.5"/>
+                </pattern>
+                <pattern id="donut-pattern-dot" width="8" height="8" patternUnits="userSpaceOnUse">
+                  <rect width="8" height="8" fill="var(--chart-cyan)"/>
+                  <circle cx="2" cy="2" r="1.2" fill="var(--pattern-ink)"/>
+                  <circle cx="6" cy="6" r="1.2" fill="var(--pattern-ink)"/>
+                </pattern>
+                <pattern id="donut-pattern-wave" width="12" height="8" patternUnits="userSpaceOnUse">
+                  <rect width="12" height="8" fill="var(--chart-pink)"/>
+                  <path d="M-2 4Q1 1 4 4T10 4T16 4" fill="none" stroke="var(--pattern-ink)" stroke-width="1.4"/>
+                </pattern>
+                <pattern id="donut-pattern-cross" width="9" height="9" patternUnits="userSpaceOnUse">
+                  <rect width="9" height="9" fill="var(--chart-neutral)"/>
+                  <path d="M0 0 9 9M9 0 0 9" fill="none" stroke="var(--pattern-ink)" stroke-width="1.2"/>
+                </pattern>
+              </defs>
+              <circle class="donut-slice" style="--slice:url(#donut-pattern-dash)" cx="71" cy="71" r="59" pathLength="100" stroke-dasharray="38 62"/>
+              <circle class="donut-slice" style="--slice:url(#donut-pattern-dot)" cx="71" cy="71" r="59" pathLength="100" stroke-dasharray="29 71" stroke-dashoffset="-38"/>
+              <circle class="donut-slice" style="--slice:url(#donut-pattern-wave)" cx="71" cy="71" r="59" pathLength="100" stroke-dasharray="17 83" stroke-dashoffset="-67"/>
+              <circle class="donut-slice" style="--slice:url(#donut-pattern-cross)" cx="71" cy="71" r="59" pathLength="100" stroke-dasharray="16 84" stroke-dashoffset="-84"/>
+            </svg>
+          </div>
+        </article>
+        <article class="mini-chart">
+          <h3>Café buzz · heatmap</h3>
+          <div class="heatmap chart-interaction" role="grid" aria-label="Seattle café buzz by weekday and time of day">
+            <span style="--heat:20%;--i:1"></span><span style="--heat:72%;--i:2"></span><span style="--heat:42%;--i:3"></span><span style="--heat:88%;--i:4"></span><span style="--heat:35%;--i:5"></span>
+            <span style="--heat:58%;--i:6"></span><span style="--heat:26%;--i:7"></span><span style="--heat:92%;--i:8"></span><span style="--heat:48%;--i:9"></span><span style="--heat:68%;--i:10"></span>
+            <span style="--heat:84%;--i:11"></span><span style="--heat:46%;--i:12"></span><span style="--heat:30%;--i:13"></span><span style="--heat:76%;--i:14"></span><span style="--heat:54%;--i:15"></span>
+          </div>
+        </article>
+        <article class="mini-chart">
+          <h3>Rainy-day drinks · bar</h3>
+          <svg class="mini-bars chart-interaction" viewBox="0 0 260 120" role="group" aria-label="Top rainy-day drink orders in Seattle">
+            <defs>
+              <pattern id="bar-pattern-dash" width="10" height="10" patternUnits="userSpaceOnUse">
+                <path d="M0 0H10V10H0Z" fill="var(--chart-blue)"/>
+                <path d="M-2 3 3-2M1 10 10 1M7 12 12 7" fill="none" stroke="var(--pattern-ink)" stroke-width="1.5"/>
+              </pattern>
+              <pattern id="bar-pattern-dot" width="8" height="8" patternUnits="userSpaceOnUse">
+                <path d="M0 0H8V8H0Z" fill="var(--chart-lime)"/>
+                <circle cx="2" cy="2" r="1.2" fill="var(--pattern-ink)"/>
+                <circle cx="6" cy="6" r="1.2" fill="var(--pattern-ink)"/>
+              </pattern>
+              <pattern id="bar-pattern-wave" width="12" height="8" patternUnits="userSpaceOnUse">
+                <path d="M0 0H12V8H0Z" fill="var(--chart-violet)"/>
+                <path d="M-2 4Q1 1 4 4T10 4T16 4" fill="none" stroke="var(--pattern-ink)" stroke-width="1.4"/>
+              </pattern>
+              <pattern id="bar-pattern-cross" width="9" height="9" patternUnits="userSpaceOnUse">
+                <path d="M0 0H9V9H0Z" fill="var(--chart-orange)"/>
+                <path d="M0 0 9 9M9 0 0 9" fill="none" stroke="var(--pattern-ink)" stroke-width="1.2"/>
+              </pattern>
+            </defs>
+            <rect class="bar-pattern--dash" x="18" y="52" width="38" height="68" rx="10"/>
+            <rect class="bar-pattern--dot" x="78" y="22" width="38" height="98" rx="10"/>
+            <rect class="bar-pattern--wave" x="138" y="68" width="38" height="52" rx="10"/>
+            <rect class="bar-pattern--cross" x="198" y="38" width="38" height="82" rx="10"/>
+          </svg>
+        </article>
+        <div class="generation-pixels" id="generation-pixels" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="scene" aria-labelledby="scene-5-title">
+      <div class="scene-copy">
+        <div class="eyebrow">The real contribution · <span class="eyebrow-timer" data-countdown="45">45</span><span class="eyebrow-timer-unit"> seconds</span></div>
+        <h2 id="scene-5-title">Generate. Evaluate.<br><span class="gradient-text">Improve the system.</span></h2>
+        <p class="lead">The output became an evaluation surface—revealing where guidance needed to be more precise, accessible, or implementation-aware.</p>
+        <div class="takeaway-list">
+          <div class="takeaway"><b>1</b><span>Found geometry failures in gauges and collisions in tree layouts.</span></div>
+          <div class="takeaway"><b>2</b><span>Caught on-mark contrast problems and missing callout or focus behavior.</span></div>
+          <div class="takeaway"><b>3</b><span>Kept dataviz guidance technology-agnostic while separating Figma construction guidance.</span></div>
+        </div>
+      </div>
+      <div class="visual loop" aria-label="Generate, evaluate, refine, and share feedback loop. Drag an orbit card and flick to spin it.">
+        <div class="loop-core"><div><strong>Better<br>guidance</strong><span>with every loop</span></div></div>
+        <div class="loop-orbit">
+          <div class="loop-ring" aria-hidden="true"></div>
+          <div class="loop-item loop-item--generate"><span class="loop-item__number">01</span><div class="loop-item__content"><strong>Generate</strong><small>Produce varied chart examples</small></div></div>
+          <div class="loop-item loop-item--evaluate"><span class="loop-item__number">02</span><div class="loop-item__content"><strong>Evaluate</strong><small>Find visual and behavior gaps</small></div></div>
+          <div class="loop-item loop-item--refine"><span class="loop-item__number">03</span><div class="loop-item__content"><strong>Refine</strong><small>Make the rules more precise</small></div></div>
+          <div class="loop-item loop-item--share"><span class="loop-item__number">04</span><div class="loop-item__content"><strong>Share</strong><small>Reusable guidance for everyone</small></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene--expressions" aria-labelledby="scene-6-title">
+      <div class="expressions-echoes" aria-hidden="true">
+        <img class="expression-float expression-float--radial" src="dataviz-walkthrough-assets/expressions-radial.png" alt="">
+        <img class="expression-float expression-float--stacks" src="dataviz-walkthrough-assets/expressions-stacks.png" alt="">
+        <img class="expression-float expression-float--bars" src="dataviz-walkthrough-assets/expressions-bars.png" alt="">
+      </div>
+      <div class="scene-copy">
+        <div class="eyebrow">Next steps · <span class="eyebrow-timer" data-countdown="60">60</span><span class="eyebrow-timer-unit"> seconds</span></div>
+        <h2 id="scene-6-title">From guidance to<br><span class="gradient-text">Figma generation.</span></h2>
+        <p class="lead">PR #1050 extends the system with a dedicated Figma skill for drawing static, spec-informed chart examples directly on the canvas.</p>
+        <div class="expressions-note">
+          <span class="expressions-note__mark" aria-hidden="true"></span>
+          <span>
+            <strong>Next round: expressive data visualization</strong>
+            <small>Evolve the system toward our editorial, expressive vision—without losing the rigor, accessibility, and reuse beneath it.</small>
+          </span>
+        </div>
+      </div>
+      <div class="visual glass roadmap">
+        <div class="pr-banner">
+          <div>
+            <span class="pr-banner__status">In review</span>
+            <strong>Dataviz-build skill for Figma</strong>
+          </div>
+          <a class="pr-link" href="https://github.com/x3-design/fluent-design/pull/1050" target="_blank" rel="noreferrer">PR #1050 ↗</a>
+        </div>
+        <div class="roadmap-step" style="--step-color:var(--cyan)">
+          <span class="roadmap-step__number">01</span>
+          <div>
+            <h3>Translate guidance into drawing rules</h3>
+            <p>Turn chart intent, geometry, color, and density guidance into repeatable Figma construction steps.</p>
+          </div>
+        </div>
+        <div class="roadmap-step" style="--step-color:var(--violet)">
+          <span class="roadmap-step__number">02</span>
+          <div>
+            <h3>Generate varied chart batches</h3>
+            <p>Create multiple examples per chart family so quality is evaluated across data shapes—not one ideal case.</p>
+          </div>
+        </div>
+        <div class="roadmap-step" style="--step-color:var(--pink)">
+          <span class="roadmap-step__number">03</span>
+          <div>
+            <h3>Keep the layers clean</h3>
+            <p>Figma-specific techniques live in flex-figma while flex-dataviz remains the reusable source for chart behavior.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="dots" aria-label="Walkthrough sections">
+    <button class="dot" type="button" aria-label="Go to introduction" aria-current="step"></button>
+    <button class="dot" type="button" aria-label="Go to installation"></button>
+    <button class="dot" type="button" aria-label="Go to architecture"></button>
+    <button class="dot" type="button" aria-label="Go to examples"></button>
+    <button class="dot" type="button" aria-label="Go to contribution"></button>
+    <button class="dot" type="button" aria-label="Go to next steps"></button>
+  </div>
+
+  <span class="hint">Use ← → or Space</span>
+  <nav class="controls" aria-label="Walkthrough navigation">
+    <button class="nav-button" id="previous" type="button" aria-label="Previous section" disabled>
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.8 4.3a1 1 0 0 1 0 1.4L8.5 10l4.3 4.3a1 1 0 1 1-1.4 1.4l-5-5a1 1 0 0 1 0-1.4l5-5a1 1 0 0 1 1.4 0Z"/></svg>
+    </button>
+    <button class="nav-button" id="next" type="button" aria-label="Next section">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.2 4.3a1 1 0 0 0 0 1.4l4.3 4.3-4.3 4.3a1 1 0 1 0 1.4 1.4l5-5a1 1 0 0 0 0-1.4l-5-5a1 1 0 0 0-1.4 0Z"/></svg>
+    </button>
+  </nav>
+
+  <div class="chart-callout" id="chart-callout" role="tooltip" aria-hidden="true">
+    <div class="chart-callout__title" id="callout-title"></div>
+    <div class="chart-callout__row">
+      <span class="chart-callout__swatch" id="callout-swatch" aria-hidden="true"></span>
+      <span class="chart-callout__series" id="callout-series"></span>
+      <strong class="chart-callout__value" id="callout-value"></strong>
+    </div>
+    <div class="chart-callout__ratio" id="callout-ratio"></div>
+  </div>
+
+  <div id="announcer" class="sr-only" aria-live="polite"></div>
+
+  <script>
+    const deck = document.getElementById("deck");
+    const scenes = [...document.querySelectorAll(".scene")];
+    const dots = [...document.querySelectorAll(".dot")];
+    const previous = document.getElementById("previous");
+    const next = document.getElementById("next");
+    const progress = document.getElementById("progress-bar");
+    const counter = document.getElementById("current-number");
+    const announcer = document.getElementById("announcer");
+    const themeToggle = document.getElementById("theme-toggle");
+    const themeLabel = document.getElementById("theme-label");
+    const callout = document.getElementById("chart-callout");
+    const calloutTitle = document.getElementById("callout-title");
+    const calloutSwatch = document.getElementById("callout-swatch");
+    const calloutSeries = document.getElementById("callout-series");
+    const calloutValue = document.getElementById("callout-value");
+    const calloutRatio = document.getElementById("callout-ratio");
+    const terminalOutput = document.getElementById("terminal-output");
+    const terminalState = document.getElementById("terminal-state");
+    const generationOutput = document.getElementById("generation-output");
+    const generationState = document.getElementById("generation-state");
+    const generationGallery = document.querySelector(".gallery");
+    const generationPixels = document.getElementById("generation-pixels");
+    const generationScene = document.querySelector(".scene--generation");
+    const generationTitleAsk = document.getElementById("generation-title-ask");
+    const generationTitleResult = document.getElementById("generation-title-result");
+    const loopRoot = document.querySelector(".loop");
+    const loopOrbit = loopRoot.querySelector(".loop-orbit");
+    const loopItems = [...loopRoot.querySelectorAll(".loop-item")];
+    const chartInteractionTimers = new WeakMap();
+    const installCommands = [
+      "/plugin install flex-system@fluent-design",
+      "/plugin install flex-tokens@fluent-design",
+      "/plugin install flex-dataviz@fluent-design"
+    ];
+    const generationPrompt = "Create charts for a Seattle coffee crawl: monthly latte orders, favorite neighborhoods, café buzz by weekday and time, and top rainy-day drinks. Follow flex-dataviz for all guidance, including color, axes, legends, interaction, and accessibility.";
+    let installRun = 0;
+    let generationRun = 0;
+    let current = 0;
+
+    const generationPixelColors = [
+      "color-mix(in srgb, var(--chart-violet) 72%, var(--surface-strong))",
+      "color-mix(in srgb, var(--chart-cyan) 68%, var(--surface-strong))",
+      "color-mix(in srgb, var(--chart-pink) 66%, var(--surface-strong))",
+      "color-mix(in srgb, var(--chart-orange) 70%, var(--surface-strong))",
+      "color-mix(in srgb, var(--chart-blue) 68%, var(--surface-strong))",
+      "color-mix(in srgb, var(--chart-lime) 58%, var(--surface-strong))",
+      "color-mix(in srgb, var(--chart-heat-theme) 64%, var(--surface-strong))"
+    ];
+    const generationPixelMotifs = ["pixel--dot", "pixel--dash", "pixel--grid", "pixel--ring"];
+    for (let index = 0; index < 96; index += 1) {
+      const cell = document.createElement("span");
+      const row = Math.floor(index / 12);
+      cell.classList.add(generationPixelMotifs[(index * 7 + row * 3) % generationPixelMotifs.length]);
+      cell.style.setProperty("--pixel-color", generationPixelColors[(index * 5 + row * 3) % generationPixelColors.length]);
+      cell.style.setProperty("--pixel-delay", `-${(index * 47) % 900}ms`);
+      cell.style.setProperty("--pixel-speed", `${820 + ((index * 83) % 620)}ms`);
+      generationPixels.append(cell);
+    }
+    const generationPixelCells = [...generationPixels.children];
+    const generationPixelOrder = [...generationPixelCells].sort((cellA, cellB) => {
+      const indexA = generationPixelCells.indexOf(cellA);
+      const indexB = generationPixelCells.indexOf(cellB);
+      return (indexA * 37) % 97 - (indexB * 37) % 97;
+    });
+    const eyebrowTimers = scenes.map(scene => scene.querySelector(".eyebrow-timer"));
+    let countdownInterval = 0;
+
+    const chartDefinitions = [
+      {
+        root: ".bars",
+        marks: ".bar",
+        items: [
+          ["Monday", "Skill-guided generations", "28"],
+          ["Tuesday", "Skill-guided generations", "46"],
+          ["Wednesday", "Skill-guided generations", "39"],
+          ["Thursday", "Skill-guided generations", "67"],
+          ["Friday", "Skill-guided generations", "58"],
+          ["Saturday", "Skill-guided generations", "82"],
+          ["Sunday", "Skill-guided generations", "94"]
+        ]
+      },
+      {
+        root: ".area-chart",
+        marks: ".area-point",
+        items: [
+          ["January", "Latte orders", "320"],
+          ["February", "Latte orders", "410"],
+          ["March", "Latte orders", "560"],
+          ["April", "Latte orders", "590"],
+          ["May", "Latte orders", "710"],
+          ["June", "Latte orders", "840"]
+        ]
+      },
+      {
+        root: ".donut",
+        marks: ".donut-slice",
+        swatches: ["var(--chart-violet)", "var(--chart-cyan)", "var(--chart-pink)", "var(--chart-neutral)"],
+        items: [
+          ["Capitol Hill", "Coffee crawl stops", "456", "38% of 1.2K total"],
+          ["Ballard", "Coffee crawl stops", "348", "29% of 1.2K total"],
+          ["Fremont", "Coffee crawl stops", "204", "17% of 1.2K total"],
+          ["Other neighborhoods", "Coffee crawl stops", "192", "16% of 1.2K total"]
+        ]
+      },
+      {
+        root: ".heatmap",
+        marks: "span",
+        gridColumns: 5,
+        items: [
+          ["Monday · Morning", "Café buzz", "20%"],
+          ["Tuesday · Morning", "Café buzz", "72%"],
+          ["Wednesday · Morning", "Café buzz", "42%"],
+          ["Thursday · Morning", "Café buzz", "88%"],
+          ["Friday · Morning", "Café buzz", "35%"],
+          ["Monday · Afternoon", "Café buzz", "58%"],
+          ["Tuesday · Afternoon", "Café buzz", "26%"],
+          ["Wednesday · Afternoon", "Café buzz", "92%"],
+          ["Thursday · Afternoon", "Café buzz", "48%"],
+          ["Friday · Afternoon", "Café buzz", "68%"],
+          ["Monday · Evening", "Café buzz", "84%"],
+          ["Tuesday · Evening", "Café buzz", "46%"],
+          ["Wednesday · Evening", "Café buzz", "30%"],
+          ["Thursday · Evening", "Café buzz", "76%"],
+          ["Friday · Evening", "Café buzz", "54%"]
+        ]
+      },
+      {
+        root: ".mini-bars",
+        marks: ":scope > rect",
+        swatches: ["var(--chart-blue)", "var(--chart-lime)", "var(--chart-violet)", "var(--chart-orange)"],
+        items: [
+          ["Americano", "Rainy-day orders", "68"],
+          ["Latte", "Rainy-day orders", "98"],
+          ["Mocha", "Rainy-day orders", "52"],
+          ["Chai", "Rainy-day orders", "82"]
+        ]
+      }
+    ];
+
+    function positionCallout(mark, pointerX, pointerY) {
+      const target = mark.getBoundingClientRect();
+      const width = callout.offsetWidth;
+      const height = callout.offsetHeight;
+      const hasPointer = Number.isFinite(pointerX) && Number.isFinite(pointerY);
+      const anchorX = hasPointer ? pointerX : target.right;
+      const anchorY = hasPointer ? pointerY : target.top;
+      let x = anchorX + 14;
+      let y = anchorY - 12;
+
+      if (x + width > window.innerWidth - 12) {
+        x = (hasPointer ? pointerX : target.left) - width - 14;
+      }
+      if (y + height > window.innerHeight - 12) {
+        y = window.innerHeight - height - 12;
+      }
+
+      callout.style.setProperty("--callout-x", `${Math.max(12, x)}px`);
+      callout.style.setProperty("--callout-y", `${Math.max(12, y)}px`);
+    }
+
+    function openCallout(mark, pointerX, pointerY) {
+      calloutTitle.textContent = mark.dataset.calloutTitle;
+      calloutSeries.textContent = mark.dataset.calloutSeries;
+      calloutValue.textContent = mark.dataset.calloutValue;
+      calloutRatio.textContent = mark.dataset.calloutRatio || "";
+      calloutSwatch.hidden = !mark.dataset.calloutSwatch;
+      callout.style.setProperty("--callout-color", mark.dataset.calloutSwatch || "var(--violet)");
+      callout.dataset.open = "true";
+      callout.setAttribute("aria-hidden", "false");
+      positionCallout(mark, pointerX, pointerY);
+    }
+
+    function closeCallout() {
+      callout.dataset.open = "false";
+      callout.setAttribute("aria-hidden", "true");
+    }
+
+    function getInteractionTimers(root) {
+      if (!chartInteractionTimers.has(root)) {
+        chartInteractionTimers.set(root, { clear: 0 });
+      }
+      return chartInteractionTimers.get(root);
+    }
+
+    function activateMark(root, mark) {
+      const timers = getInteractionTimers(root);
+      window.clearTimeout(timers.clear);
+      timers.clear = 0;
+      root.querySelector(".data-mark.is-active")?.classList.remove("is-active");
+      root.classList.add("is-inspecting", "is-dimmed");
+      mark.classList.add("is-active");
+      root.setAttribute("aria-activedescendant", mark.id);
+      if (root.matches(".area-chart")) {
+        root.style.setProperty("--active-x", mark.getAttribute("cx"));
+      }
+    }
+
+    function clearChart(root) {
+      const timers = getInteractionTimers(root);
+      window.clearTimeout(timers.clear);
+      timers.clear = 0;
+      root.classList.remove("is-inspecting", "is-dimmed");
+      root.querySelector(".data-mark.is-active")?.classList.remove("is-active");
+      root.removeAttribute("aria-activedescendant");
+    }
+
+    function scheduleChartClear(root) {
+      const timers = getInteractionTimers(root);
+      window.clearTimeout(timers.clear);
+      timers.clear = window.setTimeout(() => {
+        clearChart(root);
+        closeCallout();
+      }, 180);
+    }
+
+    function configureChart(definition, chartIndex) {
+      const root = document.querySelector(definition.root);
+      const marks = [...root.querySelectorAll(definition.marks)];
+      const isArea = root.matches(".area-chart");
+
+      marks.forEach((mark, index) => {
+        const [title, series, value, ratio = ""] = definition.items[index];
+        mark.classList.add("data-mark");
+        mark.id = `chart-${chartIndex}-mark-${index}`;
+        mark.tabIndex = index === 0 ? 0 : -1;
+        mark.setAttribute("role", root.matches(".heatmap") ? "gridcell" : "img");
+        mark.setAttribute("aria-label", `${title}. ${series}, ${value}.${ratio ? ` ${ratio}.` : ""}`);
+        mark.setAttribute("aria-describedby", "chart-callout");
+        mark.dataset.calloutTitle = title;
+        mark.dataset.calloutSeries = series;
+        mark.dataset.calloutValue = value;
+        mark.dataset.calloutRatio = ratio;
+        if (definition.swatches) {
+          mark.dataset.calloutSwatch = definition.swatches[index];
+        } else if (root.matches(".heatmap")) {
+          mark.dataset.calloutSwatch = "var(--chart-heat-theme)";
+        }
+
+        if (!isArea) {
+          mark.addEventListener("pointerenter", (event) => {
+            activateMark(root, mark);
+            openCallout(mark, event.clientX, event.clientY);
+          });
+          mark.addEventListener("pointermove", (event) => positionCallout(mark, event.clientX, event.clientY));
+          mark.addEventListener("pointerleave", () => {
+            if (document.activeElement !== mark) {
+              scheduleChartClear(root);
+            }
+          });
+        }
+
+        mark.addEventListener("focus", () => {
+          marks.forEach((item) => { item.tabIndex = item === mark ? 0 : -1; });
+          activateMark(root, mark);
+          openCallout(mark);
+        });
+        mark.addEventListener("blur", () => {
+          clearChart(root);
+          closeCallout();
+        });
+      });
+
+      root.addEventListener("keydown", (event) => {
+        const activeIndex = marks.indexOf(event.target);
+        if (activeIndex < 0) return;
+        if (event.key === " ") event.stopPropagation();
+
+        let nextIndex = activeIndex;
+        if (event.key === "ArrowRight") nextIndex += 1;
+        if (event.key === "ArrowLeft") nextIndex -= 1;
+        if (definition.gridColumns && event.key === "ArrowDown") nextIndex += definition.gridColumns;
+        if (definition.gridColumns && event.key === "ArrowUp") nextIndex -= definition.gridColumns;
+        if (nextIndex === activeIndex) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        nextIndex = (nextIndex + marks.length) % marks.length;
+        marks[nextIndex].focus();
+      });
+
+      if (isArea) {
+        root.addEventListener("pointermove", (event) => {
+          const bounds = root.getBoundingClientRect();
+          const chartX = ((event.clientX - bounds.left) / bounds.width) * root.viewBox.baseVal.width;
+          const nearest = marks.reduce((best, mark) => (
+            Math.abs(Number(mark.getAttribute("cx")) - chartX) <
+            Math.abs(Number(best.getAttribute("cx")) - chartX) ? mark : best
+          ));
+          activateMark(root, nearest);
+          openCallout(nearest, event.clientX, event.clientY);
+        });
+        root.addEventListener("pointerleave", () => {
+          if (!root.contains(document.activeElement)) {
+            scheduleChartClear(root);
+          }
+        });
+      }
+    }
+
+    function syncThemeControl() {
+      const isLight = document.documentElement.dataset.theme === "light";
+      themeToggle.setAttribute("aria-pressed", String(isLight));
+      themeToggle.setAttribute("aria-label", `Switch to ${isLight ? "dark" : "light"} mode`);
+      themeLabel.textContent = isLight ? "Dark" : "Light";
+    }
+
+    function syncSlideColumnHeights() {
+      document.querySelectorAll(".scene--height-sync").forEach((scene) => {
+        const copy = scene.querySelector(".scene-copy");
+        const visual = scene.querySelector(".visual");
+        visual.style.removeProperty("height");
+        visual.style.removeProperty("min-height");
+        if (window.innerWidth <= 1100) return;
+
+        const copyHeight = Math.ceil(copy.getBoundingClientRect().height);
+        visual.style.height = `${copyHeight}px`;
+        visual.style.minHeight = `${copyHeight}px`;
+      });
+    }
+
+    function wait(duration) {
+      return new Promise((resolve) => window.setTimeout(resolve, duration));
+    }
+
+    function setupOrbitPhysics() {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const desktopOrbit = window.matchMedia("(min-width: 701px)");
+      const baseSpeed = 360 / 32000;
+      let angle = 0;
+      let velocity = baseSpeed;
+      let dragging = false;
+      let momentum = false;
+      let hovered = false;
+      let activePointer = null;
+      let previousPointerAngle = 0;
+      let previousPointerTime = 0;
+      let previousFrameTime = performance.now();
+
+      function normalizeAngle(value) {
+        return ((value + 180) % 360 + 360) % 360 - 180;
+      }
+
+      function pointerAngle(event) {
+        const bounds = loopOrbit.getBoundingClientRect();
+        return Math.atan2(
+          event.clientY - (bounds.top + bounds.height / 2),
+          event.clientX - (bounds.left + bounds.width / 2)
+        ) * 180 / Math.PI;
+      }
+
+      function render() {
+        if (reducedMotion.matches || !desktopOrbit.matches) {
+          loopOrbit.style.removeProperty("rotate");
+          loopItems.forEach(item => item.style.removeProperty("rotate"));
+          return;
+        }
+        loopOrbit.style.rotate = `${angle}deg`;
+        loopItems.forEach(item => {
+          item.style.rotate = `${-angle}deg`;
+        });
+      }
+
+      function releaseOrbit(event, cancelled = false) {
+        if (!dragging || event.pointerId !== activePointer) return;
+        dragging = false;
+        activePointer = null;
+        loopRoot.classList.remove("is-dragging");
+
+        if (cancelled) {
+          velocity = baseSpeed;
+          momentum = false;
+          return;
+        }
+
+        if (event.timeStamp - previousPointerTime > 100) {
+          velocity *= .35;
+        }
+        velocity = Math.max(-1.4, Math.min(1.4, velocity));
+        if (Math.abs(velocity) < baseSpeed * 2) {
+          velocity = Math.sign(velocity || 1) * baseSpeed;
+          momentum = false;
+        } else {
+          momentum = true;
+          loopRoot.classList.add("is-spinning");
+        }
+      }
+
+      loopRoot.addEventListener("pointerenter", () => { hovered = true; });
+      loopRoot.addEventListener("pointerleave", () => { hovered = false; });
+      loopItems.forEach(item => {
+        item.addEventListener("pointerdown", (event) => {
+          if (event.button !== 0 || reducedMotion.matches || !desktopOrbit.matches) return;
+          event.preventDefault();
+          dragging = true;
+          momentum = false;
+          velocity = 0;
+          activePointer = event.pointerId;
+          previousPointerAngle = pointerAngle(event);
+          previousPointerTime = event.timeStamp;
+          item.setPointerCapture(event.pointerId);
+          loopRoot.classList.remove("is-spinning");
+          loopRoot.classList.add("is-dragging");
+        });
+        item.addEventListener("pointermove", (event) => {
+          if (!dragging || event.pointerId !== activePointer) return;
+          const nextPointerAngle = pointerAngle(event);
+          const angleDelta = normalizeAngle(nextPointerAngle - previousPointerAngle);
+          const timeDelta = Math.max(1, event.timeStamp - previousPointerTime);
+          angle += angleDelta;
+          velocity = velocity * .45 + (angleDelta / timeDelta) * .55;
+          previousPointerAngle = nextPointerAngle;
+          previousPointerTime = event.timeStamp;
+          render();
+        });
+        item.addEventListener("pointerup", event => releaseOrbit(event));
+        item.addEventListener("pointercancel", event => releaseOrbit(event, true));
+      });
+
+      function tick(timestamp) {
+        const timeDelta = Math.min(40, timestamp - previousFrameTime);
+        previousFrameTime = timestamp;
+
+        if (!reducedMotion.matches && desktopOrbit.matches && !dragging) {
+          if (momentum) {
+            const targetSpeed = Math.sign(velocity || 1) * baseSpeed;
+            const decay = Math.pow(.97, timeDelta / 16.67);
+            velocity = targetSpeed + (velocity - targetSpeed) * decay;
+            if (Math.abs(velocity - targetSpeed) < .0025) {
+              velocity = targetSpeed;
+              momentum = false;
+              loopRoot.classList.remove("is-spinning");
+            }
+            angle += velocity * timeDelta;
+          } else if (!hovered) {
+            angle += velocity * timeDelta;
+          }
+          render();
+        }
+
+        window.requestAnimationFrame(tick);
+      }
+
+      reducedMotion.addEventListener("change", render);
+      desktopOrbit.addEventListener("change", render);
+      render();
+      window.requestAnimationFrame(tick);
+    }
+
+    function terminalLine(output, content, className = "") {
+      const line = document.createElement("div");
+      line.className = `terminal__line ${className}`.trim();
+      line.innerHTML = content;
+      output.append(line);
+      return line;
+    }
+
+    function showInstallResult() {
+      terminalOutput.replaceChildren();
+      terminalState.textContent = "Installed";
+      installCommands.forEach((command) => {
+        terminalLine(terminalOutput, `<span class="terminal__prompt">$</span> ${command}`);
+        terminalLine(terminalOutput, `<span class="terminal__success">✓</span> Installed ${command.match(/flex-[^@]+/)[0]}`, "terminal__success");
+      });
+    }
+
+    async function runInstallSimulation() {
+      const run = ++installRun;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      terminalOutput.replaceChildren();
+      terminalState.textContent = "Installing";
+
+      if (reduceMotion) {
+        showInstallResult();
+        return;
+      }
+
+      for (const command of installCommands) {
+        if (run !== installRun || current !== 1) return;
+        const commandLine = terminalLine(terminalOutput, `<span class="terminal__prompt">$</span> ${command}<span class="terminal__cursor" aria-hidden="true"></span>`);
+        await wait(620);
+        if (run !== installRun || current !== 1) return;
+        commandLine.querySelector(".terminal__cursor")?.remove();
+        terminalLine(terminalOutput, `<span class="terminal__success">✓</span> Installed ${command.match(/flex-[^@]+/)[0]}`, "terminal__success");
+        await wait(360);
+      }
+
+      if (run !== installRun || current !== 1) return;
+      terminalState.textContent = "Installed";
+    }
+
+    function showGenerationResult() {
+      generationOutput.replaceChildren();
+      generationState.textContent = "Generated";
+      terminalLine(generationOutput, `<span class="terminal__prompt">›</span> <span class="terminal__typed">${generationPrompt}</span>`);
+      terminalLine(generationOutput, `<span class="terminal__success">✓</span> Loaded flex-dataviz guidance`, "terminal__success");
+      terminalLine(generationOutput, `<span class="terminal__success">✓</span> Applied interaction and accessibility rules`, "terminal__success");
+      terminalLine(generationOutput, `<span class="terminal__success">✓</span> Generated four responsive chart examples`, "terminal__success");
+      setGenerationReveal(4);
+    }
+
+    function setGenerationReveal(stage) {
+      const clearRatios = [0, .22, .48, .74, 1];
+      const blurValues = [12, 8, 5, 2, 0];
+      const normalizedStage = Math.max(0, Math.min(stage, clearRatios.length - 1));
+      const clearCount = Math.round(generationPixelCells.length * clearRatios[normalizedStage]);
+      generationGallery.dataset.revealStage = String(normalizedStage);
+      generationGallery.classList.add("is-generating");
+      generationGallery.style.setProperty("--generation-blur", `${blurValues[normalizedStage]}px`);
+      generationPixelOrder.forEach((cell, index) => {
+        cell.classList.toggle("is-clear", index < clearCount);
+      });
+
+      if (normalizedStage === 4) {
+        window.setTimeout(() => {
+          if (generationGallery.dataset.revealStage === "4") {
+            generationGallery.classList.remove("is-generating");
+          }
+        }, 300);
+      }
+    }
+
+    async function runGenerationSimulation(run = ++generationRun) {
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      generationOutput.replaceChildren();
+      generationState.textContent = "Prompting";
+      setGenerationReveal(0);
+
+      if (reduceMotion) {
+        showGenerationResult();
+        return;
+      }
+
+      const promptLine = terminalLine(
+        generationOutput,
+        `<span class="terminal__prompt">›</span> <span class="terminal__typed"></span><span class="terminal__cursor" aria-hidden="true"></span>`
+      );
+      const typedPrompt = promptLine.querySelector(".terminal__typed");
+      for (const character of generationPrompt) {
+        if (run !== generationRun || current !== 3) return;
+        typedPrompt.textContent += character;
+        await wait(12);
+      }
+      promptLine.querySelector(".terminal__cursor")?.remove();
+      setGenerationReveal(1);
+
+      generationState.textContent = "Working";
+      const steps = [
+        "Loaded flex-dataviz guidance",
+        "Applied interaction and accessibility rules",
+        "Generated four responsive chart examples"
+      ];
+      for (const [index, step] of steps.entries()) {
+        if (run !== generationRun || current !== 3) return;
+        const statusLine = terminalLine(generationOutput, `<span class="terminal__working">·</span> ${step}…`, "terminal__working");
+        await wait(460);
+        if (run !== generationRun || current !== 3) return;
+        statusLine.className = "terminal__line terminal__success";
+        statusLine.innerHTML = `<span class="terminal__success">✓</span> ${step}`;
+        setGenerationReveal(index + 2);
+      }
+      generationState.textContent = "Generated";
+    }
+
+    async function typeGenerationLine(element, text, run) {
+      element.textContent = "";
+      element.classList.add("is-typing");
+      for (const character of text) {
+        if (run !== generationRun || current !== 3) return false;
+        element.textContent += character;
+        await wait(55);
+      }
+      element.classList.remove("is-typing");
+      return true;
+    }
+
+    function resetGenerationIntro() {
+      generationScene.classList.remove("is-intro-ready");
+      generationTitleAsk.classList.remove("is-typing");
+      generationTitleResult.classList.remove("is-typing");
+      generationTitleAsk.textContent = "Ask naturally.";
+      generationTitleResult.textContent = "Generate coherently.";
+      generationOutput.replaceChildren();
+      generationState.textContent = "Ready";
+    }
+
+    async function runGenerationIntro() {
+      const run = ++generationRun;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      generationScene.classList.remove("is-intro-ready");
+      generationTitleAsk.textContent = "";
+      generationTitleResult.textContent = "";
+      generationOutput.replaceChildren();
+      generationState.textContent = "Ready";
+      setGenerationReveal(0);
+
+      if (reduceMotion) {
+        generationTitleAsk.textContent = "Ask naturally.";
+        generationTitleResult.textContent = "Generate coherently.";
+        generationScene.classList.add("is-intro-ready");
+        showGenerationResult();
+        return;
+      }
+
+      await wait(650);
+      if (!await typeGenerationLine(generationTitleAsk, "Ask naturally.", run)) return;
+      await wait(1000);
+      if (run !== generationRun || current !== 3) return;
+      if (!await typeGenerationLine(generationTitleResult, "Generate coherently.", run)) return;
+      await wait(500);
+      if (run !== generationRun || current !== 3) return;
+      generationScene.classList.add("is-intro-ready");
+      await wait(650);
+      if (run !== generationRun || current !== 3) return;
+      runGenerationSimulation(run);
+    }
+
+    function startSceneCountdown(index) {
+      window.clearInterval(countdownInterval);
+      eyebrowTimers.forEach(timer => {
+        timer.textContent = String(Number(timer.dataset.countdown)).padStart(2, "0");
+        timer.nextElementSibling.hidden = false;
+        timer.classList.remove("is-expired");
+      });
+
+      const timer = eyebrowTimers[index];
+      let remaining = Number(timer.dataset.countdown);
+      timer.textContent = String(remaining).padStart(2, "0");
+
+      countdownInterval = window.setInterval(() => {
+        remaining = Math.max(0, remaining - 1);
+        timer.textContent = String(remaining).padStart(2, "0");
+        if (remaining === 0) {
+          window.clearInterval(countdownInterval);
+          timer.textContent = "Time's up!";
+          timer.nextElementSibling.hidden = true;
+          timer.classList.add("is-expired");
+        }
+      }, 1000);
+    }
+
+    function showScene(index) {
+      current = Math.max(0, Math.min(index, scenes.length - 1));
+      installRun += 1;
+      generationRun += 1;
+      deck.style.transform = `translateX(-${current * 100}vw)`;
+      scenes.forEach((scene, sceneIndex) => scene.classList.toggle("is-active", sceneIndex === current));
+      dots.forEach((dot, dotIndex) => {
+        if (dotIndex === current) {
+          dot.setAttribute("aria-current", "step");
+        } else {
+          dot.removeAttribute("aria-current");
+        }
+      });
+      previous.disabled = current === 0;
+      next.disabled = current === scenes.length - 1;
+      progress.style.width = `${((current + 1) / scenes.length) * 100}%`;
+      counter.textContent = String(current + 1).padStart(2, "0");
+      announcer.textContent = `Section ${current + 1} of ${scenes.length}: ${scenes[current].querySelector("h1, h2").textContent}`;
+      startSceneCountdown(current);
+      if (current === 1) runInstallSimulation();
+      if (current === 3) {
+        runGenerationIntro();
+      } else {
+        resetGenerationIntro();
+      }
+    }
+
+    previous.addEventListener("click", () => showScene(current - 1));
+    next.addEventListener("click", () => showScene(current + 1));
+    dots.forEach((dot, index) => dot.addEventListener("click", () => showScene(index)));
+    themeToggle.addEventListener("click", () => {
+      const nextTheme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+      document.documentElement.dataset.theme = nextTheme;
+      localStorage.setItem("dataviz-theme", nextTheme);
+      syncThemeControl();
+      syncSlideColumnHeights();
+    });
+
+    chartDefinitions.forEach(configureChart);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+        event.preventDefault();
+        showScene(current + 1);
+      }
+      if (event.key === "ArrowLeft" || event.key === "PageUp") {
+        event.preventDefault();
+        showScene(current - 1);
+      }
+      if (event.key === "Home") showScene(0);
+      if (event.key === "End") showScene(scenes.length - 1);
+    });
+
+    window.addEventListener("resize", syncSlideColumnHeights);
+    document.fonts?.ready.then(syncSlideColumnHeights);
+    syncThemeControl();
+    syncSlideColumnHeights();
+    startSceneCountdown(current);
+    setupOrbitPhysics();
+  </script>
+</body>
+</html>

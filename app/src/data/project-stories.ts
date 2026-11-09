@@ -10,28 +10,28 @@ export interface ProjectStory {
 }
 export const projectStories: Record<string, ProjectStory> = {
   "fluent-dataviz": {
-    "role": "Data visualization guidance and examples",
+    "role": "Creator of the flex-dataviz plugin",
     "status": "Fluent Flex design system work",
     "opening": "paired",
     "sections": [
       {
         "title": "A chart needs more than a visual style",
-        "body": "Choosing a chart is only the beginning. Labels, density, color, and interaction all affect whether someone can understand and explore the data. I worked on guidance that puts those decisions in one navigable system.",
-        "media": ["img/portfolio/dataviz/overview.png"]
+        "body": "Choosing a chart is only the beginning. Labels, density, color, and interaction all affect whether someone can understand and explore the data. I created the flex-dataviz plugin to put those decisions in one navigable system.",
+        "media": ["img/portfolio/dataviz/coffee-crawl.png"]
       },
       {
         "title": "Principles that travel across chart types",
-        "body": "The flex-dataviz plugin starts with shared rules for corner radius, typography, density, and color with patterns. It then connects those rules to chart-specific guidance, from bars and lines to heatmaps, Sankey diagrams, axes, legends, and callouts.",
-        "media": ["img/portfolio/dataviz/color-patterns.png"]
+        "body": "The plugin starts with shared rules for corner radius, typography, density, and color with patterns. It connects those rules to chart-specific guidance, from bars and lines to heatmaps, Sankey diagrams, axes, legends, and callouts. These bar and area examples come from the HTML galleries.",
+        "media": ["img/portfolio/dataviz/gallery-examples.png"]
       },
       {
-        "title": "Explore the system in the browser",
-        "body": "I made an interactive HTML gallery and a presentation to show the guidance in context. The gallery brings the chart types and their behaviors together, so you can move from a written rule to a concrete example. Both are linked below."
+        "title": "From a natural request to charts",
+        "body": "The five-minute walkthrough asks an agent for charts about a Seattle coffee crawl. Its area, donut, heatmap, and bar examples show how guidance can shape a coherent set. The walkthrough then uses the output to evaluate the rules and explains the path toward Figma generation. Open it and the two galleries below to explore the original examples."
       }
     ],
     "captions": {
-      "img/portfolio/dataviz/overview.png": "Fluent's data visualization overview brings several chart forms into one expression.",
-      "img/portfolio/dataviz/color-patterns.png": "Color and pattern guidance helps distinguish data series and preserve meaning."
+      "img/portfolio/dataviz/coffee-crawl.png": "The walkthrough's Seattle coffee crawl brings area, donut, heatmap, and bar charts together.",
+      "img/portfolio/dataviz/gallery-examples.png": "Bar and area examples use chart values from the interactive HTML galleries."
     }
   },
   "genui-bebop": {

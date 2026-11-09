@@ -4,22 +4,24 @@ export const portfolioProjects = [
     "title": "Fluent data visualization",
     "category": "Design tooling",
     "org": "Microsoft · Fluent Design Studio",
-    "summary": "Making chart guidance usable by designers, engineers, and agents.",
-    "cover": "img/portfolio/dataviz/overview.png",
+    "summary": "I created a plugin that makes chart guidance usable by designers, engineers, and agents.",
+    "cover": "img/portfolio/dataviz/coffee-crawl.png",
     "skills": "Design systems · Data visualization · Agent guidance",
-    "about": "I worked on Fluent Flex's data visualization guidance: a plugin that connects shared chart principles to practical rules for individual chart types. The accompanying gallery and presentation make the system easier to explore and discuss.",
+    "about": "I created the flex-dataviz plugin, connecting shared chart principles to practical rules for individual chart types. Interactive galleries and a five-minute walkthrough show those rules in use.",
     "contributions": [
-      "worked on the flex-dataviz plugin's guidance for core principles and chart-specific patterns",
-      "helped turn chart decisions such as color, density, typography, axes, legends, and callouts into guidance an agent can navigate",
-      "created interactive HTML material that shows the chart guidance in context"
+      "created the flex-dataviz plugin and organized its core principles and chart-specific guidance",
+      "turned chart decisions such as color, density, typography, axes, legends, and callouts into guidance an agent can navigate",
+      "built interactive galleries and a five-minute walkthrough that put the guidance to work in concrete chart examples"
     ],
     "images": [
-      { "src": "img/portfolio/dataviz/overview.png", "alt": "Fluent data visualization overview with a pie chart, trend line, and bars" },
-      { "src": "img/portfolio/dataviz/color-patterns.png", "alt": "Fluent data visualization color and pattern examples" }
+      { "src": "img/portfolio/dataviz/coffee-crawl.png", "alt": "Coffee crawl chart examples from the dataviz walkthrough: area, donut, heatmap, and bar" },
+      { "src": "img/portfolio/dataviz/gallery-examples.png", "alt": "Bar and area chart examples based on the Fluent data visualization gallery" }
     ],
     "links": [
-      ["/dataviz/gallery.html", "Explore the interactive chart gallery"],
-      ["/dataviz/presentation.html", "Open the data visualization presentation"]
+      ["/dataviz/walkthrough.html", "Explore the five-minute walkthrough"],
+      ["/dataviz/gallery.html", "Explore the Fluent Flex chart gallery"],
+      ["/dataviz/gallery-v2.html", "Explore the Bebop chart gallery"],
+      ["/dataviz/presentation.html", "Open the original data visualization presentation"]
     ]
   },
   {

@@ -4,7 +4,7 @@ import "../../styles/portfolio.css";
 import { portfolioProjects } from "../../data/portfolio-projects";
 import { portfolioImg } from "../../lib/content";
 
-const projectOrder = ["genui-bebop", "bebop", "icon-scaling-tool", "fluent-dataviz"];
+const projectOrder = ["genui-bebop", "bebop", "fluent-dataviz", "agent-builder", "nav2", "icon-scaling-tool", "visual-diff"];
 const projects = [
   ...projectOrder.map((slug) => portfolioProjects.find((project) => project.slug === slug)!).filter(Boolean),
   ...portfolioProjects.filter((project) => !projectOrder.some((slug) => slug === project.slug)),
