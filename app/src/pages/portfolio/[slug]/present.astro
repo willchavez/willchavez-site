@@ -1,4 +1,5 @@
 ---
+import Analytics from '../../../components/Analytics.astro';
 import { portfolioProjects } from '../../../data/portfolio-projects';
 import { projectStories } from '../../../data/project-stories';
 import { projectPresentations, type PresentationSlide } from '../../../data/project-presentations';
@@ -29,6 +30,7 @@ const imageFor = (src: string) => {
     <link rel="canonical" href={new URL(`/portfolio/${project.slug}`, Astro.site ?? 'https://willchavez.com')} />
     <link rel="icon" href="/favicon.ico" />
     <link rel="preload" href="/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <Analytics />
   </head>
   <body>
     <header class="deck-toolbar">

@@ -137,3 +137,9 @@ responsive images without fixing every story to the same cover-first layout.
 Individual project pages now include **Present project**, linking to a separate slide deck at `/portfolio/<slug>/present`. The Projects index and reading layouts remain intact. Decks are curated individually in `app/src/data/project-presentations.ts`; historical collaborator credits, narrative sources, controls, and maintenance guidance are documented in [docs/project-presentations.md](docs/project-presentations.md).
 
 Run `CHROMIUM_PATH=/usr/bin/chromium npm --prefix app run test:presentation -- BASE_URL` against a built preview to verify all eleven decks.
+
+### Google Analytics
+
+The shared Analytics component initializes `G-RPXX4TMRSH` once on `willchavez.com` and `www.willchavez.com`, across both Base pages and standalone project presentations. It stays disabled on preview and local hostnames. The existing GA4 data stream has Enhanced Measurement page views and browser-history tracking enabled; those settings cover Astro navigation and browser Back/Forward. Keep that history option enabled. Do not add manual `page_view` calls on `astro:page-load`, which would duplicate the automatic events. Google may batch transmission, so a short network observation can miss queued route events.
+
+Verify a local production build with `CHROMIUM_PATH=/usr/bin/chromium npm --prefix app run test:analytics -- BASE_URL`. The test fetches the current Google tag, uses production hostnames mapped to the local build, and intercepts all collection requests before they leave the browser. It checks initial/navigation/history requests, titles and measurement ID, one initialization, standalone presentations, no slide-change duplicates, and excluded preview/local hosts. It does not generate test traffic in GA reports or verify account-side report ingestion.

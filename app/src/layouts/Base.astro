@@ -3,10 +3,11 @@ import "../styles/base.css";
 import "../styles/nav.css";
 import "../styles/pages.css";
 import Nav from "../components/Nav.astro";
+import Analytics from "../components/Analytics.astro";
 import { ClientRouter } from "astro:transitions";
 import { getWriting, getEnjoying } from "../lib/content";
 
-const { title, titleExact = false, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, subKind, subAfter, compactTitle = false, analytics = false, showHeading = true, showPageTitle = true, socialType = "website", structuredData, navAlignment = "start" } = Astro.props;
+const { title, titleExact = false, current = "work", description = "Will Chavez, design technologist.", heading = "Will Chavez", sub, subKind, subAfter, compactTitle = false, analytics = true, showHeading = true, showPageTitle = true, socialType = "website", structuredData, navAlignment = "start" } = Astro.props;
 const [w, e] = await Promise.all([getWriting(), getEnjoying()]);
 const counts = { notes: w.length, enjoying: e.length };
 const pageTitle = title ? (titleExact ? title : `${title} — Will Chavez`) : "Will Chavez — UX Engineer";
@@ -63,15 +64,7 @@ const jsonLd = {
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="alternate" type="application/rss+xml" title="Will Chavez" href="/rss.xml" />
     <link rel="preload" href="/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
-    {analytics && (<>
-      <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-RPXX4TMRSH"></script>
-      <script is:inline>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag("js", new Date());
-        gtag("config", "G-RPXX4TMRSH");
-      </script>
-    </>)}
+    {analytics && <Analytics />}
   </head>
   <body class:list={[showHeading && "content-shell", `route-${current}`]}>
     <Nav current={current} counts={counts} alignment={navAlignment} />

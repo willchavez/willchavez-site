@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build && node scripts/images.mjs",
     "preview": "astro preview",
+    "test:analytics": "node scripts/analytics.browser.mjs",
     "test:presentation": "node scripts/presentation.browser.mjs",
     "test:nav:position": "node scripts/nav-position.browser.mjs",
     "test:nav": "node scripts/nav-contrast.browser.mjs",
