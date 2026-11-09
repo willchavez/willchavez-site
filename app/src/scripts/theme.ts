@@ -34,7 +34,7 @@ function init() {
     button.style.setProperty('--orbit-angle', `${reducedMotion.matches ? angle : angle - 110}deg`);
     button.addEventListener('click', () => {
       window.willThemePreference = theme() === 'dark' ? 'light' : 'dark';
-      try { localStorage.setItem('will-theme', window.willThemePreference); } catch {}
+      try { sessionStorage.setItem('will-theme', window.willThemePreference); } catch {}
       sync(true);
     });
     const image = button.querySelector('img');
@@ -49,6 +49,7 @@ function init() {
 }
 system.addEventListener('change', () => { if (!window.willThemePreference) sync(true); });
 addEventListener('storage', event => {
+  try { if (event.storageArea !== sessionStorage) return; } catch { return; }
   if (event.key !== 'will-theme' && event.key !== null) return;
   window.willThemePreference = event.newValue === 'light' || event.newValue === 'dark' ? event.newValue : null;
   sync(true);

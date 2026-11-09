@@ -73,7 +73,7 @@ function openImage(source: HTMLImageElement) {
     viewer = document.createElement('dialog');
     viewer.className = 'image-viewer';
     viewer.setAttribute('aria-label', 'Enlarged image');
-    viewer.innerHTML = '<button class="image-viewer-close" type="button" aria-label="Close enlarged image">Close ×</button><button class="image-viewer-playback" type="button" hidden>Pause animation</button><figure><img alt=""><video muted loop playsinline preload="metadata" hidden aria-label="Enlarged animation"></video><figcaption id="image-viewer-caption"></figcaption></figure>';
+    viewer.innerHTML = '<button class="image-viewer-close" type="button" aria-label="Close enlarged image">Close ×</button><figure><img alt=""><video muted loop playsinline preload="metadata" hidden aria-label="Enlarged animation"></video><figcaption id="image-viewer-caption"></figcaption><button class="image-viewer-playback" type="button" hidden>Pause animation</button></figure>';
     document.body.append(viewer);
     viewer.addEventListener('click', closeViewer);
     viewer.querySelector('.image-viewer-playback')!.addEventListener('click', event => {

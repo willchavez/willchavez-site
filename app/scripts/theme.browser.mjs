@@ -26,7 +26,7 @@ try {
     const next = system === 'dark' ? 'light' : 'dark';
     await toggle.focus(); await page.keyboard.press('Enter');
     assert.equal(await page.locator('html').getAttribute('data-theme'), next);
-    assert.equal(await page.evaluate(() => localStorage.getItem('will-theme')), next);
+    assert.equal(await page.evaluate(() => sessionStorage.getItem('will-theme')), next);
     assert.equal(await page.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(23, 20, 17)' : 'rgb(247, 245, 242)');
     assert.equal(await toggle.evaluate(e => e.style.getPropertyValue('--orbit-angle')), system === 'dark' ? '360deg' : '180deg');
     // Persisted nav must retain its orbit rather than replaying the sunrise.
@@ -35,15 +35,19 @@ try {
     assert.equal(await page.locator('html').getAttribute('data-theme'), next);
     assert.equal(await page.locator('.work-logo-lockheed-martin path').first().evaluate(e => getComputedStyle(e).fill), next === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(0, 82, 155)');
     await page.reload(); assert.equal(await page.locator('html').getAttribute('data-theme'), next);
-    await page.goto(base + '/portfolio/genui-bebop/present');
+    await page.goto(base + '/portfolio/genui-bebop/present', { referer: base + '/about' });
     assert.equal(await page.locator('html').getAttribute('data-theme'), next);
     assert.equal(await page.locator('html').evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(23, 20, 17)' : 'rgb(247, 245, 242)');
-    await page.goto(base + '/enjoying');
+    await page.goto(base + '/enjoying', { referer: base + '/portfolio/genui-bebop/present' });
     const tag = page.locator('.ent[data-kind="film"] .enjoying-tag').first();
     assert.equal(await tag.evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(38, 56, 72)' : 'rgb(223, 232, 241)');
     for (let i = 0; i < 5; i++) await toggle.click();
     assert.equal(await page.locator('html').getAttribute('data-theme'), system);
     assert.equal(errors.length, 0, errors.join('\n'));
+    const newVisit = await ctx.newPage();
+    await newVisit.goto(base + '/');
+    assert.equal(await newVisit.locator('html').getAttribute('data-theme'), system, 'a new tab follows the OS instead of another tab’s override');
+    await newVisit.close();
     await ctx.close();
   }
   const mobile = await context({ colorScheme: 'light', reducedMotion: 'reduce', viewport: { width: 375, height: 850 } });
@@ -56,10 +60,25 @@ try {
   const automatic = await context({ colorScheme: 'light' }); const auto = await automatic.newPage();
   await auto.goto(base + '/'); await auto.emulateMedia({ colorScheme: 'dark' });
   await auto.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
+  await auto.emulateMedia({ colorScheme: 'light' });
+  await auto.waitForFunction(() => document.documentElement.dataset.theme === 'light');
+  await auto.emulateMedia({ colorScheme: 'dark' });
+  await auto.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
   await auto.locator('[data-theme-toggle]').click();
   await auto.emulateMedia({ colorScheme: 'light' }); await auto.emulateMedia({ colorScheme: 'dark' });
   assert.equal(await auto.locator('html').getAttribute('data-theme'), 'light', 'explicit choice overrides OS');
+  await auto.reload();
+  assert.equal(await auto.locator('html').getAttribute('data-theme'), 'light', 'refresh retains the manual choice for this visit');
+  await auto.goto('about:blank');
+  await auto.goto(base + '/');
+  assert.equal(await auto.locator('html').getAttribute('data-theme'), 'dark', 'leaving and entering the site again follows the OS');
   await automatic.close();
+  const legacy = await context({ colorScheme: 'dark' });
+  await legacy.addInitScript(() => localStorage.setItem('will-theme', 'light'));
+  const legacyPage = await legacy.newPage();
+  await legacyPage.goto(base + '/');
+  assert.equal(await legacyPage.locator('html').getAttribute('data-theme'), 'dark', 'old permanent overrides do not prevent OS defaults');
+  await legacy.close();
   const blocked = await context(); await blocked.addInitScript(() => { Storage.prototype.getItem = Storage.prototype.setItem = () => { throw new Error('blocked'); }; });
   const blockedPage = await blocked.newPage(); await blockedPage.goto(base + '/'); await blockedPage.locator('[data-theme-toggle]').click();
   assert.equal(await blockedPage.locator('html').getAttribute('data-theme'), 'dark'); await blocked.close();
@@ -69,5 +88,5 @@ try {
   assert(!await nojs.locator('[data-theme-toggle]').isVisible());
   assert.equal(await nojs.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(23, 20, 17)');
   await fallback.close();
-  console.log('Avatar rise/orbit, keyboard/mobile toggle, saved and OS themes, SPA persistence, standalone presentations, tags/logos, rapid clicks, reduced motion, blocked storage, and no-JS fallback passed.');
+  console.log('Avatar rise/orbit, keyboard/mobile toggle, OS themes and visit-scoped overrides, reset on new visits, legacy preference migration, SPA persistence, standalone presentations, tags/logos, rapid clicks, reduced motion, blocked storage, and no-JS fallback passed.');
 } finally { await browser.close(); }
