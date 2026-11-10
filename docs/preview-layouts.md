@@ -6,6 +6,6 @@ Cascade varies full-media, compact-thumbnail, visual-only, and text-led tiles. E
 
 The title's native link stretches over each card, so the padding and excerpt open the post and support normal link actions. Filter tags and audio controls stay independently clickable. Hover slightly expands a card and adds a soft shadow. Keyboard focus outlines the card; reduced motion removes the scale effect.
 
-The controls and styling are scoped to Enjoying's index. Unavailable cover images fall back to text; responsive image selection follows each tile's displayed width. Articles keep their reading layout, and without JavaScript the prior cards remain available.
+The controls and styling are scoped to Enjoying's index. All layouts use the site's shared page width, keeping the header and outer content edges aligned when navigating between pages. Unavailable cover images fall back to text; responsive image selection follows each tile's displayed width. Articles keep their reading layout, and without JavaScript the prior cards remain available.
 
 Check a built preview with `CHROMIUM_PATH=/usr/bin/chromium node app/scripts/enjoying-layout.browser.mjs http://localhost:4359`. Set `BROWSER_ENGINE=webkit` to test Safari's engine when Playwright WebKit is installed. The check covers filters, wheel scrolling and late-media remeasurement, card navigation, independent tags, hover and keyboard focus, reduced motion, and the regular Notes/Projects layouts.

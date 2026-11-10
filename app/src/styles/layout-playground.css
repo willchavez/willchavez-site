@@ -6,7 +6,6 @@
 .layout-options button:focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
 .layout-playground p { color: var(--muted); font-size: .8rem; }
 /* The layout studies are limited to Enjoying's index on preview. */
-html[data-layout-experiment]:not([data-layout-experiment="cards"]) body:has([data-layout-playground]) { max-width: 1440px; }
 html[data-layout-experiment]:not([data-layout-experiment="cards"]) .route-enjoying main:has(#list) { max-width: none; }
 html[data-layout-experiment]:not([data-layout-experiment="cards"]) #list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; width: 100%; max-width: none; align-items: start; }
 html[data-layout-experiment]:not([data-layout-experiment="cards"]) #list[data-cascade-ready] { grid-auto-rows: 8px; row-gap: 16px; }
