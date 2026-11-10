@@ -4,7 +4,7 @@ function init() {
   const control = document.querySelector<HTMLElement>('[data-layout-playground]');
   const root = document.documentElement;
   if (!control) { delete root.dataset.layoutExperiment; return; }
-  const container = document.querySelector<HTMLElement>('.note-list, #enjoying-results #list, #portfolio-results .portfolio-grid');
+  const container = document.querySelector<HTMLElement>('#enjoying-results #list');
   if (!container) return;
   const cards = Array.from(container.children) as HTMLElement[];
   const controller = new AbortController();
@@ -19,23 +19,33 @@ function init() {
     frame = 0;
     if (!active) return;
     container.querySelectorAll<HTMLImageElement>('img[srcset]').forEach(image => {
-      const width = Math.ceil(image.getBoundingClientRect().width);
+      const width = image.clientWidth;
       if (width) image.sizes = `${width}px`;
     });
     const visible = cards.filter(card => !card.hidden);
     const pattern = ['lead', 'compact', 'visual', 'text', 'compact', 'visual', 'lead', 'compact'];
     visible.forEach((card, index) => {
-      card.dataset.tile = pattern[index % pattern.length];
-      card.style.removeProperty('grid-row-end');
+      const tile = pattern[index % pattern.length];
+      if (card.dataset.tile !== tile) card.dataset.tile = tile;
     });
-    if (mode === 'cards' || innerWidth < 700) { delete container.dataset.cascadeReady; return; }
+    if (mode === 'cards' || innerWidth < 700) {
+      delete container.dataset.cascadeReady;
+      cards.forEach(card => card.style.removeProperty('grid-row-end'));
+      return;
+    }
     container.dataset.cascadeReady = '';
     const style = getComputedStyle(container);
     const unit = parseFloat(style.gridAutoRows) + parseFloat(style.rowGap);
     if (!Number.isFinite(unit)) return;
     // Start-aligned cards retain their natural height, independent of the span.
-    const spans = visible.map(card => Math.ceil((card.getBoundingClientRect().height + parseFloat(style.rowGap)) / unit));
-    visible.forEach((card, index) => card.style.gridRowEnd = `span ${Math.max(1, spans[index])}`);
+    // Keep the current spans while measuring: clearing them temporarily collapses
+    // the document and can clamp the scroll position when lazy media loads.
+    // offsetHeight also ignores the hover scale, avoiding a resize feedback loop.
+    const spans = visible.map(card => Math.ceil((card.offsetHeight + parseFloat(style.rowGap)) / unit));
+    visible.forEach((card, index) => {
+      const span = `span ${Math.max(1, spans[index])}`;
+      if (card.style.gridRowEnd !== span) card.style.gridRowEnd = span;
+    });
   };
   const schedule = () => { if (!frame && active) frame = requestAnimationFrame(measure); };
   const apply = (next: string, updateURL = false) => {
@@ -50,7 +60,18 @@ function init() {
     }
     schedule();
   };
-  const resize = new ResizeObserver(schedule);
+  let containerWidth = 0;
+  const resize = new ResizeObserver(entries => {
+    // Grid height changes are the result of our row spans, not new content.
+    const changed = entries.some(entry => {
+      if (entry.target !== container) return true;
+      const width = entry.contentRect.width;
+      if (width === containerWidth) return false;
+      containerWidth = width;
+      return true;
+    });
+    if (changed) schedule();
+  });
   resize.observe(container);
   cards.forEach(card => resize.observe(card));
   const mutations = new MutationObserver(schedule);

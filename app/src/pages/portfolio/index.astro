@@ -1,6 +1,5 @@
 ---
 import Base from "../../layouts/Base.astro";
-import LayoutPlayground from "../../components/LayoutPlayground.astro";
 import "../../styles/portfolio.css";
 import { portfolioProjects } from "../../data/portfolio-projects";
 import { portfolioImg } from "../../lib/content";
@@ -29,7 +28,6 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
       <p>Prototypes, design tools, and websites I’ve helped shape with teams and communities.</p>
     </section>
 
-  <LayoutPlayground />
     <div class="portfolio-toolbar">
       <div class="portfolio-filters">
         <div class="chips" role="group" aria-label="Filter projects" id="kind-tabs">
