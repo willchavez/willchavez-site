@@ -30,17 +30,19 @@ try {
     const ctx = await browser.newContext({ viewport: { width, height: 1000 }, colorScheme: width === 820 ? 'dark' : 'light' });
     const page = await ctx.newPage(); const errors = [];
     page.on('pageerror', e => errors.push(e.message));
-    await page.goto(base + '/enjoying');
-    await page.locator('.enjoying-view-toggle:visible').waitFor();
-    assert.equal(await page.locator('#enjoying-results').getAttribute('data-view'), 'grid');
+    await page.goto(base + '/enjoying?view=grid');
+    const mobile = width <= 640;
+    await page.waitForFunction(() => document.querySelector('#enjoying-results').hasAttribute('data-card-motion'));
+    assert.equal(await page.locator('#enjoying-results').getAttribute('data-view'), mobile ? 'list' : 'grid');
+    assert.equal(await page.locator('.enjoying-view-toggle').isVisible(), !mobile);
     assert.equal(await page.getByText('Different sizes, one flowing grid.', { exact: true }).count(), 0);
     assert.equal(await page.locator('[data-layout-playground]').count(), 0);
     const toggle = await page.locator('.enjoying-view-toggle').boundingBox();
     const toolbar = await page.locator('.enjoying-toolbar').boundingBox();
-    assert(Math.abs(toggle.x + toggle.width - toolbar.x - toolbar.width) < 1, 'toggle aligns at right of filter toolbar');
+    if (!mobile) assert(Math.abs(toggle.x + toggle.width - toolbar.x - toolbar.width) < 1, 'toggle aligns at right of filter toolbar');
     const siteWidth = await page.locator('body').evaluate(e => e.getBoundingClientRect().width);
-    for (const view of ['grid', 'list']) {
-      await page.locator(`.enjoying-view-toggle [data-layout-choice="${view}"]`).click();
+    for (const view of mobile ? ['list'] : ['grid', 'list']) {
+      if (!mobile) await page.locator(`.enjoying-view-toggle [data-layout-choice="${view}"]`).click();
       await settle(page);
       assert.equal(await page.locator(`.enjoying-view-toggle [data-layout-choice="${view}"]`).getAttribute('aria-pressed'), 'true');
       for (const kind of ['film', 'music', 'paper', 'book', 'all']) {
@@ -66,10 +68,12 @@ try {
       assert(Math.abs(await page.evaluate(() => scrollY) - before) < 3, 'remeasurement preserves scroll position');
     }
     await page.reload();
-    assert.equal(await page.locator('#enjoying-results').getAttribute('data-view'), 'list', 'selected view survives refresh');
-    await page.locator('.enjoying-view-toggle [data-layout-choice="grid"]').focus();
-    await page.keyboard.press('Enter'); await settle(page);
-    assert.equal(await page.locator('#enjoying-results').getAttribute('data-view'), 'grid', 'keyboard can switch view');
+    assert.equal(await page.locator('#enjoying-results').getAttribute('data-view'), 'list', 'mobile stays in List; desktop selection survives refresh');
+    if (!mobile) {
+      await page.locator('.enjoying-view-toggle [data-layout-choice="grid"]').focus();
+      await page.keyboard.press('Enter'); await settle(page);
+      assert.equal(await page.locator('#enjoying-results').getAttribute('data-view'), 'grid', 'keyboard can switch view');
+    }
     await choose(page, width, 'all'); await settle(page);
     const card = page.locator('#list > .ent').first(); const title = card.locator('a.t');
     await page.keyboard.press('Tab');
@@ -79,9 +83,12 @@ try {
     const box = await card.boundingBox(); await page.mouse.click(box.x + box.width - 10, box.y + box.height - 10);
     await page.waitForURL(u => u.pathname === new URL(href, base).pathname);
     await page.goto(base + '/enjoying');
-    await page.locator('#list > .ent [data-kind-filter]').first().click();
-    await page.waitForFunction(() => document.querySelector('#enjoying-results').dataset.kind === 'film'); await settle(page);
-    assert(new URL(page.url()).pathname.endsWith('/enjoying'), 'tag filters independently of post link');
+    assert.equal(await page.locator('[data-kind-filter], button.enjoying-tag').count(), 0);
+    const label = page.locator('#list > .ent span.enjoying-tag').first();
+    assert.equal(await label.evaluate(e => getComputedStyle(e).borderTopWidth), '0px');
+    const urlBefore = page.url(); await label.click();
+    assert.equal(page.url(), urlBefore, 'plain labels do not navigate or filter');
+    assert.equal(await page.locator('#enjoying-results').getAttribute('data-kind'), 'all');
     await page.goto(base + '/portfolio');
     assert.equal(await page.locator('body').evaluate(e => e.getBoundingClientRect().width), siteWidth, 'shared page width is unchanged');
     if (width > 640) {

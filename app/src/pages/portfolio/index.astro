@@ -4,6 +4,7 @@ import ViewToggle from "../../components/ViewToggle.astro";
 import "../../styles/portfolio.css";
 import { portfolioProjects } from "../../data/portfolio-projects";
 import { portfolioImg } from "../../lib/content";
+import { projectTags } from "../../lib/project-tags";
 
 const projectOrder = ["genui-bebop", "bebop", "fluent-asset-library", "fluent-dataviz", "agent-builder", "nav2", "icon-scaling-tool", "visual-diff"];
 const projects = [
@@ -60,7 +61,7 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
                 <div class="portfolio-eyebrow">{project.org}</div>
                 <h2>{project.title}</h2>
                 <p>{project.summary}</p>
-                <div class="skills" aria-label="Project tags">{project.skills.split(" · ").map((skill) => <span class="skill-tag">{skill}</span>)}</div>
+                <div class="skills" aria-label="Project tags">{projectTags(project).map((tag) => <span class="skill-tag" data-tone={tag.tone}>{tag.label}</span>)}</div>
               </div>
             </a>
           </article>
@@ -75,26 +76,28 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
 </Base>
 
 <script>
+  import { createCardMotion } from "../../scripts/card-motion";
   let cleanup = () => {};
   document.addEventListener("astro:page-load", () => {
     cleanup();
     const results = document.getElementById("portfolio-results");
     if (!results) return;
     const controller = new AbortController();
+    const cards = [...results.querySelectorAll<HTMLElement>(".portfolio-card")];
+    const motion = createCardMotion(results, results.querySelector<HTMLElement>(".portfolio-grid")!, cards, {
+      enabled: () => matchMedia("(min-width: 641px)").matches,
+    });
     cleanup = () => {
       controller.abort();
-      results.getAnimations().forEach((animation) => animation.cancel());
+      motion.destroy();
     };
-    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
     const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
     const layoutButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-layout-choice]")];
     const mobileViewport = matchMedia("(max-width: 640px)");
     const kindMenu = document.getElementById("kind-menu") as HTMLDetailsElement | null;
     const validKinds = new Set(buttons.map((button) => button.dataset.kind || "all"));
-    const shouldAnimate = () => !reducedMotion.matches && matchMedia("(min-width: 821px)").matches;
     let kind = "all";
     let requestedKind = kind;
-    let changeId = 0;
     const fromHash = () => {
       const candidate = decodeURIComponent(location.hash.slice(1));
       kind = validKinds.has(candidate) ? candidate : "all";
@@ -102,7 +105,7 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
     const apply = () => {
       results.dataset.kind = kind;
       const category = categoriesForKind[kind];
-      results.querySelectorAll<HTMLElement>("[data-category]").forEach((card) => {
+      cards.forEach((card) => {
         card.hidden = kind !== "all" && card.dataset.category !== category;
       });
       buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.kind === kind)));
@@ -118,9 +121,10 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
       layoutButtons.forEach((choice) => choice.setAttribute("aria-pressed", String(choice.dataset.layoutChoice === activeView)));
     };
     layoutButtons.forEach((button) => button.addEventListener("click", () => {
-      applyLayout(button.dataset.layoutChoice === "list" ? "list" : "grid");
+      motion.cancel(); applyLayout(button.dataset.layoutChoice === "list" ? "list" : "grid");
     }, { signal: controller.signal }));
-    mobileViewport.addEventListener("change", () => applyLayout(), { signal: controller.signal });
+    mobileViewport.addEventListener("change", () => { motion.cancel(); applyLayout(); }, { signal: controller.signal });
+    addEventListener("resize", () => motion.cancel(), { signal: controller.signal });
     applyLayout();
     const categoriesForKind: Record<string, string | undefined> = {
       "ai-experiences": "AI experiences",
@@ -129,26 +133,10 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
       community: "Community",
     };
     const push = () => history.replaceState(history.state, "", kind === "all" ? `${location.pathname}${location.search}` : `#${kind}`);
-    const resetAnimation = () => {
-      results.classList.remove("is-entering", "is-leaving");
-      results.getAnimations().forEach((animation) => animation.cancel());
-    };
-    const select = async (next: string) => {
+    const select = (next: string) => {
       if (next === requestedKind) return;
       requestedKind = next;
-      const request = ++changeId;
-      const animate = shouldAnimate();
-      resetAnimation();
-      if (animate) {
-        results.classList.add("is-leaving");
-        await Promise.allSettled(results.getAnimations().map((animation) => animation.finished));
-      }
-      if (request !== changeId || controller.signal.aborted) return;
-      kind = next;
-      push();
-      apply();
-      results.classList.remove("is-leaving");
-      if (animate) results.classList.add("is-entering");
+      void motion.change(() => { kind = next; push(); apply(); });
     };
     buttons.forEach((button) => button.addEventListener("click", (event) => {
       if (button.closest("#kind-menu") && kindMenu) {
@@ -169,11 +157,7 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
       }, { signal: controller.signal });
     }
     addEventListener("hashchange", () => {
-      ++changeId;
-      resetAnimation();
-      fromHash();
-      requestedKind = kind;
-      apply();
+      void motion.change(() => { fromHash(); requestedKind = kind; apply(); });
     }, { signal: controller.signal });
     fromHash();
     requestedKind = kind;
@@ -197,6 +181,7 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
       }
     } catch {}
   });
+  document.addEventListener("astro:before-swap", () => cleanup());
   addEventListener("popstate", () => {
     if (location.pathname.replace(/\/$/, "").endsWith("/portfolio")) {
       try { sessionStorage.setItem("portfolio-restore", "true"); } catch {}

@@ -63,10 +63,9 @@
   #enjoying-results #list .ent:hover { transform: none; }
 }
 
-/* Transient exit copies never participate in the grid, focus, or hit testing. */
-#enjoying-results { position: relative; }
-#enjoying-results #list { position: relative; }
-#enjoying-results[data-rearranging] { overflow: clip; overflow-clip-margin: 12px; overflow-anchor: none; }
+/* Hover yields to the card-position animation during filtering. */
 #enjoying-results[data-rearranging] #list .ent { transition: none; }
 #enjoying-results[data-rearranging] #list .ent:hover { transform: none; }
-#enjoying-results #list .ent[data-layout-exit] { position: absolute; margin: 0; pointer-events: none; z-index: 4; grid-row: auto; }
+@media (max-width: 640px) {
+  .enjoying-toolbar .enjoying-view-toggle { display: none; }
+}

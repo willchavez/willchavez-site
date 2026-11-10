@@ -53,7 +53,7 @@ const tilePattern = ["lead", "compact", "visual", "text", "compact", "visual", "
               ? <a class="cover-link" href={`/enjoying/${i.id}?from=all`} data-enjoying-entry aria-label={`View ${i.data.title}`}><img class="cover" src={img(i.data.cover, 240)} srcset={i.data.cover.startsWith("/uploads/") ? `${img(i.data.cover, 240)} 240w, ${img(i.data.cover, 480)} 480w, ${img(i.data.cover, 960)} 960w` : undefined} sizes="(max-width: 699px) 90vw, 50vw" alt="" loading="lazy" decoding="async" /></a>
               : <div class="cover cover-empty" aria-hidden="true" />}
             <div class="ent-copy">
-              <EnjoyingHeading data={i.data} href={`/enjoying/${i.id}?from=all`} filterable />
+              <EnjoyingHeading data={i.data} href={`/enjoying/${i.id}?from=all`} />
               {contentExcerpt(i.body) && <p class="ent-excerpt">{contentExcerpt(i.body)}</p>}
               <SoundCloud url={i.data.link} title={i.data.title} />
             </div>
@@ -95,7 +95,6 @@ const tilePattern = ["lead", "compact", "visual", "text", "compact", "visual", "
   const show = (id: string, on: boolean) => { const el = document.getElementById(id); if (el) el.hidden = !on; };
   let kind = "all";
   let requestedKind = kind;
-  let changeId = 0;
   const fromHash = () => {
     const h = decodeURIComponent(location.hash.slice(1));
     // Accept old #enjoyed/type and #next/type links, but keep new links short.
@@ -114,9 +113,6 @@ const tilePattern = ["lead", "compact", "visual", "text", "compact", "visual", "
         entry.href = url.pathname + url.search;
       });
     });
-    results.querySelectorAll<HTMLButtonElement>("[data-kind-filter]").forEach((tag) => {
-      tag.disabled = kind !== "all";
-    });
     kindBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.kind === kind)));
     const currentLabel = document.getElementById("kind-current");
     if (currentLabel) currentLabel.textContent = kindBtns.find((b) => b.dataset.kind === kind)?.dataset.label || "All";
@@ -127,9 +123,7 @@ const tilePattern = ["lead", "compact", "visual", "text", "compact", "visual", "
   const select = async (next: string) => {
     if (next === requestedKind) return;
     requestedKind = next;
-    const request = ++changeId;
     await layout.change(() => { kind = next; push(); apply(); });
-    return request === changeId && !controller.signal.aborted;
   };
   kindBtns.forEach((b) => b.addEventListener("click", (event) => {
     if (b.closest("#kind-menu") && kindMenu) {
@@ -138,17 +132,6 @@ const tilePattern = ["lead", "compact", "visual", "text", "compact", "visual", "
     }
     select(b.dataset.kind!);
   }, { signal: controller.signal }));
-  results.addEventListener("click", async (event) => {
-    const tag = event.target instanceof Element ? event.target.closest<HTMLButtonElement>("[data-kind-filter]") : null;
-    if (!tag || kind !== "all") return;
-    const current = await select(tag.dataset.kind!);
-    if (!current) return;
-    const filter = matchMedia("(max-width: 820px)").matches
-      ? kindMenu?.querySelector<HTMLElement>("summary")
-      : kindBtns.find((button) => button.dataset.kind === kind && button.closest("#kind-tabs"));
-    filter?.focus({ preventScroll: true });
-    if (filter && filter.getBoundingClientRect().top < 0) filter.scrollIntoView({ block: "start" });
-  }, { signal: controller.signal });
   document.addEventListener("click", (event) => {
     const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
     if (!link) return;
@@ -171,7 +154,6 @@ const tilePattern = ["lead", "compact", "visual", "text", "compact", "visual", "
     }, { signal: controller.signal });
   }
   addEventListener("hashchange", () => {
-    ++changeId;
     void layout.change(() => { fromHash(); requestedKind = kind; apply(); });
   }, { signal: controller.signal });
   fromHash(); requestedKind = kind;
