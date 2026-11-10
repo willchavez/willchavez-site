@@ -1,6 +1,6 @@
 .route-work .topbar { margin-bottom: 2.5rem; }
 .route-work main { max-width: none; }
-.home-page { --home-card: #fffdfa; }
+.home-page { --home-card: #f7f5e7; }
 .home-intro { display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: 2.5rem; margin: 1.5rem 0 4rem; }
 .home-kicker { color: var(--muted); font-size: .8rem; }
 .home-intro h1 { margin: .7rem 0 0; font-size: clamp(2.5rem, 4.2vw, 3.3rem); letter-spacing: -.055em; line-height: 1.06; }
@@ -41,7 +41,7 @@
 .home-journal { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3.5rem; }
 .home-journal .home-section { margin: 0; padding: 1.25rem; border-radius: 1.4rem; }
 .home-notes-section { background: color-mix(in srgb, var(--rust) 7%, var(--paper)); }
-.home-enjoying-section { background: color-mix(in srgb, #708876 10%, var(--paper)); }
+.home-enjoying-section { background: color-mix(in srgb, #b9b47e 10%, var(--paper)); }
 .home-journal .home-section-head { margin-bottom: .35rem; }
 .home-journal .home-section-description { font-size: .85rem; line-height: 1.5; margin-bottom: 1.25rem; }
 .home-note, .home-enjoying { display: block; padding: 1.1rem; margin-bottom: 1rem; }
@@ -82,9 +82,9 @@
   .home-closing { align-items: flex-start; flex-direction: column; gap: .7rem; }
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .home-page { --home-card: #241e19; }
+  :root:not([data-theme="light"]) .home-page { --home-card: #2e586b; }
 }
-:root[data-theme="dark"] .home-page { --home-card: #241e19; }
+:root[data-theme="dark"] .home-page { --home-card: #2e586b; }
 
 @media (prefers-reduced-motion: reduce) {
   .home-project-image img { transition: none; }

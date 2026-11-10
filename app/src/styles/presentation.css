@@ -1,10 +1,10 @@
 @font-face { font-family: 'Source Serif 4'; font-style: normal; font-weight: 200 900; font-display: block; src: url('/fonts/source-serif-4-latin.woff2') format('woff2'); }
 * { box-sizing: border-box; }
-:root { color-scheme: light dark; --paper: #f7f5f2; --ink: #1a1a1a; --muted: #655e58; --rust: #9c4b2e; --hairline: #ddd5cd; --surface: #fffdfa; --wash: color-mix(in srgb, #708876 10%, var(--paper)); }
+:root { color-scheme: light dark; --paper: #f1efdc; --ink: #264f63; --muted: #4f666b; --rust: #356984; --hairline: #bac8bc; --surface: #f7f5e7; --wash: color-mix(in srgb, #b9b47e 10%, var(--paper)); }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --paper: #171411; --ink: #e8e0d6; --muted: #b9ada0; --rust: #df7955; --hairline: #514237; --surface: #241e19; }
+  :root:not([data-theme="light"]) { --paper: #244e63; --ink: #dcfff6; --muted: #bdd9d4; --rust: #dad39a; --hairline: #62838c; --surface: #2e586b; }
 }
-:root[data-theme="dark"] { --paper: #171411; --ink: #e8e0d6; --muted: #b9ada0; --rust: #df7955; --hairline: #514237; --surface: #241e19; }
+:root[data-theme="dark"] { --paper: #244e63; --ink: #dcfff6; --muted: #bdd9d4; --rust: #dad39a; --hairline: #62838c; --surface: #2e586b; }
 
 html { font: 17px 'Source Serif 4', Georgia, serif; background: var(--paper); color: var(--ink); }
 body { margin: 0; }
