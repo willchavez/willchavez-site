@@ -61,7 +61,7 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
                 <div class="portfolio-eyebrow">{project.org}</div>
                 <h2>{project.title}</h2>
                 <p>{project.summary}</p>
-                <div class="skills" aria-label="Project tags">{projectTags(project).map((tag) => <span class="skill-tag" data-tone={tag.tone}>{tag.label}</span>)}</div>
+                <div class="skills" aria-label="Project tags">{projectTags(project).map((tag) => <span class="skill-tag">{tag}</span>)}</div>
               </div>
             </a>
           </article>

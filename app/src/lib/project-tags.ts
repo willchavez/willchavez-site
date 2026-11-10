@@ -1,48 +1,42 @@
-type Tone = 'blue' | 'lilac' | 'green' | 'amber' | 'rose';
-type Tag = { label: string; tone: Tone };
-const categories: Record<string, Tone> = {
-  'AI experiences': 'blue', 'Design tooling': 'lilac',
-  'Research & learning': 'green', Community: 'rose',
-};
-const skills: Record<string, Tag> = {
-  Composition: { label: 'Design', tone: 'lilac' },
-  Interaction: { label: 'Interaction', tone: 'lilac' },
-  'Interaction design': { label: 'Design', tone: 'lilac' },
-  'Interaction patterns': { label: 'Interaction', tone: 'lilac' },
-  'Interactive states': { label: 'Interaction', tone: 'lilac' },
-  'Creation flows': { label: 'Interaction', tone: 'lilac' },
-  Prototyping: { label: 'Prototyping', tone: 'amber' },
-  'High-fidelity prototypes': { label: 'Prototyping', tone: 'amber' },
-  'React & TypeScript': { label: 'Code', tone: 'green' },
-  'Full-stack development': { label: 'Code', tone: 'green' },
-  'Asset systems': { label: 'Assets', tone: 'blue' },
-  'Asset pipelines': { label: 'Assets', tone: 'blue' },
-  'Design systems': { label: 'Design systems', tone: 'lilac' },
-  'Data visualization': { label: 'Data viz', tone: 'blue' },
-  'Agent guidance': { label: 'AI', tone: 'amber' },
-  'Figma plugins': { label: 'Figma', tone: 'lilac' },
-  Figma: { label: 'Figma', tone: 'lilac' },
-  SVG: { label: 'SVG', tone: 'blue' },
-  Automation: { label: 'Automation', tone: 'green' },
-  CI: { label: 'Automation', tone: 'green' },
-  'Image analysis': { label: 'Image analysis', tone: 'blue' },
-  'Designer workflows': { label: 'Design tools', tone: 'lilac' },
-  Needfinding: { label: 'Research', tone: 'rose' },
-  Research: { label: 'Research', tone: 'rose' },
-  Evaluation: { label: 'Testing', tone: 'green' },
-  'Information architecture': { label: 'Navigation', tone: 'lilac' },
-  Navigation: { label: 'Navigation', tone: 'lilac' },
-  'Semantic retrieval': { label: 'Search', tone: 'blue' },
-  'Open source': { label: 'Open source', tone: 'green' },
-  'Cross-platform': { label: 'Cross-platform', tone: 'amber' },
-  Community: { label: 'Community', tone: 'rose' },
+const skills: Record<string, string> = {
+  Composition: 'Design',
+  Interaction: 'Interaction',
+  'Interaction design': 'Design',
+  'Interaction patterns': 'Interaction',
+  'Interactive states': 'Interaction',
+  'Creation flows': 'Interaction',
+  Prototyping: 'Prototyping',
+  'High-fidelity prototypes': 'Prototyping',
+  'React & TypeScript': 'Code',
+  'Full-stack development': 'Code',
+  'Asset systems': 'Assets',
+  'Asset pipelines': 'Assets',
+  'Design systems': 'Design systems',
+  'Data visualization': 'Data viz',
+  'Agent guidance': 'AI',
+  'Figma plugins': 'Figma',
+  Figma: 'Figma',
+  SVG: 'SVG',
+  Automation: 'Automation',
+  CI: 'Automation',
+  'Image analysis': 'Image analysis',
+  'Designer workflows': 'Design tools',
+  Needfinding: 'Research',
+  Research: 'Research',
+  Evaluation: 'Testing',
+  'Information architecture': 'Navigation',
+  Navigation: 'Navigation',
+  'Semantic retrieval': 'Search',
+  'Open source': 'Open source',
+  'Cross-platform': 'Cross-platform',
+  Community: 'Community',
 };
 /** Short labels on index cards; detailed project skill descriptions stay intact. */
-export function projectTags(project: { category: string; skills: string }): Tag[] {
-  const tags: Tag[] = [{ label: project.category, tone: categories[project.category] || 'blue' }];
+export function projectTags(project: { category: string; skills: string }): string[] {
+  const tags = [project.category];
   for (const skill of project.skills.split(' · ')) {
-    const tag = skills[skill] || { label: skill, tone: 'green' as const };
-    if (!tags.some(existing => existing.label === tag.label)) tags.push(tag);
+    const tag = skills[skill] || skill;
+    if (!tags.includes(tag)) tags.push(tag);
   }
   return tags;
 }

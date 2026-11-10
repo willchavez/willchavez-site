@@ -52,13 +52,14 @@ try {
         const labels = [...card.querySelectorAll('.skill-tag')];
         return { category: card.dataset.category, first: labels[0].textContent, labels: labels.map(label => {
           const s = getComputedStyle(label); const bg = luminance(rgb(s.backgroundColor));
-          return { text: label.textContent, tone: label.dataset.tone, border: s.borderTopWidth, font: parseFloat(s.fontSize), ink: contrast(luminance(rgb(s.color)), bg), card: contrast(bg, luminance(rgb(getComputedStyle(card).backgroundColor))) };
+          return { text: label.textContent, background: s.backgroundColor, foreground: s.color, border: s.borderTopWidth, font: parseFloat(s.fontSize), ink: contrast(luminance(rgb(s.color)), bg), card: contrast(bg, luminance(rgb(getComputedStyle(card).backgroundColor))) };
         }) };
       });
     });
     assert(tags.every(card => card.first === card.category), 'every project includes its exact filter category');
     const labels = tags.flatMap(card => card.labels);
-    assert(new Set(labels.map(label => label.tone)).size >= 4);
+    assert.equal(new Set(labels.map(label => label.background)).size, 1, 'all tags share one accent fill');
+    assert.equal(new Set(labels.map(label => label.foreground)).size, 1, 'all tags share one text color');
     assert(labels.every(label => label.border === '0px' && label.font <= 12), 'Notes-sized borderless chips');
     assert(labels.every(label => label.ink >= 4.5), 'tag text meets WCAG AA contrast');
     assert(labels.every(label => label.card >= 1.2), 'chip backgrounds separate from the card background');

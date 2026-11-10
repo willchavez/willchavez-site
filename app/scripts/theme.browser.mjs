@@ -40,7 +40,7 @@ try {
     assert.equal(await page.locator('html').evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(23, 20, 17)' : 'rgb(247, 245, 242)');
     await page.goto(base + '/enjoying', { referer: base + '/portfolio/genui-bebop/present' });
     const tag = page.locator('.ent[data-kind="film"] .enjoying-tag').first();
-    assert.equal(await tag.evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(150, 183, 220)' : 'rgb(191, 212, 236)');
+    assert.equal(await tag.evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(223, 121, 85)' : 'rgb(156, 75, 46)');
     for (let i = 0; i < 5; i++) await toggle.click();
     assert.equal(await page.locator('html').getAttribute('data-theme'), system);
     assert.equal(errors.length, 0, errors.join('\n'));
