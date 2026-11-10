@@ -1,10 +1,12 @@
 ---
 import Base from "../../layouts/Base.astro";
+import LayoutPlayground from "../../components/LayoutPlayground.astro";
 import Empty from "../../components/Empty.astro";
 import { getWriting, fmtDate, img } from "../../lib/content";
 const posts = await getWriting();
 ---
 <Base showPageTitle={false} title="Notes" current="notes" heading="Notes" sub="Thoughts, things I’m learning, and occasional longer posts." description="Notes by Will Chavez">
+  <LayoutPlayground />
   <div class="section note-index">
     {posts.length === 0 ? (
       <Empty line="No notes yet." hint="I’ll add something here when I have a thought to share." />
@@ -12,7 +14,7 @@ const posts = await getWriting();
       <ol class="entries note-list">
         {posts.map((p) => (
           <li class:list={["note-card", !p.data.thumbnail && "note-card-text"]}>
-            {p.data.thumbnail && <a class="note-thumb" href={`/notes/${p.id}`} aria-label={`Read ${p.data.title}`}><img src={img(p.data.thumbnail, 480)} alt="" loading="lazy" decoding="async" /></a>}
+            {p.data.thumbnail && <a class="note-thumb" href={`/notes/${p.id}`} aria-label={`Read ${p.data.title}`}><img src={img(p.data.thumbnail, 480)} srcset={`${img(p.data.thumbnail, 480)} 480w, ${img(p.data.thumbnail, 960)} 960w`} sizes="(max-width: 699px) 90vw, 50vw" alt="" loading="lazy" decoding="async" /></a>}
             <div class="note-card-copy">
               <div class="note-card-heading">
                 <a class="t" href={`/notes/${p.id}`}>{p.data.title}</a>

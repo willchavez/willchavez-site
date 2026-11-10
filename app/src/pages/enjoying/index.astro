@@ -2,6 +2,7 @@
 import { contentExcerpt } from "../../lib/excerpt";
 import EnjoyingHeading from "../../components/EnjoyingHeading.astro";
 import Base from "../../layouts/Base.astro";
+import LayoutPlayground from "../../components/LayoutPlayground.astro";
 import Empty from "../../components/Empty.astro";
 import SoundCloud from "../../components/SoundCloud.astro";
 import { getEnjoying, img, KIND_PLURAL } from "../../lib/content";
@@ -10,6 +11,7 @@ const items = await getEnjoying();
 const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).length;
 ---
 <Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, books, and papers I’ve spent time with." description="What Will Chavez has been enjoying">
+  <LayoutPlayground />
   <div class="section">
     <div>
       <div class="chips" role="group" aria-label="Filter by type" id="kind-tabs">
@@ -42,7 +44,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
           return (
           <div class="ent" data-kind={i.data.kind}>
             {i.data.cover
-              ? <a class="cover-link" href={`/enjoying/${i.id}?from=all`} data-enjoying-entry aria-label={`View ${i.data.title}`}><img class="cover" src={img(i.data.cover, 240)} alt="" loading="lazy" decoding="async" /></a>
+              ? <a class="cover-link" href={`/enjoying/${i.id}?from=all`} data-enjoying-entry aria-label={`View ${i.data.title}`}><img class="cover" src={img(i.data.cover, 240)} srcset={i.data.cover.startsWith("/uploads/") ? `${img(i.data.cover, 240)} 240w, ${img(i.data.cover, 480)} 480w, ${img(i.data.cover, 960)} 960w` : undefined} sizes="(max-width: 699px) 90vw, 50vw" alt="" loading="lazy" decoding="async" /></a>
               : <div class="cover cover-empty" aria-hidden="true" />}
             <div class="ent-copy">
               <EnjoyingHeading data={i.data} href={`/enjoying/${i.id}?from=all`} filterable />

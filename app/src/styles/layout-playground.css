@@ -1,0 +1,65 @@
+.layout-playground { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .75rem 1.5rem; margin: 0 0 1.5rem; }
+.layout-playground[hidden] { display: none; }
+.layout-options { display: flex; padding: .25rem; border: 1px solid var(--hairline); border-radius: 999px; gap: .15rem; }
+.layout-options button { min-height: 42px; border: 0; border-radius: 999px; background: transparent; padding: .45rem 1rem; color: var(--muted); font: inherit; font-size: .88rem; cursor: pointer; }
+.layout-options button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.layout-options button:focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
+.layout-playground p { color: var(--muted); font-size: .8rem; }
+/* These two studies are isolated to the three index pages on the preview. */
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) body:has([data-layout-playground]) { max-width: 1440px; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) .route-enjoying main:has(#list),
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) .route-notes main:has(.note-index) { max-width: none; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results .portfolio-grid) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; width: 100%; max-width: none; align-items: start; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results .portfolio-grid)[data-cascade-ready] { grid-auto-rows: 8px; row-gap: 16px; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list li.note-card, #list .ent, #portfolio-results .portfolio-card) { display: block; grid-column: auto; align-self: start; min-width: 0; margin: 0; padding: 1rem; border: 1px solid color-mix(in srgb, var(--hairline) 65%, transparent); border-radius: 1.3rem; background: color-mix(in srgb, var(--rust) 7%, var(--paper)); overflow: hidden; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list li.note-card, #list .ent, #portfolio-results .portfolio-card)[hidden] { display: none; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list li.note-card, #list .ent, #portfolio-results .portfolio-card)[data-tile="visual"] { background: color-mix(in srgb, #708876 14%, var(--paper)); }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #portfolio-results .project-open { display: block; border-radius: .7rem; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-thumb, #list .cover-link, #portfolio-results .project-image) { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; padding: 0; margin: 0 0 1.15rem; border: 0; border-radius: .85rem; overflow: hidden; background: color-mix(in srgb, var(--ink) 4%, var(--paper)); }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-thumb img, #list .cover, #portfolio-results .project-image img) { display: block; width: 100%; height: 100%; max-width: none; max-height: none; aspect-ratio: auto; object-fit: cover; border-radius: .85rem; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #list .ent .cover-empty { display: none; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-card-heading, #list .ent-heading) { display: flex; flex-direction: column; gap: .2rem; align-items: flex-start; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #list .enjoying-side-meta { flex-direction: row; align-items: center; flex-wrap: wrap; gap: .7rem; margin: .45rem 0; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-card .t, #list .ent .t, #portfolio-results .project-info h2) { font-size: 1.35rem; line-height: 1.2; font-weight: 500; letter-spacing: -.03em; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-card .s, #list .ent-excerpt, #portfolio-results .project-info p) { font-size: .95rem; line-height: 1.65; margin-top: .6rem; -webkit-line-clamp: 3; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #portfolio-results .project-info { padding: 0; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #portfolio-results .portfolio-eyebrow { font-size: .6rem; margin: .25rem 0 .5rem; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #portfolio-results :is(.skills, .explore),
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) .portfolio-view-toggle { display: none; }
+/* Square visual cards feel like album sleeves; text cards interrupt the rhythm. */
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) [data-tile="visual"] :is(.note-thumb, .cover-link, .project-image) { aspect-ratio: 1; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) [data-tile="visual"] :is(.s, .ent-excerpt, .project-info p) { display: none; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #list [data-kind="book"][data-tile="visual"] .cover-link { aspect-ratio: 4 / 5; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #list [data-kind="book"] .cover { object-fit: contain; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) :is(.note-card, .ent, .portfolio-card)[data-tile="text"] { padding: 1.75rem; background: var(--paper); }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) [data-tile="text"] :is(.note-thumb, .cover-link, .project-image) { display: none; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) [data-tile="text"] :is(.t, .project-info h2) { font-size: 1.65rem; }
+/* Small finds sit beside larger media, instead of repeating the same card. */
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) :is(.note-card, .ent)[data-tile="compact"],
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #portfolio-results [data-tile="compact"] .project-open { display: grid; grid-template-columns: 4.2rem minmax(0, 1fr); gap: .85rem; align-items: start; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) [data-tile="compact"] :is(.note-thumb, .cover-link, .project-image) { width: 4.2rem; margin: 0; aspect-ratio: 1; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) [data-tile="compact"] :is(.s, .ent-excerpt, .project-info p) { display: none; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #list [data-tile="compact"]:has(> .cover-empty) { grid-template-columns: 1fr; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) .note-card-text[data-tile="compact"] { grid-template-columns: 1fr; }
+html[data-layout-experiment="editorial"]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) [data-tile="lead"] :is(.t, .project-info h2) { font-size: clamp(1.6rem, 2.3vw, 2.2rem); }
+html[data-layout-experiment="editorial"]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) :is(.note-card, .ent, .portfolio-card)[data-tile="lead"] { grid-column: 1 / -1; padding: 1.25rem; }
+html[data-layout-experiment="editorial"]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) [data-tile="lead"] :is(.note-thumb, .cover-link, .project-image) { aspect-ratio: 2; }
+@media (min-width: 1100px) {
+  html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results .portfolio-grid) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  html[data-layout-experiment="editorial"]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) :is(.note-card, .ent, .portfolio-card)[data-tile="lead"] { grid-column: span 2; }
+  html[data-layout-experiment="editorial"]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) [data-tile="lead"] :is(.note-thumb, .cover-link, .project-image) { aspect-ratio: 16 / 10; }
+}
+@media (max-width: 699px) {
+  .layout-playground { gap: .5rem; }
+  .layout-options { width: 100%; justify-content: center; }
+  .layout-options button { flex: 1; padding-inline: .6rem; }
+  html[data-layout-experiment]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results .portfolio-grid) { grid-template-columns: 1fr; grid-auto-rows: auto; gap: 1rem; }
+  html[data-layout-experiment="editorial"]:not([data-layout-experiment="cards"]) :is(.note-list, #list, #portfolio-results) :is(.note-card, .ent, .portfolio-card)[data-tile="lead"] { grid-column: auto; grid-row: auto; }
+  html[data-layout-experiment]:not([data-layout-experiment="cards"]) .route-enjoying #list .paper-authors { white-space: normal; }
+}
+@media (prefers-reduced-motion: no-preference) { .layout-options button { transition: background 150ms ease, color 150ms ease; } }
+
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #list .ent[data-media-missing] .cover-link { display: none; }
+html[data-layout-experiment]:not([data-layout-experiment="cards"]) #list .ent[data-media-missing] { grid-template-columns: 1fr; }
+/* Layout variants must never override the filters' hidden state. */
+html[data-layout-experiment] :is(.note-card, .ent, .portfolio-card)[hidden] { display: none !important; }
