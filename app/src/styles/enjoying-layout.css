@@ -53,19 +53,6 @@
 #enjoying-results #list .ent :is(.enjoying-tag, .soundcloud) { position: relative; z-index: 2; }
 #enjoying-results #list .ent:has(a.t:focus-visible) { outline: 2px solid var(--rust); outline-offset: 4px; }
 #enjoying-results #list .ent a.t:focus-visible { outline: none; }
-@media (hover: hover) and (pointer: fine) {
-  #enjoying-results #list .ent:hover { transform: scale(1.015); box-shadow: 0 8px 22px color-mix(in srgb, var(--ink) 12%, transparent); z-index: 3; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  #enjoying-results #list .ent { transition: transform 180ms ease, box-shadow 180ms ease; }
-}
-@media (prefers-reduced-motion: reduce) {
-  #enjoying-results #list .ent:hover { transform: none; }
-}
-
-/* Hover yields to the card-position animation during filtering. */
-#enjoying-results[data-rearranging] #list .ent { transition: none; }
-#enjoying-results[data-rearranging] #list .ent:hover { transform: none; }
 @media (max-width: 640px) {
   .enjoying-toolbar .enjoying-view-toggle { display: none; }
 }

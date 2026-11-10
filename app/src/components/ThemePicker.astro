@@ -5,12 +5,19 @@
     <label for="palette-choice">Palette</label>
     <select id="palette-choice" data-palette-choice>
       <option value="blue-gold">Blue &amp; gold · ocean, aqua, butter</option>
-      <option value="forest">Forest · moss, fern, cream</option>
+      <optgroup label="Forest studies">
+        <option value="forest">Forest · original</option>
+        <option value="forest-moss">Forest · Moss — warm olive</option>
+        <option value="forest-fern">Forest · Fern — fresh green</option>
+        <option value="forest-pine">Forest · Pine — cool evergreen</option>
+        <option value="forest-lichen">Forest · Lichen — golden green</option>
+      </optgroup>
       <option value="plum">Plum · aubergine, rose, lilac</option>
       <option value="clay">Clay · terracotta, peach, sand</option>
       <option value="parchment">Parchment · paper, ink, rust</option>
     </select>
-    <div class="palette-sample" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="palette-sample" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="palette-key"><span>Paper</span><span>Text</span><span>Accent</span></div>
     <div class="theme-actions">
       <button type="button" data-palette-next>Next palette →</button>
       <button type="button" data-mode-toggle hidden><span data-mode-label>Light mode</span> ◐</button>
@@ -29,8 +36,9 @@
   .theme-panel-title { font-size: 1.25rem; margin-bottom: 1rem; }
   label { display: block; margin-bottom: .4rem; color: var(--muted); }
   select { width: 100%; min-height: 44px; padding: .5rem; border: 1px solid var(--hairline); border-radius: .5rem; background: var(--surface); color: var(--ink); font: inherit; }
-  .palette-sample { display: flex; height: 30px; overflow: hidden; border: 1px solid var(--hairline); border-radius: .5rem; margin: .8rem 0; }
-  i { flex: 1; background: var(--surface); } i:nth-child(2) { background: var(--ink); } i:nth-child(3) { background: var(--rust); } i:nth-child(4) { background: var(--muted); }
+  .palette-sample { display: flex; height: 30px; overflow: hidden; border: 1px solid var(--hairline); border-radius: .5rem; margin: .8rem 0 .25rem; }
+  i { flex: 1; background: var(--paper); } i:nth-child(2) { background: var(--ink); } i:nth-child(3) { background: var(--fill); }
+  .palette-key { display: grid; grid-template-columns: repeat(3, 1fr); margin-bottom: .8rem; color: var(--muted); font-size: .72rem; text-align: center; }
   .theme-actions { display: flex; gap: .5rem; }
   button { flex: 1; min-height: 44px; padding: .5rem; border: 1px solid var(--hairline); border-radius: 999px; background: var(--surface); color: var(--ink); font: inherit; cursor: pointer; }
   button:first-child { background: var(--fill); color: var(--fill-ink); border-color: var(--fill); }

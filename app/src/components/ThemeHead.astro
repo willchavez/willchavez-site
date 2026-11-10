@@ -4,7 +4,7 @@ import "../styles/palettes.css";
 <!-- Resolve before paint. Manual choices last for this visit, not forever. -->
 <script is:inline>
   (() => {
-    const palettes = ['blue-gold', 'forest', 'plum', 'clay', 'parchment'];
+    const palettes = ['blue-gold', 'forest', 'forest-moss', 'forest-fern', 'forest-pine', 'forest-lichen', 'plum', 'clay', 'parchment'];
     let palette = window.willPalette;
     try { palette ||= sessionStorage.getItem('will-palette'); } catch {}
     window.willPalette = palettes.includes(palette) ? palette : 'blue-gold';

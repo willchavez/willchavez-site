@@ -11,19 +11,19 @@ const posts = await getWriting();
     ) : (
       <ol class="entries note-list">
         {posts.map((p) => (
-          <li class:list={["note-card", !p.data.thumbnail && "note-card-text"]}>
+          <li class:list={["note-card", "interactive-card", !p.data.thumbnail && "note-card-text"]}>
             {p.data.thumbnail && <a class="note-thumb" href={`/notes/${p.id}`} aria-label={`Read ${p.data.title}`}><img src={img(p.data.thumbnail, 480)} alt="" loading="lazy" decoding="async" /></a>}
             <div class="note-card-copy">
               <div class="note-card-heading">
                 <a class="t" href={`/notes/${p.id}`}>{p.data.title}</a>
                 <div class="note-side-meta">
                   <time class="m" datetime={p.data.date.toISOString()}>{fmtDate(p.data.date)}</time>
-                  {p.data.topics.length > 0 && <ul class="note-topics" aria-label={`Topics for ${p.data.title}`}>
-                    {p.data.topics.map((topic) => <li class="note-topic" data-topic={topic.toLowerCase()}>{topic}</li>)}
-                  </ul>}
                 </div>
               </div>
               {p.data.summary && <div class="s">{p.data.summary}</div>}
+              {p.data.topics.length > 0 && <ul class="note-topics" aria-label={`Topics for ${p.data.title}`}>
+                {p.data.topics.map((topic) => <li class="note-topic" data-topic={topic.toLowerCase()}>{topic}</li>)}
+              </ul>}
             </div>
           </li>
         ))}
