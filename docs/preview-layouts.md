@@ -1,8 +1,8 @@
-# Portfolio layout preview
+# Portfolio layouts
 
-Enjoying defaults to the cascading Grid on desktop and offers the shared Grid/List switch beside its filters. At 640px and below it always shows List and hides the switch, matching Projects; a saved desktop Grid preference or `?view=grid` cannot override the mobile layout. Returning to desktop restores that preference. Notes keeps its existing layout. All pages retain the shared site width.
+Enjoying defaults to the cascading Grid on desktop and offers the shared Grid/List switch beside its filters. At 640px and below it always shows List and hides the switch, matching Projects; a saved desktop Grid preference or `?view=grid` cannot override the mobile layout. Returning to desktop restores that preference. Notes uses a regular list of rounded cards. All pages retain the shared site width.
 
-Enjoying's media labels are plain, borderless spans across the index, Home, and detail metadata. Rich blue, violet, green, and copper fills keep the category hues recognizable. Notes uses six consistent topic colors across index cards and articles; Music shares its violet with Enjoying. These labels use pale text on deep fills in light mode and dark text on lighter fills in dark mode. Rendered color checks require >=4.5:1 text contrast and >=3:1 separation from their actual card or page background, without borders or shadows. Labels do not act as filters. Post cards remain clickable, with audio controls independent of the main link.
+Enjoying's media labels are plain, borderless spans across the index, Home, and detail metadata. Muted blue, violet, green, and copper fills keep the category hues recognizable. Notes uses six consistent topic colors across index cards and articles; Music shares its violet with Enjoying. Light mode uses soft tinted fills with dark text; the approved dark-mode palette stays unchanged. Rendered color checks require >=4.5:1 text contrast, with subtle fill separation from cards in light mode and stronger separation in dark mode, without borders or shadows. Labels do not act as filters. Post cards remain clickable, with audio controls independent of the main link.
 
 Projects uses the same card-motion controller for desktop filtering, while retaining its existing standard grid and list geometry. The motion controller never chooses columns or row spans. Cards slide to their new positions, outgoing copies shrink/fade, and incoming cards have a short stagger. Rapid changes start from currently painted positions. Temporary copies are inert and removed on completion or navigation. Reduced motion applies filters immediately; mobile Projects filters instantly.
 
@@ -15,4 +15,4 @@ Check a built preview:
 - `CHROMIUM_PATH=/usr/bin/chromium node app/scripts/enjoying-layout.browser.mjs http://localhost:4359`
 - `CHROMIUM_PATH=/usr/bin/chromium node app/scripts/portfolio-filter.browser.mjs http://localhost:4359`
 
-Set `BROWSER_ENGINE=webkit` for Safari's engine. Checks cover motion and interruption, final geometry, scrolling, native links, static labels, adaptive views, category chips and contrast, keyboard use, shared width, reduced motion, and fallback behavior. Production remains unchanged.
+Set `BROWSER_ENGINE=webkit` for Safari's engine. Checks cover motion and interruption, final geometry, scrolling, native links, static labels, adaptive views, category chips and contrast, keyboard use, shared width, reduced motion, and fallback behavior. These layouts, filters, and tag treatments are approved for production.

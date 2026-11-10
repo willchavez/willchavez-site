@@ -1,12 +1,12 @@
-/* Solid fills separate labels from rust, sage, and paper cards without outlines. */
+/* Muted light fills and contrasting text; dark-mode colors remain independent. */
 :root {
-  --tag-blue-bg: #3c6d97; --tag-blue-ink: #fffaf5;
-  --tag-violet-bg: #75558c; --tag-violet-ink: #fffaf5;
-  --tag-green-bg: #446e50; --tag-green-ink: #fffaf5;
-  --tag-copper-bg: #96583f; --tag-copper-ink: #fffaf5;
-  --tag-amber-bg: #825d25; --tag-amber-ink: #fffaf5;
-  --tag-teal-bg: #356d70; --tag-teal-ink: #fffaf5;
-  --tag-rose-bg: #96515f; --tag-rose-ink: #fffaf5;
+  --tag-blue-bg: #bfd4ec; --tag-blue-ink: #234765;
+  --tag-violet-bg: #dac9e9; --tag-violet-ink: #513570;
+  --tag-green-bg: #bed6c5; --tag-green-ink: #2b5138;
+  --tag-copper-bg: #e7c7b8; --tag-copper-ink: #79472f;
+  --tag-amber-bg: #ebd6ae; --tag-amber-ink: #634812;
+  --tag-teal-bg: #bfd8d9; --tag-teal-ink: #2b5557;
+  --tag-rose-bg: #e8c9d2; --tag-rose-ink: #783c4e;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
