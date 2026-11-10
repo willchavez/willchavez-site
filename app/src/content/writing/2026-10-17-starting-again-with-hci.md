@@ -5,8 +5,7 @@ summary: "Two prototypes, a lot of learning, and some missed brunches. My first 
 deck: "Heuristics, cognitive load, two prototypes, and a semester that kept reminding me I am a person with plans outside Canvas."
 thumbnail: "/uploads/medium/hci-youtube-subscriptions.png"
 topics:
-  - "Learning"
-  - "Design"
+  - "HCI"
 draft: false
 ---
 

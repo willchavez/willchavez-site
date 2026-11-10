@@ -5,9 +5,7 @@ summary: "I made a little browser companion to see what my synth’s filter was 
 deck: "Envelope filters clicked when I imagined an invisible hand moving the cutoff knob while a note plays."
 thumbnail: "/synth-lessons-thumbnail.webp"
 topics:
-  - "Music"
-  - "Code"
-  - "Learning"
+  - "Synthesis"
 draft: false
 ---
 

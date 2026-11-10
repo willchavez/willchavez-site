@@ -15,7 +15,7 @@ const writing = defineCollection({
     thumbnail: z.string().optional(),
     cover: z.string().optional(),
     source: z.string().url().optional(),
-    topics: z.array(z.string()).default([]),
+    topics: z.array(z.string()).max(2, "Choose at most two meaningful topics; one is enough when it tells the story.").default([]),
     soundcloud: z.string().trim().refine((value) => !value || Boolean(soundCloudURL(value)), "Use an https://soundcloud.com or https://on.soundcloud.com link.").optional(),
     draft: z.boolean().default(false),
   }),

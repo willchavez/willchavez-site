@@ -5,8 +5,8 @@ summary: "How a few new friends and a shared belief in local businesses became a
 thumbnail: "/uploads/medium/2020-03-20-rebuilding-hireharlem-com-02.webp"
 source: "https://medium.com/@willchavez/rebuilding-hireharlem-com-f07773edb7dc"
 topics:
-  - "Design"
-  - "Code"
+  - "Community"
+  - "Web development"
 draft: false
 deck: "How Alex Ocampo and I rebuilt hireharlem.com"
 ---
