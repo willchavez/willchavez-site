@@ -39,6 +39,18 @@ Edit Markdown files in `app/src/content/writing` for Notes and
 Content changes committed to `master` trigger the site build and deployment.
 There is no public admin interface.
 
+Tags have a maximum of two per item unless Will explicitly asks for an
+exception. Read the content and choose its most meaningful subjects; use one
+when a second adds little. Do not optimize for tag popularity, automatically
+include filter categories, or truncate an unreviewed list. Notes store their
+tags in Markdown `topics`; Projects store a curated `tags` array in
+`app/src/data/portfolio-projects.ts`, shared by the index and project page.
+Enjoying's single media-type label already follows this rule.
+
+Notes list cards place the date above the tags in a right-aligned column beside
+the title and summary, matching Enjoying's list. At 480px and below the metadata
+sits below the copy, still right-aligned, so long titles retain room to wrap.
+
 ## SoundCloud in posts
 
 In a Notes Markdown file, use the optional `soundcloud` frontmatter field for

@@ -48,7 +48,7 @@ const labelFor = (label: string) => label.replace(/<[^>]*>/g, "").replace(/[→�
     <section class="portfolio-project-copy" aria-labelledby="contribution-title">
       <h2 id="contribution-title">My contribution</h2>
       <ul>{project.contributions.map((contribution) => <li>{contribution}</li>)}</ul>
-      <div class="portfolio-project-skills" aria-label="Project tags">{project.skills.split(" · ").map((skill) => <span class="skill-tag">{skill}</span>)}</div>
+      <div class="portfolio-project-skills" aria-label="Project tags">{project.tags.map((skill) => <span class="skill-tag">{skill}</span>)}</div>
       {project.links.length > 0 && <div class="portfolio-project-links">{project.links.map(([url, label]) => <p><a href={url} target="_blank" rel="noreferrer">{labelFor(label)} ↗</a></p>)}</div>}
       {story.related && <p class="portfolio-related"><a href={story.related.href}>{story.related.label} ↗</a></p>}
     </section>

@@ -5,8 +5,8 @@ summary: "Sneaker culture got a little too serious. I made a fake GOT ’EM scre
 thumbnail: "/uploads/medium/2021-09-15-got-em-snkrs-generator-01.webp"
 source: "https://medium.com/@willchavez/got-em-snkrs-generator-ef799b2db42d"
 topics:
-  - "Code"
-  - "Design"
+  - "Sneaker culture"
+  - "Creative coding"
 draft: false
 ---
 

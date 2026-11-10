@@ -50,13 +50,13 @@ try {
       const contrast = (a, b) => (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
       return cards.map(card => {
         const labels = [...card.querySelectorAll('.skill-tag')];
-        return { category: card.dataset.category, first: labels[0].textContent, labels: labels.map(label => {
+        return { labels: labels.map(label => {
           const s = getComputedStyle(label); const bg = luminance(rgb(s.backgroundColor));
           return { text: label.textContent, background: s.backgroundColor, foreground: s.color, border: s.borderTopWidth, font: parseFloat(s.fontSize), ink: contrast(luminance(rgb(s.color)), bg), card: contrast(bg, luminance(rgb(getComputedStyle(card).backgroundColor))) };
         }) };
       });
     });
-    assert(tags.every(card => card.first === card.category), 'every project includes its exact filter category');
+    assert(tags.every(card => card.labels.length >= 1 && card.labels.length <= 2), 'each project has one or two curated tags');
     const labels = tags.flatMap(card => card.labels);
     assert.equal(new Set(labels.map(label => label.background)).size, 1, 'all tags share one accent fill');
     assert.equal(new Set(labels.map(label => label.foreground)).size, 1, 'all tags share one text color');

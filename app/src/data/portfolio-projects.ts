@@ -1,6 +1,7 @@
 export const portfolioProjects = [
   {
     "slug": "fluent-asset-library",
+    "tags": ["Asset systems", "Interaction design"],
     "title": "Fluent asset library",
     "category": "Design tooling",
     "org": "Microsoft · Fluent Design Studio",
@@ -55,6 +56,7 @@ export const portfolioProjects = [
 
   {
     "slug": "fluent-dataviz",
+    "tags": ["Data visualization", "Design systems"],
     "title": "Fluent-flex data visualization",
     "category": "Design tooling",
     "org": "Microsoft · Fluent Design Studio",
@@ -79,6 +81,7 @@ export const portfolioProjects = [
   },
   {
     "slug": "genui-bebop",
+    "tags": ["Generative UI"],
     "title": "Generative interfaces",
     "category": "AI experiences",
     "org": "Microsoft · Fluent Design Studio",
@@ -117,6 +120,7 @@ export const portfolioProjects = [
   },
   {
     "slug": "icon-scaling-tool",
+    "tags": ["SVG", "Automation"],
     "title": "Icon Scaling Tool",
     "category": "Design tooling",
     "org": "Microsoft · Fluent Design Studio",
@@ -152,6 +156,7 @@ export const portfolioProjects = [
   },
   {
     "slug": "bebop",
+    "tags": ["Interaction design"],
     "title": "Microsoft 365 Copilot",
     "category": "AI experiences",
     "org": "Microsoft",
@@ -202,6 +207,7 @@ export const portfolioProjects = [
   },
   {
     "slug": "visual-diff",
+    "tags": ["Visual testing"],
     "title": "Visual Diff Analyzer",
     "category": "Design tooling",
     "org": "Microsoft · Fluent Design Studio",
@@ -232,6 +238,7 @@ export const portfolioProjects = [
   },
   {
     "slug": "peer-survey",
+    "tags": ["UX research", "Interaction design"],
     "title": "PeerView",
     "category": "Research & learning",
     "org": "Georgia Tech · Team project",
@@ -275,6 +282,7 @@ export const portfolioProjects = [
   },
   {
     "slug": "youtube-redesign",
+    "tags": ["Information architecture", "UX research"],
     "title": "Rethinking subscriptions",
     "category": "Research & learning",
     "org": "Georgia Tech · Individual project",
@@ -320,6 +328,7 @@ export const portfolioProjects = [
   },
   {
     "slug": "agent-builder",
+    "tags": ["Agent creation"],
     "title": "Agent Builder",
     "category": "AI experiences",
     "org": "Microsoft",
@@ -354,6 +363,7 @@ export const portfolioProjects = [
   },
   {
     "slug": "flubert",
+    "tags": ["Semantic search", "Design systems"],
     "title": "Flubert",
     "category": "Design tooling",
     "org": "Microsoft · Fluent Design Studio",
@@ -388,6 +398,7 @@ export const portfolioProjects = [
   },
   {
     "slug": "nav2",
+    "tags": ["Navigation", "Prototyping"],
     "title": "Navigation explorations",
     "category": "AI experiences",
     "org": "Microsoft · Collaborative project",
@@ -424,6 +435,7 @@ export const portfolioProjects = [
   },
   {
     "slug": "fluent",
+    "tags": ["Open source", "Asset pipelines"],
     "title": "Fluent in the open",
     "category": "Design tooling",
     "org": "Microsoft · Fluent Design Studio",
@@ -462,6 +474,7 @@ export const portfolioProjects = [
   },
   {
     "slug": "hireharlem",
+    "tags": ["Community", "Web development"],
     "title": "Hire Harlem",
     "category": "Community",
     "org": "Volunteer project",
