@@ -1,5 +1,6 @@
 import type { TransitionBeforeSwapEvent } from 'astro:transitions/client';
-declare global { interface Window { willThemePreference?: 'light' | 'dark' | null } }
+declare global { interface Window { willThemePreference?: 'light' | 'dark' | null; willPalette?: string } }
+const palettes = ['blue-gold', 'forest', 'plum', 'clay', 'parchment'];
 const system = matchMedia('(prefers-color-scheme: dark)');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const buttons = new WeakSet<HTMLButtonElement>();
@@ -8,7 +9,10 @@ const theme = () => window.willThemePreference || (system.matches ? 'dark' : 'li
 function sync(animate = false) {
   const selected = theme();
   document.documentElement.dataset.theme = selected;
-  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach(button => {
+  document.documentElement.dataset.palette = window.willPalette || 'blue-gold';
+  document.querySelectorAll<HTMLSelectElement>('[data-palette-choice]').forEach(select => select.value = window.willPalette || 'blue-gold');
+  document.querySelectorAll('[data-mode-label]').forEach(label => label.textContent = `${selected === 'dark' ? 'Dark' : 'Light'} mode`);
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle], [data-mode-toggle]').forEach(button => {
     const nextLabel = `Switch to ${selected === 'dark' ? 'light' : 'dark'} mode`;
     button.setAttribute('aria-label', nextLabel);
     button.title = nextLabel;
@@ -24,7 +28,8 @@ function sync(animate = false) {
 }
 function init() {
   sync();
-  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach(button => {
+  document.querySelectorAll<HTMLElement>('[data-palette-picker]').forEach(picker => picker.hidden = false);
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle], [data-mode-toggle]').forEach(button => {
     if (buttons.has(button)) return;
     buttons.add(button);
     button.hidden = false;
@@ -56,6 +61,37 @@ addEventListener('storage', event => {
 });
 document.addEventListener('astro:before-swap', (event: TransitionBeforeSwapEvent) => {
   event.newDocument.documentElement.dataset.theme = theme();
+  event.newDocument.documentElement.dataset.palette = window.willPalette || 'blue-gold';
+  document.querySelectorAll<HTMLDetailsElement>('[data-palette-picker]').forEach(picker => picker.open = false);
 });
 document.addEventListener('astro:page-load', init);
 init();
+
+function setPalette(value: string) {
+  if (!palettes.includes(value)) return;
+  window.willPalette = value;
+  try { sessionStorage.setItem('will-palette', value); } catch {}
+  sync();
+  const choice = document.querySelector<HTMLSelectElement>('[data-palette-choice]');
+  const status = document.querySelector('[data-palette-status]');
+  if (status) status.textContent = `${choice?.selectedOptions[0].textContent}, ${theme()} mode`;
+}
+document.addEventListener('change', event => {
+  const target = event.target;
+  if (target instanceof HTMLSelectElement && target.matches('[data-palette-choice]')) setPalette(target.value);
+});
+document.addEventListener('click', event => {
+  if (event.target instanceof Element && event.target.closest('[data-palette-next]')) {
+    setPalette(palettes[(palettes.indexOf(window.willPalette || 'blue-gold') + 1) % palettes.length]);
+  }
+  document.querySelectorAll<HTMLDetailsElement>('[data-palette-picker]').forEach(picker => {
+    if (!picker.contains(event.target as Node)) picker.open = false;
+  });
+});
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  document.querySelectorAll<HTMLDetailsElement>('[data-palette-picker][open]').forEach(picker => {
+    picker.open = false;
+    picker.querySelector('summary')?.focus();
+  });
+});

@@ -1,0 +1,41 @@
+<details class="theme-picker" data-palette-picker hidden>
+  <summary>Themes <span aria-hidden="true">◐</span></summary>
+  <div class="theme-panel">
+    <p class="theme-panel-title">Find your colors</p>
+    <label for="palette-choice">Palette</label>
+    <select id="palette-choice" data-palette-choice>
+      <option value="blue-gold">Blue &amp; gold · ocean, aqua, butter</option>
+      <option value="forest">Forest · moss, fern, cream</option>
+      <option value="plum">Plum · aubergine, rose, lilac</option>
+      <option value="clay">Clay · terracotta, peach, sand</option>
+      <option value="parchment">Parchment · paper, ink, rust</option>
+    </select>
+    <div class="palette-sample" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="theme-actions">
+      <button type="button" data-palette-next>Next palette →</button>
+      <button type="button" data-mode-toggle hidden><span data-mode-label>Light mode</span> ◐</button>
+    </div>
+    <p class="theme-hint">Every palette has a light and dark side.</p>
+    <span class="sr-only" data-palette-status role="status"></span>
+  </div>
+</details>
+<style>
+  .theme-picker[hidden] { display: none; }
+  .theme-picker { position: relative; font-size: .85rem; }
+  summary { display: flex; align-items: center; gap: .6rem; min-height: 44px; padding: .4rem .9rem; border: 1px solid var(--hairline); border-radius: 999px; cursor: pointer; list-style: none; white-space: nowrap; }
+  summary::-webkit-details-marker { display: none; }
+  .theme-picker[open] summary { background: var(--surface); }
+  .theme-panel { position: absolute; top: calc(100% + .75rem); right: 0; width: min(340px, calc(100vw - 3rem)); padding: 1.2rem; border: 1px solid var(--hairline); border-radius: 1.2rem; background: var(--paper); box-shadow: 0 16px 45px color-mix(in srgb, var(--ink) 15%, transparent); }
+  .theme-panel-title { font-size: 1.25rem; margin-bottom: 1rem; }
+  label { display: block; margin-bottom: .4rem; color: var(--muted); }
+  select { width: 100%; min-height: 44px; padding: .5rem; border: 1px solid var(--hairline); border-radius: .5rem; background: var(--surface); color: var(--ink); font: inherit; }
+  .palette-sample { display: flex; height: 30px; overflow: hidden; border: 1px solid var(--hairline); border-radius: .5rem; margin: .8rem 0; }
+  i { flex: 1; background: var(--surface); } i:nth-child(2) { background: var(--ink); } i:nth-child(3) { background: var(--rust); } i:nth-child(4) { background: var(--muted); }
+  .theme-actions { display: flex; gap: .5rem; }
+  button { flex: 1; min-height: 44px; padding: .5rem; border: 1px solid var(--hairline); border-radius: 999px; background: var(--surface); color: var(--ink); font: inherit; cursor: pointer; }
+  button:first-child { background: var(--fill); color: var(--fill-ink); border-color: var(--fill); }
+  .theme-hint { margin-top: .8rem; color: var(--muted); font-size: .78rem; }
+  :is(button, summary, select):focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
+  @media (max-width: 820px) { .theme-picker { position: static; } .theme-panel { left: 0; right: auto; } }
+  @media (max-width: 400px) { summary { padding-inline: .65rem; } }
+</style>

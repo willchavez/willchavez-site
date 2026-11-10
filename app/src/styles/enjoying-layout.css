@@ -15,7 +15,7 @@
 #enjoying-results[data-view="grid"] #list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; width: 100%; max-width: none; align-items: start; }
 #enjoying-results[data-view="grid"] #list[data-cascade-ready] { grid-auto-rows: 8px; row-gap: 16px; }
 #enjoying-results[data-view="grid"] #list .ent { display: block; grid-column: auto; align-self: start; min-width: 0; margin: 0; padding: 1rem; border: 1px solid color-mix(in srgb, var(--hairline) 65%, transparent); border-radius: 1.3rem; background: color-mix(in srgb, var(--rust) 7%, var(--paper)); overflow: hidden; }
-#enjoying-results[data-view="grid"] #list .ent[data-tile="visual"] { background: color-mix(in srgb, #b9b47e 14%, var(--paper)); }
+#enjoying-results[data-view="grid"] #list .ent[data-tile="visual"] { background: color-mix(in srgb, var(--wash-accent, #b9b47e) 14%, var(--paper)); }
 #enjoying-results[data-view="grid"] #list .cover-link { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; padding: 0; margin: 0 0 1.15rem; border: 0; border-radius: .85rem; overflow: hidden; background: color-mix(in srgb, var(--ink) 4%, var(--paper)); }
 #enjoying-results[data-view="grid"] #list .cover { display: block; width: 100%; height: 100%; max-width: none; max-height: none; aspect-ratio: auto; object-fit: cover; border-radius: .85rem; }
 #enjoying-results[data-view="grid"] #list .ent .cover-empty { display: none; }

@@ -41,7 +41,7 @@
 .home-journal { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3.5rem; }
 .home-journal .home-section { margin: 0; padding: 1.25rem; border-radius: 1.4rem; }
 .home-notes-section { background: color-mix(in srgb, var(--rust) 7%, var(--paper)); }
-.home-enjoying-section { background: color-mix(in srgb, #b9b47e 10%, var(--paper)); }
+.home-enjoying-section { background: color-mix(in srgb, var(--wash-accent, #b9b47e) 10%, var(--paper)); }
 .home-journal .home-section-head { margin-bottom: .35rem; }
 .home-journal .home-section-description { font-size: .85rem; line-height: 1.5; margin-bottom: 1.25rem; }
 .home-note, .home-enjoying { display: block; padding: 1.1rem; margin-bottom: 1rem; }
