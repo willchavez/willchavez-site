@@ -2,47 +2,53 @@
 import { contentExcerpt } from "../../lib/excerpt";
 import EnjoyingHeading from "../../components/EnjoyingHeading.astro";
 import Base from "../../layouts/Base.astro";
-import LayoutPlayground from "../../components/LayoutPlayground.astro";
+import ViewToggle from "../../components/ViewToggle.astro";
+import "../../styles/enjoying-layout.css";
 import Empty from "../../components/Empty.astro";
 import SoundCloud from "../../components/SoundCloud.astro";
 import { getEnjoying, img, KIND_PLURAL } from "../../lib/content";
 import { KINDS } from "../../content.config";
 const items = await getEnjoying();
 const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).length;
+const tilePattern = ["lead", "compact", "visual", "text", "compact", "visual", "lead", "compact"];
 ---
 <Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, books, and papers I’ve spent time with." description="What Will Chavez has been enjoying">
-  <LayoutPlayground />
   <div class="section">
     <div>
-      <div class="chips" role="group" aria-label="Filter by type" id="kind-tabs">
-        <button class="chip" type="button" data-kind="all" data-label="All" aria-pressed="true">All<span class="chip-count" data-count hidden={items.length === 0}>{items.length || ""}</span></button>
-        {KINDS.map((k) => {
-          const count = kindCount(k);
-          const label = KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1);
-          return <button class="chip" type="button" data-kind={k} data-label={label} aria-pressed="false">{label}<span class="chip-count" data-count hidden={count === 0}>{count || ""}</span></button>;
-        })}
+      <div class="enjoying-toolbar">
+        <div class="enjoying-filters">
+          <div class="chips" role="group" aria-label="Filter by type" id="kind-tabs">
+            <button class="chip" type="button" data-kind="all" data-label="All" aria-pressed="true">All<span class="chip-count" data-count hidden={items.length === 0}>{items.length || ""}</span></button>
+            {KINDS.map((k) => {
+              const count = kindCount(k);
+              const label = KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1);
+              return <button class="chip" type="button" data-kind={k} data-label={label} aria-pressed="false">{label}<span class="chip-count" data-count hidden={count === 0}>{count || ""}</span></button>;
+            })}
+          </div>
+
+          <details class="enjoying-kind-menu" id="kind-menu">
+            <summary aria-label="Filter enjoying items by type">
+              <span id="kind-current">All</span>
+              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
+            </summary>
+            <div class="enjoying-kind-options" role="group" aria-label="Filter by type">
+              <button class="chip" type="button" data-kind="all" data-label="All" aria-pressed="true">All<span class="chip-count" data-count hidden={items.length === 0}>{items.length || ""}</span></button>
+              {KINDS.map((k) => {
+                const count = kindCount(k);
+                const label = KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1);
+                return <button class="chip" type="button" data-kind={k} data-label={label} aria-pressed="false">{label}<span class="chip-count" data-count hidden={count === 0}>{count || ""}</span></button>;
+              })}
+            </div>
+          </details>
+        </div>
+        <ViewToggle label="Enjoying layout" className="enjoying-view-toggle" hidden />
       </div>
 
-      <details class="enjoying-kind-menu" id="kind-menu">
-        <summary aria-label="Filter enjoying items by type">
-          <span id="kind-current">All</span>
-          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m4 6 4 4 4-4" /></svg>
-        </summary>
-        <div class="enjoying-kind-options" role="group" aria-label="Filter by type">
-          <button class="chip" type="button" data-kind="all" data-label="All" aria-pressed="true">All<span class="chip-count" data-count hidden={items.length === 0}>{items.length || ""}</span></button>
-          {KINDS.map((k) => {
-            const count = kindCount(k);
-            const label = KIND_PLURAL[k].charAt(0).toUpperCase() + KIND_PLURAL[k].slice(1);
-            return <button class="chip" type="button" data-kind={k} data-label={label} aria-pressed="false">{label}<span class="chip-count" data-count hidden={count === 0}>{count || ""}</span></button>;
-          })}
-        </div>
-      </details>
-
-      <div id="enjoying-results" data-kind="all">
+      <div id="enjoying-results" data-kind="all" data-view="list">
       <div id="list">
-        {items.map((i) => {
+        {items.map((i, index) => {
           return (
-          <div class="ent" data-kind={i.data.kind}>
+          <div class="ent" data-kind={i.data.kind} data-tile={tilePattern[index % tilePattern.length]}>
             {i.data.cover
               ? <a class="cover-link" href={`/enjoying/${i.id}?from=all`} data-enjoying-entry aria-label={`View ${i.data.title}`}><img class="cover" src={img(i.data.cover, 240)} srcset={i.data.cover.startsWith("/uploads/") ? `${img(i.data.cover, 240)} 240w, ${img(i.data.cover, 480)} 480w, ${img(i.data.cover, 960)} 960w` : undefined} sizes="(max-width: 699px) 90vw, 50vw" alt="" loading="lazy" decoding="async" /></a>
               : <div class="cover cover-empty" aria-hidden="true" />}
@@ -63,6 +69,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   </div>
 </Base>
 <script>
+  import { initEnjoyingLayout } from "../../scripts/enjoying-layout";
   let cleanup = () => {};
   let activeResults: HTMLElement | null = null;
   const initFilters = () => {
@@ -73,18 +80,17 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   if (!nextResults) return;
   const results = nextResults;
   const controller = new AbortController();
+  const layout = initEnjoyingLayout(results);
   cleanup = () => {
     controller.abort();
-    results.getAnimations().forEach((animation) => animation.cancel());
+    layout.destroy();
   };
-  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const scrollPositionKey = "enjoying:list-scroll-position";
   const restorePositionKey = "enjoying:restore-list-scroll-position";
   // Type filter state lives in the URL hash so it can be linked.
   const rows = [...document.querySelectorAll<HTMLElement>(".ent")];
   const kindBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-kind].chip")];
   const kindMenu = document.getElementById("kind-menu") as HTMLDetailsElement | null;
-  const shouldAnimateFilter = () => !reducedMotion.matches && matchMedia("(min-width: 821px)").matches;
   const validKinds = new Set(kindBtns.map((b) => b.dataset.kind || "all"));
   const show = (id: string, on: boolean) => { const el = document.getElementById(id); if (el) el.hidden = !on; };
   let kind = "all";
@@ -118,25 +124,12 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     show("empty-filter", rows.length > 0 && shown === 0);
   };
   const push = () => history.replaceState(history.state, "", kind === "all" ? `${location.pathname}${location.search}` : `#${kind}`);
-  const resetAnimation = () => {
-    results.classList.remove("is-entering", "is-leaving");
-    results.getAnimations().forEach((animation) => animation.cancel());
-  };
   const select = async (next: string) => {
     if (next === requestedKind) return;
     requestedKind = next;
     const request = ++changeId;
-    const animate = shouldAnimateFilter();
-    resetAnimation();
-    if (animate) {
-      results.classList.add("is-leaving");
-      await Promise.allSettled(results.getAnimations().map((animation) => animation.finished));
-    }
-    if (request !== changeId || controller.signal.aborted) return;
-    kind = next;
-    push(); apply();
-    results.classList.remove("is-leaving");
-    if (animate) results.classList.add("is-entering");
+    await layout.change(() => { kind = next; push(); apply(); });
+    return request === changeId && !controller.signal.aborted;
   };
   kindBtns.forEach((b) => b.addEventListener("click", (event) => {
     if (b.closest("#kind-menu") && kindMenu) {
@@ -148,8 +141,8 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
   results.addEventListener("click", async (event) => {
     const tag = event.target instanceof Element ? event.target.closest<HTMLButtonElement>("[data-kind-filter]") : null;
     if (!tag || kind !== "all") return;
-    await select(tag.dataset.kind!);
-    if (controller.signal.aborted) return;
+    const current = await select(tag.dataset.kind!);
+    if (!current) return;
     const filter = matchMedia("(max-width: 820px)").matches
       ? kindMenu?.querySelector<HTMLElement>("summary")
       : kindBtns.find((button) => button.dataset.kind === kind && button.closest("#kind-tabs"));
@@ -178,10 +171,11 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     }, { signal: controller.signal });
   }
   addEventListener("hashchange", () => {
-    ++changeId; resetAnimation();
-    fromHash(); requestedKind = kind; apply();
+    ++changeId;
+    void layout.change(() => { fromHash(); requestedKind = kind; apply(); });
   }, { signal: controller.signal });
-  fromHash(); requestedKind = kind; apply();
+  fromHash(); requestedKind = kind;
+  void layout.change(apply, false);
   if (sessionStorage.getItem(restorePositionKey) === "true") {
     sessionStorage.removeItem(restorePositionKey);
     const savedPosition = sessionStorage.getItem(scrollPositionKey);
@@ -198,10 +192,7 @@ const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).le
     }
   }
   };
+  document.addEventListener("astro:before-swap", () => { cleanup(); activeResults = null; });
   document.addEventListener("astro:page-load", initFilters);
   initFilters();
 </script>
-<style>
-  #enjoying-results.is-leaving { animation: var(--content-exit-animation); }
-  #enjoying-results.is-entering { animation: var(--content-enter-animation); }
-</style>

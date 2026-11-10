@@ -9,12 +9,6 @@
 .portfolio-filters { min-width: 0; }
 .portfolio-filters #kind-tabs { margin: 0; }
 .portfolio-filters .enjoying-kind-menu { display: none; }
-.portfolio-view-toggle { display: inline-flex; flex: 0 0 auto; gap: 2px; padding: 3px; border: 1px solid var(--hairline); border-radius: 999px; background: color-mix(in srgb, var(--rust) 4%, var(--paper)); }
-.portfolio-view-toggle button { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 36px; padding: 0 .75rem; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font: inherit; font-size: .82rem; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 180ms ease, color 180ms ease; }
-.portfolio-view-toggle button[aria-pressed="true"] { background: color-mix(in srgb, var(--rust) 12%, var(--paper)); color: var(--ink); }
-.portfolio-view-toggle button:hover { color: var(--ink); }
-.portfolio-view-toggle button:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px; }
-.portfolio-view-toggle svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 #portfolio-results.is-leaving { animation: var(--content-exit-animation); }
 #portfolio-results.is-entering { animation: var(--content-enter-animation); }
 .portfolio-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 2.6rem 1.5rem; }
@@ -100,7 +94,7 @@
 @media (max-width: 640px) {
   .portfolio-toolbar { align-items: stretch; flex-direction: row; gap: .65rem; margin-bottom: 1.7rem; }
   .portfolio-filters { width: 100%; }
-  .portfolio-view-toggle { display: none; }
+  .portfolio-toolbar .portfolio-view-toggle { display: none; }
 }
 @media (max-width: 640px) {
   #portfolio-results[data-view="list"] .portfolio-grid,
