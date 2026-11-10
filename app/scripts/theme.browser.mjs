@@ -27,7 +27,7 @@ try {
     await toggle.focus(); await page.keyboard.press('Enter');
     assert.equal(await page.locator('html').getAttribute('data-theme'), next);
     assert.equal(await page.evaluate(() => sessionStorage.getItem('will-theme')), next);
-    assert.equal(await page.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(23, 20, 17)' : 'rgb(247, 245, 242)');
+    assert.equal(await page.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(36, 78, 99)' : 'rgb(241, 239, 220)');
     assert.equal(await toggle.evaluate(e => e.style.getPropertyValue('--orbit-angle')), system === 'dark' ? '360deg' : '180deg');
     // Persisted nav must retain its orbit rather than replaying the sunrise.
     await page.locator('.desktop-nav a[href$="/about"]').click(); await page.waitForURL('**/about');
@@ -37,10 +37,10 @@ try {
     await page.reload(); assert.equal(await page.locator('html').getAttribute('data-theme'), next);
     await page.goto(base + '/portfolio/genui-bebop/present', { referer: base + '/about' });
     assert.equal(await page.locator('html').getAttribute('data-theme'), next);
-    assert.equal(await page.locator('html').evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(23, 20, 17)' : 'rgb(247, 245, 242)');
+    assert.equal(await page.locator('html').evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(36, 78, 99)' : 'rgb(241, 239, 220)');
     await page.goto(base + '/enjoying', { referer: base + '/portfolio/genui-bebop/present' });
     const tag = page.locator('.ent[data-kind="film"] .enjoying-tag').first();
-    assert.equal(await tag.evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(223, 121, 85)' : 'rgb(156, 75, 46)');
+    assert.equal(await tag.evaluate(e => getComputedStyle(e).backgroundColor), next === 'dark' ? 'rgb(218, 211, 154)' : 'rgb(53, 105, 132)');
     for (let i = 0; i < 5; i++) await toggle.click();
     assert.equal(await page.locator('html').getAttribute('data-theme'), system);
     assert.equal(errors.length, 0, errors.join('\n'));
@@ -86,7 +86,7 @@ try {
   const nojs = await fallback.newPage(); await nojs.goto(base + '/');
   assert(await nojs.locator('[data-theme-fallback]').isVisible());
   assert(!await nojs.locator('[data-theme-toggle]').isVisible());
-  assert.equal(await nojs.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(23, 20, 17)');
+  assert.equal(await nojs.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), 'rgb(36, 78, 99)');
   await fallback.close();
   console.log('Avatar rise/orbit, keyboard/mobile toggle, OS themes and visit-scoped overrides, reset on new visits, legacy preference migration, SPA persistence, standalone presentations, tags/logos, rapid clicks, reduced motion, blocked storage, and no-JS fallback passed.');
 } finally { await browser.close(); }
