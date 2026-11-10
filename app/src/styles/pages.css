@@ -240,3 +240,13 @@ button.enjoying-tag:focus-visible { outline: 2px solid currentColor; outline-off
   .ent[data-kind="paper"] .paper-publication-short { display: block; }
   .ent[data-kind="paper"] .paper-year { flex-shrink: 0; white-space: pre; }
 }
+
+/* Preview experiment: the compact cards remain cards on larger screens. */
+@media (min-width: 641px) {
+  .note-list { gap: .85rem; }
+  .note-list li.note-card { align-items: start; padding: 1.25rem; border: 0; border-radius: 1.35rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
+  .note-card-heading { flex-direction: column; align-items: flex-start; gap: .2rem; }
+  .route-enjoying #list { display: grid; gap: .85rem; }
+  .route-enjoying #list .ent { padding: 1.25rem; border-radius: 1.35rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
+  .route-enjoying #list .ent a.t { text-decoration: none; }
+}

@@ -203,3 +203,11 @@
 /* Keep tall asset-viewer recordings readable without a wide empty frame. */
 .project-figure-portrait { width: min(100%, 24rem); margin-inline: auto; }
 .project-figure-portrait img { max-height: none; }
+
+/* Preview experiment: List keeps its horizontal layout inside rounded cards. */
+@media (min-width: 641px) {
+  #portfolio-results[data-view="list"] .portfolio-grid { gap: .85rem; }
+  #portfolio-results[data-view="list"] .portfolio-card,
+  #portfolio-results[data-view="list"] .portfolio-card.featured { padding: 1.25rem; border: 0; border-radius: 1.35rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
+  #portfolio-results[data-view="list"] .project-open { align-items: start; }
+}
