@@ -21,7 +21,11 @@ try {
       return {
         title: rect(card.querySelector('.t')), meta: rect(meta),
         date: rect(meta.querySelector('time')), summary: rect(card.querySelector('.s')),
-        tags: [...meta.querySelectorAll('.note-topic')].map(rect),
+        tags: [...meta.querySelectorAll('.note-topic')].map(tag => {
+          const text = document.createRange();
+          text.selectNodeContents(tag);
+          return { ...rect(tag), lines: text.getClientRects().length, clipped: tag.scrollWidth > tag.clientWidth };
+        }),
       };
     }));
     assert(cards.length > 0);
@@ -33,7 +37,11 @@ try {
       if (width <= 820) assert(card.summary.right >= card.meta.right - 1, 'description reclaims the metadata column at narrow widths');
       assert(card.tags.length >= 1 && card.tags.length <= 2);
       assert(card.date.bottom <= Math.min(...card.tags.map(tag => tag.top)) + 1, 'date stays above tags');
-      for (const tag of card.tags) assert(tag.left >= card.meta.left - 1 && tag.right <= card.meta.right + 1, 'tags fit the right column');
+      for (const tag of card.tags) {
+        assert(tag.left >= card.meta.left - 1 && tag.right <= card.meta.right + 1, 'tags fit the right column');
+        assert.equal(tag.lines, 1, 'each tag stays on one line');
+        assert(!tag.clipped, 'long tags remain fully visible');
+      }
     }
     assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), 'no horizontal overflow');
     if (process.env.NOTES_SCREENSHOTS_DIR && [393, 1440].includes(width)) {

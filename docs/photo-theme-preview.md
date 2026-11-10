@@ -16,4 +16,6 @@ The reference photo combines smoky ocean blue, faded yellow-gold, and icy aqua. 
 
 Light mode uses gold-tinted paper with blue ink. Dark mode comes closer to the reference's blue field, aqua lettering, and faded gold highlights. Existing card variation mixes these colors with the page. Layouts, content, and original media keep their current treatment. The avatar still follows the OS on a new visit and toggles manually during the visit.
 
+On phones, Notes reserves the intrinsic width of its longest tag instead of limiting the metadata column to 40%. Tags stack as individual single-line pills at the top right, preserving their full wording without squeezing text into two lines.
+
 Base text contrast is 7.6:1 in light mode and 8.4:1 in dark mode; secondary text is 5.3:1 and 6.0:1. Accent labels are 5.6:1 and 5.9:1. Check rendered cards as well as token pairs before publishing, since mixed surfaces can change contrast.
