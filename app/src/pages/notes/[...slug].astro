@@ -27,7 +27,7 @@ const articleUrl = new URL(Astro.url.pathname, Astro.site ?? "https://willchavez
     <div class:list={["prose", `note-${entry.id}`]}><Content /></div>
     {(entry.data.topics.length > 0 || entry.data.source) && <footer class="note-detail-meta">
       {entry.data.topics.length > 0 && <ul class="note-topics" aria-label="Topics">
-        {entry.data.topics.map((topic) => <li class="note-topic">{topic}</li>)}
+        {entry.data.topics.map((topic) => <li class="note-topic" data-topic={topic.toLowerCase()}>{topic}</li>)}
       </ul>}
       {entry.data.source && <a class="note-source" href={entry.data.source} target="_blank" rel="noreferrer">Originally published on Medium <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 12 12 4M5 4h7v7" /></svg></a>}
     </footer>}
