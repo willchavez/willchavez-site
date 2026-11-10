@@ -16,7 +16,6 @@ const posts = await getWriting();
             <div class="note-card-copy">
               <div class="note-card-heading">
                 <a class="t" href={`/notes/${p.id}`}>{p.data.title}</a>
-                {p.data.summary && <div class="s">{p.data.summary}</div>}
                 <div class="note-side-meta">
                   <time class="m" datetime={p.data.date.toISOString()}>{fmtDate(p.data.date)}</time>
                   {p.data.topics.length > 0 && <ul class="note-topics" aria-label={`Topics for ${p.data.title}`}>
@@ -24,6 +23,7 @@ const posts = await getWriting();
                   </ul>}
                 </div>
               </div>
+              {p.data.summary && <div class="s">{p.data.summary}</div>}
             </div>
           </li>
         ))}

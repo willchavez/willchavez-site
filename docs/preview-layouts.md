@@ -14,5 +14,6 @@ Check a built preview:
 
 - `CHROMIUM_PATH=/usr/bin/chromium node app/scripts/enjoying-layout.browser.mjs http://localhost:4359`
 - `CHROMIUM_PATH=/usr/bin/chromium node app/scripts/portfolio-filter.browser.mjs http://localhost:4359`
+- `CHROMIUM_PATH=/usr/bin/chromium node app/scripts/notes-layout.browser.mjs http://localhost:4359`
 
 Set `BROWSER_ENGINE=webkit` for Safari's engine. Checks cover motion and interruption, final geometry, scrolling, native links, static labels, adaptive views, category chips and contrast, keyboard use, shared width, reduced motion, and fallback behavior. These layouts, filters, and tag treatments are approved for production.
