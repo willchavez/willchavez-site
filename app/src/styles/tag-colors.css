@@ -1,0 +1,43 @@
+/* Muted light fills and contrasting text; dark-mode colors remain independent. */
+:root {
+  --tag-blue-bg: #bfd4ec; --tag-blue-ink: #234765;
+  --tag-violet-bg: #dac9e9; --tag-violet-ink: #513570;
+  --tag-green-bg: #bed6c5; --tag-green-ink: #2b5138;
+  --tag-copper-bg: #e7c7b8; --tag-copper-ink: #79472f;
+  --tag-amber-bg: #ebd6ae; --tag-amber-ink: #634812;
+  --tag-teal-bg: #bfd8d9; --tag-teal-ink: #2b5557;
+  --tag-rose-bg: #e8c9d2; --tag-rose-ink: #783c4e;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --tag-blue-bg: #96b7dc; --tag-blue-ink: #1e3b5b;
+    --tag-violet-bg: #bca2cf; --tag-violet-ink: #3e294f;
+    --tag-green-bg: #a2c2a7; --tag-green-ink: #243f2b;
+    --tag-copper-bg: #d5a08b; --tag-copper-ink: #502c20;
+    --tag-amber-bg: #d9b57b; --tag-amber-ink: #503711;
+    --tag-teal-bg: #93bfc0; --tag-teal-ink: #234344;
+    --tag-rose-bg: #d7a0ae; --tag-rose-ink: #532c36;
+  }
+}
+:root[data-theme="dark"] {
+  --tag-blue-bg: #96b7dc; --tag-blue-ink: #1e3b5b;
+  --tag-violet-bg: #bca2cf; --tag-violet-ink: #3e294f;
+  --tag-green-bg: #a2c2a7; --tag-green-ink: #243f2b;
+  --tag-copper-bg: #d5a08b; --tag-copper-ink: #502c20;
+  --tag-amber-bg: #d9b57b; --tag-amber-ink: #503711;
+  --tag-teal-bg: #93bfc0; --tag-teal-ink: #234344;
+  --tag-rose-bg: #d7a0ae; --tag-rose-ink: #532c36;
+}
+:is(.enjoying-tag[data-kind], .metadata-kind[data-kind], .note-topic[data-topic]) {
+  background: var(--label-bg, var(--tag-rose-bg));
+  color: var(--label-ink, var(--tag-rose-ink));
+  border: 0;
+  box-shadow: none;
+}
+:is(.enjoying-tag, .metadata-kind)[data-kind="film"], .note-topic[data-topic="work"] { --label-bg: var(--tag-blue-bg); --label-ink: var(--tag-blue-ink); }
+:is(.enjoying-tag, .metadata-kind)[data-kind="music"], .note-topic[data-topic="music"] { --label-bg: var(--tag-violet-bg); --label-ink: var(--tag-violet-ink); }
+:is(.enjoying-tag, .metadata-kind)[data-kind="book"], .note-topic[data-topic="code"] { --label-bg: var(--tag-green-bg); --label-ink: var(--tag-green-ink); }
+:is(.enjoying-tag, .metadata-kind)[data-kind="paper"] { --label-bg: var(--tag-copper-bg); --label-ink: var(--tag-copper-ink); }
+.note-topic[data-topic="learning"] { --label-bg: var(--tag-amber-bg); --label-ink: var(--tag-amber-ink); }
+.note-topic[data-topic="travel"] { --label-bg: var(--tag-teal-bg); --label-ink: var(--tag-teal-ink); }
+.note-topic[data-topic="design"] { --label-bg: var(--tag-rose-bg); --label-ink: var(--tag-rose-ink); }

@@ -1,0 +1,4 @@
+/* Shared motion layer; each page keeps its own grid/list geometry. */
+[data-card-motion], [data-motion-grid] { position: relative; }
+[data-card-motion][data-rearranging] { overflow: clip; overflow-clip-margin: 12px; overflow-anchor: none; }
+[data-card-motion] [data-layout-exit] { pointer-events: none; }

@@ -67,29 +67,6 @@
 .enjoying-side-meta { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; align-items: flex-end; gap: .35rem; }
 .ent-titleline { min-width: 0; line-height: 1.55; overflow-wrap: anywhere; }
 .enjoying-tag { display: inline-flex; align-items: center; min-height: 1.35rem; padding: 0 .58rem; border-radius: 999px; background: color-mix(in srgb, var(--rust) 14%, var(--paper)); color: color-mix(in srgb, var(--rust) 76%, var(--ink)); font-size: .72rem; line-height: 1; text-transform: capitalize; vertical-align: middle; white-space: nowrap; }
-/* Keep each media kind recognizable across Home, Enjoying, and detail pages. */
-.enjoying-tag[data-kind], .metadata-kind[data-kind] { border: .5px solid color-mix(in srgb, var(--media-tag-ink, var(--rust)) 75%, var(--media-tag-bg, var(--paper))); background: var(--media-tag-bg, color-mix(in srgb, var(--rust) 14%, var(--paper))); color: var(--media-tag-ink, color-mix(in srgb, var(--rust) 76%, var(--ink))); }
-button.enjoying-tag { font-family: inherit; font-weight: inherit; cursor: pointer; }
-button.enjoying-tag:disabled { cursor: default; opacity: 1; }
-button.enjoying-tag:not(:disabled):hover { border-color: currentColor; box-shadow: 0 0 0 1px currentColor; }
-button.enjoying-tag:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-:is(.enjoying-tag, .metadata-kind)[data-kind="music"] { --media-tag-bg: #ece5f4; --media-tag-ink: #654779; }
-:is(.enjoying-tag, .metadata-kind)[data-kind="film"] { --media-tag-bg: #dfe8f1; --media-tag-ink: #375b7b; }
-:is(.enjoying-tag, .metadata-kind)[data-kind="book"] { --media-tag-bg: #e1ebe2; --media-tag-ink: #3f624a; }
-:is(.enjoying-tag, .metadata-kind)[data-kind="paper"] { --media-tag-bg: #f1dfd5; --media-tag-ink: #83442c; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) :is(.enjoying-tag, .metadata-kind)[data-kind="music"] { --media-tag-bg: #382e43; --media-tag-ink: #ddc7f0; }
-  :root:not([data-theme="light"]) :is(.enjoying-tag, .metadata-kind)[data-kind="film"] { --media-tag-bg: #263848; --media-tag-ink: #bed5ef; }
-  :root:not([data-theme="light"]) :is(.enjoying-tag, .metadata-kind)[data-kind="book"] { --media-tag-bg: #293d30; --media-tag-ink: #bedbc3; }
-  :root:not([data-theme="light"]) :is(.enjoying-tag, .metadata-kind)[data-kind="paper"] { --media-tag-bg: #432d23; --media-tag-ink: #f1c2aa; }
-
-}
-:root[data-theme="dark"] :is(.enjoying-tag, .metadata-kind)[data-kind="music"] { --media-tag-bg: #382e43; --media-tag-ink: #ddc7f0; }
-  :root[data-theme="dark"] :is(.enjoying-tag, .metadata-kind)[data-kind="film"] { --media-tag-bg: #263848; --media-tag-ink: #bed5ef; }
-  :root[data-theme="dark"] :is(.enjoying-tag, .metadata-kind)[data-kind="book"] { --media-tag-bg: #293d30; --media-tag-ink: #bedbc3; }
-  :root[data-theme="dark"] :is(.enjoying-tag, .metadata-kind)[data-kind="paper"] { --media-tag-bg: #432d23; --media-tag-ink: #f1c2aa; }
-
-
 .ent-meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: .3rem .6rem; margin-top: .3rem; }
 .ent .t { font-size: 1.2rem; letter-spacing: -.02em; }
 .ent a.t { box-shadow: none; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--rust) 60%, transparent); text-decoration-thickness: 1px; text-underline-offset: .15em; }
@@ -239,4 +216,14 @@ button.enjoying-tag:focus-visible { outline: 2px solid currentColor; outline-off
   .ent[data-kind="paper"] .paper-publication-short { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .ent[data-kind="paper"] .paper-publication-short { display: block; }
   .ent[data-kind="paper"] .paper-year { flex-shrink: 0; white-space: pre; }
+}
+
+/* Preview experiment: the compact cards remain cards on larger screens. */
+@media (min-width: 641px) {
+  .note-list { gap: .85rem; }
+  .note-list li.note-card { align-items: start; padding: 1.25rem; border: 0; border-radius: 1.35rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
+  .note-card-heading { flex-direction: column; align-items: flex-start; gap: .2rem; }
+  .route-enjoying #list { display: grid; gap: .85rem; }
+  .route-enjoying #list .ent { padding: 1.25rem; border-radius: 1.35rem; background: color-mix(in srgb, var(--paper) 91%, var(--rust) 9%); }
+  .route-enjoying #list .ent a.t { text-decoration: none; }
 }
