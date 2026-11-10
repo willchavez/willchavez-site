@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 const base = process.argv[2] || 'http://localhost:4321';
 const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox']});
-const palettes = ['blue-gold', 'forest', 'plum', 'clay', 'parchment'];
+const palettes = ['blue-gold', 'forest', 'forest-moss', 'forest-fern', 'forest-pine', 'forest-lichen', 'plum', 'clay', 'parchment'];
 const luminance = hex => { const c = hex.match(/\w\w/g).map(x => parseInt(x,16)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4); return c[0]*.2126+c[1]*.7152+c[2]*.0722; };
 const contrast = (a,b) => {const x=luminance(a), y=luminance(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
 try {
@@ -34,5 +34,5 @@ try {
  }
  const blocked=await browser.newContext(); await blocked.addInitScript(()=>{Storage.prototype.getItem=()=>{throw Error('blocked')}; Storage.prototype.setItem=()=>{throw Error('blocked')};});
  const page=await blocked.newPage(); await page.goto(base); await page.locator('[data-palette-picker] summary').click(); await page.locator('[data-palette-next]').click(); assert.equal(await page.locator('html').getAttribute('data-palette'),'forest'); await blocked.close();
- console.log('PASS: all 10 palettes, contrast, desktop/mobile, cycling, mode, navigation, refresh, Escape and blocked storage');
+ console.log('PASS: all 18 palette/mode combinations, contrast, desktop/mobile, cycling, mode, navigation, refresh, Escape and blocked storage');
 } finally { await browser.close(); }

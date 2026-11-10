@@ -47,10 +47,9 @@ tags in Markdown `topics`; Projects store a curated `tags` array in
 `app/src/data/portfolio-projects.ts`, shared by the index and project page.
 Enjoying's single media-type label already follows this rule.
 
-Notes list cards place the date above the tags at the top right beside the
-title, matching Enjoying's list on desktop and phones. The summary sits below
-the heading and uses the full copy width. Keep this placement at every size;
-do not move the metadata beneath the description on small phones.
+Notes list cards keep the date at the top right beside the title. The summary
+sits below the heading, followed by a horizontal row of tags. Individual tags
+stay on one line; the row can wrap when a small phone needs more room.
 
 ## SoundCloud in posts
 

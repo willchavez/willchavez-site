@@ -1,6 +1,6 @@
 import type { TransitionBeforeSwapEvent } from 'astro:transitions/client';
 declare global { interface Window { willThemePreference?: 'light' | 'dark' | null; willPalette?: string } }
-const palettes = ['blue-gold', 'forest', 'plum', 'clay', 'parchment'];
+const palettes = ['blue-gold', 'forest', 'forest-moss', 'forest-fern', 'forest-pine', 'forest-lichen', 'plum', 'clay', 'parchment'];
 const system = matchMedia('(prefers-color-scheme: dark)');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const buttons = new WeakSet<HTMLButtonElement>();

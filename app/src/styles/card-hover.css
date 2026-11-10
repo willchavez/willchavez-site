@@ -1,0 +1,14 @@
+/* One hover treatment for Notes, Projects, and Enjoying cards. */
+.interactive-card { position: relative; }
+@media (hover: hover) and (pointer: fine) {
+  .interactive-card:hover { transform: scale(1.015); box-shadow: 0 8px 22px color-mix(in srgb, var(--ink) 12%, transparent); z-index: 3; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .interactive-card { transition: transform 180ms ease, box-shadow 180ms ease; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .interactive-card:hover { transform: none; }
+}
+/* Filtering owns transforms until its layout animation finishes. */
+[data-rearranging] .interactive-card { transition: none; }
+[data-rearranging] .interactive-card:hover { transform: none; }
