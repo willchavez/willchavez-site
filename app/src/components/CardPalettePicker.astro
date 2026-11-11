@@ -12,6 +12,15 @@ const { className } = Astro.props;
     <div class="card-color-sample" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="study-nav"><button type="button" data-card-color-prev>← Previous</button><button type="button" data-card-color-next>Next →</button></div>
     <button class="study-motion" type="button" data-card-motion-toggle>Pause motion</button>
+    <div class="study-speed">
+      <label for="card-motion-speed">Speed</label>
+      <select id="card-motion-speed" data-card-motion-speed>
+        <option value="slow">Slow · 1×</option>
+        <option value="medium">Medium · 2×</option>
+        <option value="fast">Fast · 4×</option>
+        <option value="extra-fast">Extra fast · 8×</option>
+      </select>
+    </div>
     <p class="study-description" data-card-color-description>{cardPalettes[0].description}</p>
     <p>15 pigment studies, light + dark. Switch modes with the avatar. About and Enjoying Grid only.</p>
     <span class="sr-only" data-card-color-status role="status"></span>
@@ -30,6 +39,9 @@ const { className } = Astro.props;
   button { min-height: 44px; width: 100%; border: 0; border-radius: 999px; background: var(--fill); color: var(--fill-ink); font: inherit; cursor: pointer; }
   .study-motion { margin-top: .6rem; background: transparent; color: var(--ink); border: 1px solid var(--hairline); }
   .study-motion:disabled { cursor: default; color: var(--muted); }
+  .study-speed { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .75rem; margin-top: .6rem; }
+  .study-speed label { margin: 0; }
+  .study-speed select:disabled { color: var(--muted); }
   .study-nav { display: flex; gap: .5rem; }
   p { margin-top: .7rem; color: var(--muted); font-size: .78rem; line-height: 1.5; }
   :is(summary, select, button):focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
