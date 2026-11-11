@@ -1,0 +1,20 @@
+<!-- Kept in the document: display:none can break fragment filters in some browsers. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;pointer-events:none">
+  <defs>
+    <filter id="card-refraction" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feTurbulence type="turbulence" baseFrequency="0.003" numOctaves="1" seed="8" result="turbulence" />
+      <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="20" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+<style is:inline>
+  .route-about .about-cards .about-card { position: relative; isolation: isolate; }
+  .route-about .about-cards .about-card::before,
+  #enjoying-results[data-view="grid"] #list .ent::before {
+    content: ""; position: absolute; inset: 10px; z-index: -1;
+    border-radius: inherit; pointer-events: none;
+    -webkit-backdrop-filter: url("#card-refraction");
+    backdrop-filter: url("#card-refraction");
+    transform: rotate(180deg);
+  }
+</style>

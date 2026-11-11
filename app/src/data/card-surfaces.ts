@@ -1,27 +1,21 @@
-/** Static SVG surfaces: turbulence affects the pigment image, never text or media. */
+/** Two-stage color field: broad saturated turbulence, then independent displacement. */
 export type PigmentFinish = 'cloud' | 'paper' | 'marble' | 'brushed' | 'contour' | 'velvet';
 const rgb = (hex: string) => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255);
-function ramp(id: string, input: string, a: string, b: string, contour = false) {
-  const aa = rgb(a), bb = rgb(b);
-  const steps = contour ? [0, .15, .65, .65, .25, .8, .8, 1] : [0, 1];
-  return `<feColorMatrix in="${input}" type="saturate" values="0" result="mono-${id}"/><feComponentTransfer in="mono-${id}" result="${id}">${['R', 'G', 'B'].map((c, i) => `<feFunc${c} type="${contour ? 'discrete' : 'table'}" tableValues="${steps.map(t => (aa[i] + (bb[i] - aa[i]) * t).toFixed(5)).join(' ')}"/>`).join('')}<feFuncA type="linear" slope="0" intercept="1"/></feComponentTransfer>`;
+function colorField(input: string, colors: string[], alpha: string, result = "pigment") {
+  const values = colors.map(rgb);
+  // Preserve independent RGB channels, unlike the old grayscale/duotone texture.
+  return `<feComponentTransfer in="${input}" result="${result}">${['R', 'G', 'B'].map((channel, i) => `<feFunc${channel} type="table" tableValues="${values.map(v => v[i].toFixed(5)).join(' ')}"/>`).join('')}<feFuncA type="table" tableValues="${alpha}"/></feComponentTransfer>`;
 }
 export function pigmentImage(kind: PigmentFinish, fill: string, low: string, high: string, bloom: string, seed: number) {
-  const frequency = kind === 'brushed' ? '.008 .18' : kind === 'velvet' ? '.003 .005' : '.006 .009';
-  const field = `<feTurbulence type="fractalNoise" baseFrequency="${frequency}" numOctaves="${kind === 'velvet' ? 1 : 2}" seed="${seed}" stitchTiles="stitch" result="field"/>`;
-  const grain = `<feTurbulence type="fractalNoise" baseFrequency=".68" numOctaves="3" seed="${seed + 9}" stitchTiles="stitch" result="grain"/>`;
-  let filter: string;
-  let artwork = '<rect width="600" height="800" filter="url(#pigment)"/>';
-  let definitions = '';
-  if (kind === 'paper') {
-    filter = grain + ramp('ink', 'grain', low, high);
-  } else if (kind === 'marble') {
-    definitions = `<linearGradient id="wash" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${high}"/><stop offset=".45" stop-color="${fill}"/><stop offset="1" stop-color="${bloom}"/></linearGradient>`;
-    filter = field + '<feDisplacementMap in="SourceGraphic" in2="field" scale="110" xChannelSelector="R" yChannelSelector="G"/>';
-    artwork = `<g filter="url(#pigment)"><rect x="-140" y="-140" width="880" height="1080" fill="url(#wash)"/><path d="M-120 170C100 20 170 380 360 210S700 80 740 460" fill="none" stroke="${low}" stroke-width="105"/><path d="M-100 650C150 350 320 920 710 530" fill="none" stroke="${high}" stroke-width="135"/></g>`;
-  } else {
-    filter = field + ramp('dye', 'field', low, bloom, kind === 'contour') + grain + ramp('tooth', 'grain', low, high) + `<feComposite in="dye" in2="tooth" operator="arithmetic" k1="0" k2="${kind === 'brushed' ? '.66' : '.87'}" k3="${kind === 'brushed' ? '.34' : '.13'}" k4="0"/>`;
-  }
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800" preserveAspectRatio="none"><defs>${definitions}<filter id="pigment" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">${filter}</filter></defs>${artwork}</svg>`;
+  const frequency = kind === 'velvet' ? '.0008' : kind === 'brushed' ? '.001 .0015' : '.001';
+  const scale = kind === 'marble' || kind === 'contour' ? 100 : kind === 'velvet' ? 45 : 70;
+  const broad = `<feTurbulence type="turbulence" baseFrequency="${frequency}" numOctaves="1" seed="${seed + 12007}" result="color-noise"/><feColorMatrix in="color-noise" type="saturate" values="4" result="chroma"/>${colorField('chroma', [low, fill, bloom, high], '.65 .8 .95 1')}<feGaussianBlur in="pigment" stdDeviation="35" result="soft-pigment"/>`;
+  const displacement = `<feTurbulence type="turbulence" baseFrequency=".003" numOctaves="1" seed="${seed + 31}" result="refraction"/><feDisplacementMap in="soft-pigment" in2="refraction" scale="${scale}" xChannelSelector="R" yChannelSelector="G" result="displaced"/><feGaussianBlur in="displaced" stdDeviation="22" result="bent"/>`;
+  // Very light tooth is secondary to the broad field, not the main visual.
+  const grainFrequency = kind === 'brushed' ? '.015 .3' : '.55';
+  const grainAmount = kind === 'paper' || kind === 'brushed' ? '.025' : '.006';
+  const grain = `<feTurbulence type="fractalNoise" baseFrequency="${grainFrequency}" numOctaves="2" seed="${seed + 9}" result="grain"/><feColorMatrix in="grain" type="saturate" values="0" result="grain-mono"/>${colorField('grain-mono', [low, high], '1 1', 'grain-ink')}<feComposite in="bent" in2="grain-ink" operator="arithmetic" k1="0" k2="${1 - Number(grainAmount)}" k3="${grainAmount}" k4="0"/>`;
+  // Large viewBox = Tarng's broad spatial scale, with a modest raster size for repeated cards.
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 2000 2000" preserveAspectRatio="none"><defs><filter id="pigment" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">${broad}${displacement}${grain}</filter></defs><rect width="2000" height="2000" filter="url(#pigment)"/></svg>`;
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 }

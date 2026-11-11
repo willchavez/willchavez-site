@@ -45,13 +45,18 @@ try {
         if (match) {
           const svg = new DOMParser().parseFromString(decodeURIComponent(match[1]), 'image/svg+xml');
           if (svg.querySelector('parsererror')) throw new Error('Invalid SVG surface');
-          if (!svg.querySelector('feTurbulence')) throw new Error('Missing turbulence surface');
+          if (svg.querySelectorAll('feTurbulence').length < 2) throw new Error('Missing independent color/displacement turbulence');
+          if (!svg.querySelector('feDisplacementMap')) throw new Error('Missing whole-field displacement');
+          if (!svg.querySelector('feColorMatrix[values="4"]')) throw new Error('Missing amplified color field');
           const color = value => { probe.style.color = value; return getComputedStyle(probe).color; };
           svg.querySelectorAll('stop').forEach(el => surfaces.push(color(el.getAttribute('stop-color'))));
           svg.querySelectorAll('path[stroke]').forEach(el => surfaces.push(color(el.getAttribute('stroke'))));
           svg.querySelectorAll('feComponentTransfer').forEach(el => {
             const channels = ['feFuncR', 'feFuncG', 'feFuncB'].map(tag => el.querySelector(tag).getAttribute('tableValues').split(' ').map(Number));
             channels[0].forEach((_, i) => surfaces.push(`rgb(${channels.map(v => v[i] * 255).join(',')})`));
+            // Independent RGB noise also reaches combinations between the transfer-table stops.
+            surfaces.push(`rgb(${channels.map(v => Math.min(...v) * 255).join(',')})`);
+            surfaces.push(`rgb(${channels.map(v => Math.max(...v) * 255).join(',')})`);
           });
         } else throw new Error('Every study should have a turbulence background');
         probe.remove(); return { surfaces, colors, image: s.backgroundImage, font: getComputedStyle(e.querySelector('h2')).fontFamily, radius: s.borderTopLeftRadius };
@@ -73,6 +78,8 @@ try {
     const about = page.locator('.about-cards .about-card').first();
     await page.mouse.move(0, 0); await page.waitForTimeout(220);
     const aboutBorder = await about.evaluate(e => getComputedStyle(e).borderTopColor);
+    assert((await about.evaluate(e => getComputedStyle(e, '::before').backdropFilter)).includes('card-refraction'));
+    assert.equal(await about.evaluate(e => getComputedStyle(e, '::before').pointerEvents), 'none');
     await about.hover(); await page.waitForTimeout(220);
     assert.equal(await about.evaluate(e => getComputedStyle(e).borderTopColor), aboutBorder, 'About is not a card link; its border stays static');
     await about.locator('a').first().focus();
