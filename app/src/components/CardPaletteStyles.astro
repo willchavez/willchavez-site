@@ -1,0 +1,19 @@
+---
+import { cardPalettes, type CardColors, type CardPalette } from '../data/card-palettes';
+const tones = ['ocean', 'aqua', 'butter'];
+const vars = (p: CardPalette, colors: CardColors) => `--study-body:${p.bodyFont};--study-title:${p.titleFont};--study-title-style:${p.titleStyle};--study-title-weight:${p.titleWeight};--study-radius:${p.radius};` + colors.map((c, i) => `--card-${tones[i]}:${c.fill};--card-${tones[i]}-ink:${c.ink};--card-${tones[i]}-muted:${c.muted};--card-${tones[i]}-accent:${c.accent};--card-${tones[i]}-image:${c.image};--card-${tones[i]}-size:${c.size};`).join('');
+const rules = (selector: string, p: CardPalette) => `${selector}{${vars(p, p.light)}}@media(prefers-color-scheme:dark){${selector}:not([data-theme="light"]){${vars(p, p.dark)}}}${selector}[data-theme="dark"]{${vars(p, p.dark)}}`;
+const css = rules(':root', cardPalettes[0]) + cardPalettes.map(p => rules(`:root[data-card-palette="${p.id}"]`, p)).join('');
+---
+<style is:inline set:html={css} />
+<script is:inline data-card-options={cardPalettes.map(p => p.id).join(',')}>
+  (() => {
+    const ids = document.currentScript.dataset.cardOptions.split(',');
+    let choice = ids[0];
+    try { choice = sessionStorage.getItem('will-card-palette') || choice; } catch {}
+    document.documentElement.dataset.cardPalette = ids.includes(choice) ? choice : ids[0];
+  })();
+</script>
+<script>
+  import '../scripts/card-colors';
+</script>

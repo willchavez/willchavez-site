@@ -1,0 +1,48 @@
+---
+import { cardPalettes } from '../data/card-palettes';
+const { className } = Astro.props;
+---
+<details class:list={['card-color-picker', className]} data-card-colors-picker hidden>
+  <summary>Card colors <span aria-hidden="true">⌄</span></summary>
+  <div class="card-color-panel">
+    <label for="card-color-choice">Pigment · Color studies</label>
+    <select id="card-color-choice" data-card-color-choice>
+      {cardPalettes.map(p => <option value={p.id}>{p.label}</option>)}
+    </select>
+    <div class="card-color-sample" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="study-nav"><button type="button" data-card-color-prev>← Previous</button><button type="button" data-card-color-next>Next →</button></div>
+    <button class="study-motion" type="button" data-card-motion-toggle>Pause motion</button>
+    <div class="study-speed">
+      <label for="card-motion-speed">Speed</label>
+      <select id="card-motion-speed" data-card-motion-speed>
+        <option value="slow">Slow · 1×</option>
+        <option value="medium">Medium · 2×</option>
+        <option value="fast">Fast · 4×</option>
+        <option value="extra-fast">Extra fast · 8×</option>
+      </select>
+    </div>
+    <p class="study-description" data-card-color-description>{cardPalettes[0].description}</p>
+    <p>15 pigment studies, light + dark. Switch modes with the avatar. About and Enjoying Grid only.</p>
+    <span class="sr-only" data-card-color-status role="status"></span>
+  </div>
+</details>
+<style>
+  .card-color-picker[hidden] { display: none; }
+  .card-color-picker { position: relative; z-index: 6; flex: 0 0 auto; font-size: .85rem; }
+  summary { display: flex; align-items: center; justify-content: space-between; gap: .5rem; min-height: 44px; padding: .4rem .85rem; border: 1px solid var(--hairline); border-radius: 999px; cursor: pointer; list-style: none; white-space: nowrap; }
+  summary::-webkit-details-marker { display: none; }
+  .card-color-panel { position: absolute; right: 0; top: calc(100% + .6rem); width: min(330px, calc(100vw - 3rem)); padding: 1.1rem; border: 1px solid var(--hairline); border-radius: 1rem; background: var(--paper); box-shadow: 0 14px 32px color-mix(in srgb, var(--ink) 14%, transparent); }
+  label { display: block; margin-bottom: .6rem; }
+  select { width: 100%; min-height: 44px; padding: .4rem; border: 1px solid var(--hairline); border-radius: .5rem; background: var(--surface); color: var(--ink); font: inherit; }
+  .card-color-sample { display: flex; height: 46px; margin: .8rem 0; overflow: hidden; border: 1px solid var(--hairline); border-radius: .5rem; }
+  i { flex: 1; background-color: var(--card-ocean); background-image: var(--card-ocean-image); background-size: var(--card-ocean-size); } i:nth-child(2) { background-color: var(--card-aqua); background-image: var(--card-aqua-image); background-size: var(--card-aqua-size); } i:nth-child(3) { background-color: var(--card-butter); background-image: var(--card-butter-image); background-size: var(--card-butter-size); }
+  button { min-height: 44px; width: 100%; border: 0; border-radius: 999px; background: var(--fill); color: var(--fill-ink); font: inherit; cursor: pointer; }
+  .study-motion { margin-top: .6rem; background: transparent; color: var(--ink); border: 1px solid var(--hairline); }
+  .study-motion:disabled { cursor: default; color: var(--muted); }
+  .study-speed { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .75rem; margin-top: .6rem; }
+  .study-speed label { margin: 0; }
+  .study-speed select:disabled { color: var(--muted); }
+  .study-nav { display: flex; gap: .5rem; }
+  p { margin-top: .7rem; color: var(--muted); font-size: .78rem; line-height: 1.5; }
+  :is(summary, select, button):focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
+</style>

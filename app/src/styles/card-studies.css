@@ -1,0 +1,15 @@
+/* Typography and shape experiments are scoped to the two card collections. */
+.route-about .about-cards .about-card,
+#enjoying-results[data-view="grid"] #list .ent {
+  font-family: var(--study-body);
+  border-radius: var(--study-radius);
+}
+.route-about .about-cards .about-card h2,
+#enjoying-results[data-view="grid"] #list .ent a.t {
+  font-family: var(--study-title);
+  font-style: var(--study-title-style);
+  font-weight: var(--study-title-weight);
+  letter-spacing: -.025em;
+}
+/* Compact tiles still need to accommodate wider sans/mono headings. */
+#enjoying-results[data-view="grid"] #list .ent .ent-titleline { overflow-wrap: anywhere; }

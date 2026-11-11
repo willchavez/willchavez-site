@@ -1,10 +1,13 @@
 ---
+import CardRefraction from "../components/CardRefraction.astro";
 import ThemeHead from "../components/ThemeHead.astro";
 import "../styles/base.css";
 import "../styles/nav.css";
 import "../styles/pages.css";
 import "../styles/tag-colors.css";
 import "../styles/card-hover.css";
+import "../styles/card-borders.css";
+import "../styles/card-studies.css";
 import Nav from "../components/Nav.astro";
 import Analytics from "../components/Analytics.astro";
 import { ClientRouter } from "astro:transitions";
@@ -71,6 +74,7 @@ const jsonLd = {
     {analytics && <Analytics />}
   </head>
   <body class:list={[showHeading && "content-shell", `route-${current}`]}>
+    {(current === "about" || current === "enjoying") && <CardRefraction />}
     <Nav current={current} counts={counts} alignment={navAlignment} />
     <div class="page-content" transition:name="page-content">
     {showHeading && <div class:list={["page-head", !showPageTitle && "page-head-minimal"]}>

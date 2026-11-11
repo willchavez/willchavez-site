@@ -3,11 +3,12 @@
 .route-about .page-head { margin-bottom: 2.25rem; }
 .route-about .about-copy { max-width: none; --about-card: #f7f5e7; }
 .about-cards { display: grid; grid-template-columns: 1fr 1.15fr; gap: 1.25rem; align-items: stretch; }
-.route-about .about-copy .about-card { margin: 0; padding: 1.5rem; border: 1px solid var(--hairline); border-radius: 1.25rem; background: var(--about-card); }
-.route-about .about-cards .about-card { --muted: var(--card-muted); --rust: var(--card-accent); }
-.route-about .about-card:has(#about-learning) { --about-card: var(--card-ocean); }
-.route-about .about-card:has(#about-music) { --about-card: var(--card-butter); }
-.route-about .about-card:has(#about-community) { --about-card: var(--card-aqua); }
+.about-card-controls { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
+.route-about .about-copy .about-card { margin: 0; padding: 1.5rem; border: 1px solid var(--hairline); border-radius: var(--study-radius, 1.25rem); background-color: var(--about-card); background-image: var(--card-image, none); background-size: var(--card-size, auto); }
+.route-about .about-cards .about-card { --ink: var(--card-ink); --muted: var(--card-muted); --rust: var(--card-accent); color: var(--card-ink); }
+.route-about .about-card:has(#about-learning) { --about-card: var(--card-ocean); --card-ink: var(--card-ocean-ink); --card-muted: var(--card-ocean-muted); --card-accent: var(--card-ocean-accent); --card-image: var(--card-ocean-image); --card-size: var(--card-ocean-size); }
+.route-about .about-card:has(#about-music) { --about-card: var(--card-butter); --card-ink: var(--card-butter-ink); --card-muted: var(--card-butter-muted); --card-accent: var(--card-butter-accent); --card-image: var(--card-butter-image); --card-size: var(--card-butter-size); }
+.route-about .about-card:has(#about-community) { --about-card: var(--card-aqua); --card-ink: var(--card-aqua-ink); --card-muted: var(--card-aqua-muted); --card-accent: var(--card-aqua-accent); --card-image: var(--card-aqua-image); --card-size: var(--card-aqua-size); }
 .about-card:has(#about-music) { grid-column: 2; grid-row: 1 / span 2; }
 .route-about .about-experience { margin-top: 3rem; padding: 0; border: 0; }
 .route-about .about-experience .work-section-title { margin-bottom: 1.25rem; color: var(--ink); font-size: 1.3rem; font-weight: 500; }
