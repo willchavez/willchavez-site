@@ -56,13 +56,13 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
                 <img src={portfolioImg(project.cover, 480)} srcset={`${portfolioImg(project.cover, 480)} 480w, ${portfolioImg(project.cover, 960)} 960w`} sizes="(max-width: 520px) 100vw, (max-width: 820px) 50vw, 33vw" alt={project.images[0]?.alt ?? project.title} loading="lazy" decoding="async" />
                 <span class="explore" aria-hidden="true">View project</span>
               </div>
-              <div class="project-info">
-                <div class="portfolio-eyebrow">{project.org}</div>
-                <h2>{project.title}</h2>
-                <p>{project.summary}</p>
-                <div class="skills" aria-label="Project tags">{project.tags.map((tag) => <span class="skill-tag">{tag}</span>)}</div>
-              </div>
             </a>
+            <div class="project-info">
+              <div class="portfolio-eyebrow">{project.org}</div>
+              <h2><a class="project-title-link" href={`/portfolio/${project.slug}`}>{project.title}</a></h2>
+              <p>{project.summary}</p>
+              <div class="skills" aria-label="Project tags">{project.tags.map((tag) => <span class="skill-tag">{tag}</span>)}</div>
+            </div>
           </article>
         ))}
       </section>
@@ -161,7 +161,7 @@ const countFor = (category?: string) => category ? projects.filter((project) => 
     fromHash();
     requestedKind = kind;
     apply();
-    results.querySelectorAll<HTMLAnchorElement>(".project-open").forEach(link => {
+    results.querySelectorAll<HTMLAnchorElement>(".project-open, .project-title-link").forEach(link => {
       link.addEventListener("click", () => {
         const from = location.pathname + location.search + location.hash;
         const target = new URL(link.href);
