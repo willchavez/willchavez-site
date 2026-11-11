@@ -1,0 +1,78 @@
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+const base = (process.argv[2] || 'http://localhost:4321').replace(/\/$/, '');
+const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH, args: ['--no-sandbox'] });
+const luminance = color => {
+  const values = color.match(/[\d.]+/g).slice(0, 3).map(Number).map(n => {
+    n /= color.startsWith('color(srgb ') ? 1 : 255; return n <= .04045 ? n / 12.92 : ((n + .055) / 1.055) ** 2.4;
+  });
+  return values[0] * .2126 + values[1] * .7152 + values[2] * .0722;
+};
+const contrast = (a, b) => (Math.max(luminance(a), luminance(b)) + .05) / (Math.min(luminance(a), luminance(b)) + .05);
+async function border(page, selector, mode, hoverSelector = selector) {
+  await page.mouse.move(0, 0); await page.waitForTimeout(220);
+  const el = page.locator(selector).first();
+  const before = await el.evaluate(e => { const s = getComputedStyle(e); return { width: s.borderTopWidth, color: s.borderTopColor }; });
+  assert.equal(before.width, '1px', selector);
+  await page.locator(hoverSelector).first().hover(); await page.waitForTimeout(220);
+  const after = await el.evaluate(e => getComputedStyle(e).borderTopColor);
+  assert(mode === 'light' ? luminance(after) < luminance(before.color) : luminance(after) > luminance(before.color), `${mode} hover border: ${selector}`);
+}
+try {
+  for (const mode of ['light', 'dark']) {
+    const context = await browser.newContext({ colorScheme: mode, viewport: { width: 1440, height: 1000 } });
+    const page = await context.newPage(); const errors = [];
+    page.on('pageerror', e => errors.push(e.message));
+    await page.goto(base + '/about');
+    const shell = await page.locator('body').evaluate(e => getComputedStyle(e).backgroundColor);
+    const experience = await page.locator('.work-role').first().evaluate(e => getComputedStyle(e).backgroundColor);
+    const picker = page.locator('[data-card-colors-picker]');
+    await picker.locator('summary').click();
+    const ids = await picker.locator('option').evaluateAll(es => es.map(e => e.value));
+    assert.equal(ids.length, 10);
+    for (const id of ids) {
+      await picker.locator('select').selectOption(id);
+      assert.equal(await page.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), shell);
+      assert.equal(await page.locator('.work-role').first().evaluate(e => getComputedStyle(e).backgroundColor), experience);
+      const cards = await page.locator('.about-cards .about-card').evaluateAll(es => es.map(e => {
+        const s = getComputedStyle(e);
+        const probe = document.createElement('span'); e.append(probe);
+        const colors = ['--ink', '--muted', '--rust'].map(v => { probe.style.color = `var(${v})`; return getComputedStyle(probe).color; });
+        probe.remove(); return { bg: s.backgroundColor, colors };
+      }));
+      for (const card of cards) for (const text of card.colors) assert(contrast(card.bg, text) >= 4.5, `${mode}/${id}: ${card.bg}/${text} contrast ${contrast(card.bg, text)}`);
+    }
+    await picker.locator('select').selectOption('forest');
+    await page.keyboard.press('Escape'); assert.equal(await picker.getAttribute('open'), null);
+    await border(page, '.about-cards .about-card', mode);
+    await page.reload(); assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'forest');
+    await page.locator('.desktop-nav a[href$="/enjoying"]').click(); await page.waitForURL('**/enjoying'); await page.waitForTimeout(350);
+    assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'forest');
+    assert(await page.locator('[data-card-colors-picker]').isVisible());
+    await border(page, '#list .ent', mode);
+    await page.getByRole('button', { name: 'List view', exact: true }).click();
+    assert(!await page.locator('[data-card-colors-picker]').isVisible());
+    await border(page, '#list .ent', mode);
+    await page.goto(base + '/writing');
+    assert.equal(await page.locator('[data-card-colors-picker]').count(), 0);
+    await border(page, '.note-list .note-card', mode);
+    await page.goto(base + '/portfolio');
+    await page.getByRole('button', { name: 'List view', exact: true }).click();
+    await border(page, '#portfolio-results .portfolio-card', mode);
+    await page.getByRole('button', { name: 'Grid view', exact: true }).click();
+    await border(page, '#portfolio-results .project-image', mode, '#portfolio-results .project-open');
+    assert.equal(await page.locator('.portfolio-card').first().evaluate(e => getComputedStyle(e).boxShadow), 'none');
+    assert.equal(errors.length, 0, errors.join('\n')); await context.close();
+  }
+  const context = await browser.newContext({ colorScheme: 'light' }); const page = await context.newPage();
+  for (const width of [320, 393, 641, 1440]) {
+    await page.setViewportSize({ width, height: 900 }); await page.goto(base + '/about');
+    await page.locator('[data-card-colors-picker] summary').click();
+    const rect = await page.locator('.card-color-panel').boundingBox();
+    assert(rect.x >= 0 && rect.x + rect.width <= width, `panel fits ${width}`);
+    await page.goto(base + '/enjoying');
+    assert.equal(await page.locator('[data-card-colors-picker]').isVisible(), width > 640);
+    assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth));
+  }
+  await context.close(); console.log('Card palettes, contrast, scope, persistence, responsive picker, and light/dark hover borders passed.');
+} finally { await browser.close(); }

@@ -3,6 +3,7 @@ import { contentExcerpt } from "../../lib/excerpt";
 import EnjoyingHeading from "../../components/EnjoyingHeading.astro";
 import Base from "../../layouts/Base.astro";
 import ViewToggle from "../../components/ViewToggle.astro";
+import CardPalettePicker from '../../components/CardPalettePicker.astro';
 import "../../styles/enjoying-layout.css";
 import Empty from "../../components/Empty.astro";
 import SoundCloud from "../../components/SoundCloud.astro";
@@ -42,7 +43,10 @@ const tonePattern = ["ocean", "aqua", "butter", "ocean", "butter", "aqua", "ocea
             </div>
           </details>
         </div>
-        <ViewToggle label="Enjoying layout" className="enjoying-view-toggle" hidden />
+        <div class="enjoying-controls">
+          <CardPalettePicker className="enjoying-card-colors" />
+          <ViewToggle label="Enjoying layout" className="enjoying-view-toggle" hidden />
+        </div>
       </div>
 
       <div id="enjoying-results" data-kind="all" data-view="list">

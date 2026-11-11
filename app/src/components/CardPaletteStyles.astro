@@ -1,0 +1,18 @@
+---
+import { cardPalettes, type CardColors } from '../data/card-palettes';
+const vars = (c: CardColors) => `--card-ocean:${c.fills[0]};--card-aqua:${c.fills[1]};--card-butter:${c.fills[2]};--card-ink:${c.ink};--card-muted:${c.muted};--card-accent:${c.accent};`;
+const rules = (selector: string, light: CardColors, dark: CardColors) => `${selector}{${vars(light)}}@media(prefers-color-scheme:dark){${selector}:not([data-theme="light"]){${vars(dark)}}}${selector}[data-theme="dark"]{${vars(dark)}}`;
+const css = rules(':root', cardPalettes[0].light, cardPalettes[0].dark) + cardPalettes.map(p => rules(`:root[data-card-palette="${p.id}"]`, p.light, p.dark)).join('');
+---
+<style is:inline set:html={css} />
+<script is:inline data-card-options={cardPalettes.map(p => p.id).join(',')}>
+  (() => {
+    const ids = document.currentScript.dataset.cardOptions.split(',');
+    let choice = ids[0];
+    try { choice = sessionStorage.getItem('will-card-palette') || choice; } catch {}
+    document.documentElement.dataset.cardPalette = ids.includes(choice) ? choice : ids[0];
+  })();
+</script>
+<script>
+  import '../scripts/card-colors';
+</script>

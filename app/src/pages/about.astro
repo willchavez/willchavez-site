@@ -1,10 +1,12 @@
 ---
 import Base from "../layouts/Base.astro";
 import Experience from "../components/Experience.astro";
+import CardPalettePicker from '../components/CardPalettePicker.astro';
 import "../styles/about.css";
 ---
 <Base showPageTitle={false} title="About" current="about" heading="About" sub="The work, the music, and the communities I’m part of.">
   <div class="about-copy">
+    <div class="about-card-controls"><CardPalettePicker /></div>
     <div class="about-cards">
     <section class="section about-card" aria-labelledby="about-learning">
       <h2 id="about-learning">What I’m learning</h2>

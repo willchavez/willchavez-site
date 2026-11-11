@@ -3,8 +3,9 @@
 .route-about .page-head { margin-bottom: 2.25rem; }
 .route-about .about-copy { max-width: none; --about-card: #f7f5e7; }
 .about-cards { display: grid; grid-template-columns: 1fr 1.15fr; gap: 1.25rem; align-items: stretch; }
+.about-card-controls { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
 .route-about .about-copy .about-card { margin: 0; padding: 1.5rem; border: 1px solid var(--hairline); border-radius: 1.25rem; background: var(--about-card); }
-.route-about .about-cards .about-card { --muted: var(--card-muted); --rust: var(--card-accent); }
+.route-about .about-cards .about-card { --ink: var(--card-ink); --muted: var(--card-muted); --rust: var(--card-accent); color: var(--card-ink); }
 .route-about .about-card:has(#about-learning) { --about-card: var(--card-ocean); }
 .route-about .about-card:has(#about-music) { --about-card: var(--card-butter); }
 .route-about .about-card:has(#about-community) { --about-card: var(--card-aqua); }
