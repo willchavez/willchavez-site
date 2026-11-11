@@ -4,20 +4,29 @@ Blue & Gold remains the site palette in this preview. A Card colors picker appea
 
 The palette pairs warm paper and blue ink in light mode with a blue field, aqua text, and gold accents in dark mode. Standalone presentations use the same colors.
 
-The previous ten card palettes are removed. The picker now contains six numbered triads from Sanzo Wada’s *A Dictionary of Color Combinations*, using the digital reference at https://sanzo-wada.dmbk.io/assets/colors.json:
+The picker contains 15 original variations on Wada combination 121 (Brown, Ochraceous Salmon, Lincoln Green). The other Wada combinations have been removed. These are adaptations, not reproductions of the original swatches; the reference is https://sanzo-wada.dmbk.io/assets/colors.json.
 
-| Combination | Colors |
+| Study | Direction |
 | --- | --- |
-| 203 (default) | Pale Lemon Yellow, Vinaceous Cinnamon, Lincoln Green |
-| 167 | Ecru, Pale King’s Blue, Vandar Poel’s Blue |
-| 174 | Corinthian Pink, Grayish Lavender B, Taupe Brown |
-| 121 | Brown, Ochraceous Salmon, Lincoln Green |
-| 140 | Golden Yellow, Antwarp Blue, Slate Color |
-| 235 | Ivory Buff, Yellow Orange, Grayish Lavender B |
+| 01 Porcelain (default) | Ivory, peach mist, pale sage; airy serif |
+| 02 Rice paper | Warm stock, fine grain |
+| 03 Chalk pastels | Powdery color, clean sans |
+| 04 Milk glass | Soft highlights, generous corners |
+| 05 Natural linen | Woven lines, classic serif |
+| 06 Watercolor | Pigment blooms, italic headings |
+| 07 Dune | Diagonal gradients, modern sans |
+| 08 Herbarium | Faint notebook rules, botanical ink |
+| 09 Letterpress | Grain, richer color, strong Georgia headings |
+| 10 Risograph | Fine dot screen, sans |
+| 11 Atelier | Nearly white, high-contrast serif |
+| 12 Mineral | Cool stone, tiny flecks, sans headings |
+| 13 Field index | Graph paper, monospaced headings |
+| 14 Faded sunset | Peach gradients, slanted literary headings |
+| 15 Soft 121 | Previous softened flat palette for comparison |
 
-Light mode uses the reference’s hex values except for combination 121, which is softened into clay (`#cfb3a3`), peach (`#e7c4a6`), and sage (`#b8c39d`). Its dark counterparts are gently lifted and muted (`#4b3830`, `#73543f`, `#424c32`). Dark mode adapts the other combinations’ hues to lower-light, less saturated surfaces; these adaptations are not presented as original Wada swatches. Each card tone has its own primary, secondary, and accent text colors with at least 4.5:1 contrast. The source numbers and original color names are retained in `card-palettes.ts`.
+All studies retain the approved dark base fills (`#4b3830`, `#73543f`, `#424c32`); finishes and type vary. Light mode explores quieter, lighter tints. Typography, shape, gradients, and textures are scoped to the same two collections as the fills. No font downloads or moving texture effects are introduced. Each swatch has dedicated primary, secondary, and accent text. Contrast is checked against the base fill and every opaque gradient/texture color, not just a nominal background.
 
-Choices persist for the tab and survive page navigation. Removed choices fall back to combination 203. The picker is hidden in Enjoying List and on mobile Enjoying. About assigns the first tone to learning, third to music, and second to community. Enjoying keeps its stable tone pattern, independent of media type and tag labels.
+The picker shows a description and texture-aware swatches, with Previous/Next controls. Choices persist for the tab and page navigation. Removed choices fall back to 01. About assigns the first tone to learning, third to music, and second to community. Enjoying retains its stable tone pattern; ResizeObserver recalculates masonry when type changes. Enjoying List and mobile Enjoying have no study picker or study styling.
 
 In Projects Grid, the preview frame and title are separate native links. Only the preview frame scales and receives a shadow on hover; captions stay still. Both links preserve category/view/scroll return context. List keeps its full-card link and hover treatment. CSS explicitly respects filtered cards' hidden state after the List layout uses a grid.
 

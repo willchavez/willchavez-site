@@ -29,8 +29,9 @@ try {
     const picker = page.locator('[data-card-colors-picker]');
     await picker.locator('summary').click();
     const ids = await picker.locator('option').evaluateAll(es => es.map(e => e.value));
-    assert.equal(ids.length, 6);
-    assert(ids.every(id => id.startsWith('wada-')), 'only Wada combinations remain');
+    assert.equal(ids.length, 15);
+    assert(ids.every(id => id === 'wada-121' || id.startsWith('121-')), 'only 121 studies remain');
+    const finishes = new Set(); const fonts = new Set();
     for (const id of ids) {
       await picker.locator('select').selectOption(id);
       assert.equal(await page.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), shell);
@@ -39,11 +40,18 @@ try {
         const s = getComputedStyle(e);
         const probe = document.createElement('span'); e.append(probe);
         const colors = ['--ink', '--muted', '--rust'].map(v => { probe.style.color = `var(${v})`; return getComputedStyle(probe).color; });
-        probe.remove(); return { bg: s.backgroundColor, colors };
+        probe.remove(); return { surfaces: [s.backgroundColor, ...Array.from(s.backgroundImage.matchAll(/rgb\([^)]*\)/g), m => m[0])], colors, image: s.backgroundImage, font: getComputedStyle(e.querySelector('h2')).fontFamily };
       }));
-      for (const card of cards) for (const text of card.colors) assert(contrast(card.bg, text) >= 4.5, `${mode}/${id}: ${card.bg}/${text} contrast ${contrast(card.bg, text)}`);
+      for (const card of cards) {
+        finishes.add(card.image); fonts.add(card.font);
+        for (const surface of card.surfaces) for (const text of card.colors) assert(contrast(surface, text) >= 4.5, `${mode}/${id}: ${surface}/${text} contrast ${contrast(surface, text)}`);
+      }
+      assert.equal(await picker.locator('[data-card-color-description]').textContent() === '', false);
+      assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth));
     }
-    await picker.locator('select').selectOption('wada-203');
+    assert(finishes.size >= 10, 'studies include distinct surface finishes');
+    assert(fonts.size >= 4, 'studies vary title typography');
+    await picker.locator('select').selectOption('wada-121');
     await page.keyboard.press('Escape'); assert.equal(await picker.getAttribute('open'), null);
     const about = page.locator('.about-cards .about-card').first();
     await page.mouse.move(0, 0); await page.waitForTimeout(220);
@@ -52,13 +60,29 @@ try {
     assert.equal(await about.evaluate(e => getComputedStyle(e).borderTopColor), aboutBorder, 'About is not a card link; its border stays static');
     await about.locator('a').first().focus();
     assert.equal(await about.evaluate(e => getComputedStyle(e).borderTopColor), aboutBorder, 'inline link focus does not highlight the card');
-    await page.reload(); assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-203');
+    await page.reload(); assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-121');
     await page.locator('.desktop-nav a[href$="/enjoying"]').click(); await page.waitForURL('**/enjoying'); await page.waitForTimeout(350);
-    assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-203');
+    assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-121');
     assert(await page.locator('[data-card-colors-picker]').isVisible());
+    const gridPicker = page.locator('[data-card-colors-picker]');
+    await gridPicker.locator('summary').click();
+    for (const id of ids) {
+      await gridPicker.locator('select').selectOption(id);
+      await page.waitForTimeout(180);
+      assert(!await page.locator('#list .ent:not([hidden])').evaluateAll(es => {
+        const rs = es.map(e => e.getBoundingClientRect());
+        return rs.some((a, i) => rs.some((b, j) => i < j && Math.min(a.right, b.right) - Math.max(a.left, b.left) > 2 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 2));
+      }), `${id}: typography changes reflow masonry without overlaps`);
+    }
+    await gridPicker.locator('[data-card-color-next]').click();
+    assert.equal(await gridPicker.locator('select').inputValue(), ids[0], 'Next wraps to the first study');
+    await gridPicker.locator('[data-card-color-prev]').click();
+    assert.equal(await gridPicker.locator('select').inputValue(), ids.at(-1), 'Previous wraps to the last study');
+    await page.keyboard.press('Escape');
     await border(page, '#list .ent', mode);
     await page.getByRole('button', { name: 'List view', exact: true }).click();
     assert(!await page.locator('[data-card-colors-picker]').isVisible());
+    assert.equal(await page.locator('#list .ent').first().evaluate(e => getComputedStyle(e).backgroundImage), 'none', 'List has no study texture');
     await border(page, '#list .ent', mode);
     await page.goto(base + '/notes');
     assert.equal(await page.locator('[data-card-colors-picker]').count(), 0);
@@ -81,5 +105,5 @@ try {
     assert.equal(await page.locator('[data-card-colors-picker]').isVisible(), width > 640);
     assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth));
   }
-  await context.close(); console.log('Wada palettes, contrast, scope, persistence, responsive picker, static About borders, and linked-card hover borders passed.');
+  await context.close(); console.log('15 Wada 121 studies: typography, texture/gradient contrast, scope, persistence, responsive picker, and borders passed.');
 } finally { await browser.close(); }

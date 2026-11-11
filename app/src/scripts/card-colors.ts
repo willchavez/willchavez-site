@@ -5,6 +5,7 @@ let choice = document.documentElement.dataset.cardPalette || ids[0];
 function sync() {
   document.documentElement.dataset.cardPalette = choice;
   document.querySelectorAll<HTMLSelectElement>('[data-card-color-choice]').forEach(el => el.value = choice);
+  document.querySelectorAll('[data-card-color-description]').forEach(el => el.textContent = cardPalettes.find(p => p.id === choice)?.description || '');
   document.querySelectorAll<HTMLElement>('[data-card-colors-picker]').forEach(el => el.hidden = false);
 }
 function select(value: string) {
@@ -20,6 +21,7 @@ document.addEventListener('change', event => {
 });
 document.addEventListener('click', event => {
   if (event.target instanceof Element && event.target.closest('[data-card-color-next]')) select(ids[(ids.indexOf(choice) + 1) % ids.length]);
+  if (event.target instanceof Element && event.target.closest('[data-card-color-prev]')) select(ids[(ids.indexOf(choice) - 1 + ids.length) % ids.length]);
   document.querySelectorAll<HTMLDetailsElement>('[data-card-colors-picker]').forEach(el => { if (!el.contains(event.target as Node)) el.open = false; });
 });
 document.addEventListener('keydown', event => {
