@@ -11,6 +11,7 @@ const { className } = Astro.props;
     </select>
     <div class="card-color-sample" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="study-nav"><button type="button" data-card-color-prev>← Previous</button><button type="button" data-card-color-next>Next →</button></div>
+    <button class="study-motion" type="button" data-card-motion-toggle>Pause motion</button>
     <p class="study-description" data-card-color-description>{cardPalettes[0].description}</p>
     <p>15 pigment studies, light + dark. Switch modes with the avatar. About and Enjoying Grid only.</p>
     <span class="sr-only" data-card-color-status role="status"></span>
@@ -27,6 +28,8 @@ const { className } = Astro.props;
   .card-color-sample { display: flex; height: 46px; margin: .8rem 0; overflow: hidden; border: 1px solid var(--hairline); border-radius: .5rem; }
   i { flex: 1; background-color: var(--card-ocean); background-image: var(--card-ocean-image); background-size: var(--card-ocean-size); } i:nth-child(2) { background-color: var(--card-aqua); background-image: var(--card-aqua-image); background-size: var(--card-aqua-size); } i:nth-child(3) { background-color: var(--card-butter); background-image: var(--card-butter-image); background-size: var(--card-butter-size); }
   button { min-height: 44px; width: 100%; border: 0; border-radius: 999px; background: var(--fill); color: var(--fill-ink); font: inherit; cursor: pointer; }
+  .study-motion { margin-top: .6rem; background: transparent; color: var(--ink); border: 1px solid var(--hairline); }
+  .study-motion:disabled { cursor: default; color: var(--muted); }
   .study-nav { display: flex; gap: .5rem; }
   p { margin-top: .7rem; color: var(--muted); font-size: .78rem; line-height: 1.5; }
   :is(summary, select, button):focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }

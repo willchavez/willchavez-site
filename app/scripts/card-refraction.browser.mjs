@@ -14,6 +14,7 @@ async function difference(a, b) {
 try {
   for (const mode of ['light', 'dark']) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1100 }, colorScheme: mode });
+    await page.addInitScript(() => sessionStorage.setItem('will-card-motion', 'paused'));
     await page.goto(base + '/about'); await page.evaluate(() => document.fonts.ready);
     await page.mouse.move(0, 0);
     const card = page.locator('.about-card').first();
