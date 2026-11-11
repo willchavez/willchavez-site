@@ -2,7 +2,7 @@ export type CardSwatch = { fill: string; ink: string; muted: string; accent: str
 export type CardColors = readonly [CardSwatch, CardSwatch, CardSwatch];
 export type CardPalette = { id: string; label: string; combination: number; colorNames: readonly string[]; light: CardColors; dark: CardColors };
 /** Wada triads from A Dictionary of Color Combinations, digitized at https://sanzo-wada.dmbk.io/assets/colors.json.
- * Light uses the reference hex values; dark adapts their hues for lower-light surfaces.
+ * Light uses the reference hex values except the softened 121 study; dark adapts their hues for lower-light surfaces.
  * Per-swatch text preserves readable contrast without flattening the original combinations.
  * Only About’s top blocks and Enjoying Grid consume these tokens. */
 export const cardPalettes = [
@@ -52,14 +52,14 @@ export const cardPalettes = [
     id: "wada-121", label: "121 · Brown, salmon & olive", combination: 121,
     colorNames: ["Brown", "Ochraceous Salmon", "Lincoln Green"],
     light: [
-      {"fill": "#6c2b11", "ink": "#fcf8eb", "muted": "#e5d7c8", "accent": "#fcf8eb"},
-      {"fill": "#d99e73", "ink": "#17201f", "muted": "#36342c", "accent": "#17201f"},
-      {"fill": "#405416", "ink": "#fcf8eb", "muted": "#dedec9", "accent": "#fcf8eb"},
+      {"fill": "#cfb3a3", "ink": "#3d342d", "muted": "#514338", "accent": "#3d342d"},
+      {"fill": "#e7c4a6", "ink": "#3d342d", "muted": "#584a3f", "accent": "#3d342d"},
+      {"fill": "#b8c39d", "ink": "#30382b", "muted": "#454e3a", "accent": "#30382b"},
     ],
     dark: [
-      {"fill": "#391e14", "ink": "#fcf8eb", "muted": "#ddd5c9", "accent": "#fcf8eb"},
-      {"fill": "#6a4225", "ink": "#fcf8eb", "muted": "#e5dbcb", "accent": "#fcf8eb"},
-      {"fill": "#2d3914", "ink": "#fcf8eb", "muted": "#dbd9c9", "accent": "#fcf8eb"},
+      {"fill": "#4b3830", "ink": "#fcf8eb", "muted": "#ddd5c9", "accent": "#fcf8eb"},
+      {"fill": "#73543f", "ink": "#fcf8eb", "muted": "#e5dbcb", "accent": "#fcf8eb"},
+      {"fill": "#424c32", "ink": "#fcf8eb", "muted": "#dbd9c9", "accent": "#fcf8eb"},
     ],
   },
   {

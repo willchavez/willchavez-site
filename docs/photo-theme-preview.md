@@ -15,7 +15,7 @@ The previous ten card palettes are removed. The picker now contains six numbered
 | 140 | Golden Yellow, Antwarp Blue, Slate Color |
 | 235 | Ivory Buff, Yellow Orange, Grayish Lavender B |
 
-Light mode uses the reference’s hex values. Dark mode adapts those hues to lower-light, less saturated surfaces; these adaptations are not presented as original Wada swatches. Each card tone has its own primary, secondary, and accent text colors with at least 4.5:1 contrast. This allows combinations with both pale and deep colors instead of turning every card into a pastel. The source numbers and original color names are retained in `card-palettes.ts`.
+Light mode uses the reference’s hex values except for combination 121, which is softened into clay (`#cfb3a3`), peach (`#e7c4a6`), and sage (`#b8c39d`). Its dark counterparts are gently lifted and muted (`#4b3830`, `#73543f`, `#424c32`). Dark mode adapts the other combinations’ hues to lower-light, less saturated surfaces; these adaptations are not presented as original Wada swatches. Each card tone has its own primary, secondary, and accent text colors with at least 4.5:1 contrast. The source numbers and original color names are retained in `card-palettes.ts`.
 
 Choices persist for the tab and survive page navigation. Removed choices fall back to combination 203. The picker is hidden in Enjoying List and on mobile Enjoying. About assigns the first tone to learning, third to music, and second to community. Enjoying keeps its stable tone pattern, independent of media type and tag labels.
 
