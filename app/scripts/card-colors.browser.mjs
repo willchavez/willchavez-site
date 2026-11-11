@@ -31,7 +31,7 @@ try {
     const ids = await picker.locator('option').evaluateAll(es => es.map(e => e.value));
     assert.equal(ids.length, 15);
     assert(ids.every(id => id === 'wada-121' || id.startsWith('121-')), 'only 121 studies remain');
-    const finishes = new Set(); const fonts = new Set();
+    const finishes = new Set(); const fonts = new Set(); const radii = new Set();
     for (const id of ids) {
       await picker.locator('select').selectOption(id);
       assert.equal(await page.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), shell);
@@ -40,10 +40,10 @@ try {
         const s = getComputedStyle(e);
         const probe = document.createElement('span'); e.append(probe);
         const colors = ['--ink', '--muted', '--rust'].map(v => { probe.style.color = `var(${v})`; return getComputedStyle(probe).color; });
-        probe.remove(); return { surfaces: [s.backgroundColor, ...Array.from(s.backgroundImage.matchAll(/rgb\([^)]*\)/g), m => m[0])], colors, image: s.backgroundImage, font: getComputedStyle(e.querySelector('h2')).fontFamily };
+        probe.remove(); return { surfaces: [s.backgroundColor, ...Array.from(s.backgroundImage.matchAll(/rgb\([^)]*\)/g), m => m[0])], colors, image: s.backgroundImage, font: getComputedStyle(e.querySelector('h2')).fontFamily, radius: s.borderTopLeftRadius };
       }));
       for (const card of cards) {
-        finishes.add(card.image); fonts.add(card.font);
+        finishes.add(card.image); fonts.add(card.font); radii.add(card.radius);
         for (const surface of card.surfaces) for (const text of card.colors) assert(contrast(surface, text) >= 4.5, `${mode}/${id}: ${surface}/${text} contrast ${contrast(surface, text)}`);
       }
       assert.equal(await picker.locator('[data-card-color-description]').textContent() === '', false);
@@ -51,6 +51,7 @@ try {
     }
     assert(finishes.size >= 10, 'studies include distinct surface finishes');
     assert(fonts.size >= 4, 'studies vary title typography');
+    assert(radii.size >= 8, 'corner shapes change with the studies');
     await picker.locator('select').selectOption('wada-121');
     await page.keyboard.press('Escape'); assert.equal(await picker.getAttribute('open'), null);
     const about = page.locator('.about-cards .about-card').first();
