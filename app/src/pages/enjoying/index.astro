@@ -11,6 +11,7 @@ import { KINDS } from "../../content.config";
 const items = await getEnjoying();
 const kindCount = (kind: string) => items.filter((i) => i.data.kind === kind).length;
 const tilePattern = ["lead", "compact", "visual", "text", "compact", "visual", "lead", "compact"];
+const tonePattern = ["ocean", "aqua", "butter", "ocean", "butter", "aqua", "ocean", "butter"];
 ---
 <Base showPageTitle={false} title="Enjoying" current="enjoying" heading="Enjoying" sub="Music, films, books, and papers I’ve spent time with." description="What Will Chavez has been enjoying">
   <div class="section">
@@ -48,7 +49,7 @@ const tilePattern = ["lead", "compact", "visual", "text", "compact", "visual", "
       <div id="list">
         {items.map((i, index) => {
           return (
-          <div class="ent interactive-card" data-kind={i.data.kind} data-tile={tilePattern[index % tilePattern.length]}>
+          <div class="ent interactive-card" data-kind={i.data.kind} data-tile={tilePattern[index % tilePattern.length]} data-card-tone={tonePattern[index % tonePattern.length]}>
             {i.data.cover
               ? <a class="cover-link" href={`/enjoying/${i.id}?from=all`} data-enjoying-entry aria-label={`View ${i.data.title}`}><img class="cover" src={img(i.data.cover, 240)} srcset={i.data.cover.startsWith("/uploads/") ? `${img(i.data.cover, 240)} 240w, ${img(i.data.cover, 480)} 480w, ${img(i.data.cover, 960)} 960w` : undefined} sizes="(max-width: 699px) 90vw, 50vw" alt="" loading="lazy" decoding="async" /></a>
               : <div class="cover cover-empty" aria-hidden="true" />}

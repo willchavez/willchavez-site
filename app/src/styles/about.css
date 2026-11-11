@@ -4,9 +4,10 @@
 .route-about .about-copy { max-width: none; --about-card: #f7f5e7; }
 .about-cards { display: grid; grid-template-columns: 1fr 1.15fr; gap: 1.25rem; align-items: stretch; }
 .route-about .about-copy .about-card { margin: 0; padding: 1.5rem; border: 1px solid var(--hairline); border-radius: 1.25rem; background: var(--about-card); }
-.route-about .about-card:has(#about-learning),
-.route-about .about-card:has(#about-community) { --about-card: color-mix(in srgb, var(--rust) 7%, var(--paper)); }
-.route-about .about-card:has(#about-music) { --about-card: color-mix(in srgb, var(--wash-accent, #b9b47e) 10%, var(--paper)); }
+.route-about .about-cards .about-card { --muted: var(--card-muted); --rust: var(--card-accent); }
+.route-about .about-card:has(#about-learning) { --about-card: var(--card-ocean); }
+.route-about .about-card:has(#about-music) { --about-card: var(--card-butter); }
+.route-about .about-card:has(#about-community) { --about-card: var(--card-aqua); }
 .about-card:has(#about-music) { grid-column: 2; grid-row: 1 / span 2; }
 .route-about .about-experience { margin-top: 3rem; padding: 0; border: 0; }
 .route-about .about-experience .work-section-title { margin-bottom: 1.25rem; color: var(--ink); font-size: 1.3rem; font-weight: 500; }

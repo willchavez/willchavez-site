@@ -12,9 +12,12 @@ async function context(options = {}) {
 try {
   for (const system of ['light', 'dark']) {
     const ctx = await context({ colorScheme: system, viewport: { width: 1440, height: 1000 } });
+    await ctx.addInitScript(() => sessionStorage.setItem('will-palette', 'forest-lichen'));
     const page = await ctx.newPage();
     const errors = []; page.on('pageerror', error => errors.push(String(error)));
     await page.goto(base + '/');
+    assert.equal(await page.locator('[data-palette-picker]').count(), 0, 'palette picker is removed');
+    assert.equal(await page.evaluate(() => sessionStorage.getItem('will-palette')), null, 'old palette preferences are discarded');
     const toggle = page.locator('[data-theme-toggle]');
     await toggle.waitFor({ state: 'visible' });
     await page.waitForFunction(() => document.querySelector('[data-theme-toggle]').hasAttribute('data-orbit-ready'));

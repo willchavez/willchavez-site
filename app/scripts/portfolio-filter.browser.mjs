@@ -13,6 +13,7 @@ async function choose(page, width, kind) {
 async function check(page, kind) {
   await settle(page);
   assert(await page.locator('.portfolio-card:not([data-layout-exit])').evaluateAll((cards, category) => cards.every(card => card.hidden === (!!category && card.dataset.category !== category)), categories[kind]));
+  assert(await page.locator('.portfolio-card:not([data-layout-exit])').evaluateAll(cards => cards.every(card => card.checkVisibility() === !card.hidden)), 'CSS hides filtered cards in both layouts');
   assert.equal(await page.locator('[data-layout-exit]').count(), 0);
   assert.equal(await page.locator('#portfolio-results').evaluate(e => e.style.minHeight), '');
   assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth));
@@ -64,6 +65,33 @@ try {
     assert(labels.every(label => label.ink >= 4.5), 'tag text meets WCAG AA contrast');
     assert(labels.every(label => label.card >= 1.2), 'chip backgrounds separate from the card background');
     assert(!labels.some(label => /High-fidelity|Interaction patterns|React & TypeScript/.test(label.text)), 'card labels are concise');
+    assert(await page.locator('.portfolio-card').evaluateAll(cards => cards.every(card => card.querySelector('.project-title-link').href === card.querySelector('.project-open').href)), 'project titles and previews are native links to the same project');
+    if (!mobile) {
+      await page.locator('.portfolio-view-toggle [data-layout-choice="grid"]').click();
+      const card = page.locator('.portfolio-card').first();
+      const caption = card.locator('.project-info');
+      const captionBounds = () => caption.evaluate(e => {
+        const r = e.getBoundingClientRect();
+        return { x: r.x + scrollX, y: r.y + scrollY, width: r.width, height: r.height };
+      });
+      const before = await captionBounds();
+      await card.locator('.project-open').hover(); await page.waitForTimeout(240);
+      assert.deepEqual(await captionBounds(), before, 'grid captions stay still while the preview animates');
+      assert.equal(await card.evaluate(e => getComputedStyle(e).boxShadow), 'none', 'no shadow around the grid caption');
+      assert.equal(await card.evaluate(e => getComputedStyle(e).transform), 'none', 'grid article does not scale');
+      assert.notEqual(await card.locator('.project-open').evaluate(e => getComputedStyle(e).boxShadow), 'none', 'preview alone receives the hover shadow');
+      await card.locator('.project-title-link').hover(); await page.waitForTimeout(240);
+      assert.deepEqual(await captionBounds(), before, 'title hover leaves the caption still');
+      assert.equal(await card.locator('.project-title-link').evaluate(e => getComputedStyle(e).backgroundImage), 'none', 'wrapped titles have no animated fill');
+      assert.equal(await card.locator('.project-open').evaluate(e => getComputedStyle(e).transform), 'none', 'title hover does not animate the preview');
+      await page.locator('.portfolio-view-toggle [data-layout-choice="list"]').click();
+    }
+    const description = page.locator('.portfolio-card .project-info p').first();
+    await description.scrollIntoViewIfNeeded();
+    assert(await description.evaluate(e => {
+      const r = e.getBoundingClientRect();
+      return document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest('a')?.classList.contains('project-open');
+    }), 'List card description remains part of the native full-card link');
     if (!mobile) assert.equal(await page.locator('.portfolio-grid').evaluate(e => getComputedStyle(e).gridAutoRows), 'auto');
     // Leave while a shuffle is playing; returning must bind one fresh controller.
     await choose(page, width, 'design-tooling');

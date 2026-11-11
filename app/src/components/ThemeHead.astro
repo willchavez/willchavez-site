@@ -1,14 +1,12 @@
 ---
-import "../styles/palettes.css";
+import "../styles/blue-gold.css";
 ---
 <!-- Resolve before paint. Manual choices last for this visit, not forever. -->
 <script is:inline>
   (() => {
-    const palettes = ['blue-gold', 'forest', 'forest-moss', 'forest-fern', 'forest-pine', 'forest-lichen', 'plum', 'clay', 'parchment'];
-    let palette = window.willPalette;
-    try { palette ||= sessionStorage.getItem('will-palette'); } catch {}
-    window.willPalette = palettes.includes(palette) ? palette : 'blue-gold';
-    document.documentElement.dataset.palette = window.willPalette;
+    // Old preview palette choices no longer override Blue & Gold.
+    try { sessionStorage.removeItem('will-palette'); } catch {}
+    delete document.documentElement.dataset.palette;
     let preference = window.willThemePreference;
     if (preference === undefined) {
       try {

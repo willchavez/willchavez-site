@@ -1,0 +1,8 @@
+/* Fixed Blue & Gold palette, with complementary card surfaces. */
+:root { --paper: #f1efdc; --ink: #264f63; --muted: #4f666b; --rust: #356984; --fill-ink: #dcfff6; --hairline: #bac8bc; --surface: #f7f5e7; --wash-accent: #b9b47e; --fill: var(--rust); --portrait-paper: var(--surface); --wash: color-mix(in srgb, var(--wash-accent) 10%, var(--paper)); --card-ocean: #d0e2ed; --card-aqua: #c8e2d4; --card-butter: #eee0a8; --card-muted: #435d63; --card-accent: #2c6079; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #244e63; --ink: #dcfff6; --muted: #bdd9d4; --rust: #dad39a; --fill-ink: #244e63; --hairline: #62838c; --surface: #2e586b; --wash-accent: #b9b47e; --fill: var(--rust); --portrait-paper: var(--surface); --wash: color-mix(in srgb, var(--wash-accent) 10%, var(--paper)); --card-ocean: #315d78; --card-aqua: #2d615c; --card-butter: #5a5036; --card-muted: #c6dfd8; --card-accent: #dad39a; }
+}
+:root[data-theme="dark"] { --paper: #244e63; --ink: #dcfff6; --muted: #bdd9d4; --rust: #dad39a; --fill-ink: #244e63; --hairline: #62838c; --surface: #2e586b; --wash-accent: #b9b47e; --fill: var(--rust); --portrait-paper: var(--surface); --wash: color-mix(in srgb, var(--wash-accent) 10%, var(--paper)); --card-ocean: #315d78; --card-aqua: #2d615c; --card-butter: #5a5036; --card-muted: #c6dfd8; --card-accent: #dad39a; }
+.home-page { --home-card: var(--surface); }
+.route-about .about-copy { --about-card: var(--surface); }
