@@ -30,8 +30,8 @@ try {
     await picker.locator('summary').click();
     const ids = await picker.locator('option').evaluateAll(es => es.map(e => e.value));
     assert.equal(ids.length, 15);
-    assert(ids.every(id => id === 'wada-121' || id.startsWith('121-')), 'only 121 studies remain');
-    const finishes = new Set(); const fonts = new Set(); const radii = new Set();
+    assert(ids.every(id => id.startsWith('wada-')), 'only Wada studies remain');
+    const finishes = new Set(); const fonts = new Set(); const radii = new Set(); const palettes = new Set();
     for (const id of ids) {
       await picker.locator('select').selectOption(id);
       assert.equal(await page.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), shell);
@@ -42,6 +42,7 @@ try {
         const colors = ['--ink', '--muted', '--rust'].map(v => { probe.style.color = `var(${v})`; return getComputedStyle(probe).color; });
         probe.remove(); return { surfaces: [s.backgroundColor, ...Array.from(s.backgroundImage.matchAll(/rgb\([^)]*\)/g), m => m[0])], colors, image: s.backgroundImage, font: getComputedStyle(e.querySelector('h2')).fontFamily, radius: s.borderTopLeftRadius };
       }));
+      palettes.add(cards.map(card => card.surfaces[0]).join());
       for (const card of cards) {
         finishes.add(card.image); fonts.add(card.font); radii.add(card.radius);
         for (const surface of card.surfaces) for (const text of card.colors) assert(contrast(surface, text) >= 4.5, `${mode}/${id}: ${surface}/${text} contrast ${contrast(surface, text)}`);
@@ -49,10 +50,11 @@ try {
       assert.equal(await picker.locator('[data-card-color-description]').textContent() === '', false);
       assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth));
     }
+    assert.equal(palettes.size, 15, `${mode}: every study has its own palette`);
     assert(finishes.size >= 10, 'studies include distinct surface finishes');
     assert(fonts.size >= 4, 'studies vary title typography');
     assert(radii.size >= 8, 'corner shapes change with the studies');
-    await picker.locator('select').selectOption('wada-121');
+    await picker.locator('select').selectOption('wada-166');
     await page.keyboard.press('Escape'); assert.equal(await picker.getAttribute('open'), null);
     const about = page.locator('.about-cards .about-card').first();
     await page.mouse.move(0, 0); await page.waitForTimeout(220);
@@ -61,9 +63,9 @@ try {
     assert.equal(await about.evaluate(e => getComputedStyle(e).borderTopColor), aboutBorder, 'About is not a card link; its border stays static');
     await about.locator('a').first().focus();
     assert.equal(await about.evaluate(e => getComputedStyle(e).borderTopColor), aboutBorder, 'inline link focus does not highlight the card');
-    await page.reload(); assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-121');
+    await page.reload(); assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-166');
     await page.locator('.desktop-nav a[href$="/enjoying"]').click(); await page.waitForURL('**/enjoying'); await page.waitForTimeout(350);
-    assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-121');
+    assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-166');
     assert(await page.locator('[data-card-colors-picker]').isVisible());
     const gridPicker = page.locator('[data-card-colors-picker]');
     await gridPicker.locator('summary').click();
@@ -106,5 +108,5 @@ try {
     assert.equal(await page.locator('[data-card-colors-picker]').isVisible(), width > 640);
     assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth));
   }
-  await context.close(); console.log('15 Wada 121 studies: typography, texture/gradient contrast, scope, persistence, responsive picker, and borders passed.');
+  await context.close(); console.log('15 Wada light/dark pairs: typography, texture/gradient contrast, scope, persistence, responsive picker, and borders passed.');
 } finally { await browser.close(); }
