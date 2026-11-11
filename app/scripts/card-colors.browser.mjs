@@ -30,7 +30,7 @@ try {
     await picker.locator('summary').click();
     const ids = await picker.locator('option').evaluateAll(es => es.map(e => e.value));
     assert.equal(ids.length, 15);
-    assert(ids.every(id => id.startsWith('wada-')), 'only Wada studies remain');
+    assert(ids.every(id => id.startsWith('pigment-')), 'only pigment studies remain');
     const finishes = new Set(); const fonts = new Set(); const radii = new Set(); const palettes = new Set();
     for (const id of ids) {
       await picker.locator('select').selectOption(id);
@@ -40,7 +40,21 @@ try {
         const s = getComputedStyle(e);
         const probe = document.createElement('span'); e.append(probe);
         const colors = ['--ink', '--muted', '--rust'].map(v => { probe.style.color = `var(${v})`; return getComputedStyle(probe).color; });
-        probe.remove(); return { surfaces: [s.backgroundColor, ...Array.from(s.backgroundImage.matchAll(/rgb\([^)]*\)/g), m => m[0])], colors, image: s.backgroundImage, font: getComputedStyle(e.querySelector('h2')).fontFamily, radius: s.borderTopLeftRadius };
+        const surfaces = [s.backgroundColor, ...Array.from(s.backgroundImage.matchAll(/rgb\([^)]*\)/g), m => m[0])];
+        const match = s.backgroundImage.match(/url\("data:image\/svg\+xml,([^"]+)"\)/);
+        if (match) {
+          const svg = new DOMParser().parseFromString(decodeURIComponent(match[1]), 'image/svg+xml');
+          if (svg.querySelector('parsererror')) throw new Error('Invalid SVG surface');
+          if (!svg.querySelector('feTurbulence')) throw new Error('Missing turbulence surface');
+          const color = value => { probe.style.color = value; return getComputedStyle(probe).color; };
+          svg.querySelectorAll('stop').forEach(el => surfaces.push(color(el.getAttribute('stop-color'))));
+          svg.querySelectorAll('path[stroke]').forEach(el => surfaces.push(color(el.getAttribute('stroke'))));
+          svg.querySelectorAll('feComponentTransfer').forEach(el => {
+            const channels = ['feFuncR', 'feFuncG', 'feFuncB'].map(tag => el.querySelector(tag).getAttribute('tableValues').split(' ').map(Number));
+            channels[0].forEach((_, i) => surfaces.push(`rgb(${channels.map(v => v[i] * 255).join(',')})`));
+          });
+        } else throw new Error('Every study should have a turbulence background');
+        probe.remove(); return { surfaces, colors, image: s.backgroundImage, font: getComputedStyle(e.querySelector('h2')).fontFamily, radius: s.borderTopLeftRadius };
       }));
       palettes.add(cards.map(card => card.surfaces[0]).join());
       for (const card of cards) {
@@ -54,7 +68,7 @@ try {
     assert(finishes.size >= 10, 'studies include distinct surface finishes');
     assert(fonts.size >= 4, 'studies vary title typography');
     assert(radii.size >= 8, 'corner shapes change with the studies');
-    await picker.locator('select').selectOption('wada-166');
+    await picker.locator('select').selectOption('pigment-01');
     await page.keyboard.press('Escape'); assert.equal(await picker.getAttribute('open'), null);
     const about = page.locator('.about-cards .about-card').first();
     await page.mouse.move(0, 0); await page.waitForTimeout(220);
@@ -63,9 +77,9 @@ try {
     assert.equal(await about.evaluate(e => getComputedStyle(e).borderTopColor), aboutBorder, 'About is not a card link; its border stays static');
     await about.locator('a').first().focus();
     assert.equal(await about.evaluate(e => getComputedStyle(e).borderTopColor), aboutBorder, 'inline link focus does not highlight the card');
-    await page.reload(); assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-166');
+    await page.reload(); assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'pigment-01');
     await page.locator('.desktop-nav a[href$="/enjoying"]').click(); await page.waitForURL('**/enjoying'); await page.waitForTimeout(350);
-    assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-166');
+    assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'pigment-01');
     assert(await page.locator('[data-card-colors-picker]').isVisible());
     const gridPicker = page.locator('[data-card-colors-picker]');
     await gridPicker.locator('summary').click();
@@ -108,5 +122,5 @@ try {
     assert.equal(await page.locator('[data-card-colors-picker]').isVisible(), width > 640);
     assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth));
   }
-  await context.close(); console.log('15 Wada light/dark pairs: typography, texture/gradient contrast, scope, persistence, responsive picker, and borders passed.');
+  await context.close(); console.log('15 pigment light/dark pairs: SVG turbulence, typography, texture/gradient contrast, scope, persistence, responsive picker, and borders passed.');
 } finally { await browser.close(); }

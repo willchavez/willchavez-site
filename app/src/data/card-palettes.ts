@@ -1,7 +1,8 @@
+import { pigmentImage, type PigmentFinish } from './card-surfaces';
 export type CardSwatch = { fill: string; ink: string; muted: string; accent: string; image: string; size: string };
 export type CardColors = readonly [CardSwatch, CardSwatch, CardSwatch];
-export type CardPalette = { id: string; label: string; description: string; bodyFont: string; titleFont: string; titleStyle: string; titleWeight: number; radius: string; combination: number; light: CardColors; dark: CardColors };
-type Finish = 'flat' | 'grain' | 'glass' | 'linen' | 'wash' | 'diagonal' | 'rules' | 'dots' | 'glow' | 'speckle' | 'grid' | 'sunset';
+export type CardPalette = { id: string; label: string; description: string; bodyFont: string; titleFont: string; titleStyle: string; titleWeight: number; radius: string; light: CardColors; dark: CardColors };
+type Finish = PigmentFinish;
 type Font = keyof typeof fonts;
 const fonts = {
   serif: '"Source Serif 4", Georgia, serif',
@@ -19,65 +20,51 @@ function contrast(a: string, b: string) {
   return (Math.max(x, y) + .05) / (Math.min(x, y) + .05);
 }
 function swatch(fill: string, tone: number, dark: boolean, finish: Finish): CardSwatch {
-  let high = mix(fill, '#fffaf0', dark ? .965 : .91);
-  let low = mix(fill, '#171b1c', dark ? .98 : .96);
-  let bloom = mix(fill, ['#de967c', '#e8be63', '#80b5a2'][tone], dark ? .94 : .83);
-  const candidates = ['#101513', '#fffdf3'];
-  const score = (ink: string) => Math.min(...[fill, high, low, bloom].map(bg => contrast(ink, bg)));
-  let ink = candidates.reduce((a, b) => score(a) > score(b) ? a : b);
-  // Mid-value pigments need a narrower finish range to keep type readable everywhere.
-  if (score(ink) < 4.8) {
-    high = mix(fill, '#fffaf0', .985); low = mix(fill, '#171b1c', .985); bloom = mix(fill, high, .5);
-    ink = candidates.reduce((a, b) => score(a) > score(b) ? a : b);
-  }
-  if (score(ink) < 4.5) ink = ['#000000', '#ffffff'].reduce((a, b) => score(a) > score(b) ? a : b);
-  const mutedCandidate = mix(ink, fill, .9);
-  const muted = score(mutedCandidate) >= 4.6 ? mutedCandidate : ink;
-  const images: Record<Finish, string> = {
-    flat: 'none',
-    grain: `repeating-radial-gradient(ellipse at 17% 31%,${low} 0 .55px,transparent .75px 3.5px),linear-gradient(125deg,${high},${fill})`,
-    glass: `radial-gradient(ellipse at 8% 0%,${high},transparent 65%),linear-gradient(145deg,${fill},${low})`,
-    linen: `repeating-linear-gradient(0deg,${low} 0 .6px,transparent .6px 4px),repeating-linear-gradient(90deg,${high} 0 .6px,transparent .6px 5px)`,
-    wash: `radial-gradient(ellipse at 100% 0%,${bloom},transparent 65%),radial-gradient(ellipse at 0% 100%,${high},transparent 75%)`,
-    diagonal: `linear-gradient(135deg,${high} 0%,${fill} 50%,${bloom} 100%)`,
-    rules: `repeating-linear-gradient(0deg,transparent 0 31px,${low} 31px 32px)`,
-    dots: `radial-gradient(circle,${low} .7px,transparent .9px)`,
-    glow: `radial-gradient(ellipse at 0% 0%,${high},transparent 80%),linear-gradient(160deg,${fill},${bloom})`,
-    speckle: `radial-gradient(circle at 20% 30%,${low} .8px,transparent 1px),radial-gradient(circle at 70% 80%,${high} .7px,transparent 1px)`,
-    grid: `repeating-linear-gradient(0deg,transparent 0 23px,${low} 23px 24px),repeating-linear-gradient(90deg,transparent 0 23px,${low} 23px 24px)`,
-    sunset: `linear-gradient(155deg,${high} 0%,${fill} 48%,${bloom} 100%)`,
+  const candidates = ['#101513', '#fffdf3', '#000000', '#ffffff'];
+  let ink = candidates.slice(0, 2).reduce((a, b) => contrast(a, fill) > contrast(b, fill) ? a : b);
+  if (contrast(ink, fill) < 5) ink = candidates.reduce((a, b) => contrast(a, fill) > contrast(b, fill) ? a : b);
+  const floor = Math.min(4.9, contrast(ink, fill) - .01);
+  const safe = (color: string) => {
+    for (let i = 0; i < 16 && contrast(ink, color) < floor; i++) color = mix(color, fill, .7);
+    return color;
   };
-  const size = finish === 'grain' ? '7px 9px, auto' : finish === 'dots' ? '4px 4px' : finish === 'speckle' ? '11px 13px, 17px 19px' : 'auto';
-  return { fill, ink, muted, accent: ink, image: images[finish], size };
+  const high = safe(mix(fill, '#f7efdd', dark ? .84 : .76));
+  const low = safe(mix(fill, '#182322', dark ? .78 : .86));
+  const bloom = safe(mix(fill, ['#b89b66', '#a6c0af', '#a76b5c'][tone], dark ? .65 : .62));
+  const score = (text: string) => Math.min(...[fill, high, low, bloom].map(bg => contrast(text, bg)));
+  const candidate = mix(ink, fill, .9);
+  const muted = score(candidate) >= 4.6 ? candidate : ink;
+  return { fill, ink, muted, accent: ink, image: pigmentImage(finish, fill, low, high, bloom, 17 + tone * 29), size: '100% 100%' };
 }
+
 function study(id: string, label: string, description: string, fills: readonly [string, string, string], night: readonly [string, string, string], finish: Finish, body: Font, title: Font, radius: string): CardPalette {
   const colors = (values: readonly [string, string, string], dark: boolean): CardColors => [swatch(values[0], 0, dark, finish), swatch(values[1], 1, dark, finish), swatch(values[2], 2, dark, finish)];
   return {
-    id, label, description, combination: Number(id.match(/\d+/)?.[0]), bodyFont: fonts[body], titleFont: fonts[title], radius,
-    titleStyle: finish === 'wash' || finish === 'sunset' ? 'italic' : 'normal',
+    id, label, description, bodyFont: fonts[body], titleFont: fonts[title], radius,
+    titleStyle: finish === 'velvet' ? 'italic' : 'normal',
     titleWeight: title === 'sans' || title === 'book' ? 600 : 500,
     light: colors(fills, false),
     dark: colors(night, true),
   };
 }
-/** Fifteen contrasting Wada combinations, digitized at https://sanzo-wada.dmbk.io/assets/colors.json.
- * Light uses the source colors except the retained softened 121 reference.
- * Each has an individually composed dark palette, finish, typography, and shape.
+/** New combinations built from Will’s favorite Wada pigments (125, 139, 140, 160, 167, 200, 231).
+ * These are original pairings, not numbered Wada reproductions. Burnished amber replaces the sorbet orange.
+ * Surface references: tarng.com (broad turbulence and displacement), CSS-Tricks “Grainy Gradients” (paper tooth).
  * Only About’s top blocks and Enjoying Grid consume these tokens. */
 export const cardPalettes: readonly CardPalette[] = [
-  study("wada-166", "01 · 166 / Coral & forest", "Coral, butter yellow, and deep forest; ember, ochre, and pine after dark.", ["#ff616b", "#faed8f", "#0f261f"], ["#8a4a46", "#746735", "#203c31"], "flat", "serif", "book", "1.2rem"),
-  study("wada-167", "02 · 167 / Aqua & indigo", "Ecru and icy aqua meet indigo; smoky brass, lagoon, and midnight at night.", ["#c0b490", "#abf5ed", "#003e83"], ["#615a45", "#3d6e69", "#1e355c"], "linen", "serif", "serif", ".7rem"),
-  study("wada-174", "03 · 174 / Pink & plum", "Pink and lavender against plum; mulberry, dusty lilac, and aubergine at night.", ["#ffa6d9", "#bfabcc", "#6b2e63"], ["#75516b", "#62546e", "#49263f"], "glow", "sans", "book", "1.7rem"),
-  study("wada-140", "04 · 140 / Amber & petrol", "Amber, petrol teal, and slate; tobacco, deep teal, and blue slate after dark.", ["#fa9442", "#008aa1", "#1b3644"], ["#885a35", "#255765", "#243b48"], "diagonal", "sans", "sans", "1rem"),
-  study("wada-139", "05 · 139 / Blue hour", "Clear blue, near-black indigo, and mineral gray; storm, midnight, and sea glass at night.", ["#96bfe6", "#000831", "#b5d1cc"], ["#365d7e", "#101c37", "#4b6863"], "flat", "sans", "sans", "1.6rem"),
-  study("wada-137", "06 · 137 / Vermilion & pistachio", "Red, cinnamon buff, and pistachio on grainy stock; oxblood, bronze, and fern at night.", ["#c9303e", "#ffbf6e", "#56aa69"], ["#772f3d", "#886239", "#3d664b"], "grain", "serif", "book", ".35rem"),
-  study("wada-125", "07 · 125 / Seafoam & violet", "Fawn, seafoam, and violet-blue glass; rosewood, jade, and violet ink after dark.", ["#d1b0b3", "#29bdad", "#202d85"], ["#6f5056", "#286863", "#292f5c"], "glass", "sans", "sans", "1.9rem"),
-  study("wada-160", "08 · 160 / Chartreuse atlas", "Sulphur yellow, umber, and Medici blue on a fine grid; moss gold, walnut, and peacock at night.", ["#baa600", "#5e4017", "#417777"], ["#756c29", "#493923", "#31595b"], "grid", "sans", "mono", ".4rem"),
-  study("wada-231", "09 · 231 / Rose & electric blue", "Cameo pink, russet, and Olympic blue in a dot screen; mauve, mahogany, and cobalt at night.", ["#e6adcf", "#681916", "#4f8fe6"], ["#785769", "#482a2a", "#365580"], "dots", "sans", "sans", "1.1rem"),
-  study("wada-178", "10 · 178 / Jade watercolor", "Ivory, glaucous blue, and jade pigment blooms; antique gold, malachite, and deep jade at night.", ["#ebd999", "#a6e6db", "#2dbc94"], ["#71633e", "#3b6866", "#2b5a4b"], "wash", "serif", "serif", "1.5rem"),
-  study("wada-190", "11 · 190 / Vermilion & ink", "Ivory buff, orange-red, and black letterpress; old gold, burnt orange, and charcoal at night.", ["#ebd999", "#de4500", "#000000"], ["#726240", "#803c26", "#1d2220"], "grain", "serif", "book", ".25rem"),
-  study("wada-180", "12 · 180 / Apricot & lilac", "Apricot, mauve, and gray-green in slanted light; copper, amethyst, and eucalyptus after dark.", ["#ffbf6e", "#9161f2", "#b5d1cc"], ["#85613d", "#58467f", "#50655f"], "diagonal", "sans", "sans", "1.4rem"),
-  study("wada-200", "13 · 200 / Carmine garden", "Carmine, olive buff, and leaf green on notebook rules; wine, olive, and woodland at night.", ["#a10b2b", "#bcd382", "#66ab56"], ["#662b42", "#667147", "#35523a"], "rules", "serif", "serif", ".6rem"),
-  study("wada-213", "14 · 213 / Sunlit sorbet", "Salmon, vivid yellow, and icy blue; dusty coral, saffron, and lagoon at night.", ["#f59994", "#ffe600", "#abf5ed"], ["#83534f", "#7c6d30", "#34676a"], "sunset", "sans", "book", "1.8rem"),
-  study("wada-121-soft", "15 · 121 / Familiar earth", "The softened clay, peach, and sage reference; your earlier brown, salmon, and olive at night.", ["#cfb3a3", "#e7c4a6", "#b8c39d"], ["#4b3830", "#73543f", "#424c32"], "flat", "serif", "serif", "1.3rem"),
+  study("pigment-01", "01 \u00b7 Smoked brass", "Smoky brass, mineral gray, and deep russet in clouded pigment.", ["#615a45", "#b5d1cc", "#681916"], ["#534e3c", "#425b56", "#4f2427"], "cloud", "serif", "book", "1.2rem"),
+  study("pigment-02", "02 \u00b7 Fawn lithograph", "Fawn and sulphur yellow, anchored by blue-black ink. Fine paper tooth.", ["#d1b0b3", "#baa600", "#293e40"], ["#6f5056", "#756c29", "#233b3e"], "paper", "sans", "sans", ".6rem"),
+  study("pigment-03", "03 \u00b7 Olive ink bath", "Olive buff, russet, and chalk with broad marbled ink ribbons.", ["#bcd382", "#681916", "#e7e2d4"], ["#667147", "#482a2a", "#524e44"], "marble", "serif", "serif", "1.5rem"),
+  study("pigment-04", "04 \u00b7 Burnished amber", "Antique amber, mineral gray, and walnut with a brushed finish.", ["#b48643", "#b5d1cc", "#49382d"], ["#795c36", "#4b6863", "#3f3029"], "brushed", "sans", "sans", "1rem"),
+  study("pigment-05", "05 \u00b7 Fawn after smoke", "Fawn, smoky brass, and charcoal with soft pools of pigment.", ["#d1b0b3", "#615a45", "#263237"], ["#71585e", "#57513c", "#26353a"], "cloud", "serif", "book", "1.7rem"),
+  study("pigment-06", "06 \u00b7 Sulphur contour", "Sulphur yellow, mineral smoke, and russet. Organic topographic bands.", ["#baa600", "#b6beb5", "#681916"], ["#776d2b", "#4d5b55", "#51282c"], "contour", "sans", "mono", ".4rem"),
+  study("pigment-07", "07 \u00b7 Mineral velvet", "Mineral gray, olive buff, and deep ink with diffuse, velvety light.", ["#b5d1cc", "#bcd382", "#263d40"], ["#405f5b", "#65704a", "#243e42"], "velvet", "serif", "serif", "1.6rem"),
+  study("pigment-08", "08 \u00b7 Russet edition", "Russet, fawn, and limestone on softly grained stock.", ["#681916", "#d1b0b3", "#d9d6c8"], ["#572b2b", "#725762", "#514e44"], "paper", "serif", "book", ".3rem"),
+  study("pigment-09", "09 \u00b7 Amber stone", "Burnished amber, olive buff, and graphite in displaced stone-like layers.", ["#bd8a3e", "#bcd382", "#303c3b"], ["#805f37", "#596344", "#293b3a"], "marble", "sans", "sans", "1.3rem"),
+  study("pigment-10", "10 \u00b7 Brass foil", "Smoky brass, sulphur yellow, and chalk with fine raked grain.", ["#615a45", "#baa600", "#e9e3d4"], ["#615a45", "#746b2d", "#514b3e"], "brushed", "serif", "book", ".7rem"),
+  study("pigment-11", "11 \u00b7 Mineral wine", "Mineral gray, fawn, and wine. Clouded color with clean editorial type.", ["#b5d1cc", "#d1b0b3", "#5c2632"], ["#4b6863", "#6f5056", "#4b2732"], "cloud", "sans", "book", "1.4rem"),
+  study("pigment-12", "12 \u00b7 Olive atmosphere", "Olive buff and fawn, grounded by smoky green. Soft atmospheric fields.", ["#bcd382", "#d1b0b3", "#454e42"], ["#667147", "#6e5258", "#364739"], "velvet", "serif", "serif", "1.8rem"),
+  study("pigment-13", "13 \u00b7 Russet gold", "Deep russet, antique amber, and porcelain, with fine print grain.", ["#681916", "#b48643", "#e9e5da"], ["#562b2a", "#7b603b", "#514c40"], "paper", "serif", "book", ".5rem"),
+  study("pigment-14", "14 \u00b7 Fawn mineral swirl", "Fawn, sulphur, and mineral gray with broad flowing marbling.", ["#d1b0b3", "#baa600", "#b5d1cc"], ["#70505c", "#736c30", "#416260"], "marble", "sans", "sans", "1.9rem"),
+  study("pigment-15", "15 \u00b7 Earth rebalanced", "Earthy brown, mineral gray, and smoky brass; deeper anchors and diffused light.", ["#8b664c", "#b5d1cc", "#615a45"], ["#604636", "#4c6259", "#615a45"], "velvet", "serif", "book", "1.1rem"),
 ];

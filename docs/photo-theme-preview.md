@@ -4,29 +4,36 @@ Blue & Gold remains the site palette in this preview. A Card colors picker appea
 
 The palette pairs warm paper and blue ink in light mode with a blue field, aqua text, and gold accents in dark mode. Standalone presentations use the same colors.
 
-The picker contains 15 contrasting combinations from Sanzo Wada, replacing the set limited to 121. The reference is https://sanzo-wada.dmbk.io/assets/colors.json. Light uses the digitized source colors, except the familiar softened 121 reference. Every study has a distinct, explicitly composed dark palette; these are adaptations rather than original Wada swatches.
+The picker contains 15 original pigment studies built from Will’s favorites: smoky brass from 167 (`#615a45`), mineral gray from 139 (`#b5d1cc`), fawn from 125 (`#d1b0b3`), sulphur yellow from 160 (`#baa600`), russet from 231 (`#681916`), and olive buff from 200 (`#bcd382`). Amber is burnished toward ochre (`#b48643` / `#bd8a3e`) instead of the sorbet orange. The earth study now pairs brown with mineral and brass, with stronger value differences. These are original combinations of selected Wada pigments and complementary neutrals, rather than reproductions of numbered combinations.
 
-| Study | Wada combination | Direction |
-| --- | --- | --- |
-| 01 Coral & forest (default) | 166 | Coral, butter, forest → ember, ochre, pine |
-| 02 Aqua & indigo | 167 | Ecru, icy aqua, indigo → brass, lagoon, midnight |
-| 03 Pink & plum | 174 | Pink, lavender, plum → mulberry, lilac, aubergine |
-| 04 Amber & petrol | 140 | Amber, teal, slate → tobacco, deep teal, blue slate |
-| 05 Blue hour | 139 | Blue, indigo, gray → storm, midnight, sea glass |
-| 06 Vermilion & pistachio | 137 | Red, cinnamon, pistachio → oxblood, bronze, fern |
-| 07 Seafoam & violet | 125 | Fawn, seafoam, violet-blue → rosewood, jade, violet ink |
-| 08 Chartreuse atlas | 160 | Yellow, umber, Medici blue → moss gold, walnut, peacock |
-| 09 Rose & electric blue | 231 | Cameo pink, russet, blue → mauve, mahogany, cobalt |
-| 10 Jade watercolor | 178 | Ivory, glaucous blue, jade → antique gold, malachite, deep jade |
-| 11 Vermilion & ink | 190 | Ivory, orange-red, black → old gold, burnt orange, charcoal |
-| 12 Apricot & lilac | 180 | Apricot, mauve, gray-green → copper, amethyst, eucalyptus |
-| 13 Carmine garden | 200 | Carmine, olive, leaf → wine, olive, woodland |
-| 14 Sunlit sorbet | 213 | Salmon, yellow, icy blue → coral, saffron, lagoon |
-| 15 Familiar earth | 121 | Previous softened 121 for comparison, including its approved dark colors |
+References inspected:
+- https://tarng.com/ — broad SVG `feTurbulence` fields plus displacement create organic color flow.
+- https://css-tricks.com/grainy-gradients/ — finer fractal noise gives gradients the tooth of printed stock.
+- https://sanzo-wada.dmbk.io/assets/colors.json — the digitized Wada pigment reference.
 
-Each combination has its own serif/sans/mono typography, shape, and finish: flat pigment, linen, grain, glow, glass, dot screen, notebook rules, graph paper, or gradients. Typography and surfaces remain scoped to About’s top blocks and Enjoying Grid. No new font downloads or moving textures are introduced. Text color is chosen per swatch against all texture/gradient colors; finishes on mid-value pigments use a narrower range to keep at least 4.5:1 text contrast throughout.
+| Study | Palette / surface |
+| --- | --- |
+| 01 Smoked brass (default) | Brass, mineral, russet / clouded pigment |
+| 02 Fawn lithograph | Fawn, sulphur, ink / fine paper tooth |
+| 03 Olive ink bath | Olive, russet, chalk / displaced marbling |
+| 04 Burnished amber | Antique amber, mineral, walnut / brushed grain |
+| 05 Fawn after smoke | Fawn, brass, charcoal / soft pigment pools |
+| 06 Sulphur contour | Sulphur, mineral smoke, russet / organic bands |
+| 07 Mineral velvet | Mineral, olive, deep ink / diffuse fields |
+| 08 Russet edition | Russet, fawn, limestone / grained stock |
+| 09 Amber stone | Amber, olive, graphite / marbled layers |
+| 10 Brass foil | Brass, sulphur, chalk / raked grain |
+| 11 Mineral wine | Mineral, fawn, wine / clouded pigment |
+| 12 Olive atmosphere | Olive, fawn, smoky green / atmospheric fields |
+| 13 Russet gold | Russet, antique amber, porcelain / print grain |
+| 14 Fawn mineral swirl | Fawn, sulphur, mineral / flowing marbling |
+| 15 Earth rebalanced | Brown, mineral, brass / diffused light |
 
-The picker shows a description covering light and dark, texture-aware swatches, and Previous/Next controls. The avatar switches modes while keeping the selected study. Choices persist for the tab and page navigation. Removed choices fall back to 01. About assigns the first tone to learning, third to music, and second to community. Enjoying retains its stable tone pattern and recalculates masonry on type changes. Enjoying List and mobile Enjoying have no study picker or study styling.
+Each study has its own light and dark colors, typography, and shape. Surfaces are deterministic static SVG background images: broad fractal noise is mapped into a bounded pigment range, fine noise adds tooth, and displacement warps marbled artwork. The filter never touches text, covers, players, or the viewport. There is no texture animation or pointer-catching overlay. Solid fills provide a fallback while images load.
+
+Text colors are chosen against every pigment endpoint; proposed highlight/shadow colors are pulled toward the base fill when needed for contrast. The browser check parses actual SVG stops and color-transfer tables, validating at least 4.5:1 contrast throughout the color range in both modes. It also checks valid turbulence images, distinct palettes, typography, shapes, picker controls, scope, persistence, masonry reflow, and responsive behavior.
+
+The picker shows descriptions and surface-aware swatches, with Previous/Next controls. The avatar switches modes while keeping the study. Choices persist for the tab and page navigation. Removed choices fall back to 01. About assigns the first tone to learning, third to music, and second to community. Enjoying retains its stable tone pattern and recalculates masonry on type changes. Enjoying List and mobile Enjoying have no study picker or study styling.
 
 In Projects Grid, the preview frame and title are separate native links. Only the preview frame scales and receives a shadow on hover; captions stay still. Both links preserve category/view/scroll return context. List keeps its full-card link and hover treatment. CSS explicitly respects filtered cards' hidden state after the List layout uses a grid.
 
