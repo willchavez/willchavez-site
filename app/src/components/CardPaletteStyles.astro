@@ -1,6 +1,7 @@
 ---
 import { cardPalettes, type CardColors } from '../data/card-palettes';
-const vars = (c: CardColors) => `--card-ocean:${c.fills[0]};--card-aqua:${c.fills[1]};--card-butter:${c.fills[2]};--card-ink:${c.ink};--card-muted:${c.muted};--card-accent:${c.accent};`;
+const tones = ['ocean', 'aqua', 'butter'];
+const vars = (colors: CardColors) => colors.map((c, i) => `--card-${tones[i]}:${c.fill};--card-${tones[i]}-ink:${c.ink};--card-${tones[i]}-muted:${c.muted};--card-${tones[i]}-accent:${c.accent};`).join('');
 const rules = (selector: string, light: CardColors, dark: CardColors) => `${selector}{${vars(light)}}@media(prefers-color-scheme:dark){${selector}:not([data-theme="light"]){${vars(dark)}}}${selector}[data-theme="dark"]{${vars(dark)}}`;
 const css = rules(':root', cardPalettes[0].light, cardPalettes[0].dark) + cardPalettes.map(p => rules(`:root[data-card-palette="${p.id}"]`, p.light, p.dark)).join('');
 ---

@@ -29,7 +29,8 @@ try {
     const picker = page.locator('[data-card-colors-picker]');
     await picker.locator('summary').click();
     const ids = await picker.locator('option').evaluateAll(es => es.map(e => e.value));
-    assert.equal(ids.length, 10);
+    assert.equal(ids.length, 6);
+    assert(ids.every(id => id.startsWith('wada-')), 'only Wada combinations remain');
     for (const id of ids) {
       await picker.locator('select').selectOption(id);
       assert.equal(await page.locator('body').evaluate(e => getComputedStyle(e).backgroundColor), shell);
@@ -42,18 +43,24 @@ try {
       }));
       for (const card of cards) for (const text of card.colors) assert(contrast(card.bg, text) >= 4.5, `${mode}/${id}: ${card.bg}/${text} contrast ${contrast(card.bg, text)}`);
     }
-    await picker.locator('select').selectOption('forest');
+    await picker.locator('select').selectOption('wada-203');
     await page.keyboard.press('Escape'); assert.equal(await picker.getAttribute('open'), null);
-    await border(page, '.about-cards .about-card', mode);
-    await page.reload(); assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'forest');
+    const about = page.locator('.about-cards .about-card').first();
+    await page.mouse.move(0, 0); await page.waitForTimeout(220);
+    const aboutBorder = await about.evaluate(e => getComputedStyle(e).borderTopColor);
+    await about.hover(); await page.waitForTimeout(220);
+    assert.equal(await about.evaluate(e => getComputedStyle(e).borderTopColor), aboutBorder, 'About is not a card link; its border stays static');
+    await about.locator('a').first().focus();
+    assert.equal(await about.evaluate(e => getComputedStyle(e).borderTopColor), aboutBorder, 'inline link focus does not highlight the card');
+    await page.reload(); assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-203');
     await page.locator('.desktop-nav a[href$="/enjoying"]').click(); await page.waitForURL('**/enjoying'); await page.waitForTimeout(350);
-    assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'forest');
+    assert.equal(await page.locator('html').getAttribute('data-card-palette'), 'wada-203');
     assert(await page.locator('[data-card-colors-picker]').isVisible());
     await border(page, '#list .ent', mode);
     await page.getByRole('button', { name: 'List view', exact: true }).click();
     assert(!await page.locator('[data-card-colors-picker]').isVisible());
     await border(page, '#list .ent', mode);
-    await page.goto(base + '/writing');
+    await page.goto(base + '/notes');
     assert.equal(await page.locator('[data-card-colors-picker]').count(), 0);
     await border(page, '.note-list .note-card', mode);
     await page.goto(base + '/portfolio');
@@ -74,5 +81,5 @@ try {
     assert.equal(await page.locator('[data-card-colors-picker]').isVisible(), width > 640);
     assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth));
   }
-  await context.close(); console.log('Card palettes, contrast, scope, persistence, responsive picker, and light/dark hover borders passed.');
+  await context.close(); console.log('Wada palettes, contrast, scope, persistence, responsive picker, static About borders, and linked-card hover borders passed.');
 } finally { await browser.close(); }

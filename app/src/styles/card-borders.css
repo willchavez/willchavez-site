@@ -11,7 +11,6 @@ body #portfolio-results[data-view="grid"] .project-image {
   body .note-list li.note-card:hover,
   body .portfolio-page #portfolio-results[data-view="list"] .portfolio-card:hover,
   body #enjoying-results[data-view] #list .ent:hover,
-  body.route-about .about-cards .about-card:hover,
   body #portfolio-results[data-view="grid"] .project-open:hover .project-image {
     border-color: var(--card-border-hover);
   }
@@ -19,11 +18,9 @@ body #portfolio-results[data-view="grid"] .project-image {
 body .note-list li.note-card:has(:focus-visible),
 body .portfolio-page #portfolio-results[data-view="list"] .portfolio-card:has(:focus-visible),
 body #enjoying-results[data-view] #list .ent:has(:focus-visible),
-body.route-about .about-cards .about-card:has(:focus-visible),
 body #portfolio-results[data-view="grid"] .project-open:focus-visible .project-image {
   border-color: var(--card-border-hover);
 }
 @media (prefers-reduced-motion: no-preference) {
-  .about-cards .about-card,
   #portfolio-results[data-view="grid"] .project-image { transition: border-color 180ms ease; }
 }

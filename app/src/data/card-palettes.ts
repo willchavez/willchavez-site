@@ -1,245 +1,93 @@
-export type CardColors = { fills: readonly [string, string, string]; ink: string; muted: string; accent: string };
-export type CardPalette = { id: string; label: string; light: CardColors; dark: CardColors };
-/** These tokens are consumed only by About’s top blocks and Enjoying Grid. */
+export type CardSwatch = { fill: string; ink: string; muted: string; accent: string };
+export type CardColors = readonly [CardSwatch, CardSwatch, CardSwatch];
+export type CardPalette = { id: string; label: string; combination: number; colorNames: readonly string[]; light: CardColors; dark: CardColors };
+/** Wada triads from A Dictionary of Color Combinations, digitized at https://sanzo-wada.dmbk.io/assets/colors.json.
+ * Light uses the reference hex values; dark adapts their hues for lower-light surfaces.
+ * Per-swatch text preserves readable contrast without flattening the original combinations.
+ * Only About’s top blocks and Enjoying Grid consume these tokens. */
 export const cardPalettes = [
   {
-    "id": "soft",
-    "label": "Blue & gold \u00b7 soft",
-    "light": {
-      "fills": [
-        "#e2e7de",
-        "#d9e6df",
-        "#e9e5cc"
-      ],
-      "ink": "#264f63",
-      "muted": "#435d63",
-      "accent": "#2c6079"
-    },
-    "dark": {
-      "fills": [
-        "#2e586b",
-        "#315f61",
-        "#4a503e"
-      ],
-      "ink": "#dcfff6",
-      "muted": "#c6dfd8",
-      "accent": "#dad39a"
-    }
+    id: "wada-203", label: "203 · Lemon, cinnamon & moss", combination: 203,
+    colorNames: ["Pale Lemon Yellow", "Vinaceous Cinnamon", "Lincoln Green"],
+    light: [
+      {"fill": "#fff59e", "ink": "#17201f", "muted": "#3c4233", "accent": "#17201f"},
+      {"fill": "#f59994", "ink": "#17201f", "muted": "#3b3332", "accent": "#17201f"},
+      {"fill": "#405416", "ink": "#fcf8eb", "muted": "#dedec9", "accent": "#fcf8eb"},
+    ],
+    dark: [
+      {"fill": "#6a6325", "ink": "#fcf8eb", "muted": "#e5e0cb", "accent": "#fcf8eb"},
+      {"fill": "#6a2925", "ink": "#fcf8eb", "muted": "#e5d7cb", "accent": "#fcf8eb"},
+      {"fill": "#2d3914", "ink": "#fcf8eb", "muted": "#dbd9c9", "accent": "#fcf8eb"},
+    ],
   },
   {
-    "id": "vivid",
-    "label": "Blue & gold \u00b7 vivid",
-    "light": {
-      "fills": [
-        "#d0e2ed",
-        "#c8e2d4",
-        "#eee0a8"
-      ],
-      "ink": "#264f63",
-      "muted": "#435d63",
-      "accent": "#2c6079"
-    },
-    "dark": {
-      "fills": [
-        "#315d78",
-        "#2d615c",
-        "#5a5036"
-      ],
-      "ink": "#dcfff6",
-      "muted": "#c6dfd8",
-      "accent": "#dad39a"
-    }
+    id: "wada-167", label: "167 · Ecru, pale blue & indigo", combination: 167,
+    colorNames: ["Ecru", "Pale King's Blue", "Vandar Poel's Blue"],
+    light: [
+      {"fill": "#c0b490", "ink": "#17201f", "muted": "#323831", "accent": "#17201f"},
+      {"fill": "#abf5ed", "ink": "#17201f", "muted": "#2f4240", "accent": "#17201f"},
+      {"fill": "#003e83", "ink": "#fcf8eb", "muted": "#d4dada", "accent": "#fcf8eb"},
+    ],
+    dark: [
+      {"fill": "#5b5134", "ink": "#fcf8eb", "muted": "#e2ddce", "accent": "#fcf8eb"},
+      {"fill": "#256a62", "ink": "#fcf8eb", "muted": "#dae1d5", "accent": "#fcf8eb"},
+      {"fill": "#142539", "ink": "#fcf8eb", "muted": "#d7d6cf", "accent": "#fcf8eb"},
+    ],
   },
   {
-    "id": "forest",
-    "label": "Forest",
-    "light": {
-      "fills": [
-        "#e7ebe2",
-        "#e8ecd9",
-        "#f6f7ef"
-      ],
-      "ink": "#253f35",
-      "muted": "#526457",
-      "accent": "#3d6651"
-    },
-    "dark": {
-      "fills": [
-        "#375342",
-        "#425c45",
-        "#2b483b"
-      ],
-      "ink": "#ecf3df",
-      "muted": "#c1d0bc",
-      "accent": "#c4d58e"
-    }
+    id: "wada-174", label: "174 · Pink, lavender & taupe", combination: 174,
+    colorNames: ["Corinthian Pink", "Grayish Lavender - B", "Taupe Brown"],
+    light: [
+      {"fill": "#ffa6d9", "ink": "#17201f", "muted": "#3c353d", "accent": "#17201f"},
+      {"fill": "#bfabcc", "ink": "#17201f", "muted": "#32363b", "accent": "#17201f"},
+      {"fill": "#6b2e63", "ink": "#fcf8eb", "muted": "#e5d8d5", "accent": "#fcf8eb"},
+    ],
+    dark: [
+      {"fill": "#6a254c", "ink": "#fcf8eb", "muted": "#e5d6d2", "accent": "#fcf8eb"},
+      {"fill": "#4b3659", "ink": "#fcf8eb", "muted": "#e0d9d4", "accent": "#fcf8eb"},
+      {"fill": "#351731", "ink": "#fcf8eb", "muted": "#dcd4cd", "accent": "#fcf8eb"},
+    ],
   },
   {
-    "id": "forest-moss",
-    "label": "Forest \u00b7 Moss",
-    "light": {
-      "fills": [
-        "#ebecdd",
-        "#e7e8d4",
-        "#f8f7eb"
-      ],
-      "ink": "#343c2c",
-      "muted": "#5d6450",
-      "accent": "#596b3e"
-    },
-    "dark": {
-      "fills": [
-        "#3c4532",
-        "#434d36",
-        "#30392a"
-      ],
-      "ink": "#f0f0da",
-      "muted": "#c5cbb4",
-      "accent": "#c6d18e"
-    }
+    id: "wada-121", label: "121 · Brown, salmon & olive", combination: 121,
+    colorNames: ["Brown", "Ochraceous Salmon", "Lincoln Green"],
+    light: [
+      {"fill": "#6c2b11", "ink": "#fcf8eb", "muted": "#e5d7c8", "accent": "#fcf8eb"},
+      {"fill": "#d99e73", "ink": "#17201f", "muted": "#36342c", "accent": "#17201f"},
+      {"fill": "#405416", "ink": "#fcf8eb", "muted": "#dedec9", "accent": "#fcf8eb"},
+    ],
+    dark: [
+      {"fill": "#391e14", "ink": "#fcf8eb", "muted": "#ddd5c9", "accent": "#fcf8eb"},
+      {"fill": "#6a4225", "ink": "#fcf8eb", "muted": "#e5dbcb", "accent": "#fcf8eb"},
+      {"fill": "#2d3914", "ink": "#fcf8eb", "muted": "#dbd9c9", "accent": "#fcf8eb"},
+    ],
   },
   {
-    "id": "forest-fern",
-    "label": "Forest \u00b7 Fern",
-    "light": {
-      "fills": [
-        "#e7efe3",
-        "#e2eddb",
-        "#f7fbf1"
-      ],
-      "ink": "#243f32",
-      "muted": "#526854",
-      "accent": "#326748"
-    },
-    "dark": {
-      "fills": [
-        "#2e553f",
-        "#355c42",
-        "#244a36"
-      ],
-      "ink": "#eafadf",
-      "muted": "#bfd5bc",
-      "accent": "#a9d9ae"
-    }
+    id: "wada-140", label: "140 · Gold, teal & slate", combination: 140,
+    colorNames: ["Golden Yellow", "Antwarp Blue", "Slate Color"],
+    light: [
+      {"fill": "#fa9442", "ink": "#17201f", "muted": "#3b3325", "accent": "#17201f"},
+      {"fill": "#008aa1", "ink": "#0d1413", "muted": "#0d1413", "accent": "#0d1413"},
+      {"fill": "#1b3644", "ink": "#fcf8eb", "muted": "#d8d9d0", "accent": "#fcf8eb"},
+    ],
+    dark: [
+      {"fill": "#694325", "ink": "#fcf8eb", "muted": "#e4dbcb", "accent": "#fcf8eb"},
+      {"fill": "#143339", "ink": "#fcf8eb", "muted": "#d7d8cf", "accent": "#fcf8eb"},
+      {"fill": "#162b37", "ink": "#fcf8eb", "muted": "#d7d7ce", "accent": "#fcf8eb"},
+    ],
   },
   {
-    "id": "forest-pine",
-    "label": "Forest \u00b7 Pine",
-    "light": {
-      "fills": [
-        "#e3ece5",
-        "#dde7df",
-        "#f4f8f2"
-      ],
-      "ink": "#1f3d37",
-      "muted": "#4b6460",
-      "accent": "#225f52"
-    },
-    "dark": {
-      "fills": [
-        "#2a4942",
-        "#2f4f47",
-        "#203e38"
-      ],
-      "ink": "#e6f4e9",
-      "muted": "#bad1c3",
-      "accent": "#9acbb1"
-    }
+    id: "wada-235", label: "235 · Ivory, orange & lavender", combination: 235,
+    colorNames: ["Ivory Buff", "Yellow Orange", "Grayish Lavender - B"],
+    light: [
+      {"fill": "#ebd999", "ink": "#17201f", "muted": "#393e33", "accent": "#17201f"},
+      {"fill": "#ff8c00", "ink": "#17201f", "muted": "#3c311a", "accent": "#17201f"},
+      {"fill": "#bfabcc", "ink": "#17201f", "muted": "#32363b", "accent": "#17201f"},
+    ],
+    dark: [
+      {"fill": "#6a5b25", "ink": "#fcf8eb", "muted": "#e5dfcb", "accent": "#fcf8eb"},
+      {"fill": "#553c1e", "ink": "#fcf8eb", "muted": "#e1daca", "accent": "#fcf8eb"},
+      {"fill": "#4b3659", "ink": "#fcf8eb", "muted": "#e0d9d4", "accent": "#fcf8eb"},
+    ],
   },
-  {
-    "id": "forest-lichen",
-    "label": "Forest \u00b7 Lichen",
-    "light": {
-      "fills": [
-        "#efedde",
-        "#eeedd6",
-        "#fbf9ed"
-      ],
-      "ink": "#383d2c",
-      "muted": "#63684c",
-      "accent": "#606832"
-    },
-    "dark": {
-      "fills": [
-        "#474a34",
-        "#505438",
-        "#3a3e2c"
-      ],
-      "ink": "#f5f1d7",
-      "muted": "#cecfb2",
-      "accent": "#d8d98d"
-    }
-  },
-  {
-    "id": "plum",
-    "label": "Plum",
-    "light": {
-      "fills": [
-        "#f0e6ed",
-        "#eee5ef",
-        "#faf3f7"
-      ],
-      "ink": "#50364e",
-      "muted": "#705b6d",
-      "accent": "#795676"
-    },
-    "dark": {
-      "fills": [
-        "#534058",
-        "#5c4a64",
-        "#47364e"
-      ],
-      "ink": "#f6e7f3",
-      "muted": "#d5bfd3",
-      "accent": "#e1b8ce"
-    }
-  },
-  {
-    "id": "clay",
-    "label": "Clay",
-    "light": {
-      "fills": [
-        "#f7e9de",
-        "#f3e5d4",
-        "#fff6ec"
-      ],
-      "ink": "#573d32",
-      "muted": "#756154",
-      "accent": "#9c4f37"
-    },
-    "dark": {
-      "fills": [
-        "#5e4439",
-        "#644b3c",
-        "#513a32"
-      ],
-      "ink": "#fff0df",
-      "muted": "#dfc5b7",
-      "accent": "#f4bd9c"
-    }
-  },
-  {
-    "id": "parchment",
-    "label": "Parchment",
-    "light": {
-      "fills": [
-        "#f7efea",
-        "#e5e8e2",
-        "#fffdfa"
-      ],
-      "ink": "#1a1a1a",
-      "muted": "#655e58",
-      "accent": "#9c4b2e"
-    },
-    "dark": {
-      "fills": [
-        "#33251e",
-        "#32312a",
-        "#241e19"
-      ],
-      "ink": "#e7dfd3",
-      "muted": "#aaa095",
-      "accent": "#e88665"
-    }
-  }
 ] as const satisfies readonly CardPalette[];

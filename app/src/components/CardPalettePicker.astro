@@ -5,13 +5,13 @@ const { className } = Astro.props;
 <details class:list={['card-color-picker', className]} data-card-colors-picker hidden>
   <summary>Card colors <span aria-hidden="true">⌄</span></summary>
   <div class="card-color-panel">
-    <label for="card-color-choice">Choose card colors</label>
+    <label for="card-color-choice">Wada color combinations</label>
     <select id="card-color-choice" data-card-color-choice>
       {cardPalettes.map(p => <option value={p.id}>{p.label}</option>)}
     </select>
     <div class="card-color-sample" aria-hidden="true"><i></i><i></i><i></i></div>
     <button type="button" data-card-color-next>Next colors →</button>
-    <p>Only About and Enjoying Grid cards. Light and dark colors follow your site mode.</p>
+    <p>Inspired by Sanzo Wada. About and Enjoying Grid only; colors follow light and dark mode.</p>
     <span class="sr-only" data-card-color-status role="status"></span>
   </div>
 </details>
