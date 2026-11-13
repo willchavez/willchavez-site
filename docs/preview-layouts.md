@@ -6,7 +6,7 @@ Enjoying's media labels are plain, borderless spans across the index, Home, and 
 
 Projects uses the same card-motion controller for desktop filtering, while retaining its existing standard grid and list geometry. The motion controller never chooses columns or row spans. Cards slide to their new positions, outgoing copies shrink/fade, and incoming cards have a short stagger. Rapid changes start from currently painted positions. Temporary copies are inert and removed on completion or navigation. Reduced motion applies filters immediately; mobile Projects filters instantly.
 
-Projects' List chips follow the size and rounded, borderless shape of Notes topics. Tags are explicitly curated per project and shared with its detail page, with at most two unless Will requests an exception. One is enough when a second adds little. Filter categories are independent of tags. Notes follow the same editorial rule in their Markdown topics, and place dates above tags in a right-aligned column beside the title, matching Enjoying's list. Every tag uses the same accent fill and text color within each theme. The browser check requires at least 4.5:1 text contrast and 1.2:1 separation between each chip fill and its card background.
+Projects' List chips follow the size and rounded, borderless shape of Notes topics. Tags are explicitly curated per project and shared with its detail page, with at most two unless Will requests an exception. One is enough when a second adds little. Filter categories are independent of tags. Notes follow the same editorial rule in their Markdown topics, and keep dates at the top right beside the title and place tags in a horizontal, wrapping row below the description. Every tag uses the same accent fill and text color within each theme. The browser check requires at least 4.5:1 text contrast and 1.2:1 separation between each chip fill and its card background.
 
 Enjoying's grid retains row spans while measuring to avoid the Safari scroll-clamping bug. Measurements ignore transforms. Earlier preview links with `?layout=cascade` or `?layout=editorial` open Grid on desktop; `?layout=cards` opens List. The desktop choice persists for the tab. Without JavaScript, Enjoying's ordinary list remains available.
 
@@ -17,3 +17,13 @@ Check a built preview:
 - `CHROMIUM_PATH=/usr/bin/chromium node app/scripts/notes-layout.browser.mjs http://localhost:4359`
 
 Set `BROWSER_ENGINE=webkit` for Safari's engine. Checks cover motion and interruption, final geometry, scrolling, native links, static labels, adaptive views, category chips and contrast, keyboard use, shared width, reduced motion, and fallback behavior. These layouts, filters, and tag treatments are approved for production.
+
+## Promoted card refinements
+
+Notes, Projects List, Enjoying Grid/List, About’s top blocks, and Projects Grid thumbnail frames have consistent 1px borders using the production theme’s existing tokens. Linked cards darken their borders on light-mode hover/focus and lighten in dark mode. About’s non-link cards retain static borders.
+
+Projects Grid animates only its preview frame; captions stay still and titles are separate links. Projects List, Notes, and Enjoying retain full-card hover, with reduced-motion and filtering behavior preserved. Notes tags sit below the description in a horizontal wrapping row, with individual tags staying on one line.
+
+These refinements were selected from preview commit `2444088`. Production’s original light/dark colors, avatar toggle, About surfaces, and Enjoying grid surfaces are preserved. Palette pickers, card studies, turbulence/refraction filters, and animated gradient backgrounds are excluded. The Ratboys post remains published.
+
+Run `CHROMIUM_PATH=/usr/bin/chromium node app/scripts/card-borders.browser.mjs BASE_URL` to verify borders, keyboard focus, preserved theme colors, and exclusion of experimental surfaces.

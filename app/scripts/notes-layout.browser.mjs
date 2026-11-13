@@ -21,7 +21,13 @@ try {
       return {
         title: rect(card.querySelector('.t')), meta: rect(meta),
         date: rect(meta.querySelector('time')), summary: rect(card.querySelector('.s')),
-        tags: [...meta.querySelectorAll('.note-topic')].map(rect),
+        tagRow: rect(card.querySelector('.note-topics')),
+        tagDirection: getComputedStyle(card.querySelector('.note-topics')).flexDirection,
+        tags: [...card.querySelectorAll('.note-topic')].map(tag => {
+          const text = document.createRange();
+          text.selectNodeContents(tag);
+          return { ...rect(tag), lines: text.getClientRects().length, clipped: tag.scrollWidth > tag.clientWidth };
+        }),
       };
     }));
     assert(cards.length > 0);
@@ -32,14 +38,20 @@ try {
       assert(card.summary.left <= card.title.left + 1, 'description starts at the left of the copy');
       if (width <= 820) assert(card.summary.right >= card.meta.right - 1, 'description reclaims the metadata column at narrow widths');
       assert(card.tags.length >= 1 && card.tags.length <= 2);
-      assert(card.date.bottom <= Math.min(...card.tags.map(tag => tag.top)) + 1, 'date stays above tags');
-      for (const tag of card.tags) assert(tag.left >= card.meta.left - 1 && tag.right <= card.meta.right + 1, 'tags fit the right column');
+      assert(card.tagRow.top >= card.summary.bottom - 1, 'tags sit beneath the description');
+      assert.equal(card.tagDirection, 'row', 'tags flow horizontally');
+      assert(Math.abs(card.tagRow.left - card.summary.left) < 1, 'tags align with the description');
+      for (const tag of card.tags) {
+        assert(tag.left >= card.tagRow.left - 1 && tag.right <= card.tagRow.right + 1, 'tags fit their row');
+        assert.equal(tag.lines, 1, 'each tag stays on one line');
+        assert(!tag.clipped, 'long tags remain fully visible');
+      }
     }
     assert(!await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), 'no horizontal overflow');
     if (process.env.NOTES_SCREENSHOTS_DIR && [393, 1440].includes(width)) {
       await page.screenshot({ path: `${process.env.NOTES_SCREENSHOTS_DIR}/notes-${engine.name()}-${colorScheme}-${width}.png` });
     }
     await context.close();
-    console.log(`${engine.name()} ${colorScheme} ${width}px: Notes top-right metadata, full-width descriptions, and tag containment passed`);
+    console.log(`${engine.name()} ${colorScheme} ${width}px: Notes top-right dates, tags beneath descriptions in horizontal rows, and single-line labels passed`);
   }
 } finally { await browser.close(); }

@@ -1,0 +1,26 @@
+/* Root colors keep all border states consistent with the current light/dark theme. */
+:root { --card-border: var(--hairline); --card-border-hover: color-mix(in srgb, var(--ink) 70%, var(--paper)); }
+body .note-list li.note-card,
+body .portfolio-page #portfolio-results[data-view="list"] .portfolio-card,
+body #enjoying-results[data-view] #list .ent,
+body.route-about .about-cards .about-card,
+body #portfolio-results[data-view="grid"] .project-image {
+  border: 1px solid var(--card-border);
+}
+@media (hover: hover) and (pointer: fine) {
+  body .note-list li.note-card:hover,
+  body .portfolio-page #portfolio-results[data-view="list"] .portfolio-card:hover,
+  body #enjoying-results[data-view] #list .ent:hover,
+  body #portfolio-results[data-view="grid"] .project-open:hover .project-image {
+    border-color: var(--card-border-hover);
+  }
+}
+body .note-list li.note-card:has(:focus-visible),
+body .portfolio-page #portfolio-results[data-view="list"] .portfolio-card:has(:focus-visible),
+body #enjoying-results[data-view] #list .ent:has(:focus-visible),
+body #portfolio-results[data-view="grid"] .project-open:focus-visible .project-image {
+  border-color: var(--card-border-hover);
+}
+@media (prefers-reduced-motion: no-preference) {
+  #portfolio-results[data-view="grid"] .project-image { transition: border-color 180ms ease; }
+}
