@@ -35,4 +35,4 @@ const stars = data.rating && (Number.isInteger(data.rating)
     <span class="enjoying-tag" data-kind={data.kind}>{data.kind}</span>
   </div>
 </div>
-{data.rating && <div class="rating" aria-label={`${data.rating} out of 5`}>{stars}</div>}
+{(data.rating || data.liked) && <div class="rating" aria-label={[data.rating && `${data.rating} out of 5`, data.liked && "Liked"].filter(Boolean).join(", ")}>{stars}{data.liked && <span aria-hidden="true"> ♥</span>}</div>}
