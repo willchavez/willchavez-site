@@ -105,10 +105,13 @@ const tilePattern = ["lead", "compact", "visual", "text", "compact", "visual", "
     results.dataset.kind = kind;
     let shown = 0;
     rows.forEach((r) => {
-      const ok = kind === "all" || r.dataset.kind === kind;
-      r.hidden = !ok; if (ok) shown++;
+      const hidden = kind !== "all" && r.dataset.kind !== kind;
+      if (r.hidden !== hidden) r.hidden = hidden;
+      if (hidden) return;
+      shown++;
       r.querySelectorAll<HTMLAnchorElement>("[data-enjoying-entry]").forEach((entry) => {
         const url = new URL(entry.href);
+        if (url.searchParams.get("from") === kind) return;
         url.searchParams.set("from", kind);
         entry.href = url.pathname + url.search;
       });
