@@ -21,7 +21,8 @@ export function initEnjoyingLayout(results: HTMLElement) {
     frame = 0;
     if (!active) return;
     container.querySelectorAll<HTMLImageElement>('img[srcset]').forEach(image => {
-      if (image.clientWidth) image.sizes = `${image.clientWidth}px`;
+      const sizes = `${image.clientWidth}px`;
+      if (image.clientWidth && image.sizes !== sizes) image.sizes = sizes;
     });
     if (results.dataset.view === 'list' || innerWidth < 700) {
       delete container.dataset.cascadeReady;
