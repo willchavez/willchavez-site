@@ -55,6 +55,7 @@ const enjoying = defineCollection({
     releaseDate: z.coerce.date().optional(),
     releaseDateSource: z.string().url().optional(),
     rating: z.number().min(0.5).max(5).multipleOf(0.5).optional(),
+    liked: z.boolean().optional(),
     cover: z.string().optional(),
     link: z.string().optional(),
     draft: z.boolean().default(false),
