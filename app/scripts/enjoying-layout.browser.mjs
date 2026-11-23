@@ -122,5 +122,26 @@ try {
   await ctx.close();
   const nojs = await browser.newContext({ javaScriptEnabled: false }); const fallback = await nojs.newPage();
   await fallback.goto(base + '/enjoying'); assert(await fallback.locator('.enjoying-view-toggle').isHidden()); assert(await fallback.locator('#list > .ent').first().isVisible()); await nojs.close();
-  console.log('Reduced motion and no-JavaScript fallback passed.');
+  const stable = await browser.newContext({ viewport: { width: 1200, height: 900 } });
+  const stablePage = await stable.newPage();
+  await stablePage.addInitScript(() => {
+    window.imageLoads = 0;
+    document.addEventListener('load', event => {
+      if (event.target instanceof HTMLImageElement) window.imageLoads++;
+    }, true);
+  });
+  await stablePage.goto(base + '/enjoying?view=grid');
+  await stablePage.evaluate(() => scrollTo(0, 1500));
+  await stablePage.waitForFunction(() => {
+    const visible = [...document.querySelectorAll('#list .ent img')]
+      .filter(image => { const rect = image.getBoundingClientRect(); return rect.bottom > 0 && rect.top < innerHeight; });
+    return visible.length > 0 && visible.every(image => image.complete && image.naturalWidth > 0);
+  });
+  await stablePage.waitForTimeout(300);
+  const loadsBefore = await stablePage.evaluate(() => window.imageLoads);
+  await stablePage.waitForTimeout(400);
+  const loadsAfter = await stablePage.evaluate(() => window.imageLoads);
+  assert(loadsAfter - loadsBefore <= 2, 'settled grid images do not keep reloading');
+  await stable.close();
+  console.log('Reduced motion, no-JavaScript fallback, and stable images passed.');
 } finally { await browser.close(); }
