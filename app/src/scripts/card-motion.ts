@@ -38,10 +38,10 @@ export function createCardMotion(results: HTMLElement, container: HTMLElement, c
   };
   const change = async (update: () => void, animate = true) => {
     if (!active) return;
-    measure();
     if (!animate || reduced.matches || !enabled()) {
       cancelMotion(); update(); measure(); return;
     }
+    measure();
     // Capture painted positions before cancelling a rapid, unfinished shuffle.
     const before = new Map(cards.filter(card => !card.hidden).map(card => [card, bounds(card)]));
     const oldHeight = results.offsetHeight;

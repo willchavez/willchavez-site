@@ -21,12 +21,13 @@ export function initEnjoyingLayout(results: HTMLElement) {
     frame = 0;
     if (!active) return;
     container.querySelectorAll<HTMLImageElement>('img[srcset]').forEach(image => {
+      if (image.closest<HTMLElement>('.ent')?.hidden) return;
       const sizes = `${image.clientWidth}px`;
       if (image.clientWidth && image.sizes !== sizes) image.sizes = sizes;
     });
     if (results.dataset.view === 'list' || innerWidth < 700) {
       delete container.dataset.cascadeReady;
-      cards.forEach(card => card.style.removeProperty('grid-row-end'));
+      cards.forEach(card => { if (card.style.gridRowEnd) card.style.removeProperty('grid-row-end'); });
       return;
     }
     container.dataset.cascadeReady = '';
@@ -43,7 +44,8 @@ export function initEnjoyingLayout(results: HTMLElement) {
     });
   };
   const schedule = () => { if (active && !frame) frame = requestAnimationFrame(measure); };
-  const motion = createCardMotion(results, container, cards, { measure });
+  // FLIP snapshots and ghost copies are costly for this growing collection.
+  const motion = createCardMotion(results, container, cards, { measure, enabled: () => cards.length <= 80 });
   const { change } = motion;
   const applyView = () => {
     const activeView = mobile.matches ? 'list' : view;
