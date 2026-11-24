@@ -28,7 +28,7 @@ const enjoying = (await getEnjoying()).slice(0, 2);
       <div class="home-section-head"><h2 id="selected-title">A few things I’ve helped make</h2><a href="/portfolio">All projects</a></div>
       <div class="home-projects">
         {featured.map((p, index) => <a class="home-project" href={`/portfolio/${p.slug}`}>
-          <div class:list={["home-project-image", `home-image-${p.slug}`]}><img src={portfolioImg(p.slug === "bebop" ? "img/portfolio/bebop/zoomedout.gif" : p.cover, 960)} alt={p.slug === "bebop" ? "Copilot prototype with a canvas of project notes" : p.images[0].alt} loading={index === 0 ? "eager" : "lazy"} decoding="async" /></div>
+          <div class:list={["home-project-image", `home-image-${p.slug}`]}><img src={portfolioImg(p.slug === "bebop" ? "img/portfolio/bebop/zoomedout.gif" : p.cover, p.slug === "bebop" || p.slug === "hireharlem" ? 480 : 960)} alt={p.slug === "bebop" ? "Copilot prototype with a canvas of project notes" : p.images[0].alt} loading={index === 0 ? "eager" : "lazy"} decoding="async" /></div>
           <div class="home-project-copy"><span class="home-kicker">{p.category}</span><h3>{p.title}</h3><p>{p.summary}</p></div>
         </a>)}
       </div>
