@@ -44,7 +44,17 @@ const tilePattern = ["lead", "compact", "visual", "text", "compact", "visual", "
         <ViewToggle label="Enjoying layout" className="enjoying-view-toggle" hidden />
       </div>
 
-      <div id="enjoying-results" data-kind="all" data-view="list">
+      <div id="enjoying-results" data-kind="all" data-view="grid">
+      <script is:inline>
+        // Set the saved/mobile layout before the cards are parsed and painted.
+        (() => {
+          const results = document.currentScript.parentElement;
+          const params = new URL(location.href).searchParams;
+          let view = params.get('view') || params.get('layout');
+          if (!view) try { view = sessionStorage.getItem('enjoying-view'); } catch {}
+          if (matchMedia('(max-width: 640px)').matches || view === 'list' || view === 'cards') results.dataset.view = 'list';
+        })();
+      </script>
       <div id="list">
         {items.map((i, index) => {
           return (
